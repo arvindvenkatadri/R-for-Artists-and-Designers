@@ -1,24 +1,23 @@
 ---
 authors:
 - admin
-bio: This course will give students a foundation in the principles and practice of
-  data visualization, particularly as applied to scientific and technical data.
+bio: This course will give students a foundation in the principles and practice of data visualization, and machine learning, particularly as applied to art and design. 
 email: ""
 name: null
 organizations:
-- name: Oregon Health & Science University
-  url: https://www.ohsu.edu/
+- name: Srishti Manipal Institute of Art, Design, and Technology
+  url: https://srishtimanipalinstitute.in/
 role: null
 social:
-- icon: r-project
+- icon: discord
   icon_pack: fab
-  link: https://rstudio.cloud
-- icon: piazza
-  icon_pack: ai
-  link: https://piazza.com/
+  link: https://discord.com/channels/797796372429799465/797796372929183765
+# - icon: piazza
+#   icon_pack: ai
+#   link: https://piazza.com/
 - icon: github
   icon_pack: fab
-  link: https://github.com/apreshill/dataviz-intro
+  link: https://github.com/arvindvenkatadri/r-for-artists
 superuser: true
 user_groups:
 - Researchers
@@ -27,6 +26,6 @@ user_groups:
 
 <br>
 
-This course will give students a foundation in the principles and practice of data visualization, particularly as applied to scientific and technical data. 
+This course will give students a foundation in the principles and practice of data visualization, and machine learning, particularly as applied to art and design. 
 
-We will have weekly lectures, covering a wide variety of topics including human perception, color theory, principles of visual design, etc. We will also have weekly hands-on laboratory sessions in which students will have the opportunity to put the lecture material into practice. This year, we will be adding additional emphasis on larger issues of scientific communication— after all, that's one of the main reasons we make visualizations! 
+We will have weekly lectures and code walkthroughs, and the viewpoint of using R as a way of creating metaphors for a variety of circumstances and realities in diverse domains will be stressed. Data will be drawn from these domains and understood via geometric metaphors created in R. 

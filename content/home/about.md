@@ -5,7 +5,7 @@ headless = true  # This file represents a page section.
 active = true  # Activate this widget? true/false
 weight = 10  # Order that this section will appear in.
 
-title = "Principles & Practice of<br>Data Visualization"
+title = "Data Visualization and Machine Learning<br> for Artists and Designers"
 
 # Choose the user profile to display
 # This should be the username of a profile in your `content/authors/` folder.

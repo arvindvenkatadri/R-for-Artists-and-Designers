@@ -2,10 +2,10 @@
 # Hero widget.
 widget = "hero"  # See https://sourcethemes.com/academic/docs/page-builder/
 headless = true  # This file represents a page section.
-active = false  # Activate this widget? true/false
+active = true  # Activate this widget? true/false
 weight = 20  # Order that this section will appear.
 
-title = "Hello!"
+title = "Greetings!"
 
 # Hero image (optional). Enter filename of an image in the `static/img/` folder.
 hero_media = "blimp.jpg"
@@ -37,13 +37,13 @@ hero_media = "blimp.jpg"
 #   Display link(s) by specifying a URL and label below. Icon is optional for `[cta]`.
 #   Remove a link/note by deleting a cta/note block.
 [cta]
-  url = "https://pages.rstudio.net/SharingonShortNoticeHowtoGetYourMaterialsOnlinewithRMarkdown_WebinarRegistration.html"
+  url = "https://canvas.instructure.com/enroll/AJYAH9"
   label = "Register"
   icon_pack = "fas"
   icon = "pen-nib"
   
 [cta_alt]
-  url = "https://rstd.io/sharing"
+  url = ""
   label = "See the slides"
 
 # Note. An optional note to show underneath the links.
@@ -51,8 +51,6 @@ hero_media = "blimp.jpg"
   label = 'Last updated: 2020-03-31'
 +++
 
-This is a [demo course website created](https://github.com/apreshill/share-blogdown) for an [RStudio Education](https://education.rstudio.com/) webinar by [Alison Hill](https://alison.rbind.io/) and [Desirée De Leon](https://desiree.rbind.io/).
+This is the **Srishti R Special Interest Group (RSIG)** website created by [Arvind Venkatadri](https://arvindvenkatadri.netlify.app).
 
-To turn off this announcement, change **content/home/hero.md** from **active = true** to **active = false**.
 
-<span style="text-shadow: none;"><a class="github-button" href="https://github.com/rstudio-education/sharing-short-notice" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star this on GitHub">Star</a><script async defer src="https://buttons.github.io/buttons.js"></script></span>
