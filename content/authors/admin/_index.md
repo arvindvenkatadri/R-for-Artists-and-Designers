@@ -2,8 +2,8 @@
 authors:
 - admin
 bio: This course will give students a foundation in the principles and practice of data visualization, and machine learning, particularly as applied to art and design. 
-email: ""
-name: null
+email: "arvind.venkatadri@manipal.edu"
+name: Arvind Venkatadri
 organizations:
 - name: Srishti Manipal Institute of Art, Design, and Technology
   url: https://srishtimanipalinstitute.in/
@@ -17,11 +17,12 @@ social:
 #   link: https://piazza.com/
 - icon: github
   icon_pack: fab
-  link: https://github.com/arvindvenkatadri/r-for-artists
+  link: https://github.com/arvindvenkatadri
 superuser: true
 user_groups:
 - Researchers
 - Visitors
+- Instructors
 ---
 
 <br>
