@@ -18,7 +18,7 @@ subtitle = "We meet once a week on Sundays for Theory and Code Walkthroughs. Ses
   icon = "cloud"
   icon_pack = "fas"
   name = "Location"
-  description = "Online, all the time"
+  description = "Online"
   
 [[feature]]
   icon = "play-circle"
@@ -33,3 +33,8 @@ subtitle = "We meet once a week on Sundays for Theory and Code Walkthroughs. Ses
   description = "On Discord"
 
 +++
+
+## Access Statement
+
+This program is available *only* to students from Srishti Manipal Institute of Art, Design, and Technology Bangalore. Any student, regardless of Major or Year of study is welcome. 
+The course is currently offered free of charge.

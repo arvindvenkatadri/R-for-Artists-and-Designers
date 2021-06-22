@@ -58,10 +58,4 @@ There will be regular homework assignments, typically as part of lab sessions. T
 
 We will be drawing material from a wide variety of sources for this course; as such, there is no single, required text book <em>per se</em>. However, we will frequently refer to Nathan Yau's <a href="http://www.powells.com/biblio/1-9781118462195-4"><em>Data Points</em></a>, and highly recommend that anybody taking this class have a copy. Additionally, many lab sessions and some assignments will use exercises from Nathan Yau's <a href="http://www.powells.com/biblio/2-9780470944882-0"><em>Visualize This</em></a>. Tamara Munzer's <a href="http://www.cs.ubc.ca/~tmm/vadbook/"><em>Visualization Analysis and Design</em></a> is also incredibly useful.
 
-## Access Statement
-
-Our program is committed to all students achieving their potential. If you have a disability or think you may have a disability (physical, learning, hearing, vision, psychological) which may need a reasonable accommodation please contact Student Access at (503) 494-0082 or e-mail studentaccess@ohsu.edu to discuss your needs. You can also find more information at http://www.ohsu.edu/student-access. Because accommodations can take time to implement, it is important to have this discussion as soon as possible. All information regarding a student’s disability is kept in accordance with relevant state and federal laws. 
-
-## Equity & Inclusion
-
-Oregon Health & Science University is committed to creating and fostering a learning and working environment based on open communication and mutual respect. If you encounter sexual harassment, sexual misconduct, sexual assault, or discrimination based on race, color, religion, age, national origin or ancestry, veteran or military status, sex, marital status, pregnancy or parenting status, sexual orientation, gender identity, disability or any other protected status please contact the Affirmative Action and Equal Opportunity Department at 503-494-5148 or aaeo@ohsu.edu. Inquiries about Title IX compliance or sex/gender discrimination and harassment may be directed to the OHSU Title IX Coordinator at 503-494-0258 or titleix@ohsu.edu.
+ 

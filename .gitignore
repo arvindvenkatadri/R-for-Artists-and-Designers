@@ -3,5 +3,7 @@
 .RData
 .Ruserdata
 .DS_Store
-public/
+/public/
 static/labs/data/artworks.csv
+Thumbs.db
+/resources/
