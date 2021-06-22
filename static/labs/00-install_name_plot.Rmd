@@ -1,6 +1,6 @@
 ---
 title: 'Introduce Yourself'
-author: "Alison Hill"
+author: "Arvind Venkatadri"
 output:
   html_document:
     theme: flatly
@@ -19,7 +19,7 @@ library(tidyverse)
 library(babynames)
 ```
 
-> Read all the way through step 6, and note that there is a file that needs to be turned in to Sakai before Wednesday at noon!
+> Read all the way through step 6, and complete this lab before you come to class on Day 1!
 
 # Overview
 
@@ -148,28 +148,28 @@ names(babynames) # same
 If you have done the above and produced sane-looking output, you are ready for the next bit. Use the code below to create a new data frame called `alison`.
 
 ```{r manipulate_name_data}
-alison <- babynames %>%
-  filter(name == "Alison" | name == "Allison") %>% 
-  filter(sex == "F") 
+arvind <- babynames %>%
+  filter(name == "Arvind" | name == "Aravind") %>% 
+  filter(sex == "M") 
 ```
 
-* The first bit makes a new dataset called `alison` that is a copy of the `babynames` dataset- the `%>%` tells you we are doing some other stuff to it later.
+* The first bit makes a new dataset called `arvind` that is a copy of the `babynames` dataset- the `%>%` tells you we are doing some other stuff to it later.
 
-* The second bit `filters` our `babynames` to only keep rows where the `name` is either Alison or Allison (read `|` as _"or"_.) 
+* The second bit `filters` our `babynames` to only keep rows where the `name` is either Arvind or Aravind (read `|` as _"or"_.) 
 
-* The third bit applies another `filter` to keep only those where sex is female.
+* The third bit applies another `filter` to keep only those where sex is male.
 
 Let's check out the data.
 
 ```{r}
-alison
-glimpse(alison)
+arvind
+glimpse(arvind)
 ```
 
 Again, if you have sane-looking output here, move along to plotting the data!
 
 ```{r plot_name_data}
-plot <- ggplot(alison, aes(x = year, 
+plot <- ggplot(arvind, aes(x = year, 
                            y = prop,  
                            group = name, 
                            color = name)) + 
@@ -184,7 +184,7 @@ plot
 
 # Make a new name plot
 
-Edit my code above to create a new dataset. Pick 2 names to compare how popular they each are (these could be different spellings of your own name, like I did, but you can choose any 2 names that are present in the dataset). Make the new plot, changing the name of the first argument `alison` in `ggplot()` to the name of your new dataset.
+Edit my code above to create a new dataset. Pick 2 names to compare how popular they each are (these could be different spellings of your own name, like I did, but you can choose any 2 names that are present in the dataset). Make the new plot, changing the name of the first argument `arvind` in `ggplot()` to the name of your new dataset.
 
 
 ## Save and share 
@@ -196,10 +196,10 @@ help(ggsave)
 ```
 
 ```{r eval = F}
-ggsave("alison_hill.pdf", plot) # please make the filename unique!
+ggsave("arvind_v.pdf", plot) # please make the filename unique!
 ```
 
-Upload this exported plot to Sakai before Wednesday at noon.
+Upload this exported plot to Teams -> Assignments before Wednesday at noon on Sunday. You can add a cat picture also along with this, if you are an ailurophile like me. 
 
 # Other cool `babynames` projects
 
