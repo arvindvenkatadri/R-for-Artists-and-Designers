@@ -3,9 +3,9 @@
 widget = "hero"  # See https://sourcethemes.com/academic/docs/page-builder/
 headless = true  # This file represents a page section.
 active = true  # Activate this widget? true/false
-weight = 20  # Order that this section will appear.
+weight = 40  # Order that this section will appear.
 
-title = "Greetings!"
+title = "For FOMO people!"
 
 # Hero image (optional). Enter filename of an image in the `static/img/` folder.
 hero_media = "blimp.jpg"
@@ -48,9 +48,13 @@ hero_media = "blimp.jpg"
 
 # Note. An optional note to show underneath the links.
 [cta_note]
-  label = 'Last updated: 2020-03-31'
+  label = 'Last updated: 2021-06-22'
 +++
 
-This is the **Srishti R Special Interest Group (RSIG)** website created by [Arvind Venkatadri](https://arvindvenkatadri.netlify.app).
+This **R for Artists and Designers** course is currently taught as a part of regular coursework at the Srishti Manipal Institute of Art, Design, and Technology [(SMI)](http://srishtimanipalinstitute.in/).
+
+
+
+For those who have not been able to take this regular-hours course, and wish to learn R, the same course, or parts of it, are offered to SMI students as part of the **Srishti R Special Interest Group (RSIG)** created by [Arvind Venkatadri](https://arvindvenkatadri.netlify.app). You can register for these online classes using the `Register` button below.
 
 

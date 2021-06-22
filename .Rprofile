@@ -23,5 +23,6 @@ options(
 options(blogdown.hugo.version = "0.83.1")
 
 # Use .Rmd file extension for Posts
-options(blogdown.ext = '.Rmd')
-options(blogdown.author = 'Arvind Venkatadri')
+options(blogdown.ext = '.Rmd',
+        blogdown.author = 'Arvind Venkatadri',
+        blogdown.subdir = "post" )

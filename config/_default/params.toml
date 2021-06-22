@@ -22,7 +22,7 @@ font = "ssn"
 
 # Choose a font size.
 # Sizes: XS (extra small), S (small), M (medium), L (large - DEFAULT), XL (extra large)
-font_size = "L"
+font_size = "M"
 
 ############################
 ## Basic Info
@@ -81,7 +81,7 @@ privacy_pack = false
 ############################
 
 # Enter contact details (optional). To hide a field, clear it to "".
-email = ""
+email = "arvind.venkatadri@manipal.edu"
 phone = ""
 
 # Address
@@ -100,7 +100,7 @@ directions = "Enter N3 Building and take the stairs to Staff Room ( Yellow Door 
 office_hours = ["Monday 10:00 to 13:00", "Wednesday 09:00 to 10:00"]
 
 # Enter an optional link for booking appointments (e.g. calendly.com).
-appointment_url = "https://calendly.com"
+appointment_url = ""
 
 # Contact links
 #   Set to `[]` to disable, or comment out unwanted lines with a hash `#`.
@@ -120,7 +120,7 @@ contact_links = [
 sharing_image = "blue-balloon.jpg"
 
 # Twitter username (without @). Used when a visitor shares your site on Twitter.
-twitter = ""
+twitter = "arvind_v"
 
 ############################
 ## Regional Settings

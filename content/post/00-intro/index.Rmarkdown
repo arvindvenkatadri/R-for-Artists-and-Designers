@@ -1,5 +1,5 @@
 ---
-title: 'Welcome'
+title: 'Welcome!'
 subtitle: 'Introduce Yourself to R, RStudio, and Us!'
 summary: Introduce Yourself to R, RStudio, and Us!
 date: "2021-07-05T00:00:00Z"
