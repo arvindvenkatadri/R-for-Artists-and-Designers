@@ -1,0 +1,679 @@
+---
+title: "Lab 04: Nathan's Hot-Dog Eating Contest"
+subtitle: ""
+author: "Arvind Venkatadri"
+output:
+  html_document:
+    theme: flatly
+    toc: TRUE
+    toc_float: TRUE
+    toc_depth: 2
+    number_sections: TRUE
+    code_folding: hide
+    code_download: TRUE
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<div id="goals-for-lab-01" class="section level1">
+<h1>Goals for Lab 01</h1>
+<ul>
+<li>Get your feet wet!</li>
+<li>Innoculate you against <code>ggplot2</code> errors- we all get them!</li>
+<li>Get exposed to the <em>range</em> of things you can do, before we go <strong>deeep</strong>…</li>
+<li>Develop your <em>own</em> <strong>personal</strong> preferences for data visualizations!
+<ul>
+<li>Do you like or hate gridlines?</li>
+<li>What fonts do you find pleasant to read?</li>
+<li>What kinds of colors do you like?</li>
+<li>Are you team <code>theme_gray</code> or <code>theme_bw</code> (or <code>theme_minimal</code>)?</li>
+</ul></li>
+</ul>
+<p>These are important questions, and I want you to develop (well-informed) opinions on these matters!
+<img src="images/theme-team-tweets.png" /></p>
+</div>
+<div id="nathans-hot-dog-eating-contest" class="section level1">
+<h1>Nathan’s Hot Dog Eating Contest</h1>
+<p><img src="https://i0.wp.com/flowingdata.com/wp-content/uploads/2009/06/hot-dogs1.gif?zoom=2&amp;fit=900%2C423" /></p>
+<p>This includes a reconstruction of <a href="http://flowingdata.com/2009/07/02/whos-going-to-win-nathans-hot-dog-eating-contest/hot-dogs-2/">Nathan Yau’s hot dog contest example</a>, as interpreted by Jackie Wirz, ported into R and <code>ggplot2</code> by Steven Bedrick for a workshop for the <a href="https://ohsulibrary-datascienceinstitute.github.io">OHSU Data Science Institute</a>, and finally adapted by Alison Hill for all you intrepid Data-Viz-onauts!</p>
+<p>First, we load our packages:</p>
+<pre class="r"><code>library(tidyverse)
+library(extrafont)
+library(here)</code></pre>
+</div>
+<div id="read-in-and-wrangle-data" class="section level1">
+<h1>Read in and wrangle data</h1>
+<p>Next, we load some data. You can use the following chunk to load it in from a link:</p>
+<pre class="r"><code>hot_dogs &lt;- read_csv(&quot;http://bit.ly/cs631-hotdog&quot;, 
+    col_types = cols(
+      gender = col_factor(levels = NULL)
+    ))</code></pre>
+<p>Or you can save the file at the link to a local CSV file. I did this and saved my file in a folder called <code>data</code>, then built up the file path to the CSV using <code>here</code>:</p>
+<pre class="r"><code>hot_dogs &lt;- read_csv(here::here(&quot;static/labs/data&quot;, &quot;hot_dog_contest.csv&quot;), 
+    col_types = cols(
+      gender = col_factor(levels = NULL)
+    ))</code></pre>
+<p>Either way you do it, check it out once read in and make sure it looks like this!</p>
+<pre class="r"><code>glimpse(hot_dogs)</code></pre>
+<pre><code>Rows: 49
+Columns: 4
+$ year      &lt;dbl&gt; 2017, 2017, 2016, 2016, 2015, 2015, 2014, 2014, 2013, 2013, ~
+$ gender    &lt;fct&gt; male, female, male, female, male, female, male, female, male~
+$ name      &lt;chr&gt; &quot;Joey Chestnut&quot;, &quot;Miki Sudo&quot;, &quot;Joey Chestnut&quot;, &quot;Miki Sudo&quot;, ~
+$ num_eaten &lt;dbl&gt; 72.000, 41.000, 70.000, 38.000, 62.000, 38.000, 61.000, 34.0~</code></pre>
+<pre class="r"><code>hot_dogs</code></pre>
+<pre><code># A tibble: 49 x 4
+    year gender name           num_eaten
+   &lt;dbl&gt; &lt;fct&gt;  &lt;chr&gt;              &lt;dbl&gt;
+ 1  2017 male   Joey Chestnut       72  
+ 2  2017 female Miki Sudo           41  
+ 3  2016 male   Joey Chestnut       70  
+ 4  2016 female Miki Sudo           38  
+ 5  2015 male   Matthew Stonie      62  
+ 6  2015 female Miki Sudo           38  
+ 7  2014 male   Joey Chestnut       61  
+ 8  2014 female Miki Sudo           34  
+ 9  2013 male   Joey Chestnut       69  
+10  2013 female Sonya Thomas        36.8
+# ... with 39 more rows</code></pre>
+<p>We’ll be wanting to somehow include information about whether a given year was before or after the incorporation of the competitive eating league, so let’s add an indicator field to the data using <code>mutate()</code>. Also, the data’s a little sketchy pre-1981 and for our purposes today we’ll be focusing on males only, so let’s do some <code>filter</code>ing too:</p>
+<pre class="r"><code>hot_dogs &lt;- hot_dogs %&gt;% 
+  mutate(post_ifoce = year &gt;= 1997) %&gt;% 
+  filter(year &gt;= 1981 &amp; gender == &#39;male&#39;)
+hot_dogs</code></pre>
+<pre><code># A tibble: 37 x 5
+    year gender name           num_eaten post_ifoce
+   &lt;dbl&gt; &lt;fct&gt;  &lt;chr&gt;              &lt;dbl&gt; &lt;lgl&gt;     
+ 1  2017 male   Joey Chestnut         72 TRUE      
+ 2  2016 male   Joey Chestnut         70 TRUE      
+ 3  2015 male   Matthew Stonie        62 TRUE      
+ 4  2014 male   Joey Chestnut         61 TRUE      
+ 5  2013 male   Joey Chestnut         69 TRUE      
+ 6  2012 male   Joey Chestnut         68 TRUE      
+ 7  2011 male   Joey Chestnut         62 TRUE      
+ 8  2010 male   Joey Chestnut         54 TRUE      
+ 9  2009 male   Joey Chestnut         68 TRUE      
+10  2008 male   Joey Chestnut         59 TRUE      
+# ... with 27 more rows</code></pre>
+</div>
+<div id="plot-the-data" class="section level1">
+<h1>Plot The Data</h1>
+<p>Now let’s try making a first crack at a sketchy plot:</p>
+<pre class="r"><code>ggplot(hot_dogs, aes(x = year, y = num_eaten)) + 
+  geom_col()</code></pre>
+<p><img src="01-figs/unnamed-chunk-6-1.png" width="672" /></p>
+<p>Note that our data is already in “counted” form, so we’re using <code>geom_col()</code> instead of <code>geom_bar()</code>.</p>
+</div>
+<div id="add-axis-labels-and-title" class="section level1">
+<h1>Add Axis Labels And Title</h1>
+<pre class="r"><code>ggplot(hot_dogs, aes(x = year, y = num_eaten)) + 
+  geom_col() +
+  labs(x = &quot;Year&quot;, y = &quot;Hot Dogs and Buns Consumed&quot;) +
+  ggtitle(&quot;Nathan&#39;s Hot Dog Eating Contest Results, 1981-2017&quot;)</code></pre>
+<p><img src="01-figs/unnamed-chunk-7-1.png" width="672" /></p>
+</div>
+<div id="play-with-colors" class="section level1">
+<h1>Play With Colors</h1>
+<div class="panel panel-success">
+<div class="panel-heading">
+Challenge #1:
+</div>
+<div class="panel-body">
+<p>Make 3 versions of the last plot we just made:</p>
+<ul>
+<li><p><strong>In the first,</strong> make all the columns outlined in “white”.</p></li>
+<li><p><strong>In the second,</strong> make all the columns outlined in “white” and filled in “navyblue”.</p></li>
+<li><p><strong>In the third,</strong> make all the columns outlined in “white” and filled in according to whether or not <code>post_ifoce</code> is TRUE or FALSE (use default colors for now).</p>
+</div></li>
+</ul>
+</div>
+<pre class="r"><code>ggplot(hot_dogs, aes(x = year, y = num_eaten)) + 
+  geom_col(colour = &quot;white&quot;) + 
+  labs(x = &quot;Year&quot;, y = &quot;Hot Dogs and Buns Consumed&quot;) +
+  ggtitle(&quot;Nathan&#39;s Hot Dog Eating Contest Results, 1981-2017&quot;)</code></pre>
+<p><img src="01-figs/unnamed-chunk-8-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(hot_dogs, aes(x = year, y = num_eaten)) + 
+  geom_col(colour = &quot;white&quot;, fill = &quot;navyblue&quot;) + 
+  labs(x = &quot;Year&quot;, y = &quot;Hot Dogs and Buns Consumed&quot;) +
+  ggtitle(&quot;Nathan&#39;s Hot Dog Eating Contest Results, 1981-2017&quot;)</code></pre>
+<p><img src="01-figs/unnamed-chunk-9-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(hot_dogs, aes(x = year, y = num_eaten)) + 
+  geom_col(aes(fill = post_ifoce), colour = &quot;white&quot;) + 
+  labs(x = &quot;Year&quot;, y = &quot;Hot Dogs and Buns Consumed&quot;) +
+  ggtitle(&quot;Nathan&#39;s Hot Dog Eating Contest Results, 1981-2017&quot;)</code></pre>
+<p><img src="01-figs/unnamed-chunk-10-1.png" width="672" /></p>
+<div class="panel panel-success">
+<div class="panel-heading">
+Challenge #2:
+</div>
+<div class="panel-body">
+<p>What if you want to change the legend in the last plot you made? Use google to figure out how to do the following:</p>
+<ul>
+<li><p>Delete the legend title</p></li>
+<li><p>Make the legend text either “Post-IFOCE” or “Pre-IFOCE”.</p>
+</div></li>
+</ul>
+</div>
+<pre class="r"><code>ggplot(hot_dogs, aes(x = year, y = num_eaten)) + 
+  geom_col(aes(fill = post_ifoce), colour = &quot;white&quot;) + 
+  labs(x = &quot;Year&quot;, y = &quot;Hot Dogs and Buns Consumed&quot;) +
+  ggtitle(&quot;Nathan&#39;s Hot Dog Eating Contest Results, 1981-2017&quot;) +
+  scale_fill_discrete(name = &quot;&quot;,
+                      labels=c(&quot;Pre-IFOCE&quot;, &quot;Post-IFOCE&quot;))</code></pre>
+<p><img src="01-figs/unnamed-chunk-11-1.png" width="672" /></p>
+</div>
+<div id="change-the-dataset" class="section level1">
+<h1>Change The Dataset</h1>
+<p>Now, let’s change the question a little bit. This looks at the <em>creation</em> of the IFOCE. What about the <em>affiliation</em> of the contestants? We’ll need some different data for this. Through the <em>Magic Of Data Science™</em>, we have dug that information up and put it into an expanded version of our CSV file available at <a href="http://bit.ly/cs631-hotdog-affiliated">http://bit.ly/cs631-hotdog-affiliated</a>.</p>
+<div class="panel panel-success">
+<div class="panel-heading">
+Challenge #3:
+</div>
+<div class="panel-body">
+<p>Let’s work with this new dataset! Do the following:</p>
+<ul>
+<li><p>Read in the “hot_dog_contest_with_affiliation.csv” data file, using <code>col_types</code> to read in <code>affiliated</code> and <code>gender</code> as factors.</p></li>
+<li><p>Within a <code>mutate</code>, create a new variable called <code>post_ifoce</code> that is TRUE if <code>year</code> is greater than or equal to 1997.</p></li>
+<li><p>Also <code>filter</code> the new data for only years 1981 and after, and only for male competitors.</p>
+</div></li>
+</ul>
+</div>
+<pre class="r"><code>hdm_affil &lt;- read_csv(&quot;http://bit.ly/cs631-hotdog-affiliated&quot;, 
+    col_types = cols(
+      affiliated = col_factor(levels = NULL), 
+      gender = col_factor(levels = NULL)
+      )) %&gt;% 
+  mutate(post_ifoce = year &gt;= 1997) %&gt;% 
+  filter(year &gt;= 1981 &amp; gender == &quot;male&quot;) </code></pre>
+<pre class="r"><code>hdm_affil &lt;- read_csv(here::here(&quot;static/labs/data&quot;, &quot;hot_dog_contest_with_affiliation.csv&quot;), 
+    col_types = cols(
+      affiliated = col_factor(levels = NULL), 
+      gender = col_factor(levels = NULL)
+      )) %&gt;% 
+  mutate(post_ifoce = year &gt;= 1997) %&gt;% 
+  filter(year &gt;= 1981 &amp; gender == &quot;male&quot;) 
+glimpse(hdm_affil)</code></pre>
+<div class="panel panel-success">
+<div class="panel-heading">
+Challenge #4:
+</div>
+<div class="panel-body">
+<p>Let’s do some basic EDA with this new dataset! Do the following:</p>
+<ul>
+<li><p>Use <code>dplyr::distinct</code> to figure out how many unique values there are of <code>affiliated</code>.</p></li>
+<li><p>Use <code>dplyr::count</code> to count the number of rows for each unique value of <code>affiliated</code>; use <code>?count</code> to figure out how to sort the counts in descending order.</p>
+</div></li>
+</ul>
+</div>
+<pre class="r"><code>hdm_affil %&gt;% 
+  distinct(affiliated)</code></pre>
+<pre><code># A tibble: 3 x 1
+  affiliated    
+  &lt;fct&gt;         
+1 current       
+2 former        
+3 not affiliated</code></pre>
+<pre class="r"><code>hdm_affil %&gt;% 
+  count(affiliated, sort = TRUE)</code></pre>
+<pre><code># A tibble: 3 x 2
+  affiliated         n
+  &lt;fct&gt;          &lt;int&gt;
+1 not affiliated    20
+2 current           11
+3 former             6</code></pre>
+<p>Now let’s plot this new data, and fill the columns according to our new <code>affiliated</code> column.</p>
+<pre class="r"><code>ggplot(hdm_affil, aes(x = year, y = num_eaten)) + 
+  geom_col(aes(fill = affiliated)) + 
+  labs(x = &quot;Year&quot;, y = &quot;Hot Dogs and Buns Consumed&quot;) +
+  ggtitle(&quot;Nathan&#39;s Hot Dog Eating Contest Results, 1981-2017&quot;)</code></pre>
+<p><img src="01-figs/unnamed-chunk-15-1.png" width="672" /></p>
+<div class="panel panel-success">
+<div class="panel-heading">
+Challenge #5:
+</div>
+<div class="panel-body">
+<p>Do the following updates to the last plot we just made:</p>
+<ul>
+<li><p>Update the colors using hex colors: <code>c('#E9602B','#2277A0','#CCB683')</code>.</p></li>
+<li><p>Change the legend title to “IFOCE-affiliation”.</p></li>
+<li><p>Save this plot object as “affil_plot”.</p>
+</div></li>
+</ul>
+</div>
+<pre class="r"><code>affil_plot &lt;- ggplot(hdm_affil, aes(x = year, y = num_eaten)) + 
+  geom_col(aes(fill = affiliated)) + 
+  labs(x = &quot;Year&quot;, y = &quot;Hot Dogs and Buns Consumed&quot;) +
+  ggtitle(&quot;Nathan&#39;s Hot Dog Eating Contest Results, 1981-2017&quot;) +
+  scale_fill_manual(values = c(&#39;#E9602B&#39;,&#39;#2277A0&#39;,&#39;#CCB683&#39;),
+                    name = &quot;IFOCE-affiliation&quot;)
+affil_plot</code></pre>
+<p><img src="01-figs/unnamed-chunk-16-1.png" width="672" /></p>
+</div>
+<div id="play-with-scales-coordinates" class="section level1">
+<h1>Play With Scales &amp; Coordinates</h1>
+<p>The spacing’s a little funky down near the origin of the plot. The <a href="http://ggplot2.tidyverse.org/reference/scale_continuous.html">documentation</a> tells us that the defaults are <code>c(0.05, 0)</code> for continuous variables. The first number is multiplicative and the second is additive.</p>
+<p>The default was that 1.8 ((2017-1981)*.05+0) was added to the right and left sides of the x-axis as padding, so the effective default limits were <code>c(1979, 2019)</code>.</p>
+<p>Let’s tighten that up with the <code>expand</code> property for the <code>scale_y_continuous</code> (we’ll also change the breaks for y-axis tick marks here) and <code>scale_x_continuous</code> settings:</p>
+<pre class="r"><code>affil_plot &lt;- affil_plot + 
+  scale_y_continuous(expand = c(0, 0),
+                     breaks = seq(0, 70, 10)) +
+  scale_x_continuous(expand = c(0, 0))
+affil_plot</code></pre>
+<p><img src="01-figs/unnamed-chunk-17-1.png" width="672" /></p>
+<p>But now the plot looks like it is wearing tight pants.</p>
+<p><img src="https://media.giphy.com/media/xT1XH07no2wZSq4mnm/giphy.gif" /></p>
+<p>Let’s loosen things up a bit by updating the plot coordinates.</p>
+<div class="panel panel-success">
+<div class="panel-heading">
+Challenge #6:
+</div>
+<div class="panel-body">
+<p>Use <code>coord_cartesian</code> to:</p>
+<ul>
+<li><p>Set the x-axis range to 1980-2018</p></li>
+<li><p>Set the y-axis range to 0-80</p>
+</div></li>
+</ul>
+</div>
+<p>Using <code>coord_cartesian</code> is the preferred layer here because “setting limits on the coordinate system will zoom the plot (like you’re looking at it with a magnifying glass), and will not change the underlying data like setting <code>limits</code> on a scale will.”</p>
+<div class="panel panel-info">
+<div class="panel-heading">
+Lesson:
+</div>
+<div class="panel-body">
+Don’t change <code>limits</code> unless you really know what you are doing! Most of the time, you want to change the coordinates instead.
+</div>
+</div>
+<pre class="r"><code>affil_plot &lt;- affil_plot + 
+  coord_cartesian(xlim = c(1980, 2018), ylim = c(0, 80)) 
+affil_plot</code></pre>
+<p><img src="01-figs/unnamed-chunk-18-1.png" width="672" /></p>
+</div>
+<div id="play-with-theme-settings" class="section level1">
+<h1>Play With Theme Settings</h1>
+<p>Let’s change some key theme settings:</p>
+<pre class="r"><code>affil_plot +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme(axis.text = element_text(size = 12)) +
+  theme(panel.background = element_blank()) +
+  theme(axis.line.x = element_line(color = &quot;gray80&quot;, size = 0.5)) +
+  theme(axis.ticks = element_line(color = &quot;gray80&quot;, size = 0.5))</code></pre>
+<p><img src="01-figs/unnamed-chunk-19-1.png" width="672" /></p>
+<div class="panel panel-info">
+<div class="panel-heading">
+Lesson:
+</div>
+<div class="panel-body">
+You can change <em>almost anything</em> that your heart desires to change!
+</div>
+</div>
+<p>By default, plot titles in <code>ggplot2</code> are left-aligned. For <code>hjust</code>:</p>
+<ul>
+<li><code>0</code> == left</li>
+<li><code>0.5</code> == centered</li>
+<li><code>1</code> == right</li>
+</ul>
+<p>We could also save all these as a custom theme. We are not fans of the default font, so we are also going to change this. To do this, you need to install the (<code>extrafont</code> package)[<a href="https://github.com/wch/extrafont" class="uri">https://github.com/wch/extrafont</a>] and follow its setup instructions before doing this next step.</p>
+<pre class="r"><code>hot_diggity &lt;- theme(plot.title = element_text(hjust = 0.5),
+                     axis.text = element_text(size = 12),
+                     panel.background = element_blank(),
+                     axis.line.x = element_line(color = &quot;gray80&quot;, size = 0.5),
+                     axis.ticks = element_line(color = &quot;gray80&quot;, size = 0.5),
+                     text = element_text(family = &quot;Lato&quot;) # need extrafont for this
+                     )</code></pre>
+<pre class="r"><code>affil_plot + hot_diggity </code></pre>
+<pre><code>Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): font family not
+found in Windows font database
+
+Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): font family not
+found in Windows font database
+
+Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): font family not
+found in Windows font database
+
+Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): font family not
+found in Windows font database</code></pre>
+<pre><code>Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database</code></pre>
+<pre><code>Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
+font family not found in Windows font database</code></pre>
+<pre><code>Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database</code></pre>
+<p><img src="01-figs/unnamed-chunk-21-1.png" width="672" /></p>
+<p>We could also use someone else’s theme:</p>
+<pre class="r"><code>library(ggthemes)
+affil_plot + theme_fivethirtyeight(base_family = &quot;Lato&quot;)</code></pre>
+<pre><code>Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): font family not
+found in Windows font database</code></pre>
+<pre><code>Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database</code></pre>
+<pre><code>Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): font family not
+found in Windows font database</code></pre>
+<pre><code>Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database</code></pre>
+<p><img src="01-figs/unnamed-chunk-22-1.png" width="672" /></p>
+<pre class="r"><code>affil_plot + theme_tufte(base_family = &quot;Palatino&quot;)</code></pre>
+<pre><code>Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): font family not
+found in Windows font database</code></pre>
+<pre><code>Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): font family not
+found in Windows font database</code></pre>
+<pre><code>Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database</code></pre>
+<pre><code>Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): font family not
+found in Windows font database</code></pre>
+<pre><code>Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database</code></pre>
+<pre><code>Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
+font family not found in Windows font database</code></pre>
+<pre><code>Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database</code></pre>
+<p><img src="01-figs/unnamed-chunk-22-2.png" width="672" /></p>
+<p>The final thing we have to mess with is the x-axis ticks and labels. We’ll do this in two steps, then override our previous layer <code>scale_x_continuous</code>.</p>
+<pre class="r"><code>years_to_label &lt;- seq(from = 1981, to = 2017, by = 4)
+years_to_label</code></pre>
+<pre><code> [1] 1981 1985 1989 1993 1997 2001 2005 2009 2013 2017</code></pre>
+<pre class="r"><code>hd_years &lt;- hdm_affil %&gt;%
+  distinct(year) %&gt;% 
+  mutate(year_lab = ifelse(year %in% years_to_label, year, &quot;&quot;))</code></pre>
+<pre class="r"><code>affil_plot + 
+  hot_diggity +
+  scale_x_continuous(expand = c(0, 0), 
+                     breaks = hd_years$year,
+                     labels = hd_years$year_lab)</code></pre>
+<pre><code>Scale for &#39;x&#39; is already present. Adding another scale for &#39;x&#39;, which will
+replace the existing scale.</code></pre>
+<pre><code>Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database</code></pre>
+<pre><code>Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
+font family not found in Windows font database</code></pre>
+<pre><code>Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database</code></pre>
+<p><img src="01-figs/unnamed-chunk-24-1.png" width="672" /></p>
+</div>
+<div id="final-final-final-version" class="section level1">
+<h1>Final (final, final) version</h1>
+<p>Don’t name your files “final” :)</p>
+<p><img src="http://www.phdcomics.com/comics/archive/phd101212s.gif" /></p>
+<p>All together in one chunk, here is our final (for now) plot! I’m also adding some additional elements here to show you options:</p>
+<pre class="r"><code>nathan_plot &lt;- ggplot(hdm_affil, aes(x = year, y = num_eaten)) + 
+  geom_col(aes(fill = affiliated)) + 
+  labs(x = &quot;Year&quot;, y = &quot;Hot Dogs and Buns Consumed&quot;) +
+  ggtitle(&quot;Nathan&#39;s Hot Dog Eating Contest Results, 1981-2017&quot;) +
+  scale_fill_manual(values = c(&#39;#E9602B&#39;,&#39;#2277A0&#39;,&#39;#CCB683&#39;),
+                    name = &quot;IFOCE-affiliation&quot;) + 
+  hot_diggity +
+  scale_y_continuous(expand = c(0, 0),
+                     breaks = seq(0, 70, 10)) +
+  scale_x_continuous(expand = c(0, 0), 
+                     breaks = hd_years$year,
+                     labels = hd_years$year_lab) + 
+  coord_cartesian(xlim = c(1980, 2018), ylim = c(0, 80)) 
+nathan_plot</code></pre>
+<pre><code>Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database</code></pre>
+<pre><code>Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
+font family not found in Windows font database</code></pre>
+<pre><code>Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database</code></pre>
+<p><img src="01-figs/unnamed-chunk-25-1.png" width="672" /></p>
+<p>Adding some plot annotations rather than having a fill legend:</p>
+<pre class="r"><code>nathan_ann &lt;- nathan_plot +
+  guides(fill = FALSE) +
+  coord_cartesian(xlim = c(1980, 2019), ylim = c(0, 85)) +
+  annotate(&#39;segment&#39;, x=1980.75, xend=2000.25, y= 30, yend=30, size=0.5, color=&quot;#CCB683&quot;) +
+  annotate(&#39;segment&#39;, x=1980.75, xend=1980.75, y= 30, yend=28, size=0.5, color=&quot;#CCB683&quot;) +
+  annotate(&#39;segment&#39;, x=2000.25, xend=2000.25, y= 30, yend=28, size=0.5, color=&quot;#CCB683&quot;) +
+  annotate(&#39;segment&#39;, x=1990, xend=1990, y= 33, yend=30, size=0.5, color=&quot;#CCB683&quot;) +
+    annotate(&#39;text&#39;, x=1990, y=36, label=&quot;No MLE/IFOCE Affiliation&quot;, color=&quot;#CCB683&quot;, family=&quot;Lato&quot;, hjust=0.5, size = 3) + 
+
+  
+  
+  annotate(&#39;segment&#39;, x=2000.75, xend=2006.25, y= 58, yend=58, size=0.5, color=&quot;#2277A0&quot;) +
+  annotate(&#39;segment&#39;, x=2000.75, xend=2000.75, y= 58, yend=56, size=0.5, color=&quot;#2277A0&quot;) +
+  annotate(&#39;segment&#39;, x=2006.25, xend=2006.25, y= 58, yend=56, size=0.5, color=&quot;#2277A0&quot;) +
+  annotate(&#39;segment&#39;, x=2003.5, xend=2003.5, y= 61, yend=58, size=0.5, color=&quot;#2277A0&quot;) +
+  annotate(&#39;text&#39;, x=2003.5, y=65, label=&quot;MLE/IFOCE\nFormer Member&quot;, color=&quot;#2277A0&quot;, family=&quot;Lato&quot;, hjust=0.5, size = 3) + 
+
+  
+  annotate(&#39;segment&#39;, x=2006.75, xend=2017.25, y= 76, yend=76, size=0.5, color=&quot;#E9602B&quot;) +
+  annotate(&#39;segment&#39;, x=2006.75, xend=2006.75, y= 76, yend=74, size=0.5, color=&quot;#E9602B&quot;) +
+  annotate(&#39;segment&#39;, x=2017.25, xend=2017.25, y= 76, yend=74, size=0.5, color=&quot;#E9602B&quot;) +
+  annotate(&#39;segment&#39;, x=2012, xend=2012, y= 79, yend=76, size=0.5, color=&quot;#E9602B&quot;) +
+  annotate(&#39;text&#39;, x=2012, y=82, label=&quot;MLE/IFOCE Current Member&quot;, color=&quot;#E9602B&quot;, family=&quot;Lato&quot;, hjust=0.5, size = 3) </code></pre>
+<pre><code>Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; =
+&quot;none&quot;)` instead.</code></pre>
+<pre><code>Coordinate system already present. Adding new coordinate system, which will replace the existing one.</code></pre>
+<pre class="r"><code>nathan_ann</code></pre>
+<pre><code>Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database</code></pre>
+<pre><code>Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database</code></pre>
+<pre><code>Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
+font family not found in Windows font database</code></pre>
+<pre><code>Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database
+
+Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database</code></pre>
+<pre><code>Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
+font family not found in Windows font database</code></pre>
+<pre><code>Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+family not found in Windows font database</code></pre>
+<p><img src="01-figs/unnamed-chunk-26-1.png" width="672" /></p>
+<p>Finally, adding in another layer of data from female contestants:</p>
+<pre class="r"><code>hdm_females &lt;- read_csv(here::here(&quot;static&quot;, labs&quot;,&quot;data&quot;, &quot;hot_dog_contest_with_affiliation.csv&quot;), 
+    col_types = cols(
+      affiliated = col_factor(levels = NULL), 
+      gender = col_factor(levels = NULL)
+      )) %&gt;% 
+  mutate(post_ifoce = year &gt;= 1997) %&gt;% 
+  filter(year &gt;= 1981 &amp; gender == &quot;female&quot;) 
+glimpse(hdm_females)</code></pre>
+<pre><code>Error: &lt;text&gt;:1:50: unexpected string constant
+1: hdm_females &lt;- read_csv(here::here(&quot;static&quot;, labs&quot;,&quot;
+                                                     ^</code></pre>
+<pre class="r"><code>nathan_w_females &lt;- nathan_ann +
+  # add in the female data, and manually set a fill color
+  geom_col(data = hdm_females, 
+           width = 0.75, 
+           fill = &quot;#F68A39&quot;) </code></pre>
+<pre><code>Error in fortify(data): object &#39;hdm_females&#39; not found</code></pre>
+<pre class="r"><code>nathan_w_females</code></pre>
+<pre><code>Error in eval(expr, envir, enclos): object &#39;nathan_w_females&#39; not found</code></pre>
+<p>And adding a final caption:</p>
+<pre class="r"><code>caption &lt;- paste(strwrap(&quot;* From 2011 on, separate Men&#39;s and Women&#39;s prizes have been awarded. All female champions to date have been MLE/IFOCE-affiliated.&quot;, 70), collapse=&quot;\n&quot;)
+
+nathan_w_females +
+  # now an asterisk to set off the female scores, and a caption
+  annotate(&#39;text&#39;, x = 2018.5, y = 39, label=&quot;*&quot;, family = &quot;Lato&quot;, size = 8) +
+  labs(caption = caption) +
+  theme(plot.caption = element_text(family = &quot;Lato&quot;, size=8, hjust=0, margin=margin(t=15)))</code></pre>
+<pre><code>Error in eval(expr, envir, enclos): object &#39;nathan_w_females&#39; not found</code></pre>
+</div>

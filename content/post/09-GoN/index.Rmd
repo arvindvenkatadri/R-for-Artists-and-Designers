@@ -22,8 +22,10 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(extrafont)
 # Run this one time
 #extrafont::font_import()
+loadfonts()
 ########################################
 # For General Data Manipulation
 library(tidyverse)

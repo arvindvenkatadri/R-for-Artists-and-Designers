@@ -1,0 +1,589 @@
+---
+title: "Lab 02: MoMA Museum Tour"
+subtitle: "CS631"
+author: "Alison Hill"
+output:
+  html_document:
+    theme: flatly
+    toc: TRUE
+    toc_float: TRUE
+    toc_depth: 2
+    number_sections: TRUE
+    code_folding: hide
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<div id="goals-for-lab-02" class="section level1">
+<h1>Goals for Lab 02</h1>
+<ul>
+<li>Review <code>dplyr</code> functions learned in last lab and DataCamp course</li>
+<li>Practice using <code>dplyr</code> functions to get to know a new dataset</li>
+<li>Map global plot aesthetics to variables in <code>ggplot2</code></li>
+<li>Create facetted plots with <code>ggplot2</code></li>
+</ul>
+</div>
+<div id="slides-for-today" class="section level1">
+<h1>Slides for today</h1>
+<pre class="r"><code>#knitr::include_url(&quot;/slides/02-slides.html&quot;)</code></pre>
+</div>
+<div id="inspiration-data" class="section level1">
+<h1>Inspiration + data</h1>
+<p>We’ll use data from the Museum of Modern Art (MoMA)</p>
+<ul>
+<li>Publicly available on <a href="https://github.com/MuseumofModernArt/collection">GitHub</a></li>
+<li>As analyzed by <a href="https://fivethirtyeight.com/features/a-nerds-guide-to-the-2229-paintings-at-moma/">fivethirtyeight.com</a></li>
+<li>And by <a href="https://medium.com/@foe/here-s-a-roundup-of-how-people-have-used-our-data-so-far-80862e4ce220">others</a></li>
+</ul>
+</div>
+<div id="packages-needed" class="section level1">
+<h1>Packages needed</h1>
+<pre class="r"><code>library(here) # to set file path if working from local file
+library(tidyverse) # readr, ggplot2, dplyr</code></pre>
+</div>
+<div id="read-in-the-data" class="section level1">
+<h1>Read in the data</h1>
+<p>Note! This is not the original data- I did a lot of cleaning and decision-making in the pre-processing. The below contains only paintings and drawings in the MoMA collection.</p>
+<p>Use this code chunk to read in the data available at <a href="http://bit.ly/cs631-moma">http://bit.ly/cs631-moma</a>:</p>
+<pre class="r"><code>library(readr)
+moma &lt;- read_csv(&quot;http://bit.ly/cs631-moma&quot;)</code></pre>
+<p>I called my cleaned data <code>artworks-cleaned.csv</code>, and stored it in a folder called <code>data</code>. You can use this code if you want to read in the local CSV file.</p>
+<pre class="r"><code>#library(here)
+library(readr)
+library(dplyr)
+#moma &lt;- read_csv(here::here(&quot;static/labs/data&quot;, &quot;artworks-cleaned.csv&quot;))</code></pre>
+</div>
+<div id="know-your-data" class="section level1">
+<h1>Know your data</h1>
+<div class="panel panel-success">
+<div class="panel-heading">
+Challenge #1:
+</div>
+<div class="panel-body">
+<p>Try to answer all of these questions using <code>dplyr</code>. Answers are below but try them on your own first!</p>
+<ol style="list-style-type: decimal">
+<li>How many paintings (rows) are in <code>moma</code>? How many variables (columns) are in <code>moma</code>?</li>
+<li>What is the first painting acquired by MoMA? Which year? Which artist? What title?</li>
+<li>What is the oldest painting in the collection? Which year? Which artist? What title?</li>
+<li>How many distinct artists are there?</li>
+<li>Which artist has the most paintings in the collection? How many paintings are by this artist?</li>
+<li>How many paintings by male vs female artists?</li>
+</ol>
+<p>If you want more:</p>
+<ol style="list-style-type: decimal">
+<li>How many artists of each gender are there?</li>
+<li>In what year were the most paintings acquired? Created?</li>
+<li>In what year was the first painting by a (solo) female artist acquired? When was that painting created? Which artist? What title?
+</div></li>
+</ol>
+</div>
+<div id="how-many-paintings" class="section level2">
+<h2>How many paintings?</h2>
+<ul>
+<li>How many rows/observations are in <code>moma</code>?</li>
+<li>How many variables are in <code>moma</code>?</li>
+</ul>
+<p class="text-info">
+<strong>Hint:</strong> These questions can be answered using the <code>dplyr</code> function <code>glimpse</code>.
+</p>
+<pre class="r"><code>library(dplyr)
+moma</code></pre>
+<pre><code># A tibble: 2,253 x 23
+   title    artist   artist_bio    artist_birth_ye~ artist_death_ye~ num_artists
+   &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;                    &lt;dbl&gt;            &lt;dbl&gt;       &lt;dbl&gt;
+ 1 &quot;Rope a~ Joan Mi~ (Spanish, 18~             1893             1983           1
+ 2 &quot;Fire i~ Paul Kl~ (German, bor~             1879             1940           1
+ 3 &quot;Portra~ Paul Kl~ (German, bor~             1879             1940           1
+ 4 &quot;Guitar&quot; Pablo P~ (Spanish, 18~             1881             1973           1
+ 5 &quot;Grandm~ Arthur ~ (American, 1~             1880             1946           1
+ 6 &quot;\&quot;M&#39;Am~ Francis~ (French, 187~             1879             1953           1
+ 7 &quot;Untitl~ Blinky ~ (German, 194~             1943             1977           1
+ 8 &quot;Daylig~ Pierre ~ (French, 188~             1880             1950           1
+ 9 &quot;The Ba~ Paul Cé~ (French, 183~             1839             1906           1
+10 &quot;Synthe~ Enrico ~ (Italian, 18~             1894             1956           1
+# ... with 2,243 more rows, and 17 more variables: n_female_artists &lt;dbl&gt;,
+#   n_male_artists &lt;dbl&gt;, artist_gender &lt;chr&gt;, year_acquired &lt;dbl&gt;,
+#   year_created &lt;dbl&gt;, circumference_cm &lt;lgl&gt;, depth_cm &lt;dbl&gt;,
+#   diameter_cm &lt;lgl&gt;, height_cm &lt;dbl&gt;, length_cm &lt;lgl&gt;, width_cm &lt;dbl&gt;,
+#   seat_height_cm &lt;lgl&gt;, purchase &lt;lgl&gt;, gift &lt;lgl&gt;, exchange &lt;lgl&gt;,
+#   classification &lt;chr&gt;, department &lt;chr&gt;</code></pre>
+<pre class="r"><code>glimpse(moma)</code></pre>
+<pre><code>Rows: 2,253
+Columns: 23
+$ title             &lt;chr&gt; &quot;Rope and People, I&quot;, &quot;Fire in the Evening&quot;, &quot;Portra~
+$ artist            &lt;chr&gt; &quot;Joan Miró&quot;, &quot;Paul Klee&quot;, &quot;Paul Klee&quot;, &quot;Pablo Picass~
+$ artist_bio        &lt;chr&gt; &quot;(Spanish, 1893–1983)&quot;, &quot;(German, born Switzerland. ~
+$ artist_birth_year &lt;dbl&gt; 1893, 1879, 1879, 1881, 1880, 1879, 1943, 1880, 1839~
+$ artist_death_year &lt;dbl&gt; 1983, 1940, 1940, 1973, 1946, 1953, 1977, 1950, 1906~
+$ num_artists       &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1~
+$ n_female_artists  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0~
+$ n_male_artists    &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1~
+$ artist_gender     &lt;chr&gt; &quot;Male&quot;, &quot;Male&quot;, &quot;Male&quot;, &quot;Male&quot;, &quot;Male&quot;, &quot;Male&quot;, &quot;Mal~
+$ year_acquired     &lt;dbl&gt; 1936, 1970, 1966, 1955, 1939, 1968, 1997, 1931, 1934~
+$ year_created      &lt;dbl&gt; 1935, 1929, 1927, 1919, 1925, 1919, 1970, 1929, 1885~
+$ circumference_cm  &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
+$ depth_cm          &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
+$ diameter_cm       &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
+$ height_cm         &lt;dbl&gt; 104.8, 33.8, 60.3, 215.9, 50.8, 129.2, 200.0, 54.6, ~
+$ length_cm         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
+$ width_cm          &lt;dbl&gt; 74.6, 33.3, 36.8, 78.7, 54.0, 89.9, 200.0, 38.1, 96.~
+$ seat_height_cm    &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
+$ purchase          &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FAL~
+$ gift              &lt;lgl&gt; TRUE, FALSE, FALSE, TRUE, TRUE, FALSE, TRUE, TRUE, F~
+$ exchange          &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALS~
+$ classification    &lt;chr&gt; &quot;Painting&quot;, &quot;Painting&quot;, &quot;Painting&quot;, &quot;Painting&quot;, &quot;Pai~
+$ department        &lt;chr&gt; &quot;Painting &amp; Sculpture&quot;, &quot;Painting &amp; Sculpture&quot;, &quot;Pai~</code></pre>
+</div>
+<div id="what-is-the-first-painting-acquired" class="section level2">
+<h2>What is the first painting acquired?</h2>
+<ul>
+<li>What is the first painting acquired by MoMA (since they started tracking)?</li>
+<li>What year was it acquired?</li>
+<li>Which artist?</li>
+<li>What title?</li>
+</ul>
+<p class="text-info">
+<strong>Hint:</strong> These questions can be answered by combining two <code>dplyr</code> functions: <code>select</code> and <code>arrange</code>.
+</p>
+<pre class="r"><code>moma %&gt;% 
+  select(artist, title, year_acquired) %&gt;% 
+  arrange(year_acquired)</code></pre>
+<pre><code># A tibble: 2,253 x 3
+   artist           title                                          year_acquired
+   &lt;chr&gt;            &lt;chr&gt;                                                  &lt;dbl&gt;
+ 1 Edward Hopper    House by the Railroad                                   1930
+ 2 Bernard Karfiol  Seated Nude                                             1930
+ 3 Pierre Roy       Daylight Savings Time                                   1931
+ 4 Preston Dickins~ Plums on a Plate                                        1931
+ 5 Otto Dix         Dr. Mayer-Hermann                                       1932
+ 6 Paul Cézanne     The Bather                                              1934
+ 7 Paul Cézanne     Pines and Rocks (Fontainebleau?)                        1934
+ 8 Paul Cézanne     Still Life with Ginger Jar, Sugar Bowl, and O~          1934
+ 9 Paul Cézanne     Still Life with Apples                                  1934
+10 Arthur B. Davies Italian Landscape                                       1934
+# ... with 2,243 more rows</code></pre>
+</div>
+<div id="what-is-the-oldest-painting-in-the-moma-collection" class="section level2">
+<h2>What is the oldest painting in the MoMA collection?</h2>
+<ul>
+<li>What is the oldest painting in the MoMA collection historically (since they started tracking)?</li>
+<li>What year was it created?</li>
+<li>Which artist?</li>
+<li>What title?</li>
+</ul>
+<p class="text-info">
+<strong>Hint:</strong> These questions can be answered by combining two <code>dplyr</code> functions: <code>select</code> and <code>arrange</code>.
+</p>
+<pre class="r"><code>moma %&gt;% 
+  select(artist, title, year_created) %&gt;% 
+  arrange(year_created)</code></pre>
+<pre><code># A tibble: 2,253 x 3
+   artist       title                                    year_created
+   &lt;chr&gt;        &lt;chr&gt;                                           &lt;dbl&gt;
+ 1 Odilon Redon Landscape at Daybreak                            1872
+ 2 Odilon Redon Apache (Man on Horseback)                        1875
+ 3 Odilon Redon Apache (Man on Horseback II)                     1875
+ 4 Odilon Redon Fishing Boat                                     1875
+ 5 Odilon Redon Rocky Peak                                       1875
+ 6 Odilon Redon The Rocky Slope                                  1875
+ 7 Odilon Redon Landscape with Rocks, near Royan                 1875
+ 8 Paul Cézanne Still Life with Fruit Dish                       1879
+ 9 Paul Cézanne L&#39;Estaque                                        1879
+10 Claude Monet On the Cliff at Pourville, Clear Weather         1882
+# ... with 2,243 more rows</code></pre>
+<pre class="r"><code>oldest &lt;- moma %&gt;% 
+  select(artist, title, year_created) %&gt;% 
+  arrange(year_created) %&gt;% 
+  slice(1)
+oldest</code></pre>
+<pre><code># A tibble: 1 x 3
+  artist       title                 year_created
+  &lt;chr&gt;        &lt;chr&gt;                        &lt;dbl&gt;
+1 Odilon Redon Landscape at Daybreak         1872</code></pre>
+<p>To do inline comments, I could say that the oldest painting is Landscape at Daybreak, painted by Odilon Redon in 1872.</p>
+</div>
+<div id="how-many-artists" class="section level2">
+<h2>How many artists?</h2>
+<ul>
+<li>How many distinct artists are there?</li>
+</ul>
+<p class="text-info">
+<strong>Hint:</strong> Try <code>dplyr::distinct</code>.
+</p>
+<pre class="r"><code>moma %&gt;% 
+  distinct(artist)</code></pre>
+<pre><code># A tibble: 989 x 1
+   artist           
+   &lt;chr&gt;            
+ 1 Joan Miró        
+ 2 Paul Klee        
+ 3 Pablo Picasso    
+ 4 Arthur Dove      
+ 5 Francis Picabia  
+ 6 Blinky Palermo   
+ 7 Pierre Roy       
+ 8 Paul Cézanne     
+ 9 Enrico Prampolini
+10 Jankel Adler     
+# ... with 979 more rows</code></pre>
+<p>You could add a <code>tally()</code> too to get just the number of rows. You can also then use <code>pull()</code> to get that single number out of the tibble:</p>
+<pre class="r"><code>num_artists &lt;- moma %&gt;% 
+  distinct(artist) %&gt;% 
+  tally() %&gt;% 
+  pull()
+num_artists</code></pre>
+<pre><code>[1] 989</code></pre>
+<p>Then I can refer to this number in inline comments like: there are 989 total.</p>
+</div>
+<div id="which-artist-has-the-most-paintings" class="section level2">
+<h2>Which artist has the most paintings?</h2>
+<ul>
+<li>Which artist has the most paintings ever owned by <code>moma</code>?</li>
+<li>How many paintings in the MoMA collection by that artist?</li>
+</ul>
+<p class="text-info">
+<strong>Hint:</strong> Try <code>dplyr::count</code>. Use <code>?count</code> to figure out how to sort the output.
+</p>
+<pre class="r"><code>moma %&gt;% 
+  count(artist, sort = TRUE)</code></pre>
+<pre><code># A tibble: 989 x 2
+   artist               n
+   &lt;chr&gt;            &lt;int&gt;
+ 1 Pablo Picasso       55
+ 2 Henri Matisse       32
+ 3 On Kawara           32
+ 4 Jacob Lawrence      30
+ 5 Batiste Madalena    25
+ 6 Jean Dubuffet       25
+ 7 Odilon Redon        25
+ 8 Ben Vautier         24
+ 9 Frank Stella        23
+10 Philip Guston       23
+# ... with 979 more rows</code></pre>
+<p>In the <code>?count</code> documentation, it says: “<code>count</code> and <code>tally</code> are designed so that you can call them repeatedly, each time rolling up a level of detail.” Try running <code>count()</code> again (leave parentheses empty) on your last code chunk.</p>
+<pre class="r"><code>moma %&gt;% 
+  count(artist, sort = TRUE) %&gt;% 
+  count()</code></pre>
+<pre><code># A tibble: 1 x 1
+      n
+  &lt;int&gt;
+1   989</code></pre>
+</div>
+<div id="how-many-paintings-by-male-vs-female-artists" class="section level2">
+<h2>How many paintings by male vs female artists?</h2>
+<pre class="r"><code>moma %&gt;% 
+  count(artist_gender)</code></pre>
+<pre><code># A tibble: 3 x 2
+  artist_gender     n
+  &lt;chr&gt;         &lt;int&gt;
+1 Female          252
+2 Male           1991
+3 &lt;NA&gt;             10</code></pre>
+<p>Now together we’ll count the number of artists by gender. You’ll need to give <code>count</code> two variable names in the parentheses: <code>artist_gender</code> and <code>artist</code>.</p>
+<pre class="r"><code>moma %&gt;% 
+  count(artist_gender, artist, sort = TRUE) </code></pre>
+<pre><code># A tibble: 989 x 3
+   artist_gender artist               n
+   &lt;chr&gt;         &lt;chr&gt;            &lt;int&gt;
+ 1 Male          Pablo Picasso       55
+ 2 Male          Henri Matisse       32
+ 3 Male          On Kawara           32
+ 4 Male          Jacob Lawrence      30
+ 5 Male          Batiste Madalena    25
+ 6 Male          Jean Dubuffet       25
+ 7 Male          Odilon Redon        25
+ 8 Male          Ben Vautier         24
+ 9 Male          Frank Stella        23
+10 Male          Philip Guston       23
+# ... with 979 more rows</code></pre>
+<p>This output is not superhelpful as we already know that Pablo Picasso has 55 paintings in the MoMA collection. But how can we find out which female artist has the most paintings? We have a few options. Let’s first add a <code>filter</code> for females.</p>
+<pre class="r"><code>moma %&gt;% 
+  count(artist_gender, artist, sort = TRUE) %&gt;% 
+  filter(artist_gender == &quot;Female&quot;)</code></pre>
+<pre><code># A tibble: 143 x 3
+   artist_gender artist                    n
+   &lt;chr&gt;         &lt;chr&gt;                 &lt;int&gt;
+ 1 Female        Sherrie Levine           12
+ 2 Female        Agnes Martin              9
+ 3 Female        Elizabeth Murray          8
+ 4 Female        Susan Rothenberg          8
+ 5 Female        Joan Mitchell             6
+ 6 Female        Loren MacIver             6
+ 7 Female        R. H. Quaytman            6
+ 8 Female        Helen Frankenthaler       5
+ 9 Female        Georgia O&#39;Keeffe          4
+10 Female        Lynette Yiadom-Boakye     4
+# ... with 133 more rows</code></pre>
+<p>Another option is to use another <code>dplyr</code> function called <code>top_n()</code>. Use <code>?top_n</code> to see how it works. How it won’t work in this context:</p>
+<pre class="r"><code>moma %&gt;% 
+  count(artist_gender, artist, sort = TRUE) %&gt;% 
+  top_n(2)</code></pre>
+<pre><code># A tibble: 3 x 3
+  artist_gender artist            n
+  &lt;chr&gt;         &lt;chr&gt;         &lt;int&gt;
+1 Male          Pablo Picasso    55
+2 Male          Henri Matisse    32
+3 Male          On Kawara        32</code></pre>
+<p>How it will work better is following a <code>group_by(artist_gender)</code>:</p>
+<pre class="r"><code>moma %&gt;% 
+  count(artist_gender, artist, sort = TRUE) %&gt;% 
+  group_by(artist_gender) %&gt;% 
+  top_n(1)</code></pre>
+<pre><code># A tibble: 3 x 3
+# Groups:   artist_gender [3]
+  artist_gender artist                                                 n
+  &lt;chr&gt;         &lt;chr&gt;                                              &lt;int&gt;
+1 Male          Pablo Picasso                                         55
+2 Female        Sherrie Levine                                        12
+3 &lt;NA&gt;          Gilbert &amp; George, Gilbert Proesch, George Passmore     2</code></pre>
+<p>Now we can see that Sherrie Levine has 12 paintings. This is a pretty far cry from the 55 paintings by Pablo Picasso.</p>
+</div>
+<div id="how-many-artists-of-each-gender-are-there" class="section level2">
+<h2>How many artists of each gender are there?</h2>
+<p>This is a harder question to answer than you think! This is because the level of observation in our current <code>moma</code> dataset is <em>unique paintings</em>. We have multiple paintings done by the same artists though, so counting just the number of unique paintings is different than counting the number of unique artists.</p>
+<p>Remember how <code>count</code> can be used back-to-back to roll up a level of detail? Try running <code>count(artist_gender)</code> again on your last code chunk.</p>
+<pre class="r"><code>moma %&gt;% 
+  count(artist_gender, artist) %&gt;% 
+  count(artist_gender)</code></pre>
+<pre><code># A tibble: 3 x 2
+  artist_gender     n
+  &lt;chr&gt;         &lt;int&gt;
+1 Female          143
+2 Male            837
+3 &lt;NA&gt;              9</code></pre>
+<p>This output takes the previous table (made with <code>count(artist_gender, artist)</code>), and essentially ignores the <code>n</code> column. So we no longer care about how <em>many</em> paintings each individual artist created. Instead, we want to <code>count</code> the rows in this <em>new</em> table where each row is a unique artist. By counting by <code>artist_gender</code> in the last line, we are grouping by levels of that variable (so Female/Male/<code>NA</code>) and <code>nn</code> is the number of unique artists for each gender category recorded.</p>
+</div>
+<div id="when-were-the-most-paintings-in-the-collection-acquired" class="section level2">
+<h2>When were the most paintings in the collection acquired?</h2>
+<p class="text-info">
+<strong>Hint:</strong> Try <code>dplyr::count</code>. Use <code>?count</code> to figure out how to sort the output.
+</p>
+<pre class="r"><code>moma %&gt;% 
+  count(year_acquired, sort = TRUE)</code></pre>
+<pre><code># A tibble: 88 x 2
+   year_acquired     n
+           &lt;dbl&gt; &lt;int&gt;
+ 1          1985    86
+ 2          1942    71
+ 3          1979    71
+ 4          1991    67
+ 5          2005    67
+ 6          1967    65
+ 7          2008    55
+ 8          1961    45
+ 9          1969    45
+10          1956    42
+# ... with 78 more rows</code></pre>
+</div>
+<div id="when-were-the-most-paintings-in-the-collection-created" class="section level2">
+<h2>When were the most paintings in the collection created?</h2>
+<p class="text-info">
+<strong>Hint:</strong> Try <code>dplyr::count</code>. Use <code>?count</code> to figure out how to sort the output.
+</p>
+<pre class="r"><code>moma %&gt;% 
+  count(year_created, sort = TRUE)</code></pre>
+<pre><code># A tibble: 139 x 2
+   year_created     n
+          &lt;dbl&gt; &lt;int&gt;
+ 1         1977    57
+ 2         1940    56
+ 3         1964    56
+ 4         1961    50
+ 5         1962    49
+ 6         1963    44
+ 7         1959    42
+ 8         1968    40
+ 9         1960    39
+10         1914    37
+# ... with 129 more rows</code></pre>
+</div>
+<div id="what-about-the-first-painting-by-a-solo-female-artist" class="section level2">
+<h2>What about the first painting by a solo female artist?</h2>
+<p class="text-info">
+<strong>Hint:</strong> Try combining three <code>dplyr</code> functions: <code>filter</code>, <code>select</code>, and <code>arrange</code>.
+</p>
+<p>When was the first painting by a solo female artist acquired?</p>
+<pre class="r"><code>moma %&gt;% 
+  filter(num_artists == 1 &amp; n_female_artists == 1) %&gt;% 
+  select(title, artist, year_acquired, year_created) %&gt;% 
+  arrange(year_acquired)</code></pre>
+<pre><code># A tibble: 252 x 4
+   title                        artist                year_acquired year_created
+   &lt;chr&gt;                        &lt;chr&gt;                         &lt;dbl&gt;        &lt;dbl&gt;
+ 1 Landscape, 47                Natalia Goncharova             1937         1912
+ 2 Shack                        Loren MacIver                  1938         1934
+ 3 Hopscotch                    Loren MacIver                  1940         1940
+ 4 Shadows with Painting        Irene Rice Pereira             1941         1940
+ 5 Figure                       Varvara Stepanova              1941         1921
+ 6 Still Life in Red            Amelia Peláez Del Ca~          1942         1938
+ 7 White Lines                  Irene Rice Pereira             1942         1942
+ 8 Musical Squash               Maud Morgan                    1942         1942
+ 9 Desolation                   Raquel Forner                  1942         1942
+10 Self-Portrait with Cropped ~ Frida Kahlo                    1943         1940
+# ... with 242 more rows</code></pre>
+<p>What is the oldest painting by a solo female artist, and when was it created?</p>
+<pre class="r"><code>moma %&gt;% 
+  filter(num_artists == 1 &amp; n_female_artists == 1) %&gt;% 
+  select(title, artist, year_acquired, year_created) %&gt;% 
+  arrange(year_created)</code></pre>
+<pre><code># A tibble: 252 x 4
+   title                              artist          year_acquired year_created
+   &lt;chr&gt;                              &lt;chr&gt;                   &lt;dbl&gt;        &lt;dbl&gt;
+ 1 Self-Portrait with Two Flowers in~ Paula Modersoh~          2017         1907
+ 2 Girl with Bare Shoulders           Gwen John                1958         1909
+ 3 Girl Reading at a Window           Gwen John                1971         1911
+ 4 Landscape, 47                      Natalia Goncha~          1937         1912
+ 5 Cubist Nude                        Alexandra Exter          1991         1912
+ 6 Rayonism, Blue-Green Forest        Natalia Goncha~          1985         1913
+ 7 The Factory and the Bridge         Olga Rozanova            1985         1913
+ 8 Subject from a Dyer&#39;s Shop         Lyubov Popova            1985         1914
+ 9 Portuguese Market                  Sonia Delaunay~          1955         1915
+10 Girl with a Blue Scarf             Gwen John                1963         1915
+# ... with 242 more rows</code></pre>
+<pre class="r"><code># or, because artist_gender is missing when num_artists &gt; 1
+moma %&gt;% 
+  filter(artist_gender == &quot;Female&quot;) %&gt;% 
+  select(title, artist, year_acquired, year_created) %&gt;% 
+  arrange(year_acquired)</code></pre>
+</div>
+</div>
+<div id="basics-of-ggplot2" class="section level1">
+<h1>Basics of <code>ggplot2</code></h1>
+<div class="panel panel-success">
+<div class="panel-heading">
+Challenge #2:
+</div>
+<div class="panel-body">
+We’ll do this together <em>(nothing to turn in)</em>: see <a href="https://apreshill.github.io/data-vis-labs-2018/slides/02-slides.html#16">slides</a>.
+</div>
+</div>
+</div>
+<div id="plot-your-data" class="section level1">
+<h1>Plot your data</h1>
+<div id="plot-year-painted-vs-year-acquired" class="section level2">
+<h2>Plot year painted vs year acquired</h2>
+<div class="panel panel-success">
+<div class="panel-heading">
+Challenge #3:
+</div>
+<div class="panel-body">
+<p>Let’s recreate this plot from <a href="https://fivethirtyeight.com/features/a-nerds-guide-to-the-2229-paintings-at-moma/">fivethirtyeight</a> (mostly)!</p>
+<p><img src="https://espnfivethirtyeight.files.wordpress.com/2015/08/roeder-feature-moma-1.png?w=1150&amp;quality=90&amp;strip=info" /></p>
+<p>Things to consider:</p>
+<ul>
+<li>You’ll want to play around with setting an <code>alpha</code> value here- keep in mind that <code>0</code> is totally transparent and <code>1</code> is opaque.</li>
+<li>Try using <code>geom_abline()</code> to add the line in red (use the default intercept value of 0). The actual red line is difficult to recreate- here is what the authors say: “The red regression line shows the “modernizing” of MoMA’s collection — how quickly the museum has moved toward acquiring recent paintings."</li>
+<li>Go back to <a href="https://apreshill.github.io/data-vis-labs-2018/01-eda_hot_dogs.html">Lab 01</a> to review how to do the following:
+<ul>
+<li>Change the x- and y-axis labels and the plot title to match the plot above</li>
+</ul>
+</div></li>
+</ul>
+</div>
+<pre class="r"><code>ggplot(moma, aes(year_created, year_acquired)) +
+  geom_point(alpha = .1, na.rm = TRUE) +
+  geom_abline(intercept = c(0,0), colour = &quot;red&quot;) +
+  labs(x = &quot;Year Painted&quot;, y = &quot;Year Acquired&quot;) +
+  ggtitle(&quot;MoMA Keeps Its Collection Current&quot;) </code></pre>
+<p><img src="02-figs/unnamed-chunk-26-1.png" width="672" /></p>
+</div>
+<div id="facet-by-artist-gender" class="section level2">
+<h2>Facet by artist gender</h2>
+<p>Can you make the same plot above, but facet by artist gender?</p>
+<p class="text-info">
+<strong>Hint:</strong> For this to make sense, you probably want to do some filtering to select only those paintings where there was one “solo” artist.
+</p>
+<pre class="r"><code>moma_solo &lt;- moma %&gt;% 
+  filter(num_artists == 1)
+ggplot(moma_solo, aes(year_created, year_acquired)) +
+  geom_point(alpha = .1) +
+  geom_abline(intercept = c(0,0), colour = &quot;red&quot;) +
+  labs(x = &quot;Year Painted&quot;, y = &quot;Year Acquired&quot;) +
+  ggtitle(&quot;MoMA Keeps Its Collection Current&quot;) +
+  facet_wrap(~artist_gender)</code></pre>
+<p><img src="02-figs/unnamed-chunk-27-1.png" width="672" /></p>
+</div>
+</div>
+<div id="plot-painting-dimensions" class="section level1">
+<h1>Plot painting dimensions</h1>
+<div class="panel panel-success">
+<div class="panel-heading">
+Challenge #4:
+</div>
+<div class="panel-body">
+<p>Let’s (somewhat) try to recreate this scatterplot from <a href="https://fivethirtyeight.com/features/a-nerds-guide-to-the-2229-paintings-at-moma/">fivethirtyeight</a>.</p>
+<p><img src="https://espnfivethirtyeight.files.wordpress.com/2015/08/roeder-feature-moma-3.png?w=1150&amp;quality=90&amp;strip=info" /></p>
+<p>To recreate, some things to consider:</p>
+<ul>
+<li>Try filtering all paintings with height less than 600 cm and width less than 760 cm.</li>
+<li>If you want to add color as in the original, you’ll need to create a new variable using <code>mutate</code>.</li>
+</ul>
+<p class="text-info">
+<strong>Hint:</strong> You’ll probably also want to look into <code>case_when</code> to create a categorical variable to color by.
+</p>
+</div>
+</div>
+<pre class="r"><code>moma_dim &lt;- moma %&gt;% 
+  filter(height_cm &lt; 600, width_cm &lt; 760) %&gt;% 
+  mutate(hw_ratio = height_cm / width_cm,
+         hw_cat = case_when(
+           hw_ratio &gt; 1 ~ &quot;taller than wide&quot;,
+           hw_ratio &lt; 1 ~ &quot;wider than tall&quot;,
+           hw_ratio == 1 ~ &quot;perfect square&quot;
+         ))
+library(ggthemes)
+ggplot(moma_dim, aes(x = width_cm, y = height_cm, colour = hw_cat)) +
+  geom_point(alpha = .5) +
+  ggtitle(&quot;MoMA Paintings, Tall and Wide&quot;) +
+  scale_colour_manual(name = &quot;&quot;,
+                      values = c(&quot;gray50&quot;, &quot;#FF9900&quot;, &quot;#B14CF0&quot;)) +
+  theme_fivethirtyeight() +
+  theme(axis.title = element_text()) +
+  labs(x = &quot;Width&quot;, y = &quot;Height&quot;) </code></pre>
+<p><img src="02-figs/unnamed-chunk-28-1.png" width="672" /></p>
+<p>Because Grace is right, we can do better with colors!</p>
+<pre class="r"><code>library(ggthemes)
+ggplot(moma_dim, aes(x = width_cm, y = height_cm, colour = hw_cat)) +
+  geom_point(alpha = .5) +
+  ggtitle(&quot;MoMA Paintings, Tall and Wide&quot;) +
+  scale_colour_manual(name = &quot;&quot;,
+                      values = c(&quot;gray50&quot;, &quot;#ee5863&quot;, &quot;#6999cd&quot;)) +
+  theme_fivethirtyeight() +
+  theme(axis.title = element_text()) +
+  labs(x = &quot;Width&quot;, y = &quot;Height&quot;) </code></pre>
+<p><img src="02-figs/unnamed-chunk-29-1.png" width="672" /></p>
+<p>We could also do away with the legend and use <code>geom_annotate</code> instead.</p>
+<pre class="r"><code>library(ggthemes)
+ggplot(moma_dim, aes(x = width_cm, y = height_cm, colour = hw_cat)) +
+  geom_point(alpha = .5, show.legend = FALSE) +
+  ggtitle(&quot;MoMA Paintings, Tall and Wide&quot;) +
+  scale_colour_manual(name = &quot;&quot;,
+                      values = c(&quot;gray50&quot;, &quot;#ee5863&quot;, &quot;#6999cd&quot;)) +
+  theme_fivethirtyeight() +
+  theme(axis.title = element_text()) +
+  labs(x = &quot;Width&quot;, y = &quot;Height&quot;) +
+  annotate(x = 200, y = 380, geom = &quot;text&quot;, 
+           label = &quot;Taller than\nWide&quot;, color = &quot;#ee5863&quot;, 
+           size = 5, family = &quot;Lato&quot;, hjust = 1, fontface = 2) +
+    annotate(x = 375, y = 100, geom = &quot;text&quot;, 
+             label = &quot;Wider than\nTall&quot;, color = &quot;#6999cd&quot;, 
+             size = 5, family = &quot;Lato&quot;, hjust = 0, fontface = 2)</code></pre>
+<p><img src="02-figs/unnamed-chunk-30-1.png" width="672" /></p>
+</div>
+<div id="plot-something-new-different" class="section level1">
+<h1>Plot something new &amp; different!</h1>
+<div class="panel panel-success">
+<div class="panel-heading">
+Challenge #5:
+</div>
+<div class="panel-body">
+<p>It can be anything- you can change colors, add annotations, switch the geoms, add new variables to examine- the world is your oyster! The only requirements are:</p>
+<ol style="list-style-type: decimal">
+<li>You <em>make</em> one new plot that is original, and</li>
+<li>You <em>write</em> 1-2 sentences to present the plot and why it makes sense. What questions do you think your plot can help you to answer?</li>
+</ol>
+It does not have to be pretty right now, but it must make sense as a visualization- you must be able to intelligently and succintly tell us about it in real words.
+</div>
+</div>
+</div>

@@ -1,0 +1,580 @@
+---
+title: "My Introduction to the dplyr package"
+author: "your NAME HERE"
+output:
+  html_document:
+    code_folding: TRUE
+    code_download: TRUE
+description: > 
+  Start here if this is your first time using dplyr. You'll learn the basic philosophy, the most important data manipulation verbs, and the pipe, `%>%`, which allows you to combine multiple verbs together to solve real problems.
+
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<p>AV: Read the text and execute each chunk as you go along. If you make any discoveries or have questions, put them into the text immediately after the chunk/text where your doubt is created. I have put in small intructions here and there for you to prompt your thinking and connection-making.</p>
+<p>When working with data you must:</p>
+<ul>
+<li><p>Figure out what you want to do.</p></li>
+<li><p>Describe those tasks in the form of a computer program.</p></li>
+<li><p>Execute the program.</p></li>
+</ul>
+<p>The <code>dplyr</code> package makes these steps fast and easy:</p>
+<ul>
+<li><p>By constraining your options, it helps you think about your data manipulation challenges.</p></li>
+<li><p>It provides simple <strong>“verbs”</strong>, functions that correspond to the most common data manipulation tasks, to help you translate your thoughts into code.</p></li>
+<li><p>It uses efficient backends, so you spend less time waiting for the computer.</p></li>
+</ul>
+<p>AV : ne’er you mind about backends ;-) See Shakespeare’s <em><a href="https://www.goodreads.com/quotes/392818-there-s-a-divinity-that-shapes-our-ends-rough-hew-them-how">Hamlet.</a></em></p>
+<p>This document introduces you to dplyr’s basic set of tools, and shows you how to apply them to data frames. <code>dplyr</code> also supports databases via the <code>dbplyr</code> package, once you’ve installed, read <code>vignette("dbplyr")</code> to learn more.</p>
+<div id="data-starwars" class="section level2">
+<h2>Data: starwars</h2>
+<p>To explore the basic data manipulation verbs of <code>dplyr</code>, we’ll use the dataset <code>starwars</code>. This dataset contains 87 characters and comes from the <a href="https://swapi.dev">Star Wars API</a>, and is documented in <code>?starwars</code></p>
+<p>AV: This means: type <code>?starwars</code> in the Console. Try.</p>
+<pre class="r"><code>dim(starwars)
+#&gt; [1] 87 14
+starwars
+#&gt; # A tibble: 87 x 14
+#&gt;   name     height  mass hair_color skin_color  eye_color birth_year sex   gender
+#&gt;   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
+#&gt; 1 Luke Sk~    172    77 blond      fair        blue            19   male  mascu~
+#&gt; 2 C-3PO       167    75 &lt;NA&gt;       gold        yellow         112   none  mascu~
+#&gt; 3 R2-D2        96    32 &lt;NA&gt;       white, blue red             33   none  mascu~
+#&gt; 4 Darth V~    202   136 none       white       yellow          41.9 male  mascu~
+#&gt; # ... with 83 more rows, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,
+#&gt; #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
+<p>Note that <code>starwars</code> is a <code>tibble</code>, a modern reimagining of the data frame. It’s particularly useful for large datasets because it only prints the first few rows. You can learn more about tibbles at <a href="https://tibble.tidyverse.org" class="uri">https://tibble.tidyverse.org</a>; in particular you can convert data frames to tibbles with <code>as_tibble()</code>.</p>
+<pre><code>AV: Check your Environment Tab to inspect `starwars` in a separate tab.</code></pre>
+</div>
+<div id="single-table-verbs" class="section level2">
+<h2>Single table verbs</h2>
+<p><code>dplyr</code> aims to provide a function for each basic verb of data manipulation. These verbs can be organised into three categories based on the component of the dataset that they work with:</p>
+<ul>
+<li>Rows:
+<ul>
+<li><code>filter()</code> chooses rows based on column values.</li>
+<li><code>slice()</code> chooses rows based on location.</li>
+<li><code>arrange()</code> changes the order of the rows.</li>
+</ul></li>
+<li>Columns:
+<ul>
+<li><code>select()</code> changes whether or not a column is included.</li>
+<li><code>rename()</code> changes the name of columns.</li>
+<li><code>mutate()</code> changes the values of columns and creates new columns.</li>
+<li><code>relocate()</code> changes the order of the columns.</li>
+</ul></li>
+<li>Groups of rows:
+<ul>
+<li><code>summarise()</code> collapses a group into a single row.</li>
+</ul></li>
+</ul>
+<p>AV: Think of the parallels from Microsoft Excel.</p>
+<div id="the-pipe" class="section level3">
+<h3>The pipe</h3>
+<p>All of the <code>dplyr</code> functions take a data frame (or <code>tibble</code>) as the first argument. Rather than forcing the user to either save intermediate objects or nest functions, dplyr provides the <code>%&gt;%</code> operator from <code>magrittr</code>. <code>x %&gt;% f(y)</code> turns into <code>f(x, y)</code> so the result from one step is then “piped” into the next step. You can use the pipe to rewrite multiple operations that you can read left-to-right, top-to-bottom (<strong>reading the pipe operator as “then”</strong>).</p>
+</div>
+<div id="filter-rows-with-filter" class="section level3">
+<h3>Filter rows with <code>filter()</code></h3>
+<p><code>filter()</code> allows you to select a subset of rows in a data frame. Like all single verbs, the first argument is the tibble (or data frame). The second and subsequent arguments refer to variables within that data frame, selecting rows where the expression is <code>TRUE</code>.</p>
+<p>For example, we can select all character with light skin color and brown eyes with:</p>
+<pre><code>AV: Note the double equal to sign (==) below! Equivalent to MS Excel Data -&gt; Filter</code></pre>
+<pre class="r"><code>starwars %&gt;% filter(skin_color == &quot;light&quot;, eye_color == &quot;brown&quot;)
+#&gt; # A tibble: 7 x 14
+#&gt;   name     height  mass hair_color skin_color eye_color birth_year sex    gender
+#&gt;   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; 
+#&gt; 1 Leia Or~    150    49 brown      light      brown             19 female femin~
+#&gt; 2 Biggs D~    183    84 black      light      brown             24 male   mascu~
+#&gt; 3 Cordé       157    NA brown      light      brown             NA female femin~
+#&gt; 4 Dormé       165    NA brown      light      brown             NA female femin~
+#&gt; # ... with 3 more rows, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,
+#&gt; #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
+</div>
+<div id="arrange-rows-with-arrange" class="section level3">
+<h3>Arrange rows with <code>arrange()</code></h3>
+<p><code>arrange()</code> works similarly to <code>filter()</code> except that instead of filtering or selecting rows, it <strong>reorders</strong> them. It takes a data frame, and a set of column names (or more complicated expressions) to order by. If you provide more than one column name, each additional column will be used to break ties in the values of preceding columns:</p>
+<pre class="r"><code>starwars %&gt;% arrange(height, mass)
+#&gt; # A tibble: 87 x 14
+#&gt;   name      height  mass hair_color skin_color eye_color birth_year sex   gender
+#&gt;   &lt;chr&gt;      &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
+#&gt; 1 Yoda          66    17 white      green      brown            896 male  mascu~
+#&gt; 2 Ratts Ty~     79    15 none       grey, blue unknown           NA male  mascu~
+#&gt; 3 Wicket S~     88    20 brown      brown      brown              8 male  mascu~
+#&gt; 4 Dud Bolt      94    45 none       blue, grey yellow            NA male  mascu~
+#&gt; # ... with 83 more rows, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,
+#&gt; #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
+<p>Use <code>desc()</code> to order a column in descending order:</p>
+<pre class="r"><code>starwars %&gt;% arrange(desc(height))
+#&gt; # A tibble: 87 x 14
+#&gt;   name     height  mass hair_color skin_color eye_color birth_year sex   gender 
+#&gt;   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  
+#&gt; 1 Yarael ~    264    NA none       white      yellow            NA male  mascul~
+#&gt; 2 Tarfful     234   136 brown      brown      blue              NA male  mascul~
+#&gt; 3 Lama Su     229    88 none       grey       black             NA male  mascul~
+#&gt; 4 Chewbac~    228   112 brown      unknown    blue             200 male  mascul~
+#&gt; # ... with 83 more rows, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,
+#&gt; #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
+</div>
+<div id="choose-rows-using-their-position-with-slice" class="section level3">
+<h3>Choose rows using their position with <code>slice()</code></h3>
+<p><code>slice()</code> lets you index rows by their (integer) locations. It allows you to select, remove, and duplicate rows.</p>
+<pre><code>AV: this is an important step in Prediction, Modelling and Machine Learning. </code></pre>
+<p>We can get characters from row numbers 5 through 10.</p>
+<pre class="r"><code>starwars %&gt;% slice(5:10)
+#&gt; # A tibble: 6 x 14
+#&gt;   name     height  mass hair_color  skin_color eye_color birth_year sex   gender
+#&gt;   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
+#&gt; 1 Leia Or~    150    49 brown       light      brown             19 fema~ femin~
+#&gt; 2 Owen La~    178   120 brown, grey light      blue              52 male  mascu~
+#&gt; 3 Beru Wh~    165    75 brown       light      blue              47 fema~ femin~
+#&gt; 4 R5-D4        97    32 &lt;NA&gt;        white, red red               NA none  mascu~
+#&gt; # ... with 2 more rows, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,
+#&gt; #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
+<p>It is accompanied by a number of helpers for common use cases:</p>
+<ul>
+<li><code>slice_head()</code> and <code>slice_tail()</code> select the first or last rows.</li>
+</ul>
+<pre class="r"><code>starwars %&gt;% slice_head(n = 3)
+#&gt; # A tibble: 3 x 14
+#&gt;   name     height  mass hair_color skin_color  eye_color birth_year sex   gender
+#&gt;   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
+#&gt; 1 Luke Sk~    172    77 blond      fair        blue              19 male  mascu~
+#&gt; 2 C-3PO       167    75 &lt;NA&gt;       gold        yellow           112 none  mascu~
+#&gt; 3 R2-D2        96    32 &lt;NA&gt;       white, blue red               33 none  mascu~
+#&gt; # ... with 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
+#&gt; #   vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
+<ul>
+<li><code>slice_sample()</code> randomly selects rows. Use the option prop to choose a certain proportion of the cases.</li>
+</ul>
+<pre class="r"><code>starwars %&gt;% slice_sample(n = 5)
+#&gt; # A tibble: 5 x 14
+#&gt;   name   height  mass hair_color skin_color   eye_color birth_year sex    gender
+#&gt;   &lt;chr&gt;   &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;        &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; 
+#&gt; 1 Dud B~     94    45 none       blue, grey   yellow            NA male   mascu~
+#&gt; 2 Bossk     190   113 none       green        red               53 male   mascu~
+#&gt; 3 Shaak~    178    57 none       red, blue, ~ black             NA female femin~
+#&gt; 4 Dormé     165    NA brown      light        brown             NA female femin~
+#&gt; # ... with 1 more row, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,
+#&gt; #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;
+starwars %&gt;% slice_sample(prop = 0.1)
+#&gt; # A tibble: 8 x 14
+#&gt;   name     height  mass hair_color skin_color  eye_color birth_year sex   gender
+#&gt;   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
+#&gt; 1 Qui-Gon~    193    89 brown      fair        blue              92 male  mascu~
+#&gt; 2 Dexter ~    198   102 none       brown       yellow            NA male  mascu~
+#&gt; 3 R4-P17       96    NA none       silver, red red, blue         NA none  femin~
+#&gt; 4 Lama Su     229    88 none       grey        black             NA male  mascu~
+#&gt; # ... with 4 more rows, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,
+#&gt; #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
+<p>Use <code>replace = TRUE</code> to perform a bootstrap sample. If needed, you can weight the sample with the <code>weight</code> argument.</p>
+<pre><code>    AV: ` Bootstrap samples` are a special statistical sampling method. Counterintuitive perhaps, since you sample with replacement. Should remind you of your high school Permutation and Combination class, with all those urn models and so on. If you remember. </code></pre>
+<ul>
+<li><code>slice_min()</code> and <code>slice_max()</code> select rows with highest or lowest values of a variable. Note that we first must choose only the values which are not NA.</li>
+</ul>
+<pre class="r"><code>starwars %&gt;%
+  filter(!is.na(height)) %&gt;%
+  slice_min(height, n = 3)
+#&gt; # A tibble: 3 x 14
+#&gt;   name      height  mass hair_color skin_color eye_color birth_year sex   gender
+#&gt;   &lt;chr&gt;      &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
+#&gt; 1 Yoda          66    17 white      green      brown            896 male  mascu~
+#&gt; 2 Ratts Ty~     79    15 none       grey, blue unknown           NA male  mascu~
+#&gt; 3 Wicket S~     88    20 brown      brown      brown              8 male  mascu~
+#&gt; # ... with 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
+#&gt; #   vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
+</div>
+<div id="select-columns-with-select" class="section level3">
+<h3>Select columns with <code>select()</code></h3>
+<p>Often you work with large datasets with many columns but only a few are actually of interest to you. <code>select()</code> allows you to rapidly zoom in on a useful subset using operations that usually only work on numeric variable positions:</p>
+<pre class="r"><code># Select columns by name
+starwars %&gt;% select(hair_color, skin_color, eye_color)
+#&gt; # A tibble: 87 x 3
+#&gt;   hair_color skin_color  eye_color
+#&gt;   &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;    
+#&gt; 1 blond      fair        blue     
+#&gt; 2 &lt;NA&gt;       gold        yellow   
+#&gt; 3 &lt;NA&gt;       white, blue red      
+#&gt; 4 none       white       yellow   
+#&gt; # ... with 83 more rows
+# Select all columns between hair_color and eye_color (inclusive)
+starwars %&gt;% select(hair_color:eye_color)
+#&gt; # A tibble: 87 x 3
+#&gt;   hair_color skin_color  eye_color
+#&gt;   &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;    
+#&gt; 1 blond      fair        blue     
+#&gt; 2 &lt;NA&gt;       gold        yellow   
+#&gt; 3 &lt;NA&gt;       white, blue red      
+#&gt; 4 none       white       yellow   
+#&gt; # ... with 83 more rows
+# Select all columns except those from hair_color to eye_color (inclusive)
+starwars %&gt;% select(!(hair_color:eye_color))
+#&gt; # A tibble: 87 x 11
+#&gt;   name    height  mass birth_year sex   gender  homeworld species films vehicles
+#&gt;   &lt;chr&gt;    &lt;int&gt; &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;   &lt;lis&gt; &lt;list&gt;  
+#&gt; 1 Luke S~    172    77       19   male  mascul~ Tatooine  Human   &lt;chr~ &lt;chr [2~
+#&gt; 2 C-3PO      167    75      112   none  mascul~ Tatooine  Droid   &lt;chr~ &lt;chr [0~
+#&gt; 3 R2-D2       96    32       33   none  mascul~ Naboo     Droid   &lt;chr~ &lt;chr [0~
+#&gt; 4 Darth ~    202   136       41.9 male  mascul~ Tatooine  Human   &lt;chr~ &lt;chr [0~
+#&gt; # ... with 83 more rows, and 1 more variable: starships &lt;list&gt;
+# Select all columns ending with color
+starwars %&gt;% select(ends_with(&quot;color&quot;))
+#&gt; # A tibble: 87 x 3
+#&gt;   hair_color skin_color  eye_color
+#&gt;   &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;    
+#&gt; 1 blond      fair        blue     
+#&gt; 2 &lt;NA&gt;       gold        yellow   
+#&gt; 3 &lt;NA&gt;       white, blue red      
+#&gt; 4 none       white       yellow   
+#&gt; # ... with 83 more rows</code></pre>
+<p>There are a number of helper functions you can use within <code>select()</code>, like <code>starts_with()</code>, <code>ends_with()</code>, <code>matches()</code> and <code>contains()</code>. These let you quickly match larger blocks of variables that meet some criterion. See <code>?select</code> for more details.</p>
+<p>You can rename variables with <code>select()</code> by using named arguments:</p>
+<pre class="r"><code>starwars %&gt;% select(home_world = homeworld)
+#&gt; # A tibble: 87 x 1
+#&gt;   home_world
+#&gt;   &lt;chr&gt;     
+#&gt; 1 Tatooine  
+#&gt; 2 Tatooine  
+#&gt; 3 Naboo     
+#&gt; 4 Tatooine  
+#&gt; # ... with 83 more rows</code></pre>
+<p>But because <code>select()</code> drops all the variables not explicitly mentioned, it’s not that useful. Instead, use <code>rename()</code>:</p>
+<pre class="r"><code>starwars %&gt;% rename(home_world = homeworld)
+#&gt; # A tibble: 87 x 14
+#&gt;   name     height  mass hair_color skin_color  eye_color birth_year sex   gender
+#&gt;   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
+#&gt; 1 Luke Sk~    172    77 blond      fair        blue            19   male  mascu~
+#&gt; 2 C-3PO       167    75 &lt;NA&gt;       gold        yellow         112   none  mascu~
+#&gt; 3 R2-D2        96    32 &lt;NA&gt;       white, blue red             33   none  mascu~
+#&gt; 4 Darth V~    202   136 none       white       yellow          41.9 male  mascu~
+#&gt; # ... with 83 more rows, and 5 more variables: home_world &lt;chr&gt;, species &lt;chr&gt;,
+#&gt; #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
+</div>
+<div id="add-new-columns-with-mutate" class="section level3">
+<h3>Add new columns with <code>mutate()</code></h3>
+<p>Besides selecting sets of existing columns, it’s often useful to add new columns that are functions of existing columns. This is the job of <code>mutate()</code>:</p>
+<pre class="r"><code>starwars %&gt;% mutate(height_m = height / 100)
+#&gt; # A tibble: 87 x 15
+#&gt;   name     height  mass hair_color skin_color  eye_color birth_year sex   gender
+#&gt;   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
+#&gt; 1 Luke Sk~    172    77 blond      fair        blue            19   male  mascu~
+#&gt; 2 C-3PO       167    75 &lt;NA&gt;       gold        yellow         112   none  mascu~
+#&gt; 3 R2-D2        96    32 &lt;NA&gt;       white, blue red             33   none  mascu~
+#&gt; 4 Darth V~    202   136 none       white       yellow          41.9 male  mascu~
+#&gt; # ... with 83 more rows, and 6 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,
+#&gt; #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;, height_m &lt;dbl&gt;</code></pre>
+<p>We can’t see the height in meters we just calculated, but we can fix that using a select command.</p>
+<pre class="r"><code>starwars %&gt;%
+  mutate(height_m = height / 100) %&gt;%
+  select(height_m, height, everything())
+#&gt; # A tibble: 87 x 15
+#&gt;   height_m height name     mass hair_color skin_color eye_color birth_year sex  
+#&gt;      &lt;dbl&gt;  &lt;int&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;
+#&gt; 1     1.72    172 Luke S~    77 blond      fair       blue            19   male 
+#&gt; 2     1.67    167 C-3PO      75 &lt;NA&gt;       gold       yellow         112   none 
+#&gt; 3     0.96     96 R2-D2      32 &lt;NA&gt;       white, bl~ red             33   none 
+#&gt; 4     2.02    202 Darth ~   136 none       white      yellow          41.9 male 
+#&gt; # ... with 83 more rows, and 6 more variables: gender &lt;chr&gt;, homeworld &lt;chr&gt;,
+#&gt; #   species &lt;chr&gt;, films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
+<p><code>dplyr::mutate()</code> is similar to the base <code>transform()</code>, but allows you to refer to columns that you’ve just created:</p>
+<pre class="r"><code>starwars %&gt;%
+  mutate(
+    height_m = height / 100,
+    BMI = mass / (height_m^2)
+  ) %&gt;%
+  select(BMI, everything())
+#&gt; # A tibble: 87 x 16
+#&gt;     BMI name       height  mass hair_color skin_color eye_color birth_year sex  
+#&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;
+#&gt; 1  26.0 Luke Skyw~    172    77 blond      fair       blue            19   male 
+#&gt; 2  26.9 C-3PO         167    75 &lt;NA&gt;       gold       yellow         112   none 
+#&gt; 3  34.7 R2-D2          96    32 &lt;NA&gt;       white, bl~ red             33   none 
+#&gt; 4  33.3 Darth Vad~    202   136 none       white      yellow          41.9 male 
+#&gt; # ... with 83 more rows, and 7 more variables: gender &lt;chr&gt;, homeworld &lt;chr&gt;,
+#&gt; #   species &lt;chr&gt;, films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;,
+#&gt; #   height_m &lt;dbl&gt;</code></pre>
+<p>If you only want to keep the new variables, use <code>transmute()</code>:</p>
+<pre class="r"><code>starwars %&gt;%
+  transmute(
+    height_m = height / 100,
+    BMI = mass / (height_m^2)
+  )
+#&gt; # A tibble: 87 x 2
+#&gt;   height_m   BMI
+#&gt;      &lt;dbl&gt; &lt;dbl&gt;
+#&gt; 1     1.72  26.0
+#&gt; 2     1.67  26.9
+#&gt; 3     0.96  34.7
+#&gt; 4     2.02  33.3
+#&gt; # ... with 83 more rows</code></pre>
+</div>
+<div id="change-column-order-with-relocate" class="section level3">
+<h3>Change column order with <code>relocate()</code></h3>
+<p>Use a similar syntax as <code>select()</code> to move blocks of columns at once</p>
+<pre class="r"><code>starwars %&gt;% relocate(sex:homeworld, .before = height)
+#&gt; # A tibble: 87 x 14
+#&gt;   name      sex   gender  homeworld height  mass hair_color skin_color eye_color
+#&gt;   &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;    
+#&gt; 1 Luke Sky~ male  mascul~ Tatooine     172    77 blond      fair       blue     
+#&gt; 2 C-3PO     none  mascul~ Tatooine     167    75 &lt;NA&gt;       gold       yellow   
+#&gt; 3 R2-D2     none  mascul~ Naboo         96    32 &lt;NA&gt;       white, bl~ red      
+#&gt; 4 Darth Va~ male  mascul~ Tatooine     202   136 none       white      yellow   
+#&gt; # ... with 83 more rows, and 5 more variables: birth_year &lt;dbl&gt;, species &lt;chr&gt;,
+#&gt; #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
+</div>
+<div id="summarise-values-with-summarise" class="section level3">
+<h3>Summarise values with <code>summarise()</code></h3>
+<p>The last verb is <code>summarise()</code>. It collapses a data frame to a single row.</p>
+<pre class="r"><code>starwars %&gt;% summarise(mean_height = mean(height, na.rm = TRUE))
+#&gt; # A tibble: 1 x 1
+#&gt;   mean_height
+#&gt;         &lt;dbl&gt;
+#&gt; 1        174.</code></pre>
+<p>It’s not that useful until we learn the <code>group_by()</code> verb below.</p>
+</div>
+<div id="commonalities" class="section level3">
+<h3>Commonalities</h3>
+<p>You may have noticed that the syntax and function of all these verbs are very similar:</p>
+<ul>
+<li><p>The first argument is a data frame.</p></li>
+<li><p>The subsequent arguments describe what to do with the data frame. You can
+refer to columns in the data frame directly without using <code>$</code>.</p></li>
+<li><p>The result is a new data frame</p></li>
+</ul>
+<p>Together these properties make it easy to chain together multiple simple steps to achieve a complex result.</p>
+<p>These five functions provide the basis of a language of data manipulation. At the most basic level, you can only alter a tidy data frame in five useful ways: you can reorder the rows (<code>arrange()</code>), pick observations and variables of interest (<code>filter()</code> and <code>select()</code>), add new variables that are functions of existing variables (<code>mutate()</code>), or collapse many values to a summary (<code>summarise()</code>).</p>
+</div>
+</div>
+<div id="combining-functions-with" class="section level2">
+<h2>Combining functions with <code>%&gt;%</code></h2>
+<p>The dplyr API is functional in the sense that function calls don’t have side-effects. You must always save their results. This doesn’t lead to particularly elegant code, especially if you want to do many operations at once. You either have to do it step-by-step:</p>
+<pre class="r"><code>a1 &lt;- group_by(starwars, species, sex)
+a2 &lt;- select(a1, height, mass)
+a3 &lt;- summarise(a2,
+  height = mean(height, na.rm = TRUE),
+  mass = mean(mass, na.rm = TRUE)
+)</code></pre>
+<p>Or if you don’t want to name the intermediate results, you need to wrap the function calls inside each other:</p>
+<pre class="r"><code>summarise(
+  select(
+    group_by(starwars, species, sex),
+    height, mass
+  ),
+  height = mean(height, na.rm = TRUE),
+  mass = mean(mass, na.rm = TRUE)
+)
+#&gt; Adding missing grouping variables: `species`, `sex`
+#&gt; `summarise()` has grouped output by &#39;species&#39;. You can override using the `.groups` argument.
+#&gt; # A tibble: 41 x 4
+#&gt; # Groups:   species [38]
+#&gt;   species  sex   height  mass
+#&gt;   &lt;chr&gt;    &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt;
+#&gt; 1 Aleena   male      79    15
+#&gt; 2 Besalisk male     198   102
+#&gt; 3 Cerean   male     198    82
+#&gt; 4 Chagrian male     196   NaN
+#&gt; # ... with 37 more rows</code></pre>
+<p>This is difficult to read because the order of the operations is from inside to out. Thus, the arguments are a long way away from the function. To get around this problem, dplyr provides the <code>%&gt;%</code> operator from magrittr. <code>x %&gt;% f(y)</code> turns into <code>f(x, y)</code> so you can use it to rewrite multiple operations that you can read left-to-right, top-to-bottom (reading the pipe operator as “then”):</p>
+<pre class="r"><code>starwars %&gt;%
+  group_by(species, sex) %&gt;%
+  summarise(
+    mean_height = mean(height, na.rm = TRUE),
+    mean_mass = mean(mass, na.rm = TRUE)
+  )
+#&gt; `summarise()` has grouped output by &#39;species&#39;. You can override using the `.groups` argument.
+#&gt; # A tibble: 41 x 4
+#&gt; # Groups:   species [38]
+#&gt;   species  sex   mean_height mean_mass
+#&gt;   &lt;chr&gt;    &lt;chr&gt;       &lt;dbl&gt;     &lt;dbl&gt;
+#&gt; 1 Aleena   male           79        15
+#&gt; 2 Besalisk male          198       102
+#&gt; 3 Cerean   male          198        82
+#&gt; 4 Chagrian male          196       NaN
+#&gt; # ... with 37 more rows</code></pre>
+</div>
+<div id="patterns-of-operations" class="section level2">
+<h2>Patterns of operations</h2>
+<p>The dplyr verbs can be classified by the type of operations they accomplish (we sometimes speak of their <strong>semantics</strong>, i.e., their meaning). It’s helpful to have a good grasp of the difference between select and mutate operations.</p>
+<div id="selecting-operations" class="section level3">
+<h3>Selecting operations</h3>
+<p>One of the appealing features of dplyr is that you can refer to
+columns from the tibble as if they were regular variables. However,
+the syntactic uniformity of referring to bare column names hides
+semantical differences across the verbs. A column symbol supplied to
+<code>select()</code> does not have the same meaning as the same symbol supplied
+to <code>mutate()</code>.</p>
+<p>Selecting operations expect column names and positions. Hence, when
+you call <code>select()</code> with bare variable names, they actually represent
+their own positions in the tibble. The following calls are completely
+equivalent from dplyr’s point of view:</p>
+<pre class="r"><code># `name` represents the integer 1
+select(starwars, name)
+#&gt; # A tibble: 87 x 1
+#&gt;   name          
+#&gt;   &lt;chr&gt;         
+#&gt; 1 Luke Skywalker
+#&gt; 2 C-3PO         
+#&gt; 3 R2-D2         
+#&gt; 4 Darth Vader   
+#&gt; # ... with 83 more rows
+select(starwars, 1)
+#&gt; # A tibble: 87 x 1
+#&gt;   name          
+#&gt;   &lt;chr&gt;         
+#&gt; 1 Luke Skywalker
+#&gt; 2 C-3PO         
+#&gt; 3 R2-D2         
+#&gt; 4 Darth Vader   
+#&gt; # ... with 83 more rows</code></pre>
+<p>By the same token, this means that you cannot refer to variables from the surrounding context if they have the same name as one of the columns. In the following example, <code>height</code> still represents 2, not 5:</p>
+<pre class="r"><code>height &lt;- 5
+select(starwars, height)
+#&gt; # A tibble: 87 x 1
+#&gt;   height
+#&gt;    &lt;int&gt;
+#&gt; 1    172
+#&gt; 2    167
+#&gt; 3     96
+#&gt; 4    202
+#&gt; # ... with 83 more rows</code></pre>
+<p>One useful subtlety is that this only applies to bare names and to
+selecting calls like <code>c(height, mass)</code> or <code>height:mass</code>. In all other
+cases, the columns of the data frame are not put in scope. This allows
+you to refer to contextual variables in selection helpers:</p>
+<pre class="r"><code>name &lt;- &quot;color&quot;
+select(starwars, ends_with(name))
+#&gt; # A tibble: 87 x 3
+#&gt;   hair_color skin_color  eye_color
+#&gt;   &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;    
+#&gt; 1 blond      fair        blue     
+#&gt; 2 &lt;NA&gt;       gold        yellow   
+#&gt; 3 &lt;NA&gt;       white, blue red      
+#&gt; 4 none       white       yellow   
+#&gt; # ... with 83 more rows</code></pre>
+<p>These semantics are usually intuitive. But note the subtle difference:</p>
+<pre class="r"><code>name &lt;- 5
+select(starwars, name, identity(name))
+#&gt; # A tibble: 87 x 2
+#&gt;   name           skin_color 
+#&gt;   &lt;chr&gt;          &lt;chr&gt;      
+#&gt; 1 Luke Skywalker fair       
+#&gt; 2 C-3PO          gold       
+#&gt; 3 R2-D2          white, blue
+#&gt; 4 Darth Vader    white      
+#&gt; # ... with 83 more rows</code></pre>
+<p>In the first argument, <code>name</code> represents its own position <code>1</code>. In the
+second argument, <code>name</code> is evaluated in the surrounding context and
+represents the fifth column.</p>
+<p>For a long time, <code>select()</code> used to only understand column positions.
+Counting from dplyr 0.6, it now understands column names as well. This
+makes it a bit easier to program with <code>select()</code>:</p>
+<pre class="r"><code>vars &lt;- c(&quot;name&quot;, &quot;height&quot;)
+select(starwars, all_of(vars), &quot;mass&quot;)
+#&gt; # A tibble: 87 x 3
+#&gt;   name           height  mass
+#&gt;   &lt;chr&gt;           &lt;int&gt; &lt;dbl&gt;
+#&gt; 1 Luke Skywalker    172    77
+#&gt; 2 C-3PO             167    75
+#&gt; 3 R2-D2              96    32
+#&gt; 4 Darth Vader       202   136
+#&gt; # ... with 83 more rows</code></pre>
+</div>
+<div id="mutating-operations" class="section level3">
+<h3>Mutating operations</h3>
+<p>Mutate semantics are quite different from selection semantics. Whereas
+<code>select()</code> expects column names or positions, <code>mutate()</code> expects
+<em>column vectors</em>.
+We will set up a smaller tibble to use for our examples.</p>
+<pre class="r"><code>df &lt;- starwars %&gt;% select(name, height, mass)</code></pre>
+<p>When we use <code>select()</code>, the bare column names stand for their own
+positions in the tibble. For <code>mutate()</code> on the other hand, column
+symbols represent the actual column vectors stored in the tibble.
+Consider what happens if we give a string or a number to <code>mutate()</code>:</p>
+<pre class="r"><code>mutate(df, &quot;height&quot;, 2)
+#&gt; # A tibble: 87 x 5
+#&gt;   name           height  mass `&quot;height&quot;`   `2`
+#&gt;   &lt;chr&gt;           &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;
+#&gt; 1 Luke Skywalker    172    77 height         2
+#&gt; 2 C-3PO             167    75 height         2
+#&gt; 3 R2-D2              96    32 height         2
+#&gt; 4 Darth Vader       202   136 height         2
+#&gt; # ... with 83 more rows</code></pre>
+<p><code>mutate()</code> gets length-1 vectors that it interprets as new columns in
+the data frame. These vectors are recycled so they match the number of
+rows. That’s why it doesn’t make sense to supply expressions like
+<code>"height" + 10</code> to <code>mutate()</code>. This amounts to adding 10 to a string!
+The correct expression is:</p>
+<pre class="r"><code>mutate(df, height + 10)
+#&gt; # A tibble: 87 x 4
+#&gt;   name           height  mass `height + 10`
+#&gt;   &lt;chr&gt;           &lt;int&gt; &lt;dbl&gt;         &lt;dbl&gt;
+#&gt; 1 Luke Skywalker    172    77           182
+#&gt; 2 C-3PO             167    75           177
+#&gt; 3 R2-D2              96    32           106
+#&gt; 4 Darth Vader       202   136           212
+#&gt; # ... with 83 more rows</code></pre>
+<p>In the same way, you can unquote values from the context if these
+values represent a valid column. They must be either length 1 (they
+then get recycled) or have the same length as the number of rows. In
+the following example we create a new vector that we add to the data
+frame:</p>
+<pre class="r"><code>var &lt;- seq(1, nrow(df))
+mutate(df, new = var)
+#&gt; # A tibble: 87 x 4
+#&gt;   name           height  mass   new
+#&gt;   &lt;chr&gt;           &lt;int&gt; &lt;dbl&gt; &lt;int&gt;
+#&gt; 1 Luke Skywalker    172    77     1
+#&gt; 2 C-3PO             167    75     2
+#&gt; 3 R2-D2              96    32     3
+#&gt; 4 Darth Vader       202   136     4
+#&gt; # ... with 83 more rows</code></pre>
+<p>A case in point is <code>group_by()</code>. While you might think it has select
+semantics, it actually has mutate semantics. This is quite handy as it
+allows to group by a modified column:</p>
+<pre class="r"><code>group_by(starwars, sex)
+#&gt; # A tibble: 87 x 14
+#&gt; # Groups:   sex [5]
+#&gt;   name     height  mass hair_color skin_color  eye_color birth_year sex   gender
+#&gt;   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
+#&gt; 1 Luke Sk~    172    77 blond      fair        blue            19   male  mascu~
+#&gt; 2 C-3PO       167    75 &lt;NA&gt;       gold        yellow         112   none  mascu~
+#&gt; 3 R2-D2        96    32 &lt;NA&gt;       white, blue red             33   none  mascu~
+#&gt; 4 Darth V~    202   136 none       white       yellow          41.9 male  mascu~
+#&gt; # ... with 83 more rows, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,
+#&gt; #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;
+group_by(starwars, sex = as.factor(sex))
+#&gt; # A tibble: 87 x 14
+#&gt; # Groups:   sex [5]
+#&gt;   name     height  mass hair_color skin_color  eye_color birth_year sex   gender
+#&gt;   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt; &lt;fct&gt; &lt;chr&gt; 
+#&gt; 1 Luke Sk~    172    77 blond      fair        blue            19   male  mascu~
+#&gt; 2 C-3PO       167    75 &lt;NA&gt;       gold        yellow         112   none  mascu~
+#&gt; 3 R2-D2        96    32 &lt;NA&gt;       white, blue red             33   none  mascu~
+#&gt; 4 Darth V~    202   136 none       white       yellow          41.9 male  mascu~
+#&gt; # ... with 83 more rows, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,
+#&gt; #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;
+group_by(starwars, height_binned = cut(height, 3))
+#&gt; # A tibble: 87 x 15
+#&gt; # Groups:   height_binned [4]
+#&gt;   name     height  mass hair_color skin_color  eye_color birth_year sex   gender
+#&gt;   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
+#&gt; 1 Luke Sk~    172    77 blond      fair        blue            19   male  mascu~
+#&gt; 2 C-3PO       167    75 &lt;NA&gt;       gold        yellow         112   none  mascu~
+#&gt; 3 R2-D2        96    32 &lt;NA&gt;       white, blue red             33   none  mascu~
+#&gt; 4 Darth V~    202   136 none       white       yellow          41.9 male  mascu~
+#&gt; # ... with 83 more rows, and 6 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,
+#&gt; #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;, height_binned &lt;fct&gt;</code></pre>
+<p>This is why you can’t supply a column name to <code>group_by()</code>. This
+amounts to creating a new column containing the string recycled to the
+number of rows:</p>
+<pre class="r"><code>group_by(df, &quot;month&quot;)
+#&gt; # A tibble: 87 x 4
+#&gt; # Groups:   &quot;month&quot; [1]
+#&gt;   name           height  mass `&quot;month&quot;`
+#&gt;   &lt;chr&gt;           &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;    
+#&gt; 1 Luke Skywalker    172    77 month    
+#&gt; 2 C-3PO             167    75 month    
+#&gt; 3 R2-D2              96    32 month    
+#&gt; 4 Darth Vader       202   136 month    
+#&gt; # ... with 83 more rows</code></pre>
+</div>
+</div>

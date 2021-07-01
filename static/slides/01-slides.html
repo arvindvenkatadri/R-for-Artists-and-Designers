@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>Lab 01: CS631</title>
+    <title>Lab 01</title>
     <meta charset="utf-8" />
-    <meta name="author" content="Alison Hill" />
+    <meta name="author" content="Arvind Venkatadri" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/ohsu.css" type="text/css" />
     <link rel="stylesheet" href="css/ohsu-fonts.css" type="text/css" />
@@ -12,9 +13,9 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# Lab 01: CS631
+# Lab 01
 ## Working in R
-### Alison Hill
+### Arvind Venkatadri
 
 ---
 
@@ -107,12 +108,12 @@ Else: `Alt` + `-`
 
 
 ```r
-us &lt;- c("Steven", "Jackie", "Alison") # combine strings
+us &lt;- c("Pratyush", "Anand", "Arvind") # combine strings
 us
 ```
 
 ```
-[1] "Steven" "Jackie" "Alison"
+[1] "Pratyush" "Anand"    "Arvind"  
 ```
 
 --
@@ -178,7 +179,7 @@ my_names
  8  1880 F     Alice      1414 0.0145
  9  1880 F     Bertha     1320 0.0135
 10  1880 F     Sarah      1288 0.0132
-# … with 1,924,655 more rows
+# ... with 1,924,655 more rows
 ```
 
 
@@ -380,13 +381,13 @@ glimpse(babynames)
 ```
 
 ```
-Observations: 1,924,665
-Variables: 5
-$ year &lt;dbl&gt; 1880, 1880, 1880, 1880, 1880, 1880, 1880, 1880, 1880, 1880, 1880…
-$ sex  &lt;chr&gt; "F", "F", "F", "F", "F", "F", "F", "F", "F", "F", "F", "F", "F",…
-$ name &lt;chr&gt; "Mary", "Anna", "Emma", "Elizabeth", "Minnie", "Margaret", "Ida"…
-$ n    &lt;int&gt; 7065, 2604, 2003, 1939, 1746, 1578, 1472, 1414, 1320, 1288, 1258…
-$ prop &lt;dbl&gt; 0.07238359, 0.02667896, 0.02052149, 0.01986579, 0.01788843, 0.01…
+Rows: 1,924,665
+Columns: 5
+$ year &lt;dbl&gt; 1880, 1880, 1880, 1880, 1880, 1880, 1880, 1880, 1880, 1880, 1880,~
+$ sex  &lt;chr&gt; "F", "F", "F", "F", "F", "F", "F", "F", "F", "F", "F", "F", "F", ~
+$ name &lt;chr&gt; "Mary", "Anna", "Emma", "Elizabeth", "Minnie", "Margaret", "Ida",~
+$ n    &lt;int&gt; 7065, 2604, 2003, 1939, 1746, 1578, 1472, 1414, 1320, 1288, 1258,~
+$ prop &lt;dbl&gt; 0.07238359, 0.02667896, 0.02052149, 0.01986579, 0.01788843, 0.016~
 ```
 
 --
@@ -546,13 +547,13 @@ class: middle
 
 ```r
 greet &lt;- function(name) {
-  glue::glue("Welcome to CS631, {name}!")
+  glue::glue("Welcome to SMI, {name}!")
 }
-greet("Sloane")
+greet("Kanishka")
 ```
 
 ```
-Welcome to CS631, Sloane!
+Welcome to SMI, Kanishka!
 ```
 
 
@@ -892,6 +893,7 @@ ipak(pkgs) # take function, and give it that list
 ```
 
 Function from: https://gist.github.com/stevenworthington/3178163
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
@@ -939,6 +941,32 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
 // adds .remark-code-has-line-highlighted class to <pre> parent elements
 // of code chunks containing highlighted lines with class .remark-code-line-highlighted
 (function(d) {
@@ -956,17 +984,6 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   }
   preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
 })(document);</script>
-
-<script>
-(function() {
-  var links = document.getElementsByTagName('a');
-  for (var i = 0; i < links.length; i++) {
-    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
-      links[i].target = '_blank';
-    }
-  }
-})();
-</script>
 
 <script>
 slideshow._releaseMath = function(el) {

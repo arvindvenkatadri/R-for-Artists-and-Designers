@@ -406,16 +406,6 @@ ggraph(ga, layout = &quot;linear&quot;) +
   labs(edge_width = &quot;Weight&quot;) +
   theme_graph()+
   theme(legend.position = &quot;top&quot;)</code></pre>
-<pre><code>## Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): font family not
-## found in Windows font database
-
-## Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): font family not
-## found in Windows font database</code></pre>
-<pre><code>## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database</code></pre>
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/arc-diagram-1.png" width="672" /></p>
 <p><strong>Questions and Inferences</strong>: How does this graph look “metaphorically” different? Do you see a difference in the relationships between people here? Why?</p>
 <pre class="r"><code># Coord diagram, circular
@@ -429,17 +419,6 @@ ggraph(ga, layout = &quot;linear&quot;, circular = TRUE) +
   theme_graph()+
   theme(legend.position = &quot;right&quot;, 
         aspect.ratio = 1)</code></pre>
-<pre><code>## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database</code></pre>
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/Coord-Diagram-circular-1.png" width="672" /></p>
 <p><strong>Questions and Inferences</strong>: How does this graph look “metaphorically” different? Do you see a difference in the relationships between people here? Why?</p>
 <div id="hierarchical-layouts" class="section level2">
@@ -474,10 +453,6 @@ graph = tbl_graph(edges = flare$edges, nodes = flare$vertices)
 ggraph(graph, layout = &quot;dendrogram&quot;) + 
   geom_edge_diagonal() + 
   labs(title = &quot;Dendrogram&quot;)</code></pre>
-<pre><code>## Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): font family not
-## found in Windows font database</code></pre>
-<pre><code>## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database</code></pre>
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
 <pre class="r"><code># circular dendrogram
 ggraph(graph, layout = &quot;dendrogram&quot;, circular = TRUE) + 
@@ -490,78 +465,22 @@ ggraph(graph, layout = &quot;dendrogram&quot;, circular = TRUE) +
 ggraph(graph, layout = &quot;treemap&quot;, weight = size) + 
   geom_node_tile(aes(fill = depth), size = 0.25) + 
   labs(title = &quot;Rectangular Tree Map&quot;)</code></pre>
-<pre><code>## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database</code></pre>
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-1-3.png" width="672" /></p>
 <pre class="r"><code># circular tree map
 ggraph(graph, layout = &quot;circlepack&quot;, weight = size) + 
   geom_node_circle(aes(fill = depth), size = 0.25, n = 50) + 
   coord_fixed() + 
   labs(title = &quot;Circular Tree Map&quot;)</code></pre>
-<pre><code>## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database</code></pre>
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-1-4.png" width="672" /></p>
 <pre class="r"><code># icicle
 ggraph(graph, layout = &quot;partition&quot;) + 
   geom_node_tile(aes(y = -y, fill = depth))</code></pre>
-<pre><code>## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database</code></pre>
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-1-5.png" width="672" /></p>
 <pre class="r"><code># sunburst (circular icicle)
 ggraph(graph, layout = &quot;partition&quot;, circular = TRUE) +
   geom_node_arc_bar(aes(fill = depth)) +
   coord_fixed() + 
   labs(title = &quot;Circular Icicle&quot;)</code></pre>
-<pre><code>## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database</code></pre>
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-1-6.png" width="672" /></p>
 <p><strong>Questions and Inferences</strong>: How do graphs look “metaphorically” different? Do they reveal different aspects of the group? How?</p>
 </div>
@@ -578,31 +497,12 @@ ggraph(ga,layout = &quot;linear&quot;, circular = TRUE) +
   geom_edge_link(aes(color = type)) + 
   geom_node_point() +
   facet_edges(~ type)</code></pre>
-<pre><code>## Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): font family not
-## found in Windows font database</code></pre>
-<pre><code>## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database</code></pre>
-<pre><code>## Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
-## font family not found in Windows font database</code></pre>
-<pre><code>## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database</code></pre>
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/faceting-1.png" width="672" /></p>
 <pre class="r"><code># facet nodes by sex
 ggraph(ga,layout = &quot;linear&quot;, circular = TRUE) + 
   geom_edge_link() + 
   geom_node_point() +
   facet_nodes(~race)</code></pre>
-<pre><code>## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database</code></pre>
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/faceting-2.png" width="672" /></p>
 <pre class="r"><code># facet both nodes and edges
 ggraph(ga,layout = &quot;linear&quot;, circular = TRUE) + 
@@ -610,39 +510,6 @@ ggraph(ga,layout = &quot;linear&quot;, circular = TRUE) +
   geom_node_point() +
   facet_graph(type ~ race) + 
   th_foreground(border = TRUE)</code></pre>
-<pre><code>## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database</code></pre>
-<pre><code>## Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
-## font family not found in Windows font database
-
-## Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
-## font family not found in Windows font database
-
-## Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
-## font family not found in Windows font database
-
-## Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
-## font family not found in Windows font database
-
-## Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
-## font family not found in Windows font database
-
-## Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
-## font family not found in Windows font database
-
-## Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
-## font family not found in Windows font database
-
-## Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :
-## font family not found in Windows font database</code></pre>
-<pre><code>## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database</code></pre>
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/faceting-3.png" width="672" /></p>
 <p><strong>Questions and Inferences</strong>: Does splitting up the main graph into subnetworks give you more insight? Describe some of these.</p>
 </div>
@@ -708,29 +575,6 @@ ga %&gt;%
   
   # discrete colour legend
   scale_color_gradient(guide = &quot;legend&quot;)</code></pre>
-<pre><code>## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database</code></pre>
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/Using-Centrality-1.png" width="672" /></p>
 <pre class="r"><code># or even less typing
   ggraph(ga,layout = &quot;nicely&quot;) +
@@ -740,35 +584,6 @@ ga %&gt;%
   scale_color_gradient(guide = &quot;legend&quot;,
                        low = &quot;green&quot;,
                        high = &quot;red&quot;)</code></pre>
-<pre><code>## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database</code></pre>
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/Using-Centrality-2.png" width="672" /></p>
 </div>
 <div id="analyse-and-visualize-network-communities" class="section level3">
@@ -787,17 +602,6 @@ ga %&gt;%
   ggraph(layout = &quot;graphopt&quot;) + 
   geom_edge_link() + 
   geom_node_point(aes(color = community), size = 5)</code></pre>
-<pre><code>## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database
-
-## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
-## family not found in Windows font database</code></pre>
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <p>Good, you are now a gRaphista !!</p>
 </div>

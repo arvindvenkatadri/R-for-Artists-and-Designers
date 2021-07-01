@@ -1,0 +1,426 @@
+---
+title: "Pronouns and data"
+author: Arvind Venkatadri
+output: 
+  html_document:
+    toc: TRUE
+    theme: cerulean # try other themes (“default”, “cerulean”, “journal”, “flatly”, “darkly”, “readable”, “spacelab”, “united”, “cosmo”, “lumen”, “paper”, “sandstone”, “simplex”, “yeti”)
+  code_download: TRUE
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>In this document, we try to connect story-making questions with two other ideas:</p>
+<ol style="list-style-type: lower-alpha">
+<li>a Variable in a dataset</li>
+<li>A computed Quantity or a Visual based on one or more Variables</li>
+<li>Add to our story-line, questions and wonderments…</li>
+</ol>
+<p>The idea is to get the intuition behind data, and develop the right questions and hypotheses, that lead to the appropriate direction in exploratory data analysis (EDA) using graphs and charts in R.</p>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<ol style="list-style-type: decimal">
+<li>Daniel Kaplan and Randall Prium, <a href="https://cran.r-project.org/web/packages/ggformula/vignettes/ggformula.html">Formula Interface for ggplot2</a></li>
+</ol>
+<ul>
+<li><strong>Short</strong> Note on <code>ggformula</code>. Absolutely must see and work through to get jump-started on <code>ggformula</code>.</li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>Data Visualization with R, <a href="https://rkabacoff.github.io/datavis/">Robert Kabacoff</a></li>
+</ol>
+<ul>
+<li>Good crisp descriptions of many kinds of graphs, no nonsense book. Available free on the web.</li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li>Wickham and Grolemund, <a href="https://r4ds.had.co.nz/">R for Data Science</a></li>
+</ol>
+<ul>
+<li>R Bible. Available free on the web.</li>
+</ul>
+</div>
+<div id="interrogative-pronouns" class="section level1">
+<h1>Interrogative Pronouns</h1>
+<p>These are the usually heard <em>interrogative pronouns</em> in English.</p>
+<table style="width:100%;">
+<colgroup>
+<col width="11%" />
+<col width="8%" />
+<col width="26%" />
+<col width="34%" />
+<col width="17%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Pronoun</th>
+<th>Answer</th>
+<th>English Character</th>
+<th>Kind of Data Variable</th>
+<th>R Character</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>What</td>
+<td>A Thing</td>
+<td>Subject</td>
+<td>Nominal</td>
+<td>Categorical</td>
+</tr>
+<tr class="even">
+<td>Who</td>
+<td>A Person</td>
+<td>Subject</td>
+<td>Nominal</td>
+<td>Categorical</td>
+</tr>
+<tr class="odd">
+<td>Where</td>
+<td>A Place</td>
+<td>Subject/Object</td>
+<td>Nominal</td>
+<td>Categorical</td>
+</tr>
+<tr class="even">
+<td>Whom</td>
+<td>To A Person</td>
+<td>Object</td>
+<td>Nominal</td>
+<td>Categorical</td>
+</tr>
+<tr class="odd">
+<td>Which</td>
+<td>A Selection or a Type</td>
+<td>Adjective</td>
+<td>Qualitative</td>
+<td>Qualitative</td>
+</tr>
+<tr class="even">
+<td>How</td>
+<td>A Manner/Method</td>
+<td>Adverb</td>
+<td>Qualitative</td>
+<td>Qualitative</td>
+</tr>
+<tr class="odd">
+<td>What Kind (1)</td>
+<td>Type or Attribute, from a list</td>
+<td>Number (noun/adj)</td>
+<td>Qualitative</td>
+<td>Factor</td>
+</tr>
+<tr class="even">
+<td>What Kind(2)</td>
+<td>Type or Attribute, from a list, with order</td>
+<td>Affirmative - Comparative - Superlative…</td>
+<td>Qualitative with Scale</td>
+<td>Factor with Scale</td>
+</tr>
+<tr class="odd">
+<td>What Kind(3)</td>
+<td>Qualitative with Scale, from a list, with order and an absolute value</td>
+<td>-</td>
+<td>Ordinal</td>
+<td>Factor with Scale with “absolute zero”</td>
+</tr>
+<tr class="even">
+<td>How Many</td>
+<td>A number</td>
+<td>Number (noun/adj)</td>
+<td>Quantitative</td>
+<td>Quantitative</td>
+</tr>
+<tr class="odd">
+<td>How Often</td>
+<td>A number</td>
+<td>Number (noun/adj)</td>
+<td>Quantitative</td>
+<td>Quantitative</td>
+</tr>
+</tbody>
+</table>
+<p>Think of :
+- How long? / Since When? : Time
+- How often? / How seldom? : Frequency
+- ..?</p>
+<div id="look-at-the-dataset-penguins" class="section level2">
+<h2>Look at the dataset <code>penguins</code></h2>
+<ol style="list-style-type: decimal">
+<li>What are the variable <code>names()</code>?</li>
+<li>What would be the question you might have asked to obtain that variable?</li>
+<li>How would you process that variable?</li>
+<li>What meta questions could you ask of each variable?</li>
+<li>Where might the answers take your story?</li>
+</ol>
+<pre class="r"><code>names(penguins) # Column, i.e. Variable names</code></pre>
+<pre><code>## [1] &quot;species&quot;           &quot;island&quot;            &quot;bill_length_mm&quot;   
+## [4] &quot;bill_depth_mm&quot;     &quot;flipper_length_mm&quot; &quot;body_mass_g&quot;      
+## [7] &quot;sex&quot;               &quot;year&quot;</code></pre>
+<pre class="r"><code>head(penguins) # first six rows</code></pre>
+<pre><code>## # A tibble: 6 x 8
+##   species island bill_length_mm bill_depth_mm flipper_length_~ body_mass_g sex  
+##   &lt;fct&gt;   &lt;fct&gt;           &lt;dbl&gt;         &lt;dbl&gt;            &lt;int&gt;       &lt;int&gt; &lt;fct&gt;
+## 1 Adelie  Torge~           39.1          18.7              181        3750 male 
+## 2 Adelie  Torge~           39.5          17.4              186        3800 fema~
+## 3 Adelie  Torge~           40.3          18                195        3250 fema~
+## 4 Adelie  Torge~           NA            NA                 NA          NA &lt;NA&gt; 
+## 5 Adelie  Torge~           36.7          19.3              193        3450 fema~
+## 6 Adelie  Torge~           39.3          20.6              190        3650 male 
+## # ... with 1 more variable: year &lt;int&gt;</code></pre>
+<pre class="r"><code>tail(penguins) # LAst six rows</code></pre>
+<pre><code>## # A tibble: 6 x 8
+##   species island bill_length_mm bill_depth_mm flipper_length_~ body_mass_g sex  
+##   &lt;fct&gt;   &lt;fct&gt;           &lt;dbl&gt;         &lt;dbl&gt;            &lt;int&gt;       &lt;int&gt; &lt;fct&gt;
+## 1 Chinst~ Dream            45.7          17                195        3650 fema~
+## 2 Chinst~ Dream            55.8          19.8              207        4000 male 
+## 3 Chinst~ Dream            43.5          18.1              202        3400 fema~
+## 4 Chinst~ Dream            49.6          18.2              193        3775 male 
+## 5 Chinst~ Dream            50.8          19                210        4100 male 
+## 6 Chinst~ Dream            50.2          18.7              198        3775 fema~
+## # ... with 1 more variable: year &lt;int&gt;</code></pre>
+<pre class="r"><code>dim(penguins) # Size of dataset</code></pre>
+<pre><code>## [1] 344   8</code></pre>
+<pre class="r"><code># Check for missing data
+any(is.na(penguins))</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+</div>
+<div id="interrogations-and-graphs" class="section level2">
+<h2>Interrogations and Graphs</h2>
+<p>What sort of measures, and visuals charts can we create with different kinds of variables, taken singly or together? Let us write some simple English descriptions of measures and visuals and see what commands they use in R.</p>
+<div id="quick-intro-to-ggformula" class="section level3">
+<h3>Quick Intro to <code>ggformula</code></h3>
+<p>All computations and graphs work with the following structure</p>
+<ul>
+<li>Simple Structure</li>
+</ul>
+<p><code>goal( y ~ x | z, data = my_data)</code></p>
+<ul>
+<li>Bells and Whistles</li>
+</ul>
+<p><code>goal( y ~ x | z, data = my_data,</code></p>
+<p><code>color = ~ some_variable,</code></p>
+<p><code>shape = ~ some_variable,</code></p>
+<p><code>size = ~ some_variable)</code></p>
+<p>Usually safe; unused variables are ignored. But keep your eyes open !!</p>
+<ul>
+<li>Still more Bells and Whistles !
+add: <code>gf_refine(.....)</code></li>
+</ul>
+<p>Look at the <code>Using Colours in R.Rmd</code> file for ideas.</p>
+</div>
+<div id="single-qualitativecategorical-variable" class="section level3">
+<h3>Single Qualitative/Categorical Variable</h3>
+<ol style="list-style-type: decimal">
+<li><p>Questions: How? Which? What Kind?</p></li>
+<li><p>Measures: No of <code>levels</code> / Counts for each <code>level</code></p></li>
+</ol>
+<ul>
+<li><code>counts</code> / <code>tally</code> (very similar syntax to ggformula)</li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li>Charts: Bar Chart / Pie Chart / Tree Map</li>
+</ol>
+<ul>
+<li><code>gf_bar</code> / <code>gf_bar %&gt;% coord_polar()</code> / Find out !!</li>
+</ul>
+<pre class="r"><code>mosaic::counts( ~ island, data = penguins)</code></pre>
+<pre><code>##   response n_Biscoe n_Dream n_Torgersen
+## 1   island      168     124          52</code></pre>
+<pre class="r"><code>mosaic::counts(~ species, data = penguins)</code></pre>
+<pre><code>##   response n_Adelie n_Chinstrap n_Gentoo
+## 1  species      152          68      124</code></pre>
+<pre class="r"><code>counts(~ sex, data = penguins)</code></pre>
+<pre><code>## Warning: Excluding 11 rows due to missing data [df_stats()].</code></pre>
+<pre><code>##   response n_female n_male
+## 1      sex      165    168</code></pre>
+<pre class="r"><code>mosaic::tally( ~ island, data = penguins)</code></pre>
+<pre><code>## island
+##    Biscoe     Dream Torgersen 
+##       168       124        52</code></pre>
+<pre class="r"><code># Curious: what&#39;s the difference in output between tally and counts?
+# 
+gf_bar( ~ island, fill = ~ island, data = penguins)</code></pre>
+<p><img src="/labs/02-Pronouns-and-Data_files/figure-html/Single%20Cat%20Var-1-1.png" width="672" /></p>
+<pre class="r"><code>gf_bar(~ island, fill = ~ sex, data = penguins)</code></pre>
+<p><img src="/labs/02-Pronouns-and-Data_files/figure-html/Single%20Cat%20Var-1-2.png" width="672" /></p>
+<pre class="r"><code># YOUR TURN
+# Run names(penguins) is you have forgotten
+counts(~ species, data  = penguins)</code></pre>
+<pre><code>##   response n_Adelie n_Chinstrap n_Gentoo
+## 1  species      152          68      124</code></pre>
+<pre class="r"><code>tally( ~ species, data = penguins)</code></pre>
+<pre><code>## species
+##    Adelie Chinstrap    Gentoo 
+##       152        68       124</code></pre>
+<pre class="r"><code>gf_bar( ~ species, data = penguins)</code></pre>
+<p><img src="/labs/02-Pronouns-and-Data_files/figure-html/Single%20Cat%20Var-2-1.png" width="672" />
+Storyline: Where do most of the penguins live? On Treasure Island….?
+Most of the Penguins live on Biscoe island. And Adelie penguins are most frequent in this dataset.</p>
+</div>
+<div id="single-quantitative-variable" class="section level3">
+<h3>Single Quantitative Variable</h3>
+<ol style="list-style-type: decimal">
+<li><p>Questions: How many? How few? How often? How much?</p></li>
+<li><p>Measures: max / min / mean / mode / (units)</p></li>
+</ol>
+<ul>
+<li><code>max()</code>, <code>min()</code>, <code>range()</code>, <code>mean()</code>, <code>favstats</code></li>
+<li><code>mode()</code> # non-formula ;-(</li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li>Charts: Bar Chart / Histogram / Density
+<ul>
+<li><code>gf_bar()</code> / <code>gf_histogram()</code> / <code>gf_density()</code></li>
+</ul></li>
+</ol>
+<pre class="r"><code>range(~ bill_length_mm, na.rm =TRUE, data = penguins) </code></pre>
+<pre><code>## [1] 32.1 59.6</code></pre>
+<pre class="r"><code># Note this. Try deleting this option!
+favstats(~ bill_length_mm, data = penguins, groups = ~island)</code></pre>
+<pre><code>##      island  min    Q1 median    Q3  max     mean       sd   n missing
+## 1    Biscoe 34.5 42.00  45.80 48.70 59.6 45.25749 4.772731 167       1
+## 2     Dream 32.1 39.15  44.65 49.85 58.0 44.16774 5.953527 124       0
+## 3 Torgersen 33.5 36.65  38.90 41.10 46.0 38.95098 3.025318  51       1</code></pre>
+<pre class="r"><code>gf_histogram(~ bill_length_mm, data = penguins)</code></pre>
+<pre><code>## Warning: Removed 2 rows containing non-finite values (stat_bin).</code></pre>
+<p><img src="/labs/02-Pronouns-and-Data_files/figure-html/Single%20Quant-1-1.png" width="672" /></p>
+<pre class="r"><code># YOUR TURN BELOW
+gf_density(~ bill_length_mm | island, data = penguins)</code></pre>
+<pre><code>## Warning: Removed 2 rows containing non-finite values (stat_density).</code></pre>
+<p><img src="/labs/02-Pronouns-and-Data_files/figure-html/Single%20Quant-2-1.png" width="672" /></p>
+<pre class="r"><code>gf_density(~body_mass_g | island, data  = penguins)</code></pre>
+<pre><code>## Warning: Removed 2 rows containing non-finite values (stat_density).</code></pre>
+<p><img src="/labs/02-Pronouns-and-Data_files/figure-html/Single%20Quant-2-2.png" width="672" /></p>
+<p>Storyline: Some of those penguins have really big bills. I mean beaks!! 59 cms !!!
+Are those the ones with a lot of body mass as well? Bite more, eat more, weigh more…</p>
+</div>
+<div id="two-variables-categorical-vs-categorical" class="section level3">
+<h3>Two Variables: Categorical vs Categorical</h3>
+<ol style="list-style-type: decimal">
+<li><p>Questions: What Kind(x) vs What Kind(y)?</p></li>
+<li><p>Measures: Counts and Tallies sliced by Category</p>
+<ul>
+<li><code>counts</code> , <code>tally</code>(very similar syntax to ggformula)</li>
+</ul></li>
+<li><p>Charts: Stacked Bar Charts / Grouped Bar Charts / Segmented Bar Chart / Mosaic Chart</p>
+<ul>
+<li><code>gf_bar()</code></li>
+<li>Use with second Categorical variables to modify <code>fill</code>, <code>color</code>.</li>
+<li>Also try to vary the parameter <code>position</code> of the bars.</li>
+</ul></li>
+</ol>
+<pre class="r"><code>counts(~ species | sex , data = penguins)</code></pre>
+<pre><code>## Warning: Excluding 11 rows due to missing data [df_stats()].</code></pre>
+<pre><code>##   response    sex n_Adelie n_Chinstrap n_Gentoo
+## 1  species female       73          34       58
+## 2  species   male       73          34       61</code></pre>
+<pre class="r"><code>counts(~ species + sex , data = penguins)</code></pre>
+<pre><code>## Warning: Excluding 11 rows due to missing data [df_stats()].</code></pre>
+<pre><code>##   response n_Adelie n_Chinstrap n_Gentoo n_female n_male
+## 1  species      152          68      124       NA     NA
+## 2      sex       NA          NA       NA      165    168</code></pre>
+<pre class="r"><code>tally(~ species + sex  , data = penguins)</code></pre>
+<pre><code>##            sex
+## species     female male &lt;NA&gt;
+##   Adelie        73   73    6
+##   Chinstrap     34   34    0
+##   Gentoo        58   61    5</code></pre>
+<pre class="r"><code># try other pairs of Categorical variables. Interpret. </code></pre>
+<p>Storyline: We have larger numbers of Adelie penguins…</p>
+<pre class="r"><code>gf_bar(~ species, fill = ~ sex, data = penguins, position = &quot;fill&quot;)</code></pre>
+<p><img src="/labs/02-Pronouns-and-Data_files/figure-html/Cat%20vs%20Cat-2-1.png" width="672" /></p>
+<pre class="r"><code># Try position = &quot;dodge&quot; and &quot;fill&quot;</code></pre>
+<p>Storyline: तीन पेनगीन। और तुम भी तीन</p>
+<p>(Oh never mind!</p>
+<pre class="r"><code>## YOUR TURN BELOW
+gf_bar(~ species, fill = ~ sex, data = penguins, 
+       position = &quot;fill&quot;) %&gt;% 
+  gf_refine(scale_fill_brewer(palette = &quot;Set3&quot;))</code></pre>
+<p><img src="/labs/02-Pronouns-and-Data_files/figure-html/Cat%20vs%20Cat-3-1.png" width="672" /></p>
+</div>
+<div id="two-variables-quantitative-vs-quantitative" class="section level3">
+<h3>Two Variables: Quantitative vs Quantitative</h3>
+<ol style="list-style-type: decimal">
+<li><p>Questions: How many vs How many? Does this depend upon that?</p></li>
+<li><p>Measures: Correlation / Covariance / T-test / Chi-Square Test for Two Means etc. We won’t go too deep into this !!</p></li>
+<li><p>Charts: Scatter Plot / Line Plot / Regression i.e. best fit lines (Remember $ y = mx + c $ and friends?)</p></li>
+</ol>
+<pre class="r"><code>#cor(penguins$body, penguins$flipper_length_mm) # Error! Why?
+penguins %&gt;% 
+  drop_na() %&gt;% # remove entries that are missing (NA)
+  mosaic::cor(body_mass_g ~ bill_length_mm, data = .)</code></pre>
+<pre><code>## [1] 0.5894511</code></pre>
+<p>Storyline: More weight, bigger the flipper, at least 59% of the time. They need to swim…but then there must be some overweight penguins with small flippers? I mean, 59%…</p>
+<pre class="r"><code>gf_point(body_mass_g ~ flipper_length_mm, data = penguins) # Why do we get a warning?</code></pre>
+<pre><code>## Warning: Removed 2 rows containing missing values (geom_point).</code></pre>
+<p><img src="/labs/02-Pronouns-and-Data_files/figure-html/Quant%20vs%20Quant-2-1.png" width="672" /></p>
+<pre class="r"><code>gf_point(flipper_length_mm ~ body_mass_g, data = penguins) %&gt;% 
+  gf_smooth(method = &quot;lm&quot;) # Try other methods</code></pre>
+<pre><code>## Warning: Removed 2 rows containing non-finite values (stat_smooth).
+
+## Warning: Removed 2 rows containing missing values (geom_point).</code></pre>
+<p><img src="/labs/02-Pronouns-and-Data_files/figure-html/Quant%20vs%20Quant-2-2.png" width="672" /></p>
+<p>Storyline: More weight, bigger the flipper…looks like a fairly predictable trend. Is this what Darwin meant?</p>
+<pre class="r"><code># YOUR TURN BELOW</code></pre>
+</div>
+<div id="two-variables-quantitative-vs-qualitative" class="section level3">
+<h3>Two Variables: Quantitative vs Qualitative</h3>
+<ol style="list-style-type: decimal">
+<li>Questions: How many vs What Kind? How many vs Which? How many vs How?</li>
+</ol>
+<p>We usually do stuff on the Quant Variable, after <code>grouping</code> using the Qual variable. (See <code>Cat vs Cat</code> above)</p>
+<ol start="2" style="list-style-type: decimal">
+<li>Measures: Quant Variable summaries, grouped by Categorical variable.</li>
+</ol>
+<ul>
+<li>Think!!</li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li>Charts: Bar Chart using group / density plots by group / violin plots by group / box plots by group</li>
+</ol>
+<ul>
+<li><code>gf_bar</code> / <code>gf_density</code> / <code>gf_violin</code> / <code>gf_boxplot</code> using Categorical Variable for grouping</li>
+</ul>
+<pre class="r"><code>penguins %&gt;% 
+  group_by(island) %&gt;% 
+    gf_density(~ body_mass_g, color = ~island, fill = ~ island, alpha = 0.3, data = .)</code></pre>
+<pre><code>## Warning: Removed 2 rows containing non-finite values (stat_density).</code></pre>
+<p><img src="/labs/02-Pronouns-and-Data_files/figure-html/Quant%20vs%20Qual-1-1.png" width="672" /></p>
+<pre class="r"><code>penguins %&gt;% 
+  group_by(species) %&gt;% 
+  gf_histogram(~ flipper_length_mm, data = .)</code></pre>
+<pre><code>## Warning: Removed 2 rows containing non-finite values (stat_bin).</code></pre>
+<p><img src="/labs/02-Pronouns-and-Data_files/figure-html/Quant%20vs%20Qual-1-2.png" width="672" /></p>
+<pre class="r"><code>penguins %&gt;% 
+  group_by(species) %&gt;% 
+  gf_violin(flipper_length_mm ~ species, data = .)</code></pre>
+<pre><code>## Warning: Removed 2 rows containing non-finite values (stat_ydensity).</code></pre>
+<p><img src="/labs/02-Pronouns-and-Data_files/figure-html/Quant%20vs%20Qual-1-3.png" width="672" /></p>
+<p>Storyline: Hmm….there are significantly different weight distributions among Antarctic penguins…based on the island they live on!
+What do they eat?</p>
+<p>What else lives there?</p>
+<pre class="r"><code>#library(dplyr) # this package is part of the tidyverse.
+penguins %&gt;% 
+  group_by(island) %&gt;% 
+  summarise(mean_weight = median(body_mass_g, na.rm = TRUE)) %&gt;% 
+# sd, var, median
+
+  gf_col(mean_weight ~ island, color = ~island, fill = ~ island, data = .)</code></pre>
+<p><img src="/labs/02-Pronouns-and-Data_files/figure-html/Quant%20vs%20Qual-2-1.png" width="672" /></p>
+<p>Storyline: Why are all heavier penguins are on one island….???</p>
+<p>Let’s try one last plot: the Boxplot. <img src="https://rkabacoff.github.io/datavis/img/boxplot.png" alt="boxplot" /></p>
+<pre class="r"><code>#library(dplyr) # this package is part of the tidyverse.
+penguins %&gt;% 
+    gf_boxplot(body_mass_g ~ island, color = ~island, data = .,notch = FALSE)</code></pre>
+<pre><code>## Warning: Removed 2 rows containing non-finite values (stat_boxplot).</code></pre>
+<p><img src="/labs/02-Pronouns-and-Data_files/figure-html/Quant%20vs%20Qual-3-1.png" width="672" />
+Storyline: Clearly there is a relationship between Species, Island and BodyWeight.
+How do we discover that?</p>
+<p>Ah, welcome to <strong>Predictive Modelling</strong> and <strong>Machine Learning</strong>….</p>
+<pre class="r"><code># YOUR TURN HERE</code></pre>
+</div>
+</div>
+</div>

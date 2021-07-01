@@ -1,0 +1,263 @@
+---
+title: "Grammar of Maps"
+subtitle: "R for Artists and Designers"
+author: "Arvind Venkatadri"
+date: 22/April/2021
+output:
+  html_document:
+    toc_float: true
+    theme: yeti
+    toc: true
+    code_download: true
+abstract: Part of the `R for Artists and Designers` at the School of Foundation Studies, Srishti Manipal Institute of Art, Design, and Technology, Bangalore.
+---
+
+
+# Installation
+**rgdal** is R’s interface to the "Geospatial Abstraction Library (GDAL)" which is used by other open source GIS packages such as QGIS and enables R to handle a broader range of spatial data formats.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# Getting Map Data into R
+library(prettymapr) # to search for map data based on location
+
+library(osmdata) # Import Open Street Data
+library(rnaturalearth)
+library(rnaturalearthdata) # Import Natural Earth Data
+library(rnaturalearthhires) # Hi Resolution..is your WiFi any good?
+
+# Plotting Maps
+library(osmplotr) # "Bespoke" Maps using OSM data
+library(tmap) # Thematic Maps, static and interactive
+library(leaflet) # Interactive Maps
+library(leaflet.providers)
+
+```
+
+## Introduction to Maps in R
+
+We will take small steps in making maps using just two of the several map making packages in R.
+
+The steps we will use are:
+
+1. Search for an area of interest ( E.g. using `prettymapr` or similar..)
+2. Learn how to access spatial/map data using `osmdata`
+3. Plot and dress up our map using `osmplot`, `tmap` and also with `leaflet`.
+4. Create interactive maps with `leaflet` using a variety of map data providers. Note: `tmap` can also do interactive maps which we will explore also. 
+
+Bas. Onwards and Map-wards!!
+
+
+## God made me a BengaluR-kaR...I think
+
+Let's get BLR data into R and see if we can plot an area of interest. Then we can order on Swiggy...never mind. 
+
+Where is my home? Specify a "bounding box" first, using a rough longitude latitude info, or using a place name and searching for the long/lat:
+
+```{r I_am_going_home}
+# BLR Bounding Box
+bbox <- osmplotr::get_bbox(c(77.56,12.93,77.63,12.96))
+bbox_l <- osmdata::getbb("Bangalore, India")
+bbox_p <- prettymapr::searchbbox("Bangalore")
+bbox
+bbox_l
+bbox_p # identical with bbox_l
+```
+
+```{r get_osm_map_data, cache = TRUE}
+# Get Map data
+
+dat_B <- extract_osm_objects (key = "building", bbox = bbox) 
+dat_H <- extract_osm_objects (key = 'highway', bbox = bbox)
+dat_P <- extract_osm_objects (key = 'park', bbox = bbox)
+dat_G <- extract_osm_objects (key = 'landuse', value = 'grass', bbox = bbox)
+dat_T <- extract_osm_objects (key = 'natural', value = 'tree', bbox = bbox)
+
+#Useful keys include building, waterway, natural, grass, park, amenity, shop, boundary, and highway.
+
+
+```
+
+## My first Map in R
+
+```{r plot osm data}
+
+blr_map <- osm_basemap(bbox = bbox, bg = "gray20") %>%
+  add_osm_objects(., dat_B, col = "gray40") %>% 
+  add_osm_objects(., dat_H, col = "gray80") %>% 
+  add_osm_objects(., dat_G, col = "darkseagreen1") %>% 
+  add_osm_objects(., dat_P, col = "darkseagreen") %>% 
+  add_osm_objects(., dat_T, col = "green")
+
+print_osm_map(blr_map)
+#print_osm_map (map, filename = "Blr.jpeg", device = "jpeg", width = 10, units = "cm")
+#print_osm_map (map, filename = "map.png", width = 10, units = "in", dpi = 300)
+```
+
+
+```{r}
+blr_map_2 <- osm_basemap(bbox = bbox, bg = "gray20") %>%
+  add_osm_objects(., dat_B, col = "gray40") %>% 
+  add_osm_objects(., dat_H, col = "gray80") %>% 
+  add_osm_objects(., dat_G, col = "darkseagreen1") %>% 
+  add_osm_objects(., dat_P, col = "darkseagreen") %>% 
+  add_osm_objects(., dat_T, col = "green")
+
+print_osm_map(blr_map)
+```
+
+```{r look at OSM data, message=FALSE}
+class(dat_B)
+names(dat_B)
+class(dat_B$geometry)
+nrow(dat_B)
+```
+
+## Adding my "area" to the map
+
+We can create areas of interest around the map. Say based on metro stations or your restaurants etc. 
+
+```{r shapes_on_maps}
+
+my_area <- 
+  bbox %>% 
+  zoombbox(factor = 16, offset = c(0,0)) 
+my_area
+bbox
+
+
+my_area_in_blr <- 
+  sp::SpatialPoints(coords = cbind(
+  c(my_area["x", "min"], my_area["x", "max"],
+    my_area["x", "max"], my_area["x", "min"]),
+  c(my_area["y", "min"], my_area["y", "min"],
+    my_area["y", "max"], my_area["y", "max"])
+        )
+  )
+my_area_in_blr
+```
+
+
+```{r My_Blr_finally}
+blr_map %>% add_osm_groups(
+  .,
+  dat_B,
+  groups = my_area_in_blr,
+  cols = "yellow",
+  bg = "gray40",
+  colmat = FALSE
+) %>%
+  add_osm_objects(., dat_B, col = "red", size = 0.2) %>% 
+  print_osm_map(.)
+```
+
+##### END OF CLASS 1
+
+
+
+## Using `rnaturalearth` and `tmap`
+
+```{r World_Data}
+data("World")
+data("metro")
+
+head(metro, n = 3)
+```
+
+
+```{r My Static World}
+tmap_mode("plot")
+tm_shape(World) +
+    tm_polygons("HPI") +
+  
+tm_shape(metro) + 
+  tm_bubbles(size = "pop2020", col = "red")
+```
+
+
+
+```{r My Interactive Water Colour World}
+tmap_mode("view")
+
+tm_shape(World) +
+    tm_polygons("HPI") +
+tm_shape(metro) + 
+  tm_bubbles(size = "pop2020", col = "red") +
+tm_tiles("Stamen.TonerLabels")
+```
+
+
+```{r spatial_data}
+india <- 
+  ne_states(country =  "india", 
+            geounit = "india", 
+            returnclass = "sf")
+
+india_neighbours <- 
+  ne_states(country= (c("india", "sri lanka", "pakistan", "afghanistan", "nepal","bangladesh")))
+
+names(india)
+names(india_neighbours)
+```
+
+
+## Subsetting Spatial data by attributes
+
+```{r Spatial_data_subsetting_by_attributes}
+#ind <- metro$iso_a3 == "IND"
+#metro_ind1 <- metro[ind,]
+metro_ind2 <- subset(metro, iso_a3 == "IND")
+metro_neighbours <- metro %>% dplyr::filter(iso_a3 %in% c("IND","PAK", "LKA", "BGD","NPL"))
+```
+
+## Map 1
+```{r Map_1}
+tm_shape(World %>% dplyr::filter(iso_a3 %in% c("IND", "AFG", "PAK", "NPL", "BGD", "LKA"))) + 
+  tm_borders() + 
+tm_shape(india) + 
+  tm_polygons("name") + 
+  tm_shape(metro_ind2)+
+  tm_dots(size = "pop2020") + 
+  tm_layout(legend.outside = TRUE,legend.outside.position = "right") +
+  tm_credits("Geographical Boundaries are not accurate",size = 0.5,position = "right") + 
+  tm_compass(position = c("right", "top")) + 
+  tm_scale_bar(position = "left") + 
+  tmap_style("watercolor") #cobalt #gray #white #col_blind #beaver #classic #watercolor #albatross #bw
+```
+
+
+
+## Map 2
+```{r Map_2}
+tm_shape(india_neighbours) + 
+  tm_polygons("name") + 
+  tm_shape(metro_neighbours) +
+  tm_dots(size = "pop2020") + 
+  tm_layout(legend.outside = TRUE,legend.outside.position = "right") +
+  tmap_options(max.categories = 10) + 
+  tm_credits("Geographical Boundaries are not accurate",size = 0.5,position = "center")
+```
+
+```{r}
+tmap_mode("plot")
+tm_basemap("Stamen.Watercolor") +
+  tm_shape(metro, bbox = "India") + 
+  tm_dots(col = "red", 
+          # user-chosen group name for layers
+          group = "Metropolitan Areas") +
+  tm_shape(World) + 
+  tm_borders() + 
+  tm_tiles(server = "Stamen.TonerLabels",group = "Labels") + # ADDS LABELS!!!
+  tm_graticules()
+
+```
+
+
+## Scope and Packages for Exploration!!
+
+### sfnetworks
+### mapsf
+### ggspatial
+
+
+# UseR2020 Tutorial

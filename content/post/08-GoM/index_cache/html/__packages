@@ -1,0 +1,16 @@
+base
+methods
+datasets
+utils
+grDevices
+graphics
+stats
+prettymapr
+osmdata
+rnaturalearth
+rnaturalearthdata
+rnaturalearthhires
+osmplotr
+tmap
+leaflet
+leaflet.providers

@@ -1,0 +1,321 @@
+---
+title: "Pronouns and data"
+author: Arvind Venkatadri
+output: 
+  html_document:
+    toc: TRUE
+    theme: cerulean # try other themes (“default”, “cerulean”, “journal”, “flatly”, “darkly”, “readable”, “spacelab”, “united”, “cosmo”, “lumen”, “paper”, “sandstone”, “simplex”, “yeti”)
+  code_download: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggformula)
+library(palmerpenguins)
+library(mosaic)
+library(mosaicCore)
+library(mosaicData)
+library(RColorBrewer)
+```
+
+# Introduction
+In this document, we try to connect story-making questions with two other ideas:
+
+a) a Variable in a dataset
+b) A computed Quantity or a Visual based on one or more Variables
+c) Add to our story-line, questions and wonderments...
+
+The idea is to get the intuition behind data, and develop the right questions and hypotheses, that lead to the appropriate direction in exploratory data analysis (EDA) using graphs and charts in R.
+
+# References
+1. Daniel Kaplan and Randall Prium, [Formula Interface for ggplot2](https://cran.r-project.org/web/packages/ggformula/vignettes/ggformula.html)
+- **Short** Note on `ggformula`. Absolutely must see and work through to get jump-started on `ggformula`. 
+
+2. Data Visualization with R, [Robert Kabacoff](https://rkabacoff.github.io/datavis/)
+- Good crisp descriptions of many kinds of graphs, no nonsense book. Available free on the web. 
+
+3. Wickham and Grolemund, [R for Data Science](https://r4ds.had.co.nz/)
+ - R Bible. Available free on the web.
+
+
+# Interrogative Pronouns
+These are the usually heard *interrogative pronouns* in English.
+
+Pronoun | Answer| English Character | Kind of Data Variable | R Character
+--------| ------|------------------ |-----------------------|------------
+What  | A Thing | Subject | Nominal| Categorical
+Who   | A Person| Subject | Nominal | Categorical
+Where | A Place | Subject/Object    | Nominal | Categorical
+Whom  | To A Person   | Object| Nominal | Categorical
+Which | A Selection or a Type   | Adjective| Qualitative| Qualitative
+How   | A Manner/Method| Adverb           | Qualitative | Qualitative
+What Kind (1)| Type or Attribute, from a list     | Number (noun/adj) | Qualitative| Factor
+What Kind(2) | Type or Attribute, from a list, with order | Affirmative - Comparative - Superlative...| Qualitative with Scale | Factor with Scale
+What Kind(3) | Qualitative with Scale, from a list, with order and an absolute value | - | Ordinal | Factor with Scale with "absolute zero"
+How Many| A number| Number (noun/adj) | Quantitative| Quantitative
+How Often | A number| Number (noun/adj) | Quantitative| Quantitative
+
+Think of :
+ - How long? / Since When? : Time
+ - How often? / How seldom? : Frequency
+ - ..? 
+
+## Look at the dataset `penguins`
+
+1. What are the variable `names()`?
+2. What would be the question you might have asked to obtain that variable?
+3. How would you process that variable? 
+4. What meta questions could you ask of each variable?
+5. Where might the answers take your story?
+
+```{r Look at Penguins}
+names(penguins) # Column, i.e. Variable names
+head(penguins) # first six rows
+tail(penguins) # LAst six rows
+dim(penguins) # Size of dataset
+
+# Check for missing data
+any(is.na(penguins))
+```
+
+## Interrogations and Graphs
+What sort of measures, and visuals charts can we create with different kinds of variables, taken singly or together? Let us write some simple English descriptions of measures and visuals and see what commands they use in R.
+
+### Quick Intro to `ggformula`
+All computations and graphs work with the following structure
+
+- Simple Structure 
+
+`goal( y ~ x | z, data = my_data)`
+
+- Bells and Whistles
+
+`goal( y ~ x | z, data = my_data, `
+
+`                 color = ~ some_variable, `
+
+`                 shape = ~ some_variable, `
+
+`                 size = ~ some_variable)`
+
+Usually safe; unused variables are ignored. But keep your eyes open !!
+ 
+- Still more Bells and Whistles !
+ add: `gf_refine(.....)`
+ 
+ Look at the `Using Colours in R.Rmd` file for ideas. 
+
+
+### Single Qualitative/Categorical Variable
+
+1) Questions: How? Which? What Kind?
+
+2) Measures: No of `levels` / Counts for each `level`
+  - `counts` / ` tally` (very similar syntax to ggformula)
+  
+3) Charts: Bar Chart / Pie Chart / Tree Map 
+  - `gf_bar` / `gf_bar %>% coord_polar()` / Find out !!
+
+```{r Single Cat Var-1}
+mosaic::counts( ~ island, data = penguins)
+mosaic::counts(~ species, data = penguins)
+counts(~ sex, data = penguins)
+mosaic::tally( ~ island, data = penguins)
+# Curious: what's the difference in output between tally and counts?
+# 
+gf_bar( ~ island, fill = ~ island, data = penguins)
+gf_bar(~ island, fill = ~ sex, data = penguins)
+```
+
+
+```{r Single Cat Var-2}
+# YOUR TURN
+# Run names(penguins) is you have forgotten
+counts(~ species, data  = penguins)
+tally( ~ species, data = penguins)
+
+gf_bar( ~ species, data = penguins)
+```
+Storyline: Where do most of the penguins live? On Treasure Island....?
+Most of the Penguins live on Biscoe island. And Adelie penguins are most frequent in this dataset.
+
+
+### Single Quantitative Variable
+
+1) Questions: How many? How few? How often? How much?
+
+2) Measures: max / min / mean / mode / (units)
+  - `max()`, `min()`, `range()`, `mean()`, `favstats`
+  - `mode()` # non-formula ;-(
+  
+3) Charts: Bar Chart / Histogram / Density  
+    - `gf_bar()` / `gf_histogram()` / `gf_density()` 
+
+```{r Single Quant-1}
+range(~ bill_length_mm, na.rm =TRUE, data = penguins) 
+# Note this. Try deleting this option!
+favstats(~ bill_length_mm, data = penguins, groups = ~island)
+
+gf_histogram(~ bill_length_mm, data = penguins)
+```
+
+```{r Single Quant-2}
+# YOUR TURN BELOW
+gf_density(~ bill_length_mm | island, data = penguins)
+gf_density(~body_mass_g | island, data  = penguins)
+
+```
+
+Storyline: Some of those penguins have really big bills. I mean beaks!! 59 cms !!!
+Are those the ones with a lot of body mass as well? Bite more, eat more, weigh more...
+
+
+
+### Two Variables: Categorical vs Categorical
+
+1) Questions: What Kind(x) vs What Kind(y)? 
+
+2) Measures: Counts and Tallies sliced by Category
+    - `counts` , `tally`(very similar syntax to ggformula)
+    
+3) Charts: Stacked Bar Charts / Grouped Bar Charts / Segmented Bar Chart / Mosaic Chart
+    - `gf_bar()` 
+    - Use with second Categorical variables to modify `fill`, `color`. 
+    - Also try to vary the parameter `position` of the bars. 
+
+```{r Cat vs Cat-1}
+counts(~ species | sex , data = penguins)
+counts(~ species + sex , data = penguins)
+tally(~ species + sex  , data = penguins)
+
+# try other pairs of Categorical variables. Interpret. 
+
+```
+Storyline: We have larger numbers of Adelie penguins...
+
+
+```{r Cat vs Cat-2}
+gf_bar(~ species, fill = ~ sex, data = penguins, position = "fill")
+# Try position = "dodge" and "fill"
+```
+
+Storyline: तीन पेनगीन। और तुम भी तीन
+
+(Oh never mind!
+
+```{r Cat vs Cat-3}
+## YOUR TURN BELOW
+gf_bar(~ species, fill = ~ sex, data = penguins, 
+       position = "fill") %>% 
+  gf_refine(scale_fill_brewer(palette = "Set3"))
+
+
+
+```
+
+
+
+### Two Variables: Quantitative vs Quantitative
+
+1) Questions: How many vs How many? Does this depend upon that?
+
+2) Measures: Correlation / Covariance / T-test / Chi-Square Test for Two Means etc. We won't go too deep into this !!
+
+3) Charts: Scatter Plot / Line Plot / Regression i.e. best fit lines (Remember $ y = mx + c $ and friends?)
+
+```{r Quant vs Quant-1}
+
+#cor(penguins$body, penguins$flipper_length_mm) # Error! Why?
+penguins %>% 
+  drop_na() %>% # remove entries that are missing (NA)
+  mosaic::cor(body_mass_g ~ bill_length_mm, data = .)
+
+```
+Storyline: More weight, bigger the flipper, at least 59% of the time. They need to swim...but then there must be some overweight penguins with small flippers? I mean, 59%...
+
+
+```{r Quant vs Quant-2}
+gf_point(body_mass_g ~ flipper_length_mm, data = penguins) # Why do we get a warning?
+
+gf_point(flipper_length_mm ~ body_mass_g, data = penguins) %>% 
+  gf_smooth(method = "lm") # Try other methods
+```
+
+Storyline: More weight, bigger the flipper...looks like a fairly predictable trend. Is this what Darwin meant?
+
+```{r Quant vs Quant-3}
+# YOUR TURN BELOW
+
+
+```
+
+
+
+
+
+### Two Variables: Quantitative vs Qualitative
+
+1) Questions: How many vs What Kind? How many vs Which? How many vs How?
+
+We usually do stuff on the Quant Variable, after `grouping` using the Qual variable. (See `Cat vs Cat` above)
+
+2) Measures: Quant Variable summaries, grouped by Categorical variable. 
+ - Think!!
+
+3) Charts: Bar Chart using group / density plots by group / violin plots by group / box plots by group
+ - `gf_bar` / `gf_density` / `gf_violin` / `gf_boxplot` using Categorical Variable for grouping
+
+```{r Quant vs Qual-1}
+penguins %>% 
+  group_by(island) %>% 
+    gf_density(~ body_mass_g, color = ~island, fill = ~ island, alpha = 0.3, data = .)
+
+penguins %>% 
+  group_by(species) %>% 
+  gf_histogram(~ flipper_length_mm, data = .)
+
+penguins %>% 
+  group_by(species) %>% 
+  gf_violin(flipper_length_mm ~ species, data = .)
+```
+
+Storyline: Hmm....there are significantly different weight distributions among Antarctic penguins...based on the island they live on!
+What do they eat?
+
+What else lives there?
+
+```{r Quant vs Qual-2}
+#library(dplyr) # this package is part of the tidyverse.
+penguins %>% 
+  group_by(island) %>% 
+  summarise(mean_weight = median(body_mass_g, na.rm = TRUE)) %>% 
+# sd, var, median
+
+  gf_col(mean_weight ~ island, color = ~island, fill = ~ island, data = .)
+```
+
+Storyline: Why are all heavier penguins are on one island....???
+
+ Let's try one last plot: the Boxplot. ![boxplot](https://rkabacoff.github.io/datavis/img/boxplot.png)
+
+
+```{r Quant vs Qual-3}
+#library(dplyr) # this package is part of the tidyverse.
+penguins %>% 
+    gf_boxplot(body_mass_g ~ island, color = ~island, data = .,notch = FALSE)
+
+```
+Storyline: Clearly there is a relationship between Species, Island and BodyWeight. 
+How do we discover that?
+
+Ah, welcome to **Predictive Modelling** and **Machine Learning**....
+
+
+```{r Quant vs Qual-4}
+# YOUR TURN HERE
+
+
+```
+
+

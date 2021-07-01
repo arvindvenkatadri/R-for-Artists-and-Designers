@@ -1,0 +1,317 @@
+---
+title: "FSP2019-2020 Students and Courses"
+author: "Arvind Venkatadri"
+date: "29/02/2020"
+output:
+  html_document: default
+  pdf_document: default
+  word_document: default
+---
+## Plotting Alluvial Plots of Student movement across FSP courses
+
+1. Let's read Kumar's Master File - Arvind.xlsx.  
+2. We will clean it up if needed.  
+3. Pivot it so that it is ready for Alluvial Plots
+
+In the following I do not show the R code that runs, just the plots. I am sure you  understand why ;-D
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggalluvial)
+library(easyalluvial) # Another Option
+```
+
+
+```{r Data input, include=FALSE}
+data <- readxl::read_xlsx(path = "./data/Master file - Arvind.xlsx",range = "C1:W324",trim_ws = TRUE)
+glimpse(data)
+```
+
+For now, we will *not* need:  
+
+- Faculty Names  
+- GSK course allocations  
+- GS course allocations  
+
+If this info is needed, we can retain it. The Alluvial Plots will then have to be plotted with care, since they will become cluttered. (Data can also be pivoted differently, Arvind.) 
+
+```{r Cleanup Data, include=TRUE}
+data <- data %>% 
+  mutate(Major = Course) %>% 
+  select(Name, Major, everything(), -contains("Faculty"), -c("GSKS1", "WKSS1", "GSKS2", "WKSS2", "GSS2", "Course"))
+glimpse(data)
+is_alluvia_form(data)
+
+# It is possible to plot this wide form data too, by declaring any number of axis
+ggplot(data = data,
+       aes(axis1 = CES1C1, axis2 = CES1C2, axis3 = CES2C1, axis4 = CES2C2)) +
+  geom_flow(stat = "alluvium",aes(fill = Major)) +
+  geom_stratum() +
+  geom_label(stat = "stratum", infer.label = TRUE) + 
+  theme(legend.position = "bottom") + 
+  ggtitle("Student Curricula across several Cycles")
+```
+
+Now to rearrange/pivot the data so that it is ready for alluvial plotting: we have columns as follows:
+
+1. Name ( of the Student )  
+2. Major (BSSD, CAP, CAC, DMA, etc....)  
+3. cycle ( S1C2, S1C2 etc...)  
+4. class ( which CE?)  
+
+```{r Pivot_Long the data}
+data_long <- data %>%
+    pivot_longer(., cols = c("CES1C1", "CES1C2", "CES2C1", "CES2C2") , names_to = "cycle", values_to = "class")
+data_long <- data_long %>% 
+  filter(class %in% c("C & P", "P & I","F & S", "S & P", "O & C", "B & C")) # knocking off empties and "Drop- Blank") 
+unique(data_long$class)
+unique(data_long$cycle)
+glimpse(data_long)
+is_alluvia_form(data_long)
+
+```
+
+All done. Let's plot the alluvial graph. 
+
+```{r echo=FALSE}
+ggplot(data_long,
+       aes(x = cycle, stratum = class, alluvium = Name)) +
+  geom_flow(stat = "alluvium",aes(fill = Major)) +
+  geom_stratum() +
+  geom_label(stat = "stratum", infer.label = TRUE) + 
+  theme(legend.position = "bottom") + 
+  ggtitle("Student Curricula across several Cycles")
+
+```
+
+
+This is looking very crowded. We can see flows of students of different Majors across course, but can't make out fine structure, because of too many Majors/colours. 
+
+
+## Major wise plotting of CE courses
+So we will need to plot subfraphs, based on some groups of Majors
+
+Group 1: CAP/DMA/Film  
+Group 2: CAC/CE/CW  
+Group 3: BSSD/HCD/IADP  
+Group 4: IAIDP/VCSB/PSD  
+
+
+### CAP, DMA and Film Students
+
+```{r CAP, echo=FALSE}
+data_long %>%
+  filter(Major %in% c( "CAP", "DMA", "Film")) %>%
+  ggplot(.,aes(x = cycle, stratum = class, alluvium = Name)) +
+  geom_alluvium(aes(fill = Major)) +
+  geom_stratum() +
+  geom_label(stat = "stratum",infer.label = TRUE) +
+  scale_fill_brewer(palette = "Paired") +
+  theme(legend.position = "bottom") + 
+  ggtitle("CAP,DMA,Film Students and Courses")
+
+data_long %>%
+  filter(Major %in% c( "CAP", "DMA", "Film")) %>%
+  ggplot(.,aes(x = cycle, stratum = class, alluvium = Name)) +
+  geom_flow(stat = "alluvium", lode.guidance = "rightleft",
+            aes(fill = Major)) +
+  geom_stratum() +
+  geom_label(stat = "stratum", infer.label = TRUE) + 
+  theme(legend.position = "bottom") + 
+  ggtitle("CAP,DMA,Film Students and Courses")
+```
+
+So looks like 
+
+1) Very few Film have done Body and Context. Whoa !!!
+2) CAP and DMA kids have had a good mix of courses
+
+### CAC CE and CW students
+
+```{r CAC, echo=FALSE}
+data_long %>%
+  filter(Major %in% c( "CAC", "CW", "CE")) %>%
+  ggplot(.,aes(x = cycle, stratum = class, alluvium = Name)) +
+  geom_alluvium(aes(fill = Major)) +
+  geom_stratum() +
+  geom_label(stat = "stratum",infer.label = TRUE) +
+  scale_fill_brewer(palette = "Paired") +
+  theme(legend.position = "bottom") + 
+  ggtitle("CAC,CW,CE Students and Courses")
+
+data_long %>%
+  filter(Major %in% c( "CAC", "CW", "CE")) %>%
+  ggplot(.,aes(x = cycle, stratum = class, alluvium = Name)) +
+  geom_flow(stat = "alluvium", lode.guidance = "rightleft",
+            aes(fill = Major)) +
+  geom_stratum() +
+  geom_label(stat = "stratum", infer.label = TRUE) + 
+  theme(legend.position = "bottom") + 
+  ggtitle("CAC,CW,CE Students and Courses")
+```
+So looks like 
+
+1) Very few of the CE kids have done Space and Place. 
+2) Very few CW kids have done Play and Invent
+3) CAC kids have had a good mix of courses
+
+### IADP, BSSD, HCD students
+
+```{r IADP,BSSD,HCD, echo=FALSE}
+data_long %>%
+  filter(Major %in% c( "BSSD", "HCD", "IADP")) %>%
+  ggplot(.,aes(x = cycle, stratum = class, alluvium = Name)) +
+  geom_alluvium(aes(fill = Major)) +
+  geom_stratum() +
+  geom_label(stat = "stratum",infer.label = TRUE) +
+  scale_fill_brewer(palette = "Paired") +
+  theme(legend.position = "bottom") + 
+  ggtitle("IADP, BSSD, HCD Students and Courses")
+
+data_long %>%
+  filter(Major %in% c( "BSSD", "HCD", "IADP")) %>%
+  ggplot(.,aes(x = cycle, stratum = class, alluvium = Name)) +
+  geom_flow(stat = "alluvium", lode.guidance = "rightleft",
+            aes(fill = Major)) +
+  geom_stratum() +
+  geom_label(stat = "stratum", infer.label = TRUE) + 
+  theme(legend.position = "bottom") + 
+  ggtitle("BSSD,HCD,IADP Students and Courses")
+```
+So looks like 
+
+1) HCD kids have done Space and Place but have not done Communities and Practices. Very few have done Body and Context. 
+2) IADP kids have had a good mix of courses
+3) 1 IADP student is repeating Body and Context in S2C2. 
+
+### IAIDP,VCSB,PSD students
+
+```{r IAIDP, VCSB,PSD, echo=FALSE}
+data_long %>%
+  filter(Major %in% c( "IAIDP", "VCSB", "PSD")) %>%
+  ggplot(.,aes(x = cycle, stratum = class, alluvium = Name)) +
+  geom_alluvium(aes(fill = Major)) +
+  geom_stratum() +
+  geom_label(stat = "stratum",infer.label = TRUE) +
+  scale_fill_brewer(palette = "Paired") +
+  theme(legend.position = "bottom") + 
+  ggtitle("IAIDP,VCSB,PSD Students and Courses")
+
+data_long %>%
+  filter(Major %in% c( "IAIDP", "VCSB", "PSD")) %>%
+  ggplot(.,aes(x = cycle, stratum = class, alluvium = Name)) +
+  geom_flow(stat = "alluvium", lode.guidance = "rightleft",
+            aes(fill = Major)) +
+  geom_stratum() +
+  geom_label(stat = "stratum", infer.label = TRUE) + 
+  theme(legend.position = "bottom") + 
+  ggtitle("IAIDP, VCSB,PSD Students and Courses")
+```
+So looks like 
+
+1) Very few IAIDP kids have done Space and Place
+2) VCSB and PSD kids have had a good mix of courses
+
+
+## Checking for Faculty repeat !!
+
+Let's try plotting the Faculty and see if they repeat for any students:
+
+```{r Data with Faculty Only}
+data <- readxl::read_xlsx(path = "./data/Master file - Arvind.xlsx",range = "C1:W324",trim_ws = TRUE)
+glimpse(data)
+
+data_faculty <- data %>% 
+  mutate(Major = Course) %>% 
+  select(Name, Major, contains(c("Faculty", "FACULTY")))
+data_faculty <- data_faculty %>% 
+  mutate(T1 = Faculty...4, T2 = Faculty...6, T3 = Faculty...9, T4 = Faculty...11, T5 = `CE FACULTY`, T6 = `CE C2 faculty`) %>% 
+  select(Name, Major, starts_with("T"))
+glimpse(data_faculty)
+is_alluvia_form(data_faculty)
+```
+
+What we need is to to summarize the data to see if there are any students who meet the same faculty member more than once. 
+
+
+Let's check this: ( I need to use "purrr" here, absolutely, to avoid writing code to check for duplication of each faculty member)
+
+```{r}
+data_temp <- data_faculty %>% 
+mutate(D.AV = rowSums(select(., starts_with("T")) == "Arvind")) 
+data_temp$D.AV
+any(data_temp$D.AV > 1, na.rm = TRUE)
+if(any(data_temp$D.AV > 1,na.rm = TRUE)) cat("Arvind has repeats!")
+
+
+
+```
+
+## Titanic Dataset
+
+
+```{r Titanic Alluvial Plot}
+
+titanic <- as.data.frame(Titanic)
+glimpse(titanic)
+ggplot(titanic,
+       aes(y = Freq, # No of people defined by each category
+           axis1 = Class, axis2 = Sex, axis3 = Age, axis4 = Survived)) + # Categories
+  geom_alluvium(aes(fill = Sex)) +
+  geom_stratum(width = 1/3, reverse = FALSE) +
+  geom_text(aes(label = after_stat(stratum)), stat = "stratum", reverse = FALSE) +
+  scale_x_continuous(breaks = 1:4, labels = c("Class","Sex", "Age", "Survived")) +
+  # coord_flip() +
+  ggtitle("Titanic survival by class and sex")
+```
+
+
+```{r help-example}
+library(ggnewscale)
+Titanic %>% 
+  as_tibble() %>% 
+  ggplot(.,
+       aes(
+         # Y axis is count of people, i.e. the "n" variable
+         y = n,
+           
+         # Define the "axes"
+         axis1 = Class, axis2 = Age, axis3 = Survived)) +
+  
+  # We want axes to be broken up into strata
+  geom_stratum(aes(fill = after_stat(stratum)),alpha = 0.6) +
+  scale_fill_brewer(palette = "Spectral") +
+  # Try either Alluvia that go right through
+  #geom_alluvium(aes(fill = Sex)) +
+  new_scale_fill() +
+  # or try Flows that connect between Strata
+  geom_flow(aes(fill = Sex), colour = "black") +
+    scale_fill_brewer(aesthetics = c("fill"), palette = "Paired") +
+  scale_x_discrete(limits = c("Class", "Age", "Survived")) +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum))) +
+  ggtitle("Alluvial plot of Titanic passenger demographic data")
+```
+
+```{r}
+mtcars2 %>% 
+  ggplot(., aes(
+    axis1 = cyl, axis2 = gear, axis3=am, axis4 = carb)) +
+  geom_stratum(aes(fill = after_stat(stratum))) +
+  geom_flow(aes(fill = am),curve_type = "quintic",colour = "black") +
+  scale_color_brewer(aesthetics = c("fill", "colour"), palette = "Paired") +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum)),) +
+  scale_x_discrete(limits = c("Cylinders", "Gears","Transmission", "Carburettors"))
+```
+
+```{r}
+data_faculty %>%
+  filter(Major == "DMA") %>%
+ggplot(.,
+       aes(axis1 = T1, axis2 = T2, axis3 = T3, axis4 = T4,axis5 = T5, axis6 = T6)) +
+  geom_flow(stat = "alluvium",aes(fill = Major)) +
+  geom_stratum() +
+  geom_label(stat = "stratum", infer.label = TRUE) + 
+  theme(legend.position = "bottom") + 
+  ggtitle("Student Curricula across several Cycles")
+```

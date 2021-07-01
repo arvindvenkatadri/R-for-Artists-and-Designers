@@ -1,7 +1,7 @@
 ---
 title: 'Lab 01'
-subtitle: 'Making slides and websites with R Markdown'
-summary: Making slides and websites with R Markdown
+subtitle: 'Working with R Markdown'
+summary: Working with R Markdown
 date: "2018-05-13T00:00:00Z"
 featured: false
 draft: false
@@ -24,14 +24,18 @@ image:
 projects: []
 
 links:
+# - icon: magic
+#   icon_pack: fas
+#   name: xaringan slides
+#   url: /slides/01-slides_xaringan.html
 - icon: magic
   icon_pack: fas
-  name: xaringan slides
-  url: /slides/01-slides_xaringan.html
-- icon: magic
-  icon_pack: fas
-  name: blogdown I slides
-  url: /slides/01-slides_blogdown.html
+  name: Markdown slides
+  url: /slides/01-Metaphors-with-Graphics.html
+# - icon: magic
+#   icon_pack: fas
+#   name: Blogdown slides
+#   url: /slides/01-slides_blogdown.html
 ---
 
 

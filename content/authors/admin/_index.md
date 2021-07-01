@@ -12,13 +12,13 @@ social:
 # - icon: discord
 #  icon_pack: fab
 #  link: https://discord.com/channels/797796372429799465/797796372929183765
-# - icon: piazza
-#   icon_pack: ai
-#   link: https://piazza.com/
+- icon: piazza
+  icon_pack: ai
+  link: https://piazza.com/
 
-# - icon: envelope
-#   icon_pack: fab
-#   link: mailto:arvind.venkatadri@manipal.edu
+- icon: envelope-open
+  icon_pack: fab
+  link: mailto:arvind.venkatadri@manipal.edu
   
 - icon: github
   icon_pack: fab
@@ -42,6 +42,6 @@ user_groups:
 
 <br>
 
-This course will give Art and Design students a foundation in the principles and practice of data visualization, and machine learning,using R.
+This course will give Art and Design students a foundation in the principles and practice of data visualization using R.
 
-We will have weekly lectures and code walkthroughs, and the viewpoint of using R as a way of creating geometric metaphors for a variety of circumstances and realities in diverse domains will be stressed. Data will be drawn from these domains and understood via the geometric metaphors created in R. 
+Tthe viewpoint of using R as a way of creating geometric metaphors for a variety of circumstances and realities in diverse domains will be stressed. Data will be drawn from these domains and understood via the geometric metaphors created in R. 

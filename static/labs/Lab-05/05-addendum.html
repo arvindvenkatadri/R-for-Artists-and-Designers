@@ -1,0 +1,149 @@
+---
+title: "Lab 05: Addendum"
+subtitle: "CS631"
+author: "Alison Hill"
+output:
+  html_document:
+    theme: flatly
+    toc: TRUE
+    toc_float: TRUE
+    toc_depth: 2
+    number_sections: TRUE
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<div id="packages" class="section level1">
+<h1>Packages</h1>
+<pre class="r"><code>library(tidyverse)
+library(babynames)
+# load hd data
+hot_dogs_aff &lt;- read_csv(&quot;http://bit.ly/cs631-hotdog-affiliated&quot;, 
+    col_types = cols(
+      affiliated = col_factor(levels = NULL), 
+      gender = col_factor(levels = NULL)
+      )) %&gt;% 
+  mutate(post_ifoce = year &gt;= 1997) %&gt;% 
+  filter(year &gt;= 1981 &amp; gender == &quot;male&quot;) </code></pre>
+</div>
+<div id="plot-1-add" class="section level1">
+<h1>Plot 1: Add</h1>
+<p>What is this code trying to accomplish?</p>
+<pre class="r"><code>temp=hot_dogs_aff
+
+for (i in 1:nrow(hot_dogs_aff)) { 
+  # if the maximum num_eaten is equal to the num_eaten for the year AND it&#39;s not the same as the year before
+  if ((max(temp$num_eaten) == hot_dogs_aff$num_eaten[i]) &amp;&amp; (max(temp$num_eaten) != hot_dogs_aff$num_eaten[i+1]) &amp;&amp; (i&lt;nrow(hot_dogs_aff))) {
+    hot_dogs_aff$record[i] = TRUE
+    temp = temp[-1,] # take the most recent year OUT of the running 
+ } else if (i&lt;nrow(hot_dogs_aff)) {
+   hot_dogs_aff$record[i] = FALSE
+   temp = temp[-1,]
+ }
+}
+
+label.df &lt;- data.frame(year = hot_dogs_aff$year[hot_dogs_aff$record],
+                       num_eaten = hot_dogs_aff$num_eaten[hot_dogs_aff$record]) # turn this into a label dataframe</code></pre>
+</div>
+<div id="tidyverse-approach" class="section level1">
+<h1>Tidyverse approach</h1>
+<p>The first thing we notice is that we don’t have data about whether each year’s winner is a record or not.</p>
+<pre class="r"><code>hot_dogs &lt;- read_csv(&quot;http://bit.ly/cs631-hotdog&quot;, 
+    col_types = cols(
+      gender = col_factor(levels = NULL)
+    ))</code></pre>
+<p>Since our data is nicely tidy, we can use <code>dplyr</code> window functions:</p>
+<ul>
+<li><p>First, we use base R’s <code>cummax</code> to create a new variable that reflects the maximum HDB eaten cumulatively, that is, compared to all earlier years. For this reason, the <code>arrange(year)</code> here is critical.</p></li>
+<li><p>Next, we want to know if the <code>hdb_record</code> is actually a <em>new</em> record or not, compared to all previous years. We can use <code>case_when</code> to create a logical variable that is TRUE if the <code>hdb_record</code> for a given year is greater than the <code>hdb_record</code> from the year before (using <code>dplyr::lag</code>). If not, this variable is FALSE.</p></li>
+</ul>
+<pre class="r"><code>hot_dogs_records &lt;- hot_dogs %&gt;% 
+  filter(year &gt;= 1980 &amp; gender == &#39;male&#39;) %&gt;%  
+  arrange(year) %&gt;% 
+  mutate(hdb_record = cummax(num_eaten),
+         new_record = case_when(
+           hdb_record &gt; lag(hdb_record) ~ TRUE,
+           TRUE ~ FALSE
+         )) %&gt;% 
+  filter(year &gt;= 1981)</code></pre>
+<p>We’ll also make our x-axis ticks again…</p>
+<pre class="r"><code>years_to_label &lt;- seq(from = 1981, to = 2017, by = 4)
+years_to_label</code></pre>
+<pre><code> [1] 1981 1985 1989 1993 1997 2001 2005 2009 2013 2017</code></pre>
+<pre class="r"><code>hd_years &lt;- hot_dogs_records %&gt;%
+  distinct(year) %&gt;% 
+  mutate(year_lab = ifelse(year %in% years_to_label, year, &quot;&quot;))</code></pre>
+<pre class="r"><code>hdb_records &lt;- ggplot(hot_dogs_records, 
+                      aes(x = year, y = num_eaten)) + 
+  geom_col(aes(fill = new_record)) + 
+  labs(x = &quot;Year&quot;, y = &quot;Hot Dogs and Buns Consumed&quot;) +
+  ggtitle(&quot;Nathan&#39;s Hot Dog Eating Contest Results, 1981-2017&quot;) +
+  scale_fill_manual(values = c(&#39;#284a29&#39;, &#39;#629d62&#39;)) + 
+  scale_y_continuous(expand = c(0, 0),
+                     breaks = seq(0, 70, 10)) +
+  scale_x_continuous(expand = c(0, 0), 
+                     breaks = hd_years$year,
+                     labels = hd_years$year_lab) + 
+  coord_cartesian(xlim = c(1980, 2018), ylim = c(0, 80)) +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5),
+        axis.text = element_text(size = 12),
+        panel.background = element_blank(),
+        axis.line.x = element_line(color = &quot;gray92&quot;, 
+                                   size = 0.5),
+        axis.ticks = element_line(color = &quot;gray92&quot;, 
+                                  size = 0.5),
+        text = element_text(family = &quot;Lato&quot;),
+        legend.position = &quot;bottom&quot;,
+        panel.grid.minor = element_blank())
+hdb_records</code></pre>
+<p><img src="/labs/05-addendum_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
+<div id="plot-2" class="section level1">
+<h1>Plot 2</h1>
+<p>Goal is to observe popular first letter trends in <code>babynames</code>.
+First filter/arrange data.</p>
+<pre class="r"><code># add column of first letters
+baby_letters &lt;- babynames %&gt;% 
+  mutate(first_letter = str_sub(name, 1, 1))
+
+# add up proportion for each letter by year + sex
+letter_by_year &lt;- baby_letters %&gt;%
+  count(year, sex, first_letter, wt = prop) %&gt;% 
+  rename(total_prop = nn)</code></pre>
+<pre><code>Error: Can&#39;t rename columns that don&#39;t exist.
+x Column `nn` doesn&#39;t exist.</code></pre>
+<pre class="r"><code># label most popular for each year + sex
+letter_by_year &lt;- letter_by_year %&gt;% 
+  group_by(sex, year) %&gt;% 
+  mutate(top_yearly = case_when(
+    total_prop == max(total_prop) ~ first_letter)) %&gt;% 
+  ungroup() %&gt;% 
+  mutate(top_latest = case_when(
+      year == max(year) ~ top_yearly
+    ))</code></pre>
+<pre><code>Error in group_by(., sex, year): object &#39;letter_by_year&#39; not found</code></pre>
+<pre class="r"><code># make a data frame with just latest top letters
+top_current &lt;- letter_by_year %&gt;% 
+  filter(!is.na(top_latest)) %&gt;% 
+  rename(color_by = top_latest) %&gt;% 
+  select(sex, first_letter, color_by)</code></pre>
+<pre><code>Error in filter(., !is.na(top_latest)): object &#39;letter_by_year&#39; not found</code></pre>
+<pre class="r"><code># now merge in
+letter_by_year &lt;- letter_by_year %&gt;% 
+  left_join(top_current) %&gt;% 
+  mutate(color_by = replace_na(color_by, &quot;else&quot;))</code></pre>
+<pre><code>Error in left_join(., top_current): object &#39;letter_by_year&#39; not found</code></pre>
+<pre class="r"><code># set up my colors for males and females
+my_colors &lt;- c(&quot;#FF1493&quot;, &quot;gray80&quot;, &quot;#3399ff&quot;)</code></pre>
+<p>Plot it!</p>
+<pre class="r"><code>ggplot(letter_by_year, aes(x = year, y = total_prop, color = color_by, group = first_letter)) +
+  geom_line() +
+  scale_color_manual(values = my_colors) +
+  facet_wrap(~sex)</code></pre>
+<pre><code>Error in ggplot(letter_by_year, aes(x = year, y = total_prop, color = color_by, : object &#39;letter_by_year&#39; not found</code></pre>
+<pre class="r"><code>ColorM2 &lt;- c(A=&quot;Gray80&quot;,B=&quot;gray80&quot;,C=&quot;gray80&quot;,D=&quot;gray80&quot;,E=&quot;gray80&quot;,F=&quot;gray80&quot;,G=&quot;gray80&quot;,H=&quot;gray80&quot;,I=&quot;gray80&quot;,J=&quot;Black&quot;,K=&quot;gray80&quot;,L=&quot;gray80&quot;,M=&quot;gray80&quot;,N=&quot;gray80&quot;,O=&quot;gray80&quot;,P=&quot;gray80&quot;,Q=&quot;gray80&quot;,R=&quot;gray80&quot;,S=&quot;gray80&quot;,T=&quot;gray80&quot;,U=&quot;gray80&quot;,V=&quot;gray80&quot;,W=&quot;gray80&quot;,X=&quot;gray80&quot;,Y=&quot;gray80&quot;,Z=&quot;gray80&quot;)
+
+ColorF2 &lt;- c(A=&quot;Black&quot;,B=&quot;gray80&quot;,C=&quot;gray80&quot;,D=&quot;gray80&quot;,E=&quot;gray80&quot;,F=&quot;gray80&quot;,G=&quot;gray80&quot;,H=&quot;gray80&quot;,I=&quot;gray80&quot;,J=&quot;gray80&quot;,K=&quot;gray80&quot;,L=&quot;gray80&quot;,M=&quot;gray80&quot;,N=&quot;gray80&quot;,O=&quot;gray80&quot;,P=&quot;gray80&quot;,Q=&quot;gray80&quot;,R=&quot;gray80&quot;,S=&quot;gray80&quot;,T=&quot;gray80&quot;,U=&quot;gray80&quot;,V=&quot;gray80&quot;,W=&quot;gray80&quot;,X=&quot;gray80&quot;,Y=&quot;gray80&quot;,Z=&quot;gray80&quot;)</code></pre>
+</div>

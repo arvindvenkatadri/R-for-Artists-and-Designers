@@ -1,0 +1,506 @@
+---
+title: "Grammar of Diagrams: using Universal Markup Language in R"
+author: Arvind Venkatadri
+affiliation: Srishti Manipal Institute of Art, Design, and Technology, Bangalore
+output: 
+  html_document:
+    toc_float: TRUE
+    code_download: true
+    code_folding: TRUE
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+<script src="/rmarkdown-libs/htmlwidgets/htmlwidgets.js"></script>
+<script src="/rmarkdown-libs/viz/viz.js"></script>
+<link href="/rmarkdown-libs/DiagrammeR-styles/styles.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/grViz-binding/grViz.js"></script>
+<script src="/rmarkdown-libs/es6shim/es6shim.js"></script>
+<script src="/rmarkdown-libs/es7shim/es7shim.js"></script>
+<script src="/rmarkdown-libs/graphre/graphre.js"></script>
+<script src="/rmarkdown-libs/nomnoml/nomnoml.js"></script>
+<script src="/rmarkdown-libs/nomnoml-binding/nomnoml.js"></script>
+
+
+<div id="pre-requisites" class="section level1">
+<h1>Pre-requisites</h1>
+<p>Do make sure you have <a href="https://www.java.com">Java</a> installed.</p>
+<p>There are many presentation and drawing tools out there. And these allow the user full control over the diagram so generally result in prettier diagrams that can convey more information to the audience at that point in time.</p>
+<p>But that point in time passes, and <strong>pretty pictures can quickly become out-of-date</strong> and, ironically, misinforming if they don’t match the reality of the system they are describing. This is especially so if one team is drawing the pretty pictures, and another team is writing the software/implementing the system.</p>
+<p>Having <strong>diagrams as code that can live beside the system design/code</strong>, that the stakeholders are equally comfortable editing and viewing,reduces the gap i.e. “Where system diagrams meet system reality”.</p>
+<p>We will “explore” three packages to do this: <code>plantUML</code>, <code>DiagrammeR</code>
+and <code>nomnoml</code>. Each of these follows a specific grammar so that sets of “sentences” will morph into very different kinds of diagrams.</p>
+</div>
+<div id="using-plantuml-to-make-diagrams-from-text" class="section level1">
+<h1>Using <code>plantUML</code> to make Diagrams from Text</h1>
+<p>PlantUML diagrams are “Diagrams as Code” using
+<a href="https://plantuml.com/">PlantUML</a> syntax.</p>
+<div id="plantuml-sequence-diagram" class="section level2">
+<h2><code>PlantUML</code> Sequence Diagram</h2>
+<pre class="r"><code>plantuml(
+&quot;skinparam handwritten true
+Alice -&gt; Bob: Are you on the task we discussed?
+Alice &lt;- Bob: Yes, I am
+Alice -&gt; Bob: Are you on the task we discussed?
+
+note over Alice, Bob #palegreen: What the hell?
+note right of Bob #pink: What does she want !!
+
+Alice &lt;- Bob: Yes, it will take me some more time...
+note left of Alice #red: The lazy bum....&quot;
+) %&gt;% 
+  plot(., vector = FALSE)</code></pre>
+<p><img src="/labs/10-Grammar-of-Diagrams_files/figure-html/Sequence_Diagram_1-1.png" width="672" /></p>
+<pre><code>## [1] 0</code></pre>
+</div>
+<div id="sequence-diagram-2" class="section level2">
+<h2>Sequence Diagram-2</h2>
+<p>We can declare actors and other entities in plantUML. See the <a href="https://plantuml.com/sequence-diagram">Sequence
+Diagram Options</a> to see what
+entities are possible.</p>
+<pre class="r"><code>plot(plantuml
+(&quot;
+actor Anamika #yellow
+actor Sai #palegreen
+actor Komal #purple
+actor Arvind #Red
+
+Arvind-&gt;Sai: You are also making too much noise!
+Sai-&gt;Arvind : ;-O
+Arvind-&gt;Anamika: You are making too much noise!
+Anamika-&gt;Sai: Hi there!
+Sai-&gt;Anamika: yeah...
+Note left of Anamika: How rude she is!
+Anamika-&gt;Komal: Hey, you done with A3?
+Komal-&gt;Anamika: (*&amp;^%#$^&amp;*)
+Anamika-&gt;Komal: Yeah, me too..
+
+Arvind-&gt;Ishita: YOU ARE LATE !!
+&quot;),vector = FALSE
+)</code></pre>
+<p><img src="/labs/10-Grammar-of-Diagrams_files/figure-html/sequence-diagram-2-1.png" width="960" /></p>
+<pre><code>## [1] 0</code></pre>
+</div>
+<div id="sequence-diagram-3" class="section level2">
+<h2>Sequence Diagram 3</h2>
+<p>We can also add <em>alternative</em> Sequences to represent what-if scenarios.</p>
+<pre class="r"><code>plot(plantuml
+(&quot;
+actor Appa #yellow
+actor Shubha #palegreen
+
+box \&quot;Parenting Challenges\&quot; #Lightblue
+participant Appa
+participant Shubha
+
+Appa-&gt;Shubha: Hi Chubbu!
+...SEVERAL minutes later...
+Shubha--[#EE1333]-&gt;Appa: Yeah...
+Appa-[#blue]&gt;&gt;Shubha: Yenna Chubbu...
+Shubha-&gt;Appa: I\&#39;m bored
+
+alt Appa is angry
+  Appa-&gt; Shubha: Chubbu you need to be more enthu!!
+  note over Appa,Shubha #pink
+    She __never__ does **anything** useful...
+  end note
+  
+  Appa-&gt;Shubha: Why aren\&#39;t you reading something?!!
+  Shubha -&gt; Appa:;-(
+  
+  note right of Shubha #aqua
+    Why doesn\&#39;t he go to office?
+  end note
+end
+
+alt Appa is yeah, like, cool
+  Appa-&gt;Shubha: Podi! Can you solve: &lt;math&gt;(ax^2 + bx + c = 0)&lt;/math&gt;?
+  Shubha-&gt;Appa: Appa...
+  Appa-&gt; Shubha: Ok, Ok...can we get pizza?
+  Shubha-&gt;Appa:;-D
+end box
+end
+&quot;), vector = FALSE
+)</code></pre>
+<p><img src="/labs/10-Grammar-of-Diagrams_files/figure-html/Complex_Sequence_Diagram_3-1.png" width="960" /></p>
+<pre><code>## [1] 0</code></pre>
+</div>
+<div id="plantuml-mindmap" class="section level2">
+<h2>PlantUML Mindmap</h2>
+<pre class="r"><code>plot(
+plantuml(&quot;
+  @startmindmap
++ OS
+++ Ubuntu
++++ Linux Mint
++++ Kubuntu
++++ Lubuntu
++++ KDE Neon
+++ LMDE
+++ SolydXK
+++ SteamOS
+++ Raspbian
+-- Windows 95
+-- Windows 98
+-- Windows NT
+--- Windows 8
+--- Windows 10
+@endmindmap&quot;),vector = FALSE)</code></pre>
+<p><img src="/labs/10-Grammar-of-Diagrams_files/figure-html/Mindmap-1.png" width="672" /></p>
+<pre><code>## [1] 0</code></pre>
+</div>
+<div id="plantuml-gantt-chart" class="section level2">
+<h2><code>PlantUML</code> Gantt Chart</h2>
+<pre class="r"><code>plot(plantuml
+(&quot;
+  [Assignment A1] lasts 6 days and is colored in Lavender/Blue
+  [Assignment A2] lasts 10 days and is colored in Lavender/Blue and starts at [Assignment A1]&#39;s end
+  [Assignment A3] lasts 8 days and is colored in Lavender/Blue and starts at [Assignment A2]&#39;s end
+  [End of Course] lasts 1 days and is colored in Red and starts 2 days after [Assignment A3]&#39;s end 
+  
+  [Reflection Writing] lasts 30 days and ends at [Assignment A3]&#39;s end
+  [Make Visual Journal] lasts 9 days and is colored in Coral/Green and starts 3       days after [Assignment A1]&#39;s end
+  [Make Poster for Home Alone] lasts 5 days and starts 3 days after [Assignment A2]&#39;s end
+  [Clean up Miro Board] lasts 1 days and starts at [Assignment A3]&#39;s end and ends at [End of Course]&#39;s end
+  &quot;),vector = FALSE
+)</code></pre>
+<p><img src="/labs/10-Grammar-of-Diagrams_files/figure-html/PlantUML_Gantt-1.png" width="672" /></p>
+<pre><code>## [1] 0</code></pre>
+</div>
+<div id="plantuml-flow-chart" class="section level2">
+<h2>PlantUML flow chart</h2>
+<pre class="r"><code>plot(
+plantuml(
+&quot;title Life in these Srishti Times
+start
+while (Hungry?)  is (Yes)
+    :Eat Hot Wings;
+    :Drink Homebrew;
+endwhile (No)
+:Go Back To Sleep;
+
+While (8:55 Alarm) is (False)
+:Go Back to Sleep;
+endwhile (True)
+  :Wake up;
+  :Brush Teeth;
+  :Get Ready;
+  :Get to College;
+  :Sleep in Arvind&#39;s class;
+
+if (Assignment) is (True)
+    : Check Teams;
+    : Take a Break;
+    : Check Whatsapp later;
+else (False)
+    : Go Back to Sleep;
+endif
+    :Head back to PG;
+stop&quot;
+), 
+vector = FALSE)</code></pre>
+<p><img src="/labs/10-Grammar-of-Diagrams_files/figure-html/Flowchart-1.png" width="960" /></p>
+<pre><code>## [1] 0</code></pre>
+</div>
+</div>
+<div id="graphviz" class="section level1">
+<h1>Graphviz</h1>
+<p>Graphviz is another approach to creating diagrams using text.
+<strong>Graphviz</strong> support is an integral part of the <code>DiagrammeR</code> R package.
+And hence the code you write is actually R code. DiagrammeR is a unique
+package since it allows you create diagrams <strong>and</strong> the Network Diagrams
+that you have created using <code>tidygraph</code> and <code>ggraph</code>. And it uses the
+tidyverse pipe <code>%&gt;%</code> syntax too!</p>
+<p>Here is the basic structure of a <code>Graphviz</code> code:</p>
+<pre><code>[strict] (graph | digraph) [ID] &#39;{&#39; stmt_list &#39;}&#39;</code></pre>
+<pre class="r"><code>grViz(&quot;
+digraph boxes_and_circles {
+
+  # a &#39;graph&#39; statement
+  graph [overlap = true, fontsize = 10,forcelabels = true]
+
+  # several &#39;node&#39; statements
+  node [shape = box,fontname = Helvetica, color = red, style = filled]
+  A[label = &#39;This is \\n an internal \\n label&#39;, xlabel = &#39;This is \\nan external \\nlabel&#39;]; B; C; D; E; F
+
+  node [shape = circle, fixedsize = true, color = palegreen, width = 0.9] // sets as circles
+  1; 2; 3; 4; 5; 6; 7; 8
+
+  # several &#39;edge&#39; statements
+  A-&gt;{1,2,3,4} B-&gt;2 B-&gt;3 B-&gt;4 C-&gt;A
+  1-&gt;D E-&gt;A 2-&gt;4 1-&gt;5 1-&gt;F
+  E-&gt;6 4-&gt;6 5-&gt;7 6-&gt;7 3-&gt;8 3-&gt;1
+}
+&quot;)</code></pre>
+<div id="htmlwidget-1" style="width:672px;height:768px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1">{"x":{"diagram":"\ndigraph boxes_and_circles {\n\n  # a \"graph\" statement\n  graph [overlap = true, fontsize = 10,forcelabels = true]\n\n  # several \"node\" statements\n  node [shape = box,fontname = Helvetica, color = red, style = filled]\n  A[label = \"This is \\n an internal \\n label\", xlabel = \"This is \\nan external \\nlabel\"]; B; C; D; E; F\n\n  node [shape = circle, fixedsize = true, color = palegreen, width = 0.9] // sets as circles\n  1; 2; 3; 4; 5; 6; 7; 8\n\n  # several \"edge\" statements\n  A->{1,2,3,4} B->2 B->3 B->4 C->A\n  1->D E->A 2->4 1->5 1->F\n  E->6 4->6 5->7 6->7 3->8 3->1\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<p>For more bells and whistles and thingummies, go to <a href="https://rich-iannone.github.io/DiagrammeR/graphviz_and_mermaid.html">Rich Iannnone’s web
+page</a>.</p>
+<p>I think we will stop here……</p>
+</div>
+<div id="a-bit-of-extra-for-the-intrepid" class="section level1">
+<h1>A bit of Extra for the Intrepid</h1>
+<div id="using-nomnoml" class="section level2">
+<h2>Using <code>nomnoml</code></h2>
+<p><code>nomnoml</code> is touted as a “sassy” UML diagram creator, in R. It allows us
+to rapidly create many of diagrams that we can use in System
+Descriptions.</p>
+<p>The syntax options for nomnoml and what can be created is described here
+<a href="https://nomnoml.com/" class="uri">https://nomnoml.com/</a></p>
+<p>The R pdf Manual for nomnoml at
+<a href="https://cran.r-project.org/web/packages/nomnoml/nomnoml.pdf">CRAN</a> (
+read just the first half-page and you are ready!!)</p>
+<p>So what can it do?</p>
+<pre class="nomnoml"><code>#import: filename
+#arrowSize: 1
+#bendSize: 0.3
+#direction: down | right
+#gutter: 5
+#edgeMargin: 0
+#gravity: 1
+#edges: hard | rounded
+#background: lightgrey
+
+//nested list of colours
+//#fill: #fcfcfc; #eee8d5; #fdf6e3
+#fill: lightgreen; pink;
+#fillArrows: false
+#font: Calibri
+#fontSize: 12
+#leading: 1.25
+#lineWidth: 3
+#padding: 8
+#spacing: 40
+#stroke: #33322E
+#title: filename
+#zoom: 1
+#acyclicer: greedy
+#ranker: network-simplex | tight-tree | longest-path
+[Pirate|eyeCount: Int|raid()|pillage()|
+  [beard]--[parrot]
+  [beard]-:&gt;[foul mouth]
+  ]
+
+[&lt;table&gt;mischief | bawl | sing || yell | drink]
+
+[&lt;abstract&gt;Marauder]&lt;:--[Pirate]
+[Pirate]- 0..7[mischief]
+[jollyness]_&gt;[Pirate]
+[jollyness]-&gt;[rum]
+[jollyness]-&gt;[singing]
+[Pirate]-&gt; *[rum|tastiness: Int|swig()]
+[Pirate]-&gt;[singing]
+[singing]&lt;-&gt;[rum]
+
+[&lt;start&gt;st]-&gt;[&lt;state&gt;plunder]
+[plunder]-&gt;[&lt;choice&gt;more loot]
+[more loot]-&gt;[st]
+[more loot] no -&gt;[&lt;end&gt;e]
+
+[&lt;actor&gt;Sailor] - [&lt;usecase&gt;shiver me;timbers]</code></pre>
+<div id="htmlwidget-2" style="width:672px;height:480px;" class="nomnoml html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2">{"x":{"code":"\n#fill: #FEFEFF\n#lineWidth: 1\n#zoom: 4\n#direction: right\n\n#import: filename\n#arrowSize: 1\n#bendSize: 0.3\n#direction: down | right\n#gutter: 5\n#edgeMargin: 0\n#gravity: 1\n#edges: hard | rounded\n#background: lightgrey\n\n//nested list of colours\n//#fill: #fcfcfc; #eee8d5; #fdf6e3\n#fill: lightgreen; pink;\n#fillArrows: false\n#font: Calibri\n#fontSize: 12\n#leading: 1.25\n#lineWidth: 3\n#padding: 8\n#spacing: 40\n#stroke: #33322E\n#title: filename\n#zoom: 1\n#acyclicer: greedy\n#ranker: network-simplex | tight-tree | longest-path\n[Pirate|eyeCount: Int|raid()|pillage()|\n  [beard]--[parrot]\n  [beard]-:>[foul mouth]\n  ]\n\n[<table>mischief | bawl | sing || yell | drink]\n\n[<abstract>Marauder]<:--[Pirate]\n[Pirate]- 0..7[mischief]\n[jollyness]_>[Pirate]\n[jollyness]->[rum]\n[jollyness]->[singing]\n[Pirate]-> *[rum|tastiness: Int|swig()]\n[Pirate]->[singing]\n[singing]<->[rum]\n\n[<start>st]->[<state>plunder]\n[plunder]->[<choice>more loot]\n[more loot]->[st]\n[more loot] no ->[<end>e]\n\n[<actor>Sailor] - [<usecase>shiver me;timbers]","svg":false},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="some-definitions-on-the-grammar-of-shapes-in-nomnoml" class="section level2">
+<h2>Some definitions on the “grammar of shapes” in <code>nomnoml</code></h2>
+<ol style="list-style-type: decimal">
+<li><p>Association Types: Connectors between blocks( i.e. Classifiers)</p></li>
+<li><p>Classifier Types: Kinds of <strong>blocks</strong>.</p></li>
+<li><p>Directive Types: Directives change the nature of the diagram
+rendered, by affective parameters like colour, direction and
+margins. ( Ha! VC people!!)</p></li>
+</ol>
+<p>CSS colours <a href="https://www.w3schools.com/cssref/css_colors.asp" class="uri">https://www.w3schools.com/cssref/css_colors.asp</a> Only these
+colours are permitted, so use either the names or these specific colour
+hash codes. Any general hash code will <em>not</em> render.</p>
+<pre class="nomnoml"><code>//association-1
+[a] - [b] 
+
+//association-2
+[b] -&gt; [c] 
+
+//association_3
+[c] &lt;-&gt; [a]
+
+//dependency-1
+[a] &lt;--&gt;[d]
+
+//dependency-2
+#.ell: visual=ellipse fill=#fbfb09 bold
+#.arvind: visual=rhomb fill=#ff2234 bold
+[&lt;ell&gt;e]--&gt;[a]
+//generalization-1
+[c]-:&gt;[&lt;arvind&gt;k]
+
+//implementation --:&gt;
+[k]--:&gt;[d]</code></pre>
+<div id="htmlwidget-3" style="width:672px;height:480px;" class="nomnoml html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3">{"x":{"code":"\n#fill: #FEFEFF\n#lineWidth: 1\n#zoom: 4\n#direction: right\n\n//association-1\n[a] - [b] \n\n//association-2\n[b] -> [c] \n\n//association_3\n[c] <-> [a]\n\n//dependency-1\n[a] <-->[d]\n\n//dependency-2\n#.ell: visual=ellipse fill=#fbfb09 bold\n#.arvind: visual=rhomb fill=#ff2234 bold\n[<ell>e]-->[a]\n//generalization-1\n[c]-:>[<arvind>k]\n\n//implementation --:>\n[k]--:>[d]","svg":false},"evals":[],"jsHooks":[]}</script>
+<pre class="nomnoml"><code>//composition +-
+[a]+-[b]
+//composition +-&gt;
+[b]-+[c]
+//aggregation o-
+[c]o-&gt;[d]
+//aggregation o-&gt;
+[d]o-&gt;[a]
+//note --
+[d]--[everything happens;here]
+//hidden -/-
+[d]-/-[f]
+////////////////////////
+//weightless edge _&gt;
+//[k]_&gt;[d] //not working
+//weightless dashed__
+//[d]__[j] //not working</code></pre>
+<div id="htmlwidget-4" style="width:672px;height:480px;" class="nomnoml html-widget"></div>
+<script type="application/json" data-for="htmlwidget-4">{"x":{"code":"\n#fill: #FEFEFF\n#lineWidth: 1\n#zoom: 4\n#direction: right\n\n//composition +-\n[a]+-[b]\n//composition +->\n[b]-+[c]\n//aggregation o-\n[c]o->[d]\n//aggregation o->\n[d]o->[a]\n//note --\n[d]--[everything happens;here]\n//hidden -/-\n[d]-/-[f]\n////////////////////////\n//weightless edge _>\n//[k]_>[d] //not working\n//weightless dashed__\n//[d]__[j] //not working","svg":false},"evals":[],"jsHooks":[]}</script>
+<div id="classifier-types" class="section level3">
+<h3>Classifier Types</h3>
+<p>These are different kinds of <strong>blocks</strong>.</p>
+<pre class="nomnoml"><code>[class]-&gt;[&lt;abstract&gt; abstract]
+[&lt;abstract&gt; abstract]-:&gt;[&lt;instance&gt; instance]
+[&lt;instance&gt; instance]-:&gt;[&lt;note&gt; note]
+[&lt;note&gt; note]--&gt;[&lt;reference&gt; reference]</code></pre>
+<div id="htmlwidget-5" style="width:672px;height:480px;" class="nomnoml html-widget"></div>
+<script type="application/json" data-for="htmlwidget-5">{"x":{"code":"\n#fill: #FEFEFF\n#lineWidth: 1\n#zoom: 4\n#direction: right\n\n[class]->[<abstract> abstract]\n[<abstract> abstract]-:>[<instance> instance]\n[<instance> instance]-:>[<note> note]\n[<note> note]-->[<reference> reference]","svg":false},"evals":[],"jsHooks":[]}</script>
+<pre class="nomnoml"><code>[&lt;package&gt; package|components]--&gt;[&lt;frame&gt; frame|]
+[&lt;database&gt; database]--&gt;[&lt;start&gt; start]
+[&lt;end&gt; end]-o&gt;[&lt;state&gt; state]</code></pre>
+<div id="htmlwidget-6" style="width:672px;height:480px;" class="nomnoml html-widget"></div>
+<script type="application/json" data-for="htmlwidget-6">{"x":{"code":"\n#fill: #FEFEFF\n#lineWidth: 1\n#zoom: 4\n#direction: right\n\n[<package> package|components]-->[<frame> frame|]\n[<database> database]-->[<start> start]\n[<end> end]-o>[<state> state]","svg":false},"evals":[],"jsHooks":[]}</script>
+<pre class="nomnoml"><code>[&lt;choice&gt; choice]---&gt;[&lt;sync&gt; sync]
+[&lt;input&gt; input]-&gt;[&lt;sender&gt; sender]
+[&lt;receiver&gt; receiver]o-[&lt;transceiver&gt; transceiver]</code></pre>
+<div id="htmlwidget-7" style="width:672px;height:480px;" class="nomnoml html-widget"></div>
+<script type="application/json" data-for="htmlwidget-7">{"x":{"code":"\n#fill: #FEFEFF\n#lineWidth: 1\n#zoom: 4\n#direction: right\n\n[<choice> choice]--->[<sync> sync]\n[<input> input]->[<sender> sender]\n[<receiver> receiver]o-[<transceiver> transceiver]","svg":false},"evals":[],"jsHooks":[]}</script>
+<pre class="nomnoml"><code>#direction:down
+#background:lightgrey
+#fill: fuchsia; green; purple
+#fillArrows: false
+#font: Courier
+[class]-&gt;[&lt;abstract&gt; abstract]
+[&lt;abstract&gt; abstract]-:&gt;[&lt;instance&gt; instance]
+[&lt;instance&gt; instance]-:&gt;[&lt;note&gt; note]
+[&lt;note&gt; note]--&gt;[&lt;reference&gt; reference]</code></pre>
+<div id="htmlwidget-8" style="width:672px;height:480px;" class="nomnoml html-widget"></div>
+<script type="application/json" data-for="htmlwidget-8">{"x":{"code":"\n#fill: #FEFEFF\n#lineWidth: 1\n#zoom: 4\n#direction: right\n\n#direction:down\n#background:lightgrey\n#fill: fuchsia; green; purple\n#fillArrows: false\n#font: Courier\n[class]->[<abstract> abstract]\n[<abstract> abstract]-:>[<instance> instance]\n[<instance> instance]-:>[<note> note]\n[<note> note]-->[<reference> reference]","svg":false},"evals":[],"jsHooks":[]}</script>
+<pre class="nomnoml"><code>#font: CenturySchoolbook
+#fill: lightyellow
+#stroke: green
+
+[&lt;actor&gt; actor]---[&lt;usecase&gt; usecase]
+[&lt;usecase&gt; usecase]&lt;--&gt;[&lt;label&gt; label]
+[&lt;usecase&gt; usecase]-/-[&lt;hidden&gt; hidden]</code></pre>
+<div id="htmlwidget-9" style="width:672px;height:480px;" class="nomnoml html-widget"></div>
+<script type="application/json" data-for="htmlwidget-9">{"x":{"code":"\n#fill: #FEFEFF\n#lineWidth: 1\n#zoom: 4\n#direction: right\n\n#font: CenturySchoolbook\n#fill: lightyellow\n#stroke: green\n\n[<actor> actor]---[<usecase> usecase]\n[<usecase> usecase]<-->[<label> label]\n[<usecase> usecase]-/-[<hidden> hidden]","svg":false},"evals":[],"jsHooks":[]}</script>
+<pre class="nomnoml"><code>[&lt;table&gt; table| a | 5 || b | 7]</code></pre>
+<div id="htmlwidget-10" style="width:672px;height:480px;" class="nomnoml html-widget"></div>
+<script type="application/json" data-for="htmlwidget-10">{"x":{"code":"\n#fill: #FEFEFF\n#lineWidth: 1\n#zoom: 4\n#direction: right\n\n[<table> table| a | 5 || b | 7]","svg":false},"evals":[],"jsHooks":[]}</script>
+<pre class="nomnoml"><code>[&lt;table&gt; table| c | 9 ]</code></pre>
+<div id="htmlwidget-11" style="width:672px;height:480px;" class="nomnoml html-widget"></div>
+<script type="application/json" data-for="htmlwidget-11">{"x":{"code":"\n#fill: #FEFEFF\n#lineWidth: 1\n#zoom: 4\n#direction: right\n\n[<table> table| c | 9 ]","svg":false},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div id="directives" class="section level2">
+<h2>Directives</h2>
+<p>Directives change the nature of the diagram rendered, by affective
+parameters like colour, direction and margins.</p>
+</div>
+<div id="custom-classifier-styles" class="section level2">
+<h2>Custom classifier styles</h2>
+<p>A directive that starts with “.” define a <strong>classifier’s style</strong>. The
+style is written as a space separated list of <em>modifiers</em> and <em>key/value
+pairs</em>.</p>
+<pre class="nomnoml"><code>#.box: fill=#8f8 dashed
+#.blob: visual=ellipse title=bold
+#.arvind: visual=rhomb title=bold dashed fill=CornFlowerBlue
+[&lt;box&gt; GreenBox]
+[&lt;blob&gt; Blobby]
+[&lt;arvind&gt; Someone]</code></pre>
+<div id="htmlwidget-12" style="width:672px;height:480px;" class="nomnoml html-widget"></div>
+<script type="application/json" data-for="htmlwidget-12">{"x":{"code":"\n#fill: #FEFEFF\n#lineWidth: 1\n#zoom: 4\n#direction: right\n\n#.box: fill=#8f8 dashed\n#.blob: visual=ellipse title=bold\n#.arvind: visual=rhomb title=bold dashed fill=CornFlowerBlue\n[<box> GreenBox]\n[<blob> Blobby]\n[<arvind> Someone]","svg":false},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="nomnoml-keyvalue-pairs" class="section level2">
+<h2><code>nomnoml</code> Key/value pairs</h2>
+<ul>
+<li>fill=(any css color)</li>
+<li>stroke=(any css color)</li>
+<li>align=center align=left</li>
+<li>direction=right direction=down</li>
+<li>visual=actor</li>
+<li>visual=class</li>
+<li>visual=database</li>
+<li>visual=ellipse</li>
+<li>visual=end</li>
+<li>visual=frame</li>
+<li>visual=hidden</li>
+<li>visual=input</li>
+<li>visual=none</li>
+<li>visual=note</li>
+<li>visual=package</li>
+<li>visual=receiver</li>
+<li>visual=rhomb</li>
+<li>visual=roundrect</li>
+<li>visual=sender</li>
+<li>visual=start</li>
+<li>visual=sync</li>
+<li>visual=table</li>
+<li>visual=transceiver</li>
+</ul>
+</div>
+<div id="text-modifiers" class="section level2">
+<h2>Text modifiers</h2>
+<p>bold center italic left underline</p>
+<pre class="nomnoml"><code># .box: fill=#8f8 dashed
+# .blob: visual=rhomb title=bold fill=#8f8 dashed
+
+[A]-[B]
+[B]--[&lt;usecase&gt;C]
+[C]-[&lt;box&gt; D]
+[B]--[&lt;blob&gt; Jabba;TheHut]</code></pre>
+<div id="htmlwidget-13" style="width:672px;height:480px;" class="nomnoml html-widget"></div>
+<script type="application/json" data-for="htmlwidget-13">{"x":{"code":"\n#fill: #FEFEFF\n#lineWidth: 1\n#zoom: 4\n#direction: right\n\n# .box: fill=#8f8 dashed\n# .blob: visual=rhomb title=bold fill=#8f8 dashed\n\n[A]-[B]\n[B]--[<usecase>C]\n[C]-[<box> D]\n[B]--[<blob> Jabba;TheHut]","svg":false},"evals":[],"jsHooks":[]}</script>
+<pre class="nomnoml"><code>[a] -&gt;[b]
+[b] -:&gt; [c]
+[c]o-&gt;[d]
+[d]-/-[e]</code></pre>
+<div id="htmlwidget-14" style="width:672px;height:480px;" class="nomnoml html-widget"></div>
+<script type="application/json" data-for="htmlwidget-14">{"x":{"code":"\n#fill: #FEFEFF\n#lineWidth: 1\n#zoom: 4\n#direction: right\n\n[a] ->[b]\n[b] -:> [c]\n[c]o->[d]\n[d]-/-[e]","svg":false},"evals":[],"jsHooks":[]}</script>
+<pre class="nomnoml"><code>#fill: lightgreen; lightblue; lightyellow; grey; white
+
+[&lt;table&gt; table | c | 9 ]
+
+[R | [&lt;table&gt; Packages |
+         Base R |
+         [ &lt;table&gt; tidyverse| ggplot | tidyr | readr |
+             [&lt;table&gt; dplyr|
+                 magrittr | Others]]]]</code></pre>
+<div id="htmlwidget-15" style="width:672px;height:480px;" class="nomnoml html-widget"></div>
+<script type="application/json" data-for="htmlwidget-15">{"x":{"code":"\n#fill: #FEFEFF\n#lineWidth: 1\n#zoom: 4\n#direction: right\n\n#fill: lightgreen; lightblue; lightyellow; grey; white\n\n[<table> table | c | 9 ]\n\n[R | [<table> Packages |\n         Base R |\n         [ <table> tidyverse| ggplot | tidyr | readr |\n             [<table> dplyr|\n                 magrittr | Others]]]]","svg":false},"evals":[],"jsHooks":[]}</script>
+<pre class="nomnoml"><code>#fill: lightgreen; lightblue; lightyellow; pink; white
+
+[RStudio | [R | [&lt;table&gt; Packages |
+                   Base R | [ tidyverse |
+                               ggplot | tidyr | readr |
+                               [dplyr]--[magrittr]
+                               [dplyr]--[Others]
+                             | tibble
+                             ]
+                 | lubridate | DiagrammeR | Lattice]]]</code></pre>
+<div id="htmlwidget-16" style="width:672px;height:480px;" class="nomnoml html-widget"></div>
+<script type="application/json" data-for="htmlwidget-16">{"x":{"code":"\n#fill: #FEFEFF\n#lineWidth: 1\n#zoom: 4\n#direction: right\n\n#fill: lightgreen; lightblue; lightyellow; pink; white\n\n[RStudio | [R | [<table> Packages |\n                   Base R | [ tidyverse |\n                               ggplot | tidyr | readr |\n                               [dplyr]--[magrittr]\n                               [dplyr]--[Others]\n                             | tibble\n                             ]\n                 | lubridate | DiagrammeR | Lattice]]]","svg":false},"evals":[],"jsHooks":[]}</script>
+<pre class="nomnoml"><code>[Linux]+-[Ubuntu]
+[Linux]+-[Mint]
+[Ubuntu]--[Mint]
+[Linux]+-[Rosa Linux]
+[Linux]+-[Mx Linux]
+[Debian]-+[Linux]
+
+
+[Fedora]-+[Linux]
+[Puppy Linux]-+[Linux]
+[Personal Pups]-+[Puppy Linux]</code></pre>
+<div id="htmlwidget-17" style="width:672px;height:480px;" class="nomnoml html-widget"></div>
+<script type="application/json" data-for="htmlwidget-17">{"x":{"code":"\n#fill: #FEFEFF\n#lineWidth: 1\n#zoom: 4\n#direction: right\n\n[Linux]+-[Ubuntu]\n[Linux]+-[Mint]\n[Ubuntu]--[Mint]\n[Linux]+-[Rosa Linux]\n[Linux]+-[Mx Linux]\n[Debian]-+[Linux]\n\n\n[Fedora]-+[Linux]\n[Puppy Linux]-+[Linux]\n[Personal Pups]-+[Puppy Linux]\n","svg":false},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>

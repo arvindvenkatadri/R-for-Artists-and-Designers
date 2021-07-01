@@ -1,7 +1,7 @@
 ---
-title: "Lab 03: CS631"
-subtitle: "Working with Data"
-author: "Alison Hill"
+title: "Lab 03"
+subtitle: "Working in the Tidyverse"
+author: "Arvind Venkatadri"
 output:
   xaringan::moon_reader:
     css: ["default", "css/ohsu.css", "css/ohsu-fonts.css"]
@@ -12,218 +12,99 @@ output:
       countIncrementalSlides: false
 ---
 
+
+
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
 knitr::opts_chunk$set(warning = FALSE, message = FALSE, 
   comment = NA, dpi = 300,
-  fig.align = "center", out.width = "65%", cache = FALSE)
+  fig.align = "center", out.width = "80%", cache = FALSE)
 library(tidyverse)
 ```
 
-```{r include = FALSE}
-sounds <- read_csv(here::here("static/labs/data", "animal_sounds_summary.csv")) %>% 
-  select(-prop_produce, -contains("understand"))
-```
+# Tidyverse basics
 
+So far in this course you learned:
 
+- `<-` (variable assignment)
+- `%>%` (then...) ( aur phir...)
+- `dplyr`, `ggplot2` (packages)
+  - `install.packages("dplyr")` (1x per machine)
+  - `library(dplyr)` (1x per work session)
+
+---
+class: center, middle, inverse
+
+# 📇
+
+## Let's review
+
+---
 # Data for today
 
-We'll use data from [Wordbank](http://wordbank.stanford.edu)- an open source database of children's vocabulary development. The tool used to measure children's language and communicative development in this database is the [MacArthur-Bates Communicative Development Inventories (MB-CDI)](http://mb-cdi.stanford.edu). The MB-CDI is a parent-reported questionnaire.
+We'll use data from the Museum of Modern Art (MoMA)
 
-- R package [`wordbankr`](https://cran.r-project.org/web/packages/wordbankr/index.html)
-- [`wordbankr` vignette](https://cran.r-project.org/web/packages/wordbankr/vignettes/wordbankr.html)
-- More about [Wordbank](http://wordbank.stanford.edu)
-- More about [MB-CDI](http://mb-cdi.stanford.edu)
-
+- Publicly available on [GitHub](https://github.com/MuseumofModernArt/collection)
+- As analyzed by [fivethirtyeight.com](https://fivethirtyeight.com/features/a-nerds-guide-to-the-2229-paintings-at-moma/)
+- And by [others](https://medium.com/@foe/here-s-a-roundup-of-how-people-have-used-our-data-so-far-80862e4ce220)
 
 ---
 # Get the data
 
 Use this code chunk to import my cleaned CSV file:
 
-```{r eval = FALSE}
+```{r}
 library(readr)
-sounds <- read_csv("http://bit.ly/cs631-meow")
+moma <- read_csv("http://bit.ly/cs631-moma")
 ```
 
 
 ---
-class: inverse, middle, center
 
-```{r echo = FALSE}
-knitr::include_graphics("../images/r-data-types.png")
-```
+# Data wrangling so far
 
-
-## RStudio Base R Cheatsheet
-
-https://github.com/rstudio/cheatsheets/blob/master/base-r.pdf
-
-
----
-
-## Know your data types
-
-
-* Numeric (2 subtypes)
-    - Integers (`1, 50`)
-    - Double (`1.5, 50.25`, `?double`)
-* Character (`"hello"`)
-* Factor (`grade = "A" | grade = "B"`)
-* Logical (`TRUE | FALSE`)
-
---
-
-```{r}
-typeof(sounds$age)
-typeof(sounds$sound)
-typeof(sounds$sound == "meow")
-```
-
----
-# Even better: `glimpse`
-
-```{r}
-glimpse(sounds)
-```
-
-
----
-# `sounds` (a subset)
-
-
-- `age`: child age in months
-- `sound`: a string describing a type of animal sound
-- `kids_produce`: the number of parents who answered "yes, my child produces this animal sound" 
-- `kids_respond`: the number of parents who responded to this question at all
-
-```{r echo = FALSE}
-head(sounds) %>% knitr::kable(format = "html")
-```
-
-
-
----
-# Data types
-
-```{r echo = FALSE}
-knitr::include_graphics("http://r4ds.had.co.nz/diagrams/data-structures-overview.png")
-```
-
-
----
-class: middle, center, inverse
-
-# ⌛️
-
-## Let's review 
-
----
-
-# Data wrangling with `dplyr` 
-
+All functions from `dplyr` package
 
 .pull-left[
-From DataCamp Chapter 3
+From DataCamp Chapter 1
 
-- `group_by`
-
-- `summarize`
-
-
-]
-
---
-
-.pull-right[
-Adding onto your arsenal of...
+- print a tibble
 
 - `filter`
 
 - `arrange`
 
 - `mutate`
+]
+
+--
+
+.pull-right[
+From Lab 01
+
 
 - `glimpse`
 
 - `distinct`
 
 - `count`
-
-- `tally`
-
-- `pull`
-
-- `top_n`
 ]
 
 ---
 class: middle, center, inverse
 
-# 😈
+![](../images/rladylego-pipe.jpg)
 
-## More on `mutate`
+## Plus: `%>%`
 
----
-# 3 ways to `mutate` 
-
-1. <font color="#ED1941">Create a new variable with a specific value</font>  
-
-1. Create a new variable based on other variables 
-
-1. Change an existing variable
-
---
-
-```{r}
-sounds %>% 
-  mutate(form = "WS")
-```
-
----
-# 3 ways to `mutate`
-
-
-1. Create a new variable with a specific value
-
-1. <font color="#ED1941">Create a new variable based on other variables</font> 
-
-1. Change an existing variable
-
---
-
-```{r}
-sounds %>% 
-  mutate(prop_produce = kids_produce / kids_respond)
-```
-
----
-# 3 ways to `mutate`
-
-1. Create a new variable with a specific value
-
-1. Create a new variable based on other variables
-
-1. <font color="#ED1941">Change an existing variable</font> 
-
---
-
-```{r include = FALSE}
-sounds <- sounds %>% 
-  mutate(prop_produce = kids_produce / kids_respond)
-```
-
-```{r}
-sounds %>% 
-  mutate(prop_produce = prop_produce * 100)
-```
+*image courtesy [@LegoRLady](https://twitter.com/LEGO_RLady/status/986661916855754752)*
 
 ---
 class: middle, center, inverse
 
 # ⌛️
 
-## Let's review some helpful functions for `mutate` + `summarize`
+## Let's review some helpful functions for `filter`
 
 ---
 class: inverse, bottom, center
@@ -231,10 +112,7 @@ background-image: url("../images/peapod.png")
 background-size: 25%
 
 
-## Remember:
-
 ## Base R + Tidyverse
-
 
 ---
 class: middle, center, inverse
@@ -243,44 +121,54 @@ class: middle, center, inverse
 
 ## First: 
 
-## Arithmetic
+## Logical Operators
 
-*especially useful for* `mutate`
 
-See:
-
-http://r4ds.had.co.nz/transform.html#mutate-funs
 
 ---
 
+
 ```{r}
-?Arithmetic
+?base::Logic
 ```
 
+
 ```{r include = FALSE}
-math_table <- tibble::tribble(
+logic_table <- tibble::tribble(
   ~Operator, ~Description, ~Usage,
-  "+", "addition", "x + y",
-  "-", "subtraction", "x - y",
-  "*", "multiplication", "x * y",
-  "/", "division", "x / y",
-  "^", "raised to the power of", "x ^ y",
-  "abs", "absolute value", "abs(x)",
-  "%/%", "integer division", "x %/% y",
-  "%%", "remainder after division", "x %% y"
+  "&", "and", "x & y",
+  "|", "or", "x | y",
+  "xor", "exactly x or y", "xor(x, y)",
+  "!", "not", "!x"
 )
 ```
 
 
 ```{r echo = FALSE, results = 'asis'}
-knitr::kable(math_table, format = "html")
+knitr::kable(logic_table, format = "html")
 ```
+
+---
+
+Logical or (`|`) is inclusive, so `x | y` really means: 
+
+* x or 
+* y or 
+* both x & y
+
+Exclusive or (`xor`) is exclusive, so `xor(x, y)` really means: 
+
+* x or
+* y...
+* but not both x & y
 
 ```{r}
-5 %/% 2 # 2 goes into 5 two times with...
-5 %% 2 # 1 left over
+x <- c(0, 1, 0, 1)
+y <- c(0, 0, 1, 1)
+boolean_or <- x | y
+exclusive_or <- xor(x, y)
+cbind(x, y, boolean_or, exclusive_or)
 ```
-
 
 ---
 class: middle, center, inverse
@@ -289,121 +177,172 @@ class: middle, center, inverse
 
 ## Second: 
 
-## Summaries
-
-*especially useful for* `summarize`
-
-*even more useful after a* `group_by`
-
-See:
-
-http://r4ds.had.co.nz/transform.html#summarise-funs
-
-
+## Comparisons
 
 ---
+```{r}
+?Comparison
+```
 
 ```{r include = FALSE}
-summary_table <- tibble::tribble(
-  ~Description, ~Usage,
-  "sum", "sum(x)",
-  "minimum", "min(x)",
-  "maximum", "max(x)",
-  "mean", "mean(x)",
-  "median", "mean(x)",
-  "standard deviation", "sd(x)",
-  "variance", "var(x)",
-  "rank", "rank(x)"
+comp_table <- tibble::tribble(
+  ~Operator, ~Description, ~Usage,
+  "<", "less than", "x < y",
+  "<=", "less than or equal to", "x <= y",
+  ">", "greater than", "x > y",
+  ">=", "greater than or equal to", "x >= y",
+  "==", "exactly equal to", "x == y",
+  "!=", "not equal to", "x != y",
+  "%in%", "group membership*", "x %in% y",
+  "is.na", "is missing", "is.na(x)",
+  "!is.na", "is not missing", "!is.na(x)"
 )
 ```
 
 
 ```{r echo = FALSE, results = 'asis'}
-knitr::kable(summary_table, format = "html")
+knitr::kable(comp_table, format = "html")
 ```
 
-* All allow for `na.rm` argument to remove `NA` values before summarizing. The default setting for this argument is *always* `na.rm = FALSE`, so if there is one `NA` value the summary will be `NA`.
-
-* See "Maths Functions" in the RStudio Base R Cheatsheet:
-https://github.com/rstudio/cheatsheets/blob/master/base-r.pdf
+*(shortcut to using `|` repeatedly with `==`)
 
 ---
-class: inverse, middle, center
+## Lab 02: Challenge 1 (`dplyr`)
 
-![](../images/alicedata-lego-colors.jpg)
-## <small>"Spent day pondering grayscale vs colourscale using `ggplot`"</small>
+1. How many paintings (rows) are in `moma`? How many variables (columns) are in `moma`?
+1. What is the first painting acquired by MoMA? Which year? Which artist? What title?
+    - *Hint: you may want to look into `select` + `arrange`*
+1. What is the oldest painting in the collection? Which year? Which artist? What title? *(see above hint)*
+1. How many distinct artists are there?
+1. Which artist has the most paintings in the collection? How many paintings are by this artist?
+1. How many paintings are by male vs female artists?
 
-*photo and caption courtesy [@alice-data](https://twitter.com/alice_data)*
+If you want more:
+1. How many artists of each gender are there?
+1. In what year were the most paintings acquired? Created?
+1. In what year was the first painting by a (solo) female artist acquired? When was that painting created? Which artist? What title? 
 
----
-# Today's lab: COLORS
-
-Specifically, discrete colors.
-
-At the end of today's lab, you'll see an extra section on continuous colors. 
-
----
-## But first: `shape`
-
-```{r echo = FALSE}
-## A look at all 25 symbols
-df <- data.frame(x = 1:5, 
-                  y = rep(rev(seq(0, 24, by = 5)), each = 5), 
-                  z = 1:25)
-s <- ggplot(df, aes(x = x, y = y)) + 
-  scale_shape_identity() + 
-  geom_text(aes(label = z, y = y - 1)) + 
-  theme_void()
-s + geom_point(aes(shape = z), size = 6) 
-```
-
----
-## Shapes with `color = "hotpink"`
-
-
-```{r echo = FALSE}
-s + geom_point(aes(shape = z), size = 6, colour = "hotpink") 
-```
 
 
 ---
-## Shapes with `fill = "gold"`
 
+# The Essence of ggplot
 
-```{r echo = FALSE}
-s + geom_point(aes(shape = z), size = 6, colour = "hotpink", fill = "gold") 
-```
+all `ggplot2`
+
+- `aes(x = , y = )` (aesthetics)
+- `aes(x = , y = , color = )` (add color)
+- `aes(x = , y = , size = )` (add size)
+- `+ facet_wrap(~ )` (facetting)
 
 ---
-## Default shape for `geom_point`
+# Old School (Challenge 2)<sup>1</sup>
 
-🕵🏽 Requires spelunking into the dark corners of the `ggplot2` code on [GitHub](https://github.com/tidyverse/ggplot2/blob/master/R/geom-point.r):
+- Sketch the graphics below on paper, where the `x`-axis is variable `year_created` and the `y`-axis is variable `year_acquired`
 
-```{r eval = FALSE}
-default_aes = aes(
-    shape = 19, colour = "black", size = 1.5, fill = NA,
-    alpha = NA, stroke = 0.5
+```{r echo=FALSE}
+moma_ex <-
+  data_frame(
+    painted = c(1980, 1990, 2000, 2010),
+    acquired = c(1985, 1995, 2005, 2015),
+    area = c(3, 2, 1, 2),
+    gender = c("male", "male", "female", "female")
   )
+moma_ex
 ```
 
-So, the default for `geom_point(shape = 19)`! This is important to remember: this shape only "understands" the *color* aesthetic, but not the *fill* aesthetic.
+<!-- Copy to chalkboard/whiteboard -->
+
+1. A scatter plot
+1. A scatter plot where the `color` of the points corresponds to `gender`
+1. A scatter plot where the `size` of the points corresponds to `area`
+
+.footnote[
+[1] Shamelessly borrowed with much appreciation to [Chester Ismay](https://ismayc.github.io/talks/ness-infer/slide_deck.html)
+]
 
 ---
 
+# 1. A scatterplot
+
+```{r, eval=FALSE}
+library(ggplot2)
+ggplot(moma_ex, aes(painted, acquired)) + 
+  geom_point()
+```
+--
+
+```{r, echo=FALSE, fig.height=4.4}
+ggplot(moma_ex, aes(painted, acquired)) + 
+  geom_point()
+```
+
+
+---
+
+
+# 2. `color` points by `gender`
+
+```{r, eval=FALSE}
+library(ggplot2)
+ggplot(moma_ex, aes(painted, acquired, color = gender)) + 
+  geom_point()
+```
+--
+
+```{r, echo=FALSE, fig.height=4.4}
+ggplot(moma_ex, aes(painted, acquired, color = gender)) + 
+  geom_point()
+```
+
+
+---
+
+# 3. `size` points by `area`
+
+```{r, eval=FALSE}
+library(ggplot2)
+ggplot(moma_ex, aes(painted, acquired, size = area)) + 
+  geom_point()
+```
+--
+
+```{r, echo=FALSE, fig.height=4.4}
+ggplot(moma_ex, aes(painted, acquired, size = area)) + 
+  geom_point()
+```
+
+---
+
+# [The Five-Named Graphs](http://moderndive.com/3-viz.html#FiveNG)
+
+
+- Scatterplot: `geom_point()`
+- Line graph: `geom_line()`
+- Histogram: `geom_histogram()`
+- Boxplot: `geom_boxplot()`
+- Bar graph: `geom_bar()` or `geom_col` (see [Lab 02](../02-Pronouns-and-Data.html))
+
+
+
+---
 class: inverse, middle, center
 
-# 👇🏽
 
-## R Markdown:
+# 📊
 
-https://www.markdowntutorial.com
+## Basics of `ggplot2` and `dplyr`:
 
-https://andrewbtran.github.io/NICAR/2018/workflow/docs/02-rmarkdown.html
+[R4DS `ggplot2` chapter](http://r4ds.had.co.nz/data-visualisation.html)
 
-https://yihui.name/tinytex/ *(install!)*
+[ModernDive `ggplot2` chapter](http://moderndive.com/3-viz.html)
 
-https://github.com/rstudio/cheatsheets/blob/master/rmarkdown-2.0.pdf
+[RStudio `ggplot2` Cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf)
 
-https://rmarkdown.rstudio.com/html_document_format.html
+[R4DS `dplyr` chapter](http://r4ds.had.co.nz/transform.html)
 
-https://rmarkdown.rstudio.com/pdf_document_format.html
+[ModernDive `dplyr` chapter](http://moderndive.com/5-wrangling.html)
+
+[RStudio `dplyr` Cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf)
+
+

@@ -1,0 +1,243 @@
+---
+title: 'Lab 00 - Introduce Yourself'
+author: "Arvind Venkatadri"
+output:
+  html_document:
+    theme: flatly
+    toc: TRUE
+    toc_float: TRUE
+    toc_depth: 2
+    number_sections: TRUE
+    code_download: TRUE
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<div id="instructions" class="section level1">
+<h1>Instructions</h1>
+<blockquote>
+<p>Read all the way through step 7, and complete this lab before you come to class on Day 1!
+Download this file using the <code>Code-&gt;Download Rmd</code> button at the top right corner.
+Change the author name to your own!</p>
+</blockquote>
+</div>
+<div id="overview" class="section level1">
+<h1>Overview</h1>
+<p>This guide will lead you through the steps to install and use <a href="https://www.r-project.org">R, a free and open-source software environment for statistical computing and graphics.</a></p>
+<p>What is R?</p>
+<ul>
+<li><strong>R</strong> is the name of the programming language itself, based off of S from Bell Labs, which users access through a command-line interpreter (<code>&gt;</code>)</li>
+</ul>
+<p>What is RStudio?</p>
+<ul>
+<li><strong>RStudio</strong> is a powerful and convenient user interface that allows you to access the R programming language along with a lot of other bells and whistles that enhance functionality (and sanity).</li>
+</ul>
+<p>Our end goal is to get you looking at a screen like this:</p>
+<p><img src="images/00_final-screenshot.png" /></p>
+</div>
+<div id="install-r" class="section level1">
+<h1>Install R</h1>
+<p>Install R from <a href="https://cran.rstudio.com">CRAN, the Comprehensive R Archive Network</a>. Please choose a <strong>precompiled binary distribution</strong> for your operating system.</p>
+<ul>
+<li>If you need more help, check out one of the following videos (courtesy of Roger Peng at Johns Hopkins Biostatistics):
+<ul>
+<li><a href="https://www.youtube.com/watch?v=Icawuhf0Yqo&amp;feature=youtu.be">Installing R on a mac</a></li>
+<li><a href="https://www.youtube.com/watch?v=mfGFv-iB724&amp;feature=youtu.be">Installing R on windows</a></li>
+</ul></li>
+<li>If you need even more help, read this <a href="https://beckmw.files.wordpress.com/2014/09/r_install_guide.pdf">step-by-step guide</a>, including screenshots.</li>
+</ul>
+<div id="check-in" class="section level2">
+<h2>Check in</h2>
+<p>Launch R. You should see one console with a command line interpreter (<code>&gt;</code>). Close R.</p>
+</div>
+</div>
+<div id="install-rstudio" class="section level1">
+<h1>Install RStudio</h1>
+<p>Install the free, open-source edition of RStudio: <a href="http://www.rstudio.com/products/rstudio/download/" class="uri">http://www.rstudio.com/products/rstudio/download/</a></p>
+<p>RStudio provides a powerful user interface for R, called an <em>integrated development environment</em>. RStudio includes:</p>
+<ul>
+<li>a console (the standard command line interface: <code>&gt;</code>),</li>
+<li>a syntax-highlighting editor that supports direct code execution, and</li>
+<li>tools for plotting, history, debugging and workspace management.</li>
+</ul>
+<div id="check-in-1" class="section level2">
+<h2>Check in</h2>
+<p>Launch RStudio. You should get a window similar to the screenshot you see <a href="https://www.rstudio.com/wp-content/uploads/2014/04/rstudio-workbench.png">here</a>, but yours will be empty. Look at the bottom left pane: this is the same console window you saw when you opened R in step 1.15.</p>
+<ul>
+<li>Place your cursor where you see <code>&gt;</code> and type <code>x &lt;- 2 + 2</code>, hit enter or return, then type <code>x</code>, and hit enter/return again.</li>
+<li>If <code>[1] 4</code> prints to the screen, you have successfully installed R and RStudio, and you can move onto installing packages.</li>
+</ul>
+</div>
+</div>
+<div id="install-packages" class="section level1">
+<h1>Install packages</h1>
+<p>The version of R that you just downloaded is considered base R, which provides you with good but basic statistical computing and graphics powers. For analytical and graphical super-powers, you’ll need to install add-on packages, which are user-written, to extend/expand your R capabilities. Packages can live in one of two places:</p>
+<ul>
+<li>They may be carefully curated by CRAN (which involves a thorough submission and review process), and thus are easy install using <code>install.packages("name_of_package", dependencies = TRUE)</code>.</li>
+<li>Alternatively, they may be available via GitHub. To download these packages, you first need to install the <code>devtools</code> package.</li>
+</ul>
+<pre class="r"><code>install.packages(&quot;devtools&quot;)
+library(devtools)
+install_github(&quot;name_of_package&quot;)</code></pre>
+<p>Place your cursor in the console again (where you last typed <code>x</code> and <code>[4]</code> printed on the screen). You can use the first method to install the following packages directly from CRAN, all of which we will use:</p>
+<ul>
+<li><a href="http://dplyr.tidyverse.org"><code>dplyr</code>,</a></li>
+<li><a href="http://ggplot2.tidyverse.org"><code>ggplot2</code>,</a></li>
+<li><a href="https://github.com/hadley/babynames"><code>babynames</code></a></li>
+</ul>
+<p>You can download all of these at once, too:</p>
+<pre class="r"><code>install.packages(c(&quot;dplyr&quot;, &quot;ggplot2&quot;, &quot;babynames&quot;), 
+                 dependencies = TRUE)</code></pre>
+<p class="text-info">
+<strong>Heads up:</strong> We should formally introduce the combine command, <a href="http://stat.ethz.ch/R-manual/R-patched/library/base/html/c.html"><code>c()</code></a>, used above. You will use this often- any time you want to combine things into a vector.
+</p>
+<pre class="r"><code>c(&quot;hello&quot;, &quot;my&quot;, &quot;name&quot;, &quot;is&quot;, &quot;alison&quot;)</code></pre>
+<pre><code>[1] &quot;hello&quot;  &quot;my&quot;     &quot;name&quot;   &quot;is&quot;     &quot;alison&quot;</code></pre>
+<pre class="r"><code>c(1:3, 20, 50)</code></pre>
+<pre><code>[1]  1  2  3 20 50</code></pre>
+<p>Mind your use of quotes carefully with packages.</p>
+<ul>
+<li>To <em>install</em> a package, you put the name of the package in quotes as in <code>install.packages("name_of_package")</code>.</li>
+<li>To <em>use</em> an already installed package, you must load it first, as in <code>library(name_of_package)</code>, leaving the name of the package bare. You only need to do this once per RStudio session.</li>
+<li>If you want <em>help</em>, no quotes are needed: <code>help(name_of_package)</code> or <code>?name_of_package</code>.</li>
+<li>If you want the <em>citation</em> for a package (and you should give credit where credit is due), ask R as in <code>citation("name_of_package")</code>.</li>
+</ul>
+<pre class="r"><code>install.packages(&quot;dplyr&quot;, dependencies = TRUE)
+library(dplyr)
+help(&quot;dplyr&quot;)</code></pre>
+<pre class="r"><code>citation(&quot;ggplot2&quot;)</code></pre>
+<pre><code>
+To cite ggplot2 in publications, please use:
+
+  H. Wickham. ggplot2: Elegant Graphics for Data Analysis.
+  Springer-Verlag New York, 2016.
+
+A BibTeX entry for LaTeX users is
+
+  @Book{,
+    author = {Hadley Wickham},
+    title = {ggplot2: Elegant Graphics for Data Analysis},
+    publisher = {Springer-Verlag New York},
+    year = {2016},
+    isbn = {978-3-319-24277-4},
+    url = {https://ggplot2.tidyverse.org},
+  }</code></pre>
+<p class="text-info">
+<strong>Heads up:</strong> R is <strong>case-sensitive</strong>, so <code>?dplyr</code> works but <code>?Dplyr</code> will not. Likewise, a variable called <code>A</code> is different from <code>a</code>.
+</p>
+</div>
+<div id="make-a-name-plot" class="section level1">
+<h1>Make a name plot</h1>
+<p>Open a new R script in RStudio by going to <code>File --&gt; New File --&gt; R Script</code>. For this first foray into R, I’ll give you the code, so sit back and relax and feel free to copy and paste my code with some small tweaks.</p>
+<p>First load the packages:</p>
+<pre class="r"><code>library(babynames) # contains the actual data
+library(dplyr) # for manipulating data
+library(ggplot2) # for plotting data</code></pre>
+<p>Next, we’ll follow <a href="https://cran.r-project.org/doc/contrib/de_Jonge+van_der_Loo-Introduction_to_data_cleaning_with_R.pdf">best practices for inspecting a freshly read dataset</a>. Also, see <a href="http://simplystatistics.org/2014/06/13/what-i-do-when-i-get-a-new-data-set-as-told-through-tweets/">“What I do when I get a new data set as told through tweets”</a> for more ideas about exploring a new dataset. Here are some critical commands to obtain a high-level overview (HLO) of your freshly read dataset in R. We’ll call it saying hello to your dataset:</p>
+<pre class="r"><code>glimpse(babynames) # dplyr</code></pre>
+<pre><code>Rows: 1,924,665
+Columns: 5
+$ year &lt;dbl&gt; 1880, 1880, 1880, 1880, 1880, 1880, 1880, 1880, 1880, 1880, 1880,~
+$ sex  &lt;chr&gt; &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, ~
+$ name &lt;chr&gt; &quot;Mary&quot;, &quot;Anna&quot;, &quot;Emma&quot;, &quot;Elizabeth&quot;, &quot;Minnie&quot;, &quot;Margaret&quot;, &quot;Ida&quot;,~
+$ n    &lt;int&gt; 7065, 2604, 2003, 1939, 1746, 1578, 1472, 1414, 1320, 1288, 1258,~
+$ prop &lt;dbl&gt; 0.07238359, 0.02667896, 0.02052149, 0.01986579, 0.01788843, 0.016~</code></pre>
+<pre class="r"><code>head(babynames) # base R</code></pre>
+<pre><code># A tibble: 6 x 5
+   year sex   name          n   prop
+  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;int&gt;  &lt;dbl&gt;
+1  1880 F     Mary       7065 0.0724
+2  1880 F     Anna       2604 0.0267
+3  1880 F     Emma       2003 0.0205
+4  1880 F     Elizabeth  1939 0.0199
+5  1880 F     Minnie     1746 0.0179
+6  1880 F     Margaret   1578 0.0162</code></pre>
+<pre class="r"><code>tail(babynames) # same</code></pre>
+<pre><code># A tibble: 6 x 5
+   year sex   name       n       prop
+  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;int&gt;      &lt;dbl&gt;
+1  2017 M     Zyhier     5 0.00000255
+2  2017 M     Zykai      5 0.00000255
+3  2017 M     Zykeem     5 0.00000255
+4  2017 M     Zylin      5 0.00000255
+5  2017 M     Zylis      5 0.00000255
+6  2017 M     Zyrie      5 0.00000255</code></pre>
+<pre class="r"><code>names(babynames) # same</code></pre>
+<pre><code>[1] &quot;year&quot; &quot;sex&quot;  &quot;name&quot; &quot;n&quot;    &quot;prop&quot;</code></pre>
+<p>If you have done the above and produced sane-looking output, you are ready for the next bit. Use the code below to create a new data frame called <code>alison</code>.</p>
+<pre class="r"><code>arvind &lt;- babynames %&gt;%
+  filter(name == &quot;Arvind&quot; | name == &quot;Aravind&quot;) %&gt;% 
+  filter(sex == &quot;M&quot;) </code></pre>
+<ul>
+<li><p>The first bit makes a new dataset called <code>arvind</code> that is a copy of the <code>babynames</code> dataset- the <code>%&gt;%</code> tells you we are doing some other stuff to it later.</p></li>
+<li><p>The second bit <code>filters</code> our <code>babynames</code> to only keep rows where the <code>name</code> is either Arvind or Aravind (read <code>|</code> as <em>“or”</em>.)</p></li>
+<li><p>The third bit applies another <code>filter</code> to keep only those where sex is male.</p></li>
+</ul>
+<p>Let’s check out the data.</p>
+<pre class="r"><code>arvind</code></pre>
+<pre><code># A tibble: 61 x 5
+    year sex   name       n       prop
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;int&gt;      &lt;dbl&gt;
+ 1  1970 M     Arvind     5 0.00000262
+ 2  1972 M     Arvind     8 0.00000478
+ 3  1975 M     Arvind     7 0.00000431
+ 4  1976 M     Arvind     5 0.00000306
+ 5  1977 M     Arvind     9 0.00000526
+ 6  1978 M     Arvind     6 0.00000351
+ 7  1979 M     Arvind     7 0.00000391
+ 8  1980 M     Arvind     6 0.00000323
+ 9  1981 M     Arvind     8 0.0000043 
+10  1982 M     Arvind     6 0.00000318
+# ... with 51 more rows</code></pre>
+<pre class="r"><code>glimpse(arvind)</code></pre>
+<pre><code>Rows: 61
+Columns: 5
+$ year &lt;dbl&gt; 1970, 1972, 1975, 1976, 1977, 1978, 1979, 1980, 1981, 1982, 1983,~
+$ sex  &lt;chr&gt; &quot;M&quot;, &quot;M&quot;, &quot;M&quot;, &quot;M&quot;, &quot;M&quot;, &quot;M&quot;, &quot;M&quot;, &quot;M&quot;, &quot;M&quot;, &quot;M&quot;, &quot;M&quot;, &quot;M&quot;, &quot;M&quot;, ~
+$ name &lt;chr&gt; &quot;Arvind&quot;, &quot;Arvind&quot;, &quot;Arvind&quot;, &quot;Arvind&quot;, &quot;Arvind&quot;, &quot;Arvind&quot;, &quot;Arvi~
+$ n    &lt;int&gt; 5, 8, 7, 5, 9, 6, 7, 6, 8, 6, 7, 7, 7, 13, 8, 11, 6, 8, 12, 10, 1~
+$ prop &lt;dbl&gt; 2.620e-06, 4.780e-06, 4.310e-06, 3.060e-06, 5.260e-06, 3.510e-06,~</code></pre>
+<p>Again, if you have sane-looking output here, move along to plotting the data!</p>
+<pre class="r"><code>plot &lt;- ggplot(arvind, aes(x = year, 
+                           y = prop,  
+                           group = name, 
+                           color = name)) + 
+  geom_line()  </code></pre>
+<p>Now if you did this right, you will not see your plot! Because we saved the <code>ggplot</code> with a name (<code>plot</code>), R just saved the object for you. But check out the top right pane in RStudio again: under <code>Values</code> you should see <code>plot</code>, so it is there, you just have to ask for it. Here’s how:</p>
+<pre class="r"><code>plot </code></pre>
+<p><img src="/labs/00-install_name_plot_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+</div>
+<div id="make-a-new-name-plot" class="section level1">
+<h1>Make a new name plot</h1>
+<p>Edit my code above to create a new dataset. Pick 2 names to compare how popular they each are (these could be different spellings of your own name, like I did, but you can choose any 2 names that are present in the dataset). Make the new plot, changing the name of the first argument <code>arvind</code> in <code>ggplot()</code> to the name of your new dataset.</p>
+<div id="save-and-share" class="section level2">
+<h2>Save and share</h2>
+<p>Save your work so you can share your favorite plot with us. You will not like the looks of your plot if you mouse over to <code>Export</code> and save it. Instead, use <code>ggplot2</code>’s command for saving a plot with sensible defaults:</p>
+<pre class="r"><code>help(ggsave)</code></pre>
+<pre class="r"><code>ggsave(&quot;arvind_v.pdf&quot;, plot) # please make the filename unique!</code></pre>
+<p>Upload this exported plot to Teams -&gt; Assignments before Wednesday at noon. You can add a cat picture also along with this, if you are an ailurophile like me.</p>
+</div>
+</div>
+<div id="other-cool-babynames-projects" class="section level1">
+<h1>Other cool <code>babynames</code> projects</h1>
+<ul>
+<li>Julia Silge <em>‘My Baby Boomer Name Might Have Been “Debbie”’</em>: <a href="https://juliasilge.com/blog/my-baby-boomer-name/" class="uri">https://juliasilge.com/blog/my-baby-boomer-name/</a>
+<ul>
+<li>Use Julia’s Shiny app: <a href="https://juliasilge.shinyapps.io/PredictNamesApp/" class="uri">https://juliasilge.shinyapps.io/PredictNamesApp/</a>
+<img src="https://juliasilge.com/figs/2016-02-29-My-Baby-Boomer-Name/unnamed-chunk-8-1.png" /></li>
+</ul></li>
+<li>Hilary Parker: Hilary: The Most Poisoned Baby Name in US History: <a href="https://hilaryparker.com/2013/01/30/hilary-the-most-poisoned-baby-name-in-us-history/" class="uri">https://hilaryparker.com/2013/01/30/hilary-the-most-poisoned-baby-name-in-us-history/</a></li>
+</ul>
+<p><img src="https://hilaryparker.files.wordpress.com/2013/01/more_names_trimmed2.png" /></p>
+</div>
+<div id="resources" class="section level1">
+<h1>Resources</h1>
+<ul>
+<li><p><a href="https://alison.rbind.io/html/jamboree_heart_ggplot.html" class="uri">https://alison.rbind.io/html/jamboree_heart_ggplot.html</a></p></li>
+<li><p><a href="http://moderndive.com/2-getting-started.html" class="uri">http://moderndive.com/2-getting-started.html</a></p></li>
+<li><p><a href="http://r4ds.had.co.nz" class="uri">http://r4ds.had.co.nz</a></p></li>
+<li><p><a href="https://www.rstudio.com/resources/cheatsheets/" class="uri">https://www.rstudio.com/resources/cheatsheets/</a></p></li>
+<li><p><a href="https://rweekly.org" class="uri">https://rweekly.org</a></p></li>
+</ul>
+</div>

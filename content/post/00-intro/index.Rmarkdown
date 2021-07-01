@@ -1,10 +1,11 @@
 ---
-title: 'Welcome!'
-subtitle: 'Introduce Yourself to R, RStudio, and Us!'
-summary: Introduce Yourself to R, RStudio, and Us!
+title: 'Lab-00'
+subtitle: 'Welcome ! Introduce Yourself to R, RStudio, and Us!'
+summary: Welcome ! Introduce Yourself to R, RStudio, and Us!
 date: "2021-07-05T00:00:00Z"
 featured: false
 draft: false
+weight: 10
 
 # Featured image
 # To use, add an image named `featured.jpg/png` to your page's folder.
@@ -27,7 +28,12 @@ links:
 - icon: flask
   icon_pack: fas
   name: lab
-  url: /labs/00-install_name_plot.html
+  url: /labs/Lab-00/00-install_name_plot.html
+  
+- icon: magic
+  icon_pack: fas
+  name: Installation Slides
+  url: /labs/Lab-00/00-installation.html
 ---
 
 Welcome! We'll see you in our first class on Monday, and please do the lab linked over the preceding weekend!
