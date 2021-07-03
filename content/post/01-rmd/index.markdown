@@ -1,10 +1,11 @@
 ---
-title: 'Lab 01'
+title: 'Lab-01: The Best Form of the Game'
 subtitle: 'Working with R Markdown'
 summary: Working with R Markdown
-date: "2018-05-13T00:00:00Z"
+date: "2021-07-06T00:00:00Z"
 featured: false
 draft: false
+weight: 2
 
 # Featured image
 # To use, add an image named `featured.jpg/png` to your page's folder.
@@ -24,19 +25,33 @@ image:
 projects: []
 
 links:
-# - icon: magic
-#   icon_pack: fas
-#   name: xaringan slides
-#   url: /slides/01-slides_xaringan.html
+- icon: magic
+  icon_pack: fas
+  name: xaringan slides
+  url: /slides/01-slides_xaringan.html
 - icon: magic
   icon_pack: fas
   name: Markdown slides
   url: /slides/01-Metaphors-with-Graphics.html
-# - icon: magic
-#   icon_pack: fas
-#   name: Blogdown slides
-#   url: /slides/01-slides_blogdown.html
+- icon: magic
+  icon_pack: fas
+  name: Blogdown slides
+  url: /slides/01-slides_blogdown.html
 ---
+
+## R Markdown:
+
+https://www.markdowntutorial.com
+
+https://andrewbtran.github.io/NICAR/2018/workflow/docs/02-rmarkdown.html
+
+https://yihui.name/tinytex/ *(install!)*
+
+https://github.com/rstudio/cheatsheets/blob/master/rmarkdown-2.0.pdf
+
+https://rmarkdown.rstudio.com/html_document_format.html
+
+https://rmarkdown.rstudio.com/pdf_document_format.html
 
 
 

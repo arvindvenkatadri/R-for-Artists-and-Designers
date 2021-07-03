@@ -50,13 +50,22 @@ subtitle = ""
  css_class = ""
 +++
 
+## Data, Domains, and Metaphors
+
+We will understand the idea of data and types of variable in data. These will lead us to creating different kinds of graphs based on variable type. We will look at diverse domains, such as Geography, Networks and Education and plot geometric visuals based on the data we find in these domains. This will help us not only appreciate the data but give us a view of the underlying realities and ideas in each of these domains. 
+
+Using RStudio as an *Integrated Development Environment* is a crucial part of this journey. As is the paradigm of **tidy data** and the **tidyverse** method of programming in R. 
 
 ## Assignments & Project
 
 There will be regular homework assignments, typically as part of lab sessions. There will also be a final term project; more details about which will be forthcoming.
 
-## Textbook
+## Textbooks
 
-We will be drawing material from a wide variety of sources for this course; as such, there is no single, required text book <em>per se</em>. However, we will frequently refer to Nathan Yau's <a href="http://www.powells.com/biblio/1-9781118462195-4"><em>Data Points</em></a>, and highly recommend that anybody taking this class have a copy. Additionally, many lab sessions and some assignments will use exercises from Nathan Yau's <a href="http://www.powells.com/biblio/2-9780470944882-0"><em>Visualize This</em></a>. Tamara Munzer's <a href="http://www.cs.ubc.ca/~tmm/vadbook/"><em>Visualization Analysis and Design</em></a> is also incredibly useful.
+We will be drawing material from a wide variety of sources for this course; as such, there is no single, required text book <em>per se</em>. 
+
+Our exposition will draw upon [Robert Kabacoff's book on Data Visualization](https://rkabacoff.github.io/datavis/), and on [Hadley Wickham and Garett Grolemund's R for Data Science](https://r4ds.had.co.nz/). This latter book is an excellent choice for a personally owned hardcopy book on R! 
+
+We will also use material from tutorials published by prominent members of the **#rstats** community, such as those by [Thomas Lin Perdersen](https://www.data-imaginist.com) (author of the **tidygraph** package for networks), [Martijn Tennekes](https://github.com/mtennekes/tmap)(creator of **tmap** package for maps) and [Carson Sievert]() (**plotly** for interactive maps); [Daniel Kallin](https://github.com/skanaar/nomnoml) and [Rich Iannone](https://github.com/rich-iannone/DiagrammeR) for the Diagrams. 
 
  

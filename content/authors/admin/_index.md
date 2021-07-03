@@ -12,12 +12,12 @@ social:
 # - icon: discord
 #  icon_pack: fab
 #  link: https://discord.com/channels/797796372429799465/797796372929183765
-- icon: piazza
-  icon_pack: ai
-  link: https://piazza.com/
+# - icon: piazza
+#   icon_pack: ai
+#   link: https://piazza.com/
 
-- icon: envelope-open
-  icon_pack: fab
+- icon: envelope
+  icon_pack: fas
   link: mailto:arvind.venkatadri@manipal.edu
   
 - icon: github
@@ -44,4 +44,4 @@ user_groups:
 
 This course will give Art and Design students a foundation in the principles and practice of data visualization using R.
 
-Tthe viewpoint of using R as a way of creating geometric metaphors for a variety of circumstances and realities in diverse domains will be stressed. Data will be drawn from these domains and understood via the geometric metaphors created in R. 
+The viewpoint of of this course is of using R to **create geometric metaphors**. Diverse domains have their own uniquely structured data. These will be depicted using geometric metaphors to enable better understanding of the underlying circumstances and realities.

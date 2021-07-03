@@ -1,11 +1,11 @@
 ---
-title: 'Lab-03: Tidy Data at the MoMa'
-subtitle: 'MoMA Museum Tour'
-summary: MoMA Museum Tour
-date: "2021-07-09T00:00:00Z"
+title: 'Lab-05: Colors with Animal Sounds'
+subtitle: 'Using Colour Palettes in R'
+summary: "Wes Anderson! Tim Burton! The Economist... and many others!!"
+date: "2021-07-11T00:00:00Z"
 featured: false
 draft: false
-weight: 4
+weight: 5
 
 # Featured image
 # To use, add an image named `featured.jpg/png` to your page's folder.
@@ -13,7 +13,7 @@ weight: 4
 # Focal point options: Smart, Center, TopLeft, Top, TopRight, Left, Right, BottomLeft, Bottom, BottomRight
 image:
   placement: 2
-  caption: 'Image credit: [**Robert Bye on Unsplash**](https://unsplash.com/photos/a3Mv2jJTI0s)'
+  caption: 'Image credit: [**Sven Brandsma on Unsplash**](https://unsplash.com/photos/6n3JxopeCKM)'
   focal_point: ""
   preview_only: true
 
@@ -28,24 +28,10 @@ links:
 - icon: flask
   icon_pack: fas
   name: lab
-  url: /labs/03-moma.html
+  url: /labs/03-colors.html
 - icon: magic
   icon_pack: fas
   name: slides
   url: /slides/03-slides.html
 ---
 
-## Readings
-
-
-+ [R4DS `ggplot2` chapter](http://r4ds.had.co.nz/data-visualisation.html)
-
-+ [ModernDive `ggplot2` chapter](http://moderndive.com/3-viz.html)
-
-+ [RStudio `ggplot2` Cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf)
-
-+ [R4DS `dplyr` chapter](http://r4ds.had.co.nz/transform.html)
-
-+ [ModernDive `dplyr` chapter](http://moderndive.com/5-wrangling.html)
-
-+ [RStudio `dplyr` Cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf)

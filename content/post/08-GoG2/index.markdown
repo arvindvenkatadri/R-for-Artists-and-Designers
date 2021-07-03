@@ -1,11 +1,10 @@
 ---
-title: 'Lab-00: Getting Started'
-subtitle: 'Welcome ! Introduce Yourself to R, RStudio, and Us!'
-summary: Welcome ! Introduce Yourself to R, RStudio, and Us!
-date: "2021-07-05T00:00:00Z"
+title: 'Lab-08: More Adventures with ggplot'
+subtitle: 'One Dataset, Visualized 11 Ways'
+summary: One Dataset, Visualized 11 Ways
+date: "2021-07-16T00:00:00Z"
 featured: false
 draft: false
-weight: 10
 
 # Featured image
 # To use, add an image named `featured.jpg/png` to your page's folder.
@@ -13,7 +12,7 @@ weight: 10
 # Focal point options: Smart, Center, TopLeft, Top, TopRight, Left, Right, BottomLeft, Bottom, BottomRight
 image:
   placement: 2
-  caption: 'Image credit: [**Shitota Yuri on Unsplash**](https://unsplash.com/photos/p0hDztR46cw)'
+  caption: 'Image credit: [**Chloe Benko-Prieur on Unsplash**](https://unsplash.com/photos/BJvZgI7p2mY)'
   focal_point: ""
   preview_only: true
 
@@ -28,12 +27,14 @@ links:
 - icon: flask
   icon_pack: fas
   name: lab
-  url: /labs/Lab-00/00-install_name_plot.html
-  
+  url: /labs/02-Pronouns-and-Data.html
 - icon: magic
   icon_pack: fas
-  name: Installation Slides
-  url: /labs/Lab-00/00-installation.html
+  name: slides
+  url: /slides/11-slides.html
 ---
 
-Welcome! We'll see you in our first class on Monday, and please do the lab linked over the preceding weekend!
+
+Inspired by Flowing Data: [One Dataset Visualized 25 Ways](https://flowingdata.com/2017/01/24/one-dataset-visualized-25-ways/)
+
+And inspired by data from ["The Great British Bake-Off"](https://thegreatbritishbakeoff.co.uk/), see [bakeoff R package](http://bakeoff.netlify.com/).

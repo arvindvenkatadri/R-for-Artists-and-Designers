@@ -1,10 +1,11 @@
 ---
-title: 'Lab 02'
+title: 'Lab-03: Tidy Data at the MoMa'
 subtitle: 'MoMA Museum Tour'
 summary: MoMA Museum Tour
-date: "2018-04-16T00:00:00Z"
+date: "2021-07-09T00:00:00Z"
 featured: false
 draft: false
+weight: 4
 
 # Featured image
 # To use, add an image named `featured.jpg/png` to your page's folder.
@@ -27,11 +28,11 @@ links:
 - icon: flask
   icon_pack: fas
   name: lab
-  url: /labs/02-moma.html
+  url: /labs/03-moma.html
 - icon: magic
   icon_pack: fas
   name: slides
-  url: /slides/02-slides.html
+  url: /slides/03-slides.html
 ---
 
 ## Readings

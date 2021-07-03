@@ -8,7 +8,7 @@ active = true  # Activate this widget? true/false
 weight = 20  # Order that this section will appear.
 
 title = "Learning Modules"
-subtitle = ""
+subtitle = "Foundation Studies Programme, July 2021"
 
 [content]
   # Page type to display. E.g. post, talk, or publication.

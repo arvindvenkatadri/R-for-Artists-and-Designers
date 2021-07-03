@@ -1,11 +1,10 @@
 ---
-title: 'Lab-00: Getting Started'
-subtitle: 'Welcome ! Introduce Yourself to R, RStudio, and Us!'
-summary: Welcome ! Introduce Yourself to R, RStudio, and Us!
-date: "2021-07-05T00:00:00Z"
+title: 'Lab-09: I am here!'
+subtitle: 'Making a share-able site'
+summary: Making a share-able site
+date: "2021-07-17"
 featured: false
 draft: false
-weight: 10
 
 # Featured image
 # To use, add an image named `featured.jpg/png` to your page's folder.
@@ -13,7 +12,7 @@ weight: 10
 # Focal point options: Smart, Center, TopLeft, Top, TopRight, Left, Right, BottomLeft, Bottom, BottomRight
 image:
   placement: 2
-  caption: 'Image credit: [**Shitota Yuri on Unsplash**](https://unsplash.com/photos/p0hDztR46cw)'
+  caption: 'Image credit: [**Will Porada on Unsplash**](https://unsplash.com/photos/DH5183gvKUg)'
   focal_point: ""
   preview_only: true
 
@@ -25,15 +24,20 @@ image:
 projects: []
 
 links:
+- icon: hand-sparkles
+  icon_pack: fas
+  name: pre-work slides
+  url: /slides/07-prework-slides_blogdown.html
 - icon: flask
   icon_pack: fas
   name: lab
-  url: /labs/Lab-00/00-install_name_plot.html
-  
+  url: /labs/02-Pronouns-and-Data.html
 - icon: magic
   icon_pack: fas
-  name: Installation Slides
-  url: /labs/Lab-00/00-installation.html
+  name: blogdown II slides
+  url: /slides/07-slides_blogdown_rev.html
+  
 ---
 
-Welcome! We'll see you in our first class on Monday, and please do the lab linked over the preceding weekend!
+
+

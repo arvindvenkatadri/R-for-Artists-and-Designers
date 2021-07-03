@@ -1,10 +1,11 @@
 ---
-title: 'Lab 01'
-subtitle: 'Nathan’s Hot-Dog Eating Contest'
-summary: Nathan’s Hot-Dog Eating Contest
-date: "2018-04-09T00:00:00Z"
+title: 'Lab-02: To R is Human'
+subtitle: 'Getting started with Data in R'
+summary: 'Getting started with Data in R'
+date: "2021-07-07T00:00:00Z"
 featured: false
 draft: false
+weight: 3
 
 # Featured image
 # To use, add an image named `featured.jpg/png` to your page's folder.
@@ -27,7 +28,7 @@ links:
 - icon: flask
   icon_pack: fas
   name: lab
-  url: /labs/01-eda_hot_dogs.html
+  url: /labs/02-Pronouns-and-Data.html
 - icon: magic
   icon_pack: fas
   name: slides

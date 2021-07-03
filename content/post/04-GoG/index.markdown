@@ -1,11 +1,11 @@
 ---
-title: 'Lab-00: Getting Started'
-subtitle: 'Welcome ! Introduce Yourself to R, RStudio, and Us!'
-summary: Welcome ! Introduce Yourself to R, RStudio, and Us!
-date: "2021-07-05T00:00:00Z"
+title: 'Lab-04: The Grammar of Graphics'
+subtitle: 'Why is a Raven like a Writing Desk?'
+summary: 'Why is a Raven like a Writing Desk?'
+date: "2021-07-10T00:00:00Z"
 featured: false
 draft: false
-weight: 10
+weight: 5
 
 # Featured image
 # To use, add an image named `featured.jpg/png` to your page's folder.
@@ -28,12 +28,11 @@ links:
 - icon: flask
   icon_pack: fas
   name: lab
-  url: /labs/Lab-00/00-install_name_plot.html
+  url: /labs/07-Grammar-of-Graphics.html
   
 - icon: magic
   icon_pack: fas
   name: Installation Slides
-  url: /labs/Lab-00/00-installation.html
+  url: /labs/01-Metaphors-with-Graphics.html
 ---
 
-Welcome! We'll see you in our first class on Monday, and please do the lab linked over the preceding weekend!

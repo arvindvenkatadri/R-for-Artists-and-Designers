@@ -1,6 +1,6 @@
 ---
 title: "Lab 01 - Metaphors with Graphics"
-subtitle: "R for Artists, Designers and non-Coders"
+subtitle: "R for Artists and Designers"
 caption: "Made with the xaringan package"
 author: "Arvind Venkatadri"
 institute: "Srishti Manipal Institute"
