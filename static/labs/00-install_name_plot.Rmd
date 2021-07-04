@@ -1,6 +1,7 @@
 ---
 title: 'Lab 00 - Introduce Yourself'
 author: "Arvind Venkatadri"
+date: 05/July/2021
 output:
   html_document:
     theme: flatly
@@ -9,7 +10,18 @@ output:
     toc_depth: 2
     number_sections: TRUE
     code_download: TRUE
+
+abstract: Part of the `R for Artists and Designers` course at the School of Foundation Studies, Srishti Manipal Institute of Art, Design, and Technology, Bangalore.
 ---
+
+# Goals
+
+At the end of this Lab, we will:
+
+- have installed R and RStudio on our machines
+- understood how to add additional R-packages for specific features and graphic capability
+- run code within RStudio and interpret the results
+- have learnt to look for help within R and RStudio
 
 ```{r setup, include = FALSE, cache = FALSE}
 knitr::opts_chunk$set(error = TRUE, comment = NA, warnings = FALSE, errors = FALSE, messages = FALSE, tidy = FALSE)
@@ -22,8 +34,9 @@ library(babynames)
 
 # Instructions
 
->Read all the way through step 7, and complete this lab before you come to class on Day 1! 
-Download this file using the `Code->Download Rmd` button at the top right corner. 
+>Keep this tab open in your browser as you work through it.  
+Read all the way through step 7, and complete this lab before you come to class on Day 1!   
+Download this file using the `Code->Download Rmd` button at the top right corner.   
 Change the author name to your own!
 
 # Overview
@@ -33,7 +46,7 @@ This guide will lead you through the steps to install and use [R, a free and ope
 
 What is R?
 
-* **R** is the name of the programming language itself, based off of S from Bell Labs, which users access through a command-line interpreter (`>`)
+* **R** is the name of the programming language itself, based off S from Bell Labs, which users access through a command-line interpreter (`>`)
 
 What is RStudio?
 

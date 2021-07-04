@@ -51,7 +51,8 @@ sounds <- read_csv("http://bit.ly/cs631-meow")
 class: inverse, middle, center
 
 ```{r echo = FALSE}
-knitr::include_graphics("../images/r-data-types.png")
+knitr::include_graphics("./images/R-Data-Types.png")
+
 ```
 
 

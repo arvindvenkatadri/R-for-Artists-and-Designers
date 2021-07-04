@@ -1,0 +1,501 @@
+---
+title: "06-Spatial-Data-in-R"
+subtitle: "Understanding Spatial Data and basics of Maps in R" 
+author: "Arvind Venkatadri"
+date: 03/July/2021
+output:
+  xaringan::moon_reader:
+    css: xaringan-themer.css
+    nature:
+      slideNumberFormat: "%current%"
+      highlightStyle: github
+      highlightLines: true
+      ratio: 16:9
+      countIncrementalSlides: true
+  code_download: true
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(
+  fig.width=9, fig.height=3.5, fig.retina=3,
+  out.width = "100%",
+  cache = FALSE,
+  echo = TRUE,
+  message = FALSE, 
+  warning = FALSE,
+  hiline = TRUE
+)
+library(tidyverse)
+library(sf)
+library(rnaturalearth)
+library(rnaturalearthdata)
+```
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+style_duo_accent(
+  primary_color = "#1381B0",
+  secondary_color = "#FF961C",
+  inverse_header_color = "#FFFFFF"
+)
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, 
+  comment = NA, dpi = 300,
+  fig.align = "center", out.width = "65%", cache = FALSE)
+library(tidyverse)
+```
+
+## What is a Feature?
+
+- A Thing, or an Object in the real world, such as a building or a tree. 
+- As is the case with Objects, they often consist of other objects.  
+- This is the case with features too: a set of features can form a single feature. 
+- Examples of Features:  
+-- A forest stand  
+-- a city with building, streets, and parks  
+-- A satellite image pixel   
+-- a complete image can be a feature too.
+
+---
+
+## What is a Geometry?
+
+- Features have a geometry describing where on Earth the feature is located  
+- they have attributes, which describe other properties.  
+- Examples:  
+-- The geometry of a tree can be the delineation of its crown,  
+-- of its stem,  
+-- or the point indicating its centre.   
+
+-- Other properties may include its height, color, diameter at breast height at a particular date, species and so on.
+
+
+---
+
+## What is Geospatial Data?
+
+.pull-left[
+
+- Geospatial vector data consist of geometries defined based on geographic coordinates. 
+
+- Geospatial Data describes **features** 
+
+- Features are represented by any combination of these shapes ( And there are more shapes if you want them!!)
+
+- And shows up in a special **geometry** column in the data
+
+- Examples:  
+-- Point: buildings, offices, venues, etc in a city  
+-- LineString: Roads, rivers and railways  
+-- Polygon: a lake, a golf course, or the border of a country  
+-- MultiPolygon: Any non-contiguous set of areas  
+]
+
+.pull-right[
+![Spatial Geometries](images/sf-classes.png)
+]
+---
+
+## How are these shapes represented?
+
+.pull-left[
+![Geometry Primitives](https://cengel.github.io/R-spatial/img/wkt_primitives.png)
+
+]
+
+.pull-right[
+![Multipart Geometry Representation](https://cengel.github.io/R-spatial/img/wkt_multipart.png)
+
+]
+---
+## The `sf` package and the Spatial Data Frame: Points
+-  A feature geometry is called **simple**  
+  -when it consists of points connected by straight line pieces,
+  -and does not intersect itself.
+
+.pull-left[
+
+```{r}
+india <- 
+  ne_states(country =  "india", 
+            geounit = "india", 
+            returnclass = "sf")
+crs_india <- st_crs(india)
+points <- 
+  data.frame(lon = rnorm(5, 77, 2), 
+             lat = rnorm(5, 23, 5)) %>% 
+  st_as_sf(., coords = c("lon", "lat"),
+           crs = crs_india)
+str(points)
+
+```
+]
+
+.pull-right[
+
+```{r}
+ggplot() +
+    geom_sf(data = india) +
+    geom_sf(data = points, colour = "red", size = 4)
+```
+]
+
+---
+The `sf` package and the Spatial Data Frame: Points
+
+.pull-left[
+
+```{r}
+outer = matrix(c(0,0,10,0,10,10,0,10,0,0) + c(77,23), ncol = 2, byrow = TRUE)
+outer = matrix(c(0,0,10,0,10,10,0,10,0,0) + c(77,23),ncol=2, byrow=TRUE)
+hole1 = matrix(c(1,1,1,2,2,2,2,1,1,1) + c(77,23),ncol=2, byrow=TRUE)
+hole2 = matrix(c(5,5,5,6,6,6,6,5,5,5) + c(77,23),ncol=2, byrow=TRUE)
+pts = list(outer, hole1, hole2)
+pl1 <- st_polygon(pts) %>% st_sfc() %>% st_as_sf(crs = crs_india)
+pl1
+```
+]
+
+]
+
+.pull-right[
+
+```{r}
+ggplot() +
+    geom_sf(data = india) +
+    geom_sf(data = pl1, colour = "red")
+```
+]
+
+
+
+
+---
+
+## Typography
+
+Text can be **bold**, _italic_, ~~strikethrough~~, or `inline code`.
+
+[Link to another slide](#colors).
+
+### Lorem Ipsum
+
+Dolor imperdiet nostra sapien scelerisque praesent curae metus facilisis dignissim tortor. 
+Lacinia neque mollis nascetur neque urna velit bibendum. 
+Himenaeos suspendisse leo varius mus risus sagittis aliquet venenatis duis nec.
+
+- Dolor cubilia nostra nunc sodales
+
+- Consectetur aliquet mauris blandit
+
+- Ipsum dis nec porttitor urna sed
+
+---
+name: colors
+
+## Colors
+
+.left-column[
+Text color
+
+[Link Color](#3)
+
+**Bold Color**
+
+_Italic Color_
+
+`Inline Code`
+]
+
+.right-column[
+Lorem ipsum dolor sit amet, [consectetur adipiscing elit (link)](#3), 
+sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+Erat nam at lectus urna.
+Pellentesque elit ullamcorper **dignissim cras tincidunt (bold)** lobortis feugiat. 
+_Eros donec ac odio tempor_ orci dapibus ultrices. 
+Id porta nibh venenatis cras sed felis eget velit aliquet.
+Aliquam id diam maecenas ultricies mi.
+Enim sit amet 
+`code_color("inline")`
+venenatis urna cursus eget nunc scelerisque viverra.
+]
+
+---
+
+# Big Topic or Inverse Slides `#`
+
+## Slide Headings `##`
+
+### Sub-slide Headings `###`
+
+#### Bold Call-Out `####`
+
+This is a normal paragraph text. Only use header levels 1-4.
+
+##### Possible, but not recommended `#####`
+
+###### Definitely don't use h6 `######`
+
+---
+
+# Left-Column Headings
+
+.left-column[
+## First
+
+## Second
+
+## Third
+]
+
+.right-column[
+Dolor quis aptent mus a dictum ultricies egestas.
+
+Amet egestas neque tempor fermentum proin massa!
+
+Dolor elementum fermentum pharetra lectus arcu pulvinar.
+]
+
+---
+class: inverse center middle
+
+# Topic Changing Interstitial
+
+--
+
+```
+class: inverse center middle
+```
+
+---
+layout: true
+
+## Blocks
+
+---
+
+### Blockquote
+
+> This is a blockquote following a header.
+>
+> When something is important enough, you do it even if the odds are not in your favor.
+
+---
+
+### Code Blocks
+
+#### R Code
+
+```{r eval=FALSE}
+ggplot(gapminder) +
+  aes(x = gdpPercap, y = lifeExp, size = pop, color = country) +
+  geom_point() +
+  facet_wrap(~year)
+```
+
+#### JavaScript
+
+```js
+var fun = function lang(l) {
+  dateformat.i18n = require('./lang/' + l)
+  return true;
+}
+```
+
+---
+
+### More R Code
+
+```{r eval=FALSE}
+dplyr::starwars %>% dplyr::slice_sample(n = 4)
+```
+
+---
+
+```{r message=TRUE, eval=requireNamespace("cli", quietly = TRUE)}
+cli::cli_alert_success("It worked!")
+```
+
+--
+
+```{r message=TRUE}
+message("Just a friendly message")
+```
+
+--
+
+```{r warning=TRUE}
+warning("This could be bad...")
+```
+
+--
+
+```{r error=TRUE}
+stop("I hope you're sitting down for this")
+```
+
+
+---
+layout: true
+
+## Tables
+
+---
+exclude: `r if (requireNamespace("tibble", quietly=TRUE)) "false" else "true"`
+
+```{r eval=requireNamespace("tibble", quietly=TRUE)}
+tibble::as_tibble(mtcars)
+```
+
+---
+
+```{r}
+knitr::kable(head(mtcars), format = 'html')
+```
+
+---
+exclude: `r if (requireNamespace("DT", quietly=TRUE)) "false" else "true"`
+
+```{r eval=requireNamespace("DT", quietly=TRUE)}
+DT::datatable(head(mtcars), fillContainer = FALSE, options = list(pageLength = 4))
+```
+
+---
+layout: true
+
+## Lists
+
+---
+
+.pull-left[
+#### Here is an unordered list:
+
+*   Item foo
+*   Item bar
+*   Item baz
+*   Item zip
+]
+
+.pull-right[
+
+#### And an ordered list:
+
+1.  Item one
+1.  Item two
+1.  Item three
+1.  Item four
+]
+
+---
+
+### And a nested list:
+
+- level 1 item
+  - level 2 item
+  - level 2 item
+    - level 3 item
+    - level 3 item
+- level 1 item
+  - level 2 item
+  - level 2 item
+  - level 2 item
+- level 1 item
+  - level 2 item
+  - level 2 item
+- level 1 item
+
+---
+
+### Nesting an ol in ul in an ol
+
+- level 1 item (ul)
+  1. level 2 item (ol)
+  1. level 2 item (ol)
+    - level 3 item (ul)
+    - level 3 item (ul)
+- level 1 item (ul)
+  1. level 2 item (ol)
+  1. level 2 item (ol)
+    - level 3 item (ul)
+    - level 3 item (ul)
+  1. level 4 item (ol)
+  1. level 4 item (ol)
+    - level 3 item (ul)
+    - level 3 item (ul)
+- level 1 item (ul)
+
+---
+layout: true
+
+## Plots
+
+---
+
+```{r plot-example, eval=requireNamespace("ggplot2", quietly=TRUE)}
+library(ggplot2)
+(g <- ggplot(mpg) + aes(hwy, cty, color = class) + geom_point())
+```
+
+---
+
+```{r plot-example-themed, eval=requireNamespace("ggplot2", quietly=TRUE)}
+g + xaringanthemer::theme_xaringan(text_font_size = 16, title_font_size = 18) +
+  ggtitle("A Plot About Cars")
+```
+
+---
+layout: false
+
+## Square image
+
+<center><img src="https://octodex.github.com/images/labtocat.png" height="400px" /></center>
+
+.footnote[GitHub Octocat]
+
+---
+
+### Wide image
+
+![](https://guides.github.com/activities/hello-world/branching.png)
+
+.footnote[Wide images scale to 100% slide width]
+
+---
+
+## Two images
+
+.pull-left[
+![](https://octodex.github.com/images/motherhubbertocat.png)
+]
+
+.pull-right[
+![](https://octodex.github.com/images/dinotocat.png)
+]
+
+---
+
+### Definition lists can be used with HTML syntax.
+
+<dl>
+<dt>Name</dt>
+<dd>Godzilla</dd>
+<dt>Born</dt>
+<dd>1952</dd>
+<dt>Birthplace</dt>
+<dd>Japan</dd>
+<dt>Color</dt>
+<dd>Green</dd>
+</dl>
+
+---
+class: center, middle
+
+# Thanks!
+
+Slides created via the R packages:
+
+[**xaringan**](https://github.com/yihui/xaringan)<br>
+[gadenbuie/xaringanthemer](https://github.com/gadenbuie/xaringanthemer)
+
+The chakra comes from [remark.js](https://remarkjs.com), [**knitr**](http://yihui.name/knitr), and [R Markdown](https://rmarkdown.rstudio.com).
