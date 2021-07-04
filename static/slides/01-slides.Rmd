@@ -4,12 +4,14 @@ subtitle: "Working in R"
 author: "Arvind Venkatadri"
 output:
   xaringan::moon_reader:
-    css: ["default", "css/ohsu.css", "css/ohsu-fonts.css"]
-    lib_dir: libs
+    css: xaringan-themer.css
     nature:
-      highlightStyle: atelier-lakeside-light
+      slideNumberFormat: "%current%"
+      highlightStyle: github
       highlightLines: true
-      countIncrementalSlides: false
+      ratio: 16:9
+      countIncrementalSlides: true
+  code_download: true
 ---
 
 ```{r setup, include=FALSE}

@@ -1,0 +1,25 @@
+---
+title: "Lab-09: Grammar of Diagrams"
+subtitle: "Won't you join the Caucus Dance?"
+summary: "Won't you join the Caucus Dance?"
+author: Arvind Venkatadri
+date: '2021-06-11'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+output: 
+  html_document:
+    code_download: TRUE
+links:
+- icon: flask
+  icon_pack: fas
+  name: lab
+  url: /labs/10-Grammar-of-Diagrams.html
+# - icon: magic
+#   icon_pack: fas
+#   name: slides
+#   url: /slides/07-slides.html
+---

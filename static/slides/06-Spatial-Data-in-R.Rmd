@@ -18,7 +18,7 @@ output:
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
 knitr::opts_chunk$set(
-  fig.width=9, fig.height=3.5, fig.retina=3,
+  fig.width=9, fig.height=5, fig.retina=3,
   out.width = "100%",
   cache = FALSE,
   echo = TRUE,
@@ -57,6 +57,9 @@ library(tidyverse)
 -- A satellite image pixel   
 -- a complete image can be a feature too.
 
+-  A feature geometry is called **simple**  
+  - when it consists of points connected by straight line pieces,  
+  - and does not intersect itself.
 ---
 
 ## What is a Geometry?
@@ -68,7 +71,7 @@ library(tidyverse)
 -- of its stem,  
 -- or the point indicating its centre.   
 
--- Other properties may include its height, color, diameter at breast height at a particular date, species and so on.
+- Other properties may include its height, color, diameter at breast height at a particular date, species and so on.
 
 
 ---
@@ -101,22 +104,20 @@ library(tidyverse)
 
 .pull-left[
 ![Geometry Primitives](https://cengel.github.io/R-spatial/img/wkt_primitives.png)
-
 ]
 
 .pull-right[
 ![Multipart Geometry Representation](https://cengel.github.io/R-spatial/img/wkt_multipart.png)
 
 ]
+
 ---
+
 ## The `sf` package and the Spatial Data Frame: Points
--  A feature geometry is called **simple**  
-  -when it consists of points connected by straight line pieces,
-  -and does not intersect itself.
 
 .pull-left[
 
-```{r}
+```{r plot1a, eval=FALSE, message=FALSE,warning=FALSE}
 india <- 
   ne_states(country =  "india", 
             geounit = "india", 
@@ -129,373 +130,75 @@ points <-
            crs = crs_india)
 str(points)
 
+ggplot() + #<<
+    geom_sf(data = india) + #<<
+    geom_sf(data = points, colour = "red", size = 4) #<<
+
 ```
 ]
 
 .pull-right[
-
-```{r}
-ggplot() +
-    geom_sf(data = india) +
-    geom_sf(data = points, colour = "red", size = 4)
+```{r first-plot1a-out, ref.label='plot1a', echo=FALSE,message=FALSE,warning=FALSE, out.width ="90%"}
 ```
 ]
 
 ---
-The `sf` package and the Spatial Data Frame: Points
+
+## The `sf` package and the Spatial Data Frame: MultiPolygons
 
 .pull-left[
 
-```{r}
-outer = matrix(c(0,0,10,0,10,10,0,10,0,0) + c(77,23), ncol = 2, byrow = TRUE)
-outer = matrix(c(0,0,10,0,10,10,0,10,0,0) + c(77,23),ncol=2, byrow=TRUE)
-hole1 = matrix(c(1,1,1,2,2,2,2,1,1,1) + c(77,23),ncol=2, byrow=TRUE)
-hole2 = matrix(c(5,5,5,6,6,6,6,5,5,5) + c(77,23),ncol=2, byrow=TRUE)
-pts = list(outer, hole1, hole2)
-pl1 <- st_polygon(pts) %>% st_sfc() %>% st_as_sf(crs = crs_india)
-pl1
-```
-]
+```{r plot1b, eval=FALSE, message=FALSE,warning=FALSE}
+outer <- matrix(c(0,0,10,0,10,10,0,10,0,0) + c(77,23), 
+               ncol = 2, byrow = TRUE)
+outer <- matrix(c(0,0,10,0,10,10,0,10,0,0) + c(77,23), ncol=2, byrow=TRUE)
+hole1 <- matrix(c(1,1,1,2,2,2,2,1,1,1) + c(77,23),ncol=2, byrow=TRUE)
+hole2 <- matrix(c(5,5,5,6,6,6,6,5,5,5) + c(77,23),ncol=2, byrow=TRUE)
+pl1 <- list(outer, hole1, hole2)
+pl1 <- st_polygon(pl1) %>% st_sfc() %>% st_as_sf(crs = crs_india)
 
+ggplot() + #<<
+    geom_sf(data = india) + #<<
+    geom_sf(data = pl1, colour = "red") #<<
+```
 ]
 
 .pull-right[
 
-```{r}
-ggplot() +
-    geom_sf(data = india) +
-    geom_sf(data = pl1, colour = "red")
+```{r first-plot1b-out, ref.label='plot1b', echo=FALSE,message=FALSE,warning=FALSE, out.width ="90%"}
 ```
-]
 
-
-
-
----
-
-## Typography
-
-Text can be **bold**, _italic_, ~~strikethrough~~, or `inline code`.
-
-[Link to another slide](#colors).
-
-### Lorem Ipsum
-
-Dolor imperdiet nostra sapien scelerisque praesent curae metus facilisis dignissim tortor. 
-Lacinia neque mollis nascetur neque urna velit bibendum. 
-Himenaeos suspendisse leo varius mus risus sagittis aliquet venenatis duis nec.
-
-- Dolor cubilia nostra nunc sodales
-
-- Consectetur aliquet mauris blandit
-
-- Ipsum dis nec porttitor urna sed
-
----
-name: colors
-
-## Colors
-
-.left-column[
-Text color
-
-[Link Color](#3)
-
-**Bold Color**
-
-_Italic Color_
-
-`Inline Code`
-]
-
-.right-column[
-Lorem ipsum dolor sit amet, [consectetur adipiscing elit (link)](#3), 
-sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-Erat nam at lectus urna.
-Pellentesque elit ullamcorper **dignissim cras tincidunt (bold)** lobortis feugiat. 
-_Eros donec ac odio tempor_ orci dapibus ultrices. 
-Id porta nibh venenatis cras sed felis eget velit aliquet.
-Aliquam id diam maecenas ultricies mi.
-Enim sit amet 
-`code_color("inline")`
-venenatis urna cursus eget nunc scelerisque viverra.
 ]
 
 ---
-
-# Big Topic or Inverse Slides `#`
-
-## Slide Headings `##`
-
-### Sub-slide Headings `###`
-
-#### Bold Call-Out `####`
-
-This is a normal paragraph text. Only use header levels 1-4.
-
-##### Possible, but not recommended `#####`
-
-###### Definitely don't use h6 `######`
-
----
-
-# Left-Column Headings
-
-.left-column[
-## First
-
-## Second
-
-## Third
-]
-
-.right-column[
-Dolor quis aptent mus a dictum ultricies egestas.
-
-Amet egestas neque tempor fermentum proin massa!
-
-Dolor elementum fermentum pharetra lectus arcu pulvinar.
-]
-
----
-class: inverse center middle
-
-# Topic Changing Interstitial
-
---
-
-```
-class: inverse center middle
-```
-
----
-layout: true
-
-## Blocks
-
----
-
-### Blockquote
-
-> This is a blockquote following a header.
->
-> When something is important enough, you do it even if the odds are not in your favor.
-
----
-
-### Code Blocks
-
-#### R Code
-
-```{r eval=FALSE}
-ggplot(gapminder) +
-  aes(x = gdpPercap, y = lifeExp, size = pop, color = country) +
-  geom_point() +
-  facet_wrap(~year)
-```
-
-#### JavaScript
-
-```js
-var fun = function lang(l) {
-  dateformat.i18n = require('./lang/' + l)
-  return true;
-}
-```
-
----
-
-### More R Code
-
-```{r eval=FALSE}
-dplyr::starwars %>% dplyr::slice_sample(n = 4)
-```
-
----
-
-```{r message=TRUE, eval=requireNamespace("cli", quietly = TRUE)}
-cli::cli_alert_success("It worked!")
-```
-
---
-
-```{r message=TRUE}
-message("Just a friendly message")
-```
-
---
-
-```{r warning=TRUE}
-warning("This could be bad...")
-```
-
---
-
-```{r error=TRUE}
-stop("I hope you're sitting down for this")
-```
+## Data Structure in `sf`
+![Spatial Data Frame](https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/sf.png)
 
 
 ---
-layout: true
+## Getting hold of Spatial Data
 
-## Tables
+Using `osmplot`
+Using `rnaturalearth`
 
----
-exclude: `r if (requireNamespace("tibble", quietly=TRUE)) "false" else "true"`
-
-```{r eval=requireNamespace("tibble", quietly=TRUE)}
-tibble::as_tibble(mtcars)
-```
 
 ---
 
-```{r}
-knitr::kable(head(mtcars), format = 'html')
-```
+## Using `osmplot` to get spatial data
 
----
-exclude: `r if (requireNamespace("DT", quietly=TRUE)) "false" else "true"`
 
-```{r eval=requireNamespace("DT", quietly=TRUE)}
-DT::datatable(head(mtcars), fillContainer = FALSE, options = list(pageLength = 4))
-```
-
----
-layout: true
-
-## Lists
 
 ---
 
-.pull-left[
-#### Here is an unordered list:
-
-*   Item foo
-*   Item bar
-*   Item baz
-*   Item zip
-]
-
-.pull-right[
-
-#### And an ordered list:
-
-1.  Item one
-1.  Item two
-1.  Item three
-1.  Item four
-]
+## Using `rnaturalearth` to get spatial data
 
 ---
 
-### And a nested list:
-
-- level 1 item
-  - level 2 item
-  - level 2 item
-    - level 3 item
-    - level 3 item
-- level 1 item
-  - level 2 item
-  - level 2 item
-  - level 2 item
-- level 1 item
-  - level 2 item
-  - level 2 item
-- level 1 item
-
----
-
-### Nesting an ol in ul in an ol
-
-- level 1 item (ul)
-  1. level 2 item (ol)
-  1. level 2 item (ol)
-    - level 3 item (ul)
-    - level 3 item (ul)
-- level 1 item (ul)
-  1. level 2 item (ol)
-  1. level 2 item (ol)
-    - level 3 item (ul)
-    - level 3 item (ul)
-  1. level 4 item (ol)
-  1. level 4 item (ol)
-    - level 3 item (ul)
-    - level 3 item (ul)
-- level 1 item (ul)
-
----
-layout: true
-
-## Plots
-
----
-
-```{r plot-example, eval=requireNamespace("ggplot2", quietly=TRUE)}
-library(ggplot2)
-(g <- ggplot(mpg) + aes(hwy, cty, color = class) + geom_point())
-```
-
----
-
-```{r plot-example-themed, eval=requireNamespace("ggplot2", quietly=TRUE)}
-g + xaringanthemer::theme_xaringan(text_font_size = 16, title_font_size = 18) +
-  ggtitle("A Plot About Cars")
-```
-
----
-layout: false
-
-## Square image
-
-<center><img src="https://octodex.github.com/images/labtocat.png" height="400px" /></center>
-
-.footnote[GitHub Octocat]
-
----
-
-### Wide image
-
-![](https://guides.github.com/activities/hello-world/branching.png)
-
-.footnote[Wide images scale to 100% slide width]
-
----
-
-## Two images
-
-.pull-left[
-![](https://octodex.github.com/images/motherhubbertocat.png)
-]
-
-.pull-right[
-![](https://octodex.github.com/images/dinotocat.png)
-]
-
----
-
-### Definition lists can be used with HTML syntax.
-
-<dl>
-<dt>Name</dt>
-<dd>Godzilla</dd>
-<dt>Born</dt>
-<dd>1952</dd>
-<dt>Birthplace</dt>
-<dd>Japan</dd>
-<dt>Color</dt>
-<dd>Green</dd>
-</dl>
-
----
 class: center, middle
 
 # Thanks!
 
-Slides created via the R packages:
+Slides created by Arvind Venkatadri via the R packages:
 
 [**xaringan**](https://github.com/yihui/xaringan)<br>
-[gadenbuie/xaringanthemer](https://github.com/gadenbuie/xaringanthemer)
 
-The chakra comes from [remark.js](https://remarkjs.com), [**knitr**](http://yihui.name/knitr), and [R Markdown](https://rmarkdown.rstudio.com).

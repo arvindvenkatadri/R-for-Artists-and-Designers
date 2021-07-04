@@ -4,12 +4,14 @@ subtitle: "Making a Site in the Tada!-verse <br> Part One: Build a Site"
 author: "Arvind Venkatadri"
 output:
   xaringan::moon_reader:
-    css: ["default", "css/ohsu.css", "css/ohsu-fonts.css"]
-    lib_dir: libs
+    css: xaringan-themer.css
     nature:
-      highlightStyle: atelier-lakeside-light
+      slideNumberFormat: "%current%"
+      highlightStyle: github
       highlightLines: true
-      countIncrementalSlides: false
+      ratio: 16:9
+      countIncrementalSlides: true
+  code_download: true
 ---
 
 ```{r setup, include=FALSE}
@@ -22,19 +24,6 @@ library(here)
 library(knitr)
 ```
 
-
-class: center, middle, inverse
-
-# First:
-
-## Slides with `xaringan`
-
---
-
-# NOW!:
-
-## Sites with `blogdown`
-
 ---
 background-image: url("https://media.giphy.com/media/3o6ozfM60Gc64dN0A0/giphy.gif")
 background-size: cover
@@ -42,7 +31,7 @@ background-size: cover
 ---
 class: middle, center
 
-![](../images/blogdown.png)
+![](./images/blogdown.png)
 ---
 
 ## So what is blogdown?<sup>*</sup>
@@ -112,35 +101,21 @@ class:middle, center, inverse
 File ➡️ New Project ➡️ New Directory ➡️ Website using blogdown
 
 ```{r echo = FALSE}
-include_graphics("../images/website-using-blogdown.png")
+include_graphics("./images/website-using-blogdown.png")
 ```
 
 ---
 # Next in RStudio
 
 ```{r echo = FALSE}
-include_graphics("../images/install-cocoa-eh-theme.png")
+include_graphics("./images/install-cocoa-eh-theme.png")
 ```
 
 ---
 # Open your new project
 
 ```{r echo = FALSE}
-include_graphics("../images/hugo-initial-files.png")
-```
-
----
-class: inverse, middle, center
-
-# ⚠️
-
-## If you have already used `blogdown`, you'll want to update your Hugo:
-
-```{r eval = FALSE}
-# force an update
-blogdown::update_hugo()
-# check your version
-blogdown::hugo_version()
+include_graphics("./images/hugo-initial-files.png")
 ```
 
 ---
@@ -194,7 +169,7 @@ Note which folders are *empty* at the top level of your project:
 Look in `/themes/cocoa-eh-hugo-theme/`. Notice now the folder structure here *mirrors* your Hugo directory structure.
 
 ```{r echo = FALSE}
-include_graphics("../images/hugo-theme-directory.png")
+include_graphics("./images/hugo-theme-directory.png")
 ```
 
 ---
@@ -245,7 +220,7 @@ class: middle, inverse, center
 .pull-left[
 ```{r eval = FALSE}
 +++
-title = "Lab 06: CS631"
+title = "Lab 10: Building my Website"
 tags = ["toml","yaml"]
 
 type = "article"
@@ -264,7 +239,7 @@ related = []
 .pull-right[
 ```{r eval = FALSE}
 ---
-title: "Lab 06: CS631"
+title: "Lab 10: Building my Website"
 tags:
 - toml
 - yaml
@@ -292,7 +267,7 @@ article:
 .pull-left[
 ```{r eval = FALSE}
 +++ #<<
-title = "Lab 06: CS631"
+title = "Lab 10: Building my Website"
 tags = ["toml","yaml"]
 
 type = "article"
@@ -311,7 +286,7 @@ related = []
 .pull-right[
 ```{r eval = FALSE}
 --- #<<
-title: "Lab 06: CS631"
+title: "Lab 10: Building my Website"
 tags:
 - toml
 - yaml
@@ -338,7 +313,7 @@ article:
 .pull-left[
 ```{r eval = FALSE}
 +++ 
-title = "Lab 06: CS631" #<<
+title = "Lab 10: Building my Website" #<<
 tags = ["toml","yaml"]
 
 type = "article"
@@ -357,7 +332,7 @@ related = []
 .pull-right[
 ```{r eval = FALSE}
 --- 
-title: "Lab 06: CS631" #<<
+title: "Lab 10: Building my Website" #<<
 tags:
 - toml
 - yaml
@@ -459,7 +434,7 @@ Mouse up to "Addins" ➡️ "Serve site"
 
 
 ```{r echo = FALSE}
-include_graphics("../images/cocoa-in-viewer.png")
+include_graphics("./images/cocoa-in-viewer.png")
 ```
 
 ---
@@ -468,7 +443,7 @@ include_graphics("../images/cocoa-in-viewer.png")
 *New*: the `public` folder
 
 ```{r out.width='75%', echo = FALSE}
-knitr::include_graphics("../images/serve-site-public.png")
+knitr::include_graphics("./images/serve-site-public.png")
 ```
 
 
@@ -521,7 +496,7 @@ share = true
 
 
 ```{r echo = FALSE}
-include_graphics("../images/update-logo.png")
+include_graphics("./images/update-logo.png")
 ```
 
 ---
@@ -557,7 +532,7 @@ class: inverse, middle, center
 
 
 ```{r echo = FALSE}
-include_graphics("../images/about-ada.png")
+include_graphics("./images/about-ada.png")
 ```
 
 ---
@@ -621,7 +596,7 @@ class: inverse, middle, center
 
 
 ```{r echo = FALSE}
-include_graphics("../images/ada-home.png")
+include_graphics("./images/ada-home.png")
 ```
 
 ---
