@@ -33,7 +33,7 @@ links:
 - icon: magic
   icon_pack: fas
   name: Installation Slides
-  url: /labs/00-Installation.html
+  url: /slides/00-Installation.html
 ---
 
 Welcome! We'll see you in our first class on Monday, and please do the lab linked over the preceding weekend!

@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>Lab 06: CS631</title>
+    <title>Lab 01</title>
     <meta charset="utf-8" />
-    <meta name="author" content="Alison Hill" />
+    <meta name="author" content="Arvind Venkatadri" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/ohsu.css" type="text/css" />
     <link rel="stylesheet" href="css/ohsu-fonts.css" type="text/css" />
@@ -12,9 +13,9 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# Lab 06: CS631
+# Lab 01
 ## Making Slides in the Tada!-verse
-### Alison Hill
+### Arvind Venkatadri
 
 ---
 
@@ -89,8 +90,8 @@ You don't have to load it to use it.
 ```r
 ---
 title: "Tada!"
-author: "Alison Hill"
-date: "May 15, 2018"
+author: "Arvind Venkatadri"
+date: "May 15, 2021"
 output: html_document
 ---
 ```
@@ -103,8 +104,8 @@ output: html_document
 ```r
 ---
 title: "Tada!"
-author: "Alison Hill"
-date: "May 15, 2018"
+author: "Arvind Venkatadri"
+date: "May 15, 2021"
 *output: xaringan::moon_reader
 ---
 ```
@@ -120,7 +121,7 @@ date: "May 15, 2018"
 
 - Must mouse over to `Knit` drop-down menu and select "Knit to moon_reader"
 
-&lt;img src="../images/knit-to-moon-reader.png" width="80%" style="display: block; margin: auto;" /&gt;
+&lt;img src="./images/knit-to-moon-reader.png" width="80%" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -169,9 +170,9 @@ I deleted the `date`.
 
 ```r
 ---
-*title: "Lab 06: CS631"
+*title: "Lab 01"
 *subtitle: "Working in the Tada!-verse"
-author: "Alison Hill"
+author: "Arvind Venkatadri"
 output: xaringan::moon_reader
 ---
 ```
@@ -481,21 +482,21 @@ include_graphics("images/sheep.jpg")
 
 
 ```r
-include_graphics("../images/sheep.jpg")
+include_graphics("./images/sheep.jpg")
 ```
 
-&lt;img src="../images/sheep.jpg" width="50%" style="display: block; margin: auto;" /&gt;
+&lt;img src="./images/sheep.jpg" width="50%" style="display: block; margin: auto;" /&gt;
 
 
 ---
 # Now for some R!
 
-&lt;img src="06-slides_xaringan_files/figure-html/unnamed-chunk-13-1.png" width="80%" style="display: block; margin: auto;" /&gt;
+&lt;img src="01-slides_xaringan_files/figure-html/unnamed-chunk-13-1.png" width="80%" style="display: block; margin: auto;" /&gt;
 
 ---
 # Control your R
 
-&lt;img src="06-slides_xaringan_files/figure-html/unnamed-chunk-14-1.png" width="80%" style="display: block; margin: auto;" /&gt;
+&lt;img src="01-slides_xaringan_files/figure-html/unnamed-chunk-14-1.png" width="80%" style="display: block; margin: auto;" /&gt;
 
 Use in your code chunks:
 - `fig.width=` (here I did 10.5)
@@ -591,10 +592,10 @@ knitr::kable(head(iris), format = "html")
 
 ```r
 ---
-title: "Lab 06: CS631"
+title: "Lab 01"
 subtitle: "Working in the Tada!-verse"
-author: "Alison Hill"
-date: "May 15, 2018"
+author: "Arvind Venkatadri"
+date: "May 15, 2021"
 output: xaringan::moon_reader
 ---
 ```
@@ -605,10 +606,10 @@ output: xaringan::moon_reader
 
 ```r
 ---
-title: "Lab 06: CS631"
+title: "Lab 01"
 subtitle: "Working in the Tada!-verse"
-author: "Alison Hill"
-date: "May 15, 2018"
+author: "Arvind Venkatadri"
+date: "May 15, 2021"
 *output:
 * xaringan::moon_reader:
 *   css: [default]
@@ -627,13 +628,16 @@ names(xaringan:::list_css())
 
 ```
  [1] "chocolate-fonts"  "chocolate"        "default-fonts"    "default"         
- [5] "duke-blue"        "fc-fonts"         "fc"               "hygge-duke"      
- [9] "hygge"            "ki-fonts"         "ki"               "kunoichi"        
-[13] "lucy-fonts"       "lucy"             "metropolis-fonts" "metropolis"      
-[17] "middlebury-fonts" "middlebury"       "ninjutsu"         "rladies-fonts"   
-[21] "rladies"          "robot-fonts"      "robot"            "rutgers-fonts"   
-[25] "rutgers"          "shinobi"          "tamu-fonts"       "tamu"            
-[29] "uo-fonts"         "uo"               "uol-fonts"        "uol"             
+ [5] "duke-blue"        "fc-fonts"         "fc"               "glasgow_template"
+ [9] "hygge-duke"       "hygge"            "ki-fonts"         "ki"              
+[13] "kunoichi"         "lucy-fonts"       "lucy"             "metropolis-fonts"
+[17] "metropolis"       "middlebury-fonts" "middlebury"       "nhsr-fonts"      
+[21] "nhsr"             "ninjutsu"         "rladies-fonts"    "rladies"         
+[25] "robot-fonts"      "robot"            "rutgers-fonts"    "rutgers"         
+[29] "shinobi"          "tamu-fonts"       "tamu"             "uio-fonts"       
+[33] "uio"              "uo-fonts"         "uo"               "uol-fonts"       
+[37] "uol"              "useR-fonts"       "useR"             "uwm-fonts"       
+[41] "uwm"             
 ```
 
 --
@@ -641,10 +645,10 @@ names(xaringan:::list_css())
 
 ```r
 ---
-title: "Lab 06: CS631"
+title: "Lab 01"
 subtitle: "Working in the Tada!-verse"
-author: "Alison Hill"
-date: "May 15, 2018"
+author: "Arvind Venkatadri"
+date: "May 15, 2021"
 output: 
   xaringan::moon_reader:
 *   css: [default, metropolis, metropolis-fonts]
@@ -657,10 +661,10 @@ output:
 
 ```r
 ---
-title: "Lab 06: CS631"
+title: "Lab 01"
 subtitle: "Working in the Tada!-verse"
-author: "Alison Hill"
-date: "May 15, 2018"
+author: "Arvind Venkatadri"
+date: "May 15, 2021"
 output: 
   xaringan::moon_reader:
     css: [default, metropolis, metropolis-fonts]
@@ -741,13 +745,13 @@ rmarkdown::yaml_front_matter(knitr::current_input())
 
 ```
 $title
-[1] "Lab 06: CS631"
+[1] "Lab 01"
 
 $subtitle
 [1] "Making Slides in the Tada!-verse"
 
 $author
-[1] "Alison Hill"
+[1] "Arvind Venkatadri"
 
 $output
 $output$`xaringan::moon_reader`
@@ -828,11 +832,9 @@ include_graphics("images/goat_yoga_in_slides-images.jpg")
 
 
 ```r
-include_graphics(fs::path_rel(here::here("goat_yoga_in_slides-images.jpg"), 
-                              here::here()))
+# include_graphics(fs::path_rel(here::here("goat_yoga_in_slides-images.jpg"), 
+#                               here::here()))
 ```
-
-&lt;img src="goat_yoga_in_slides-images.jpg" width="50%" style="display: block; margin: auto;" /&gt;
 
 ---
 ## Going up a level
@@ -852,10 +854,10 @@ include_graphics(fs::path_rel(here::here("goat_yoga_in_slides-images.jpg"),
 
 
 ```r
-include_graphics("../images/goat_yoga_in_images.jpg")
+include_graphics("./images/goat_yoga_in_images.jpg")
 ```
 
-&lt;img src="../images/goat_yoga_in_images.jpg" width="50%" style="display: block; margin: auto;" /&gt;
+&lt;img src="./images/goat_yoga_in_images.jpg" width="50%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -866,7 +868,7 @@ fs::path_dir(thisfile())
 ```
 
 ```
-[1] "/Library/Frameworks/R.framework/Versions/3.6/Resources/library/blogdown/scripts"
+[1] "C:/Users/Arvind/Documents/R/win-library/4.1/xfun/scripts"
 ```
 
 ```r
@@ -876,26 +878,23 @@ fs::path_dir(thisfile())
 ---
 
 ```r
-include_graphics(fs::path_rel(path = here::here("slides", 
-                                                "images",
-                                                "goat_yoga_in_slides-images.jpg"),  
-                              start = fs::path_dir(rprojroot::thisfile())))
+# include_graphics(fs::path_rel(path = here::here("slides", 
+#                                                 "images",
+#                                                 "goat_yoga_in_slides-images.jpg"),  
+#                               start = fs::path_dir(rprojroot::thisfile())))
 ```
-
-&lt;img src="../../../../../../../../../Users/alison/rcourses/dataviz-intro/slides/images/goat_yoga_in_slides-images.jpg" width="80%" style="display: block; margin: auto;" /&gt;
 
 
 ---
 
 
 ```r
-include_graphics(fs::path_rel(path = here::here("slides", 
-                                                "images",
-                                                "goat_yoga_in_slides-images.jpg"), 
-                              start = here::here("slides")))
+# include_graphics(fs::path_rel(path = here::here("slides", 
+#                                                 "images",
+#                                                 "goat_yoga_in_slides-images.jpg"), 
+#                               start = here::here("slides")))
 ```
 
-&lt;img src="images/goat_yoga_in_slides-images.jpg" width="80%" style="display: block; margin: auto;" /&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
@@ -943,6 +942,32 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
 // adds .remark-code-has-line-highlighted class to <pre> parent elements
 // of code chunks containing highlighted lines with class .remark-code-line-highlighted
 (function(d) {
@@ -960,17 +985,6 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   }
   preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
 })(document);</script>
-
-<script>
-(function() {
-  var links = document.getElementsByTagName('a');
-  for (var i = 0; i < links.length; i++) {
-    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
-      links[i].target = '_blank';
-    }
-  }
-})();
-</script>
 
 <script>
 slideshow._releaseMath = function(el) {

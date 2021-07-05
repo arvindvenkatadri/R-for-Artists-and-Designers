@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Lab 01 - Metaphors with Graphics</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Arvind Venkatadri" />
+    <script src="04-Grammar-of-Graphics_files/header-attrs/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Lab 01 - Metaphors with Graphics
+## R for Artists and Designers
+### Arvind Venkatadri
+### Srishti Manipal Institute
+### (2021-07-05)
+
+---
+
+
+
+
+
+
+
+# What the Heck is a Grammar of Graphics?  
+
+## Code looks and reads like **English**.   
+## Has **verbs**, **nouns**, some **adjectives**....
+
+--
+
+- Describes Information/ideas/concepts from *any* **source domain**.
+
+--
+
+- **GEOMETRY** as the *target domain* : What comes out of R is predominantly "geometry"
+---
+
+# What are we going to do
+## We will:
+
+--
+
+### 1.  Examine data and geometric graphics from a metaphoric standpoint.
+
+--
+
+### 2.  Develop graphics using a bunch of "graphical metaphors"
+
+--
+
+### 3.  Try to do that in something resembling **English gRammaR** ( well, nearly, it is code after all !!)
+
+
+---
+
+# How R we going to do it?
+
+
+- In R, we will take data from diverse **source Domains**
+
+  - Ecology
+  
+  - Finance
+  
+  - Jewellery ( yeah!)
+  
+  - Weather
+  
+  - Star Wars
+  
+  - GoT
+  
+  - ...
+
+--
+
+
+- And make graphical metaphors out of them
+
+
+-  Only our **target Domain** will be...Geometry. 
+
+
+---
+
+class: middle, center
+## How does one read Shakespeare? 
+
+![shakespeare](https://media.giphy.com/media/oveqQA2LxpwYg/giphy.gif)
+
+~~To code or not to code, that is the question...~~
+
+
+---
+
+# PRIMM Process
+
+- **Predict**: What could happen?
+
+- **Run**: the code and see
+
+- **Investigate**: What could really be happening?
+
+- **Modify**: Mess with the code and try
+
+- **Make**: Some thing brand new for yourself
+
+
+### Reference: 
+
+https://blogs.kcl.ac.uk/cser/2017/09/01/primm-a-structured-approach-to-teaching-programming/
+
+---
+
+class: center middle
+
+# Let the R-ring begin
+
+### Please open the **`Grammar-of-Graphics.Rmd`** file, which you have downloaded and placed in your default R Work folder. 
+
+
+---
+class: middle center inverse
+## Code Step-by-Step
+
+---
+
+background-image: url("https://allisonhorst.github.io/palmerpenguins/reference/figures/lter_penguins.png")
+background-size: cover
+
+---
+
+## Chunk : penguins
+
+
+
+```r
+head(penguins)
+```
+
+```
+## # A tibble: 6 x 8
+##   species island bill_length_mm bill_depth_mm flipper_length_~ body_mass_g sex  
+##   &lt;fct&gt;   &lt;fct&gt;           &lt;dbl&gt;         &lt;dbl&gt;            &lt;int&gt;       &lt;int&gt; &lt;fct&gt;
+*## 1 Adelie  Torge~           39.1          18.7              181        3750 male 
+*## 2 Adelie  Torge~           39.5          17.4              186        3800 fema~
+*## 3 Adelie  Torge~           40.3          18                195        3250 fema~
+## 4 Adelie  Torge~           NA            NA                 NA          NA &lt;NA&gt; 
+## 5 Adelie  Torge~           36.7          19.3              193        3450 fema~
+## 6 Adelie  Torge~           39.3          20.6              190        3650 male 
+## # ... with 1 more variable: year &lt;int&gt;
+```
+We see the first few rows of the dataset `penguins`. We see that there are a few **NA** data observations too. Let us remove them for now.
+
+
+```r
+penguins &lt;- penguins %&gt;% drop_na()
+```
+
+
+---
+layout:true
+
+## Chunk: Mapping
+
+---
+
+.pull-left[
+
+```r
+*ggplot(penguins)
+```
+]
+
+.pull-right[
+&lt;img src="04-Grammar-of-Graphics_files/figure-html/first-plot1a-out-1.png" width="504" /&gt;
+]
+
+---
+.pull-left[
+
+```r
+ggplot(penguins, 
+*      mapping = aes(x = bill_length_mm,
+*          y = body_mass_g))
+```
+]
+
+.pull-right[
+&lt;img src="04-Grammar-of-Graphics_files/figure-html/first-plot1b-out-1.png" width="504" /&gt;
+]
+---
+.pull-left[
+
+```r
+ggplot(penguins, 
+       mapping = aes(x = bill_length_mm, 
+           y = body_mass_g)) +
+* geom_point()
+```
+]
+
+.pull-right[
+&lt;img src="04-Grammar-of-Graphics_files/figure-html/first-plot1c-out-1.png" width="504" /&gt;
+]
+
+---
+
+.pull-left[
+
+```r
+ggplot(penguins, 
+       mapping = aes(x = bill_length_mm, 
+           y = body_mass_g)) +
+  geom_point() +
+* geom_smooth(method = "lm")
+```
+]
+
+.pull-right[
+&lt;img src="04-Grammar-of-Graphics_files/figure-html/first-plot1d-out-1.png" width="504" /&gt;
+]
+---
+
+
+layout:true
+### Chunk: Geom_Point_Position_Colour
+
+---
+.pull-left[
+
+```r
+*ggplot(data = penguins)
+```
+]
+.pull-right[
+&lt;img src="04-Grammar-of-Graphics_files/figure-html/unnamed-chunk-2-1.png" width="90%" /&gt;
+]
+
+---
+.pull-left[
+
+```r
+ggplot(data = penguins) +
+*      aes(x = bill_length_mm,
+*          y = body_mass_g,
+*          color = island)
+```
+We can leave out the "mapping" word and just use **aes** .
+
+Why is there no plot?
+
+
+
+Right !! We have not used a `geom` command yet!!
+]
+.pull-right[
+&lt;img src="04-Grammar-of-Graphics_files/figure-html/unnamed-chunk-3-1.png" width="90%" /&gt;
+]
+
+---
+
+.pull-left[
+
+```r
+ggplot(data = penguins)  +
+  aes(x = bill_length_mm,
+      y = body_mass_g,
+      color = island) +  
+*geom_point() +
+* ggtitle("A point geom with position and color aesthetics")
+```
+Note that the points are located by **position** coordinates on both x and y axis, and **coloured** by the island variable.
+
+]
+.pull-right[
+&lt;img src="04-Grammar-of-Graphics_files/figure-html/unnamed-chunk-4-1.png" width="90%" /&gt;
+]
+---
+layout: true
+## Chunk: Geom_Bar_1
+
+---
+
+.pull-left[
+
+```r
+*ggplot(data = penguins)
+```
+]
+.pull-right[
+&lt;img src="04-Grammar-of-Graphics_files/figure-html/unnamed-chunk-5-1.png" width="90%" /&gt;
+]
+
+---
+.pull-left[
+
+```r
+ggplot(data = penguins) +  
+*      aes(x = species)
+```
+]
+.pull-right[
+&lt;img src="04-Grammar-of-Graphics_files/figure-html/unnamed-chunk-6-1.png" width="90%" /&gt;
+]
+
+---
+
+.pull-left[
+
+```r
+ggplot(data = penguins) +  
+       aes(x = species) +
+* geom_bar() +
+* ggtitle("A bar geom with position and height aesthetics")
+```
+The bars are plotted with **positions** on the x-axis, defined by the `species` variable,  and **heights** mapped to the y-axis. 
+How did the graph "know" the heights of the bars?
+
+`geom_bar` has an internal `count` statistic computation. 
+Many `geom_s` have internal computation that are accessible to programmers. 
+
+]
+.pull-right[
+&lt;img src="04-Grammar-of-Graphics_files/figure-html/unnamed-chunk-7-1.png" width="90%" /&gt;
+]
+
+---
+layout: true
+#### Chunk: Geom_Bar_Position_Stack_and_Dodge
+
+---
+
+.pull-left[
+When using more than a pair of variables with a bar chart, we have a few more **position** options:
+
+```r
+  ggplot(penguins,
+*          aes(x = species,
+*              fill = island))
+```
+]
+.pull-right[
+&lt;img src="04-Grammar-of-Graphics_files/figure-html/unnamed-chunk-8-1.png" width="90%" /&gt;
+]
+
+---
+
+.pull-left[
+When using more than a pair of variables with a bar chart, we have a few more **position** options:
+
+```r
+ggplot(penguins,
+           aes(x = species,
+               fill = island)) + 
+* geom_bar() +
+* ggtitle(label = "A stacked bar chart")
+```
+The bars are coloured by the `island` variable and are **stacked** in **position**.
+]
+.pull-right[
+&lt;img src="04-Grammar-of-Graphics_files/figure-html/unnamed-chunk-9-1.png" width="90%" /&gt;
+]
+---
+
+
+.pull-left[
+And here we use the `dodge` option:
+
+```r
+  ggplot(penguins,
+           aes(x = species,
+               fill = island)) + 
+* geom_bar(position ="dodge") +
+* ggtitle(label =
+*           "A dodged bar chart")
+```
+]
+.pull-right[
+&lt;img src="04-Grammar-of-Graphics_files/figure-html/unnamed-chunk-10-1.png" width="90%" /&gt;
+]
+
+---
+
+layout: true
+#### Chunk: Facetting
+
+---
+
+.pull-left[
+
+```r
+*ggplot(penguins)
+```
+]
+.pull-right[
+&lt;img src="04-Grammar-of-Graphics_files/figure-html/unnamed-chunk-11-1.png" width="90%" /&gt;
+]
+
+---
+.pull-left[
+
+```r
+ggplot(penguins) +
+* aes(x = flipper_length_mm,
+*     y = body_mass_g)
+```
+]
+.pull-right[
+&lt;img src="04-Grammar-of-Graphics_files/figure-html/unnamed-chunk-12-1.png" width="90%" /&gt;
+]
+
+---
+
+.pull-left[
+
+```r
+ggplot(penguins) +
+  aes(x = flipper_length_mm,
+      y = body_mass_g) +
+* geom_point()
+```
+]
+.pull-right[
+&lt;img src="04-Grammar-of-Graphics_files/figure-html/unnamed-chunk-13-1.png" width="90%" /&gt;
+]
+
+---
+.pull-left[
+
+```r
+ggplot(penguins) +
+  aes(x = flipper_length_mm,
+      y = body_mass_g) +
+  geom_point() +
+* facet_wrap(~island) +
+* ggtitle("A point geom graph with facets")
+```
+The graph has **split** into multiples, based on the **number** of islands. 
+]
+.pull-right[
+&lt;img src="04-Grammar-of-Graphics_files/figure-html/unnamed-chunk-14-1.png" width="90%" /&gt;
+]
+
+---
+layout:false
+
+# Conclusion
+- `ggplot` takes a dataframe/tibble as the data argument
+- The `aes`-thetic arguments can be `x`, `y`, `colour`, `shape`, `alpha` for example...
+- The `geom_*()` commands specify the kind of plot
+- Together, the `ggplot` package offers a **Grammar** of near-English commands which allow us to plot data in various ways. 
+
+---
+
+# References
+
+
+1. [Wickham, Hadley. (2010) "A Layered Grammar of Graphics". *Journal of Computational and Graphical Statistics*, 19(1).](http://www.jstor.org.proxy.uchicago.edu/stable/25651297)
+
+2. [Wilkinson, Leland. (2005). *The Grammar of Graphics*. (UChicago authentication required)](http://link.springer.com.proxy.uchicago.edu/book/10.1007%2F0-387-28695-0)
+
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
