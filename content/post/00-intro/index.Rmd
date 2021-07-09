@@ -1,5 +1,5 @@
 ---
-title: 'Lab-00: Getting Started'
+title: 'Lab-00: Down the R-abbit Hole...'
 subtitle: 'Welcome ! Introduce Yourself to R, RStudio, and Us!'
 summary: Welcome ! Introduce Yourself to R, RStudio, and Us!
 date: "2021-06-05T00:00:00Z"
@@ -13,7 +13,7 @@ weight: 10
 # Focal point options: Smart, Center, TopLeft, Top, TopRight, Left, Right, BottomLeft, Bottom, BottomRight
 image:
   placement: 2
-  caption: 'Image credit: [**Shitota Yuri on Unsplash**](https://unsplash.com/photos/p0hDztR46cw)'
+  caption: 'Image credit: [**Alice In Wonderland dot Net**](https://www.alice-in-wonderland.net/)'
   focal_point: ""
   preview_only: true
 

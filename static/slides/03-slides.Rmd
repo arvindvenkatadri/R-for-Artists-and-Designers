@@ -2,12 +2,13 @@
 title: "Lab 03"
 subtitle: "Working in the Tidyverse"
 author: "Arvind Venkatadri"
+date: '`r Sys.Date()`'
 output:
   xaringan::moon_reader:
-    css: ["default", "css/ohsu.css", "css/ohsu-fonts.css"]
-    lib_dir: libs
+    lib_ir: libs
+    css: xaringan-themer.css
     nature:
-      highlightStyle: atelier-lakeside-light
+      highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
 ---
@@ -20,6 +21,17 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE,
   comment = NA, dpi = 300,
   fig.align = "center", out.width = "80%", cache = FALSE)
 library(tidyverse)
+library(palmerpenguins)
+library(xaringanthemer)
+```
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+style_duo(primary_color = "#1F4257", secondary_color = "#F97B64",
+  header_font_google = google_font("Josefin Sans"),
+  text_font_google   = google_font("Montserrat", "300", "300i"),
+  code_font_google   = google_font("Fira Mono")
+)
 ```
 
 # Tidyverse basics

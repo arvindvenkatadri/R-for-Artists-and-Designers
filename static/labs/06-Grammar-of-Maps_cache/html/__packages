@@ -1,10 +1,4 @@
 base
-methods
-datasets
-utils
-grDevices
-graphics
-stats
 prettymapr
 osmdata
 rnaturalearth
@@ -14,3 +8,12 @@ osmplotr
 tmap
 leaflet
 leaflet.providers
+tidyverse
+ggplot2
+tibble
+tidyr
+readr
+purrr
+dplyr
+stringr
+forcats

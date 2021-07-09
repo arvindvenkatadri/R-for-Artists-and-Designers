@@ -17,15 +17,12 @@ output:
 
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
-knitr::opts_chunk$set(
-  fig.width=9, fig.height=5, fig.retina=3,
-  out.width = "100%",
-  cache = FALSE,
-  echo = TRUE,
-  message = FALSE, 
-  warning = FALSE,
-  hiline = TRUE
-)
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, 
+  comment = NA, dpi = 300,
+  fig.align = "center", out.width = "65%", cache = FALSE)
+library(xaringanthemer)
+library(xaringanExtra)
 library(tidyverse)
 library(sf)
 library(rnaturalearth)
@@ -34,18 +31,52 @@ library(rnaturalearthdata)
 
 ```{r xaringan-themer, include=FALSE, warning=FALSE}
 library(xaringanthemer)
-style_duo_accent(
-  primary_color = "#1381B0",
-  secondary_color = "#FF961C",
-  inverse_header_color = "#FFFFFF"
+style_duo(primary_color = "#1F4257", secondary_color = "#F97B64",
+  header_font_google = google_font("Josefin Sans"),
+  text_font_google   = google_font("Montserrat", "300", "300i"),
+  code_font_google   = google_font("Fira Mono"),
+  text_bold_color = "#1E90FF"
 )
-options(htmltools.dir.version = FALSE)
-knitr::opts_chunk$set(warning = FALSE, message = FALSE, 
-  comment = NA, dpi = 300,
-  fig.align = "center", out.width = "65%", cache = FALSE)
-library(tidyverse)
+# https://htmlcolorcodes.com/color-names/
 ```
 
+```{r xaringanExtra, include=FALSE}
+use_webcam()
+use_fit_screen()
+use_panelset()
+```
+
+layout: true
+# Let's get started
+---
+
+Look at a piece of Google Map.
+
+What different objects do you see?
+
+What information do you think went into making it?
+
+---
+
+.pull-left[
+- To make maps, we need data organized in a specific way
+
+- Let us look at the pieces that go into making spatial data
+
+- Our focus will be the r package `sf` ( "simple features")
+]
+
+.pull-right[
+**Data Structure in `sf`**
+
+![Spatial Data Frame](https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/sf.png)
+]
+
+
+The picture shows a familiar looking `data-frame` with the far-right column containing geometries....hmmm.
+
+---
+layout:false
 ## What is a Feature?
 
 - A Thing, or an Object in the real world, such as a building or a tree. 
@@ -99,8 +130,9 @@ library(tidyverse)
 ![Spatial Geometries](images/sf-classes.png)
 ]
 ---
-
+layout:true
 ## How are these shapes represented?
+---
 
 .pull-left[
 ![Geometry Primitives](https://cengel.github.io/R-spatial/img/wkt_primitives.png)
@@ -110,14 +142,23 @@ library(tidyverse)
 ![Multipart Geometry Representation](https://cengel.github.io/R-spatial/img/wkt_multipart.png)
 
 ]
-
 ---
 
-## The `sf` package and the Spatial Data Frame: Points
+```{r highlight.output = c(4:5)}
+nc <- st_read(system.file("shape/nc.shp", package="sf"))
+```
+
+```{r, echo=FALSE,highlight.output= c(11:13)}
+head(nc, 3)
+```
+
+---
+layout:false
+## The `sf` : Spatial Data Frame: Point Geometry
 
 .pull-left[
 
-```{r plot1a, eval=FALSE, message=FALSE,warning=FALSE}
+```{r plot1a, eval=FALSE, message=FALSE, warning = FALSE}
 india <- 
   ne_states(country =  "india", 
             geounit = "india", 
@@ -128,6 +169,7 @@ points <-
              lat = rnorm(5, 23, 5)) %>% 
   st_as_sf(., coords = c("lon", "lat"),
            crs = crs_india)
+
 str(points)
 
 ggplot() + #<<
@@ -138,24 +180,27 @@ ggplot() + #<<
 ]
 
 .pull-right[
-```{r first-plot1a-out, ref.label='plot1a', echo=FALSE,message=FALSE,warning=FALSE, out.width ="90%"}
+```{r first-plot1a-out, ref.label='plot1a', echo=FALSE,message=FALSE,warning=FALSE, out.width ="90%", highlight.output = 2}
 ```
 ]
 
 ---
 
-## The `sf` package and the Spatial Data Frame: MultiPolygons
+## The `sf`:Spatial Data Frame: Polygon Geometry
 
 .pull-left[
 
 ```{r plot1b, eval=FALSE, message=FALSE,warning=FALSE}
-outer <- matrix(c(0,0,10,0,10,10,0,10,0,0) + c(77,23), 
-               ncol = 2, byrow = TRUE)
+# outer <- matrix(c(0,0,10,0,10,10,0,10,0,0) + c(77,23), 
+#                ncol = 2, byrow = TRUE)
 outer <- matrix(c(0,0,10,0,10,10,0,10,0,0) + c(77,23), ncol=2, byrow=TRUE)
 hole1 <- matrix(c(1,1,1,2,2,2,2,1,1,1) + c(77,23),ncol=2, byrow=TRUE)
 hole2 <- matrix(c(5,5,5,6,6,6,6,5,5,5) + c(77,23),ncol=2, byrow=TRUE)
 pl1 <- list(outer, hole1, hole2)
-pl1 <- st_polygon(pl1) %>% st_sfc() %>% st_as_sf(crs = crs_india)
+pl1 <- st_polygon(pl1) %>% # feature geometry
+  st_sfc() %>% # feature column
+  st_as_sf(crs = crs_india) # spatial data frame
+str(pl1)
 
 ggplot() + #<<
     geom_sf(data = india) + #<<
@@ -165,35 +210,142 @@ ggplot() + #<<
 
 .pull-right[
 
-```{r first-plot1b-out, ref.label='plot1b', echo=FALSE,message=FALSE,warning=FALSE, out.width ="90%"}
+```{r first-plot1b-out, ref.label='plot1b', echo=FALSE,message=FALSE,warning=FALSE, out.width ="90%", highlight.output = 2}
 ```
 
 ]
 
+
 ---
-## Data Structure in `sf`
-![Spatial Data Frame](https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/sf.png)
+## The `sf`:Spatial Data Frame: Multi-Polygon Geometry
+
+.pull-left[
+```{r message=FALSE, warning=FALSE}
+pol1 <-  list(outer, hole1, hole2)
+pol2 <-  list(outer + 12, hole1 + 12)
+pol3 <- list(outer - 12)
+mp <-  list(pol1,pol2,pol3)
+
+mp1 <- st_multipolygon(mp) %>% #feature geometry
+  st_sfc() %>% #feature column
+  st_as_sf(crs = crs_india) # sf dataframe
+```
+
+```{r plot1c, message=FALSE, eval=FALSE, warning=FALSE}
+head(mp1,3)
+
+ggplot() + #<<
+    geom_sf(data = india) + #<<
+    geom_sf(data = mp1, colour = "red") #<<
+
+```
+]
+
+.pull-right[
+
+```{r first-plot1c-out, ref.label='plot1c', echo=FALSE,message=FALSE,warning=FALSE, out.width ="90%", highlight.output = c(2,7)}
+```
+
+]
 
 
 ---
+background-image: url("images/2book11.jpg")
+background-position: 50% 50%
+class: center, bottom, inverse
+???
+Image credit: [alice-in-wonderland.net](https://www.alice-in-wonderland.net/resources/background/tenniel-and-his-illustrations/)
+
+---
+## Map Projections: Through the Looking Glass
+
+
+.pull-left[
+![](images/2book4.jpg){height=300px}
+]
+.pull-right[
+![](images/2book18.jpg)
+We see Maps Through The Looking Glass..  
+No Two Map Projections are Alike!
+]
+
+---
+# A 2D Flat projection
+
+
+
+---
+
+---
+
+class: inverse, center, middle
 ## Getting hold of Spatial Data
 
-Using `osmplot`
-Using `rnaturalearth`
+Using **osmdata**  
+Using **rnaturalearth**  
+
+
+---
+layout:true
+## Using `osmdata`
+---
+
+.pull-left[
+lorem ipsum
+![](https://youtu.be/zNzZ1PfUDNk)
+]
+
+.pull-right[
+lorem ipsum
+]
+---
+
+.pull-left[
+lorem ipsum
+
+]
+
+.pull-right[
+lorem ipsum
+]
+
+---
+layout: true
+## Using `rnaturalearth`
 
 
 ---
 
-## Using `osmplot` to get spatial data
+.pull-left[
+lorem ipsum
+
+]
+
+.pull-right[
+lorem ipsum
+]
+
+---
+
+.pull-left[
+lorem ipsum
+
+]
+
+.pull-right[
+lorem ipsum
+]
+
+---
+# Interactive Maps with `leaflet`
+```{r out.width='100%', fig.height=6, eval=require('leaflet')}
+library(leaflet)
+leaflet() %>% addTiles() %>% setView(-93.65, 42.0285, zoom = 17)
+```
 
 
 
 ---
-
-## Using `rnaturalearth` to get spatial data
-
----
-
 class: center, middle
 
 # Thanks!

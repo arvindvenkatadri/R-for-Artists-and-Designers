@@ -9,6 +9,7 @@ output:
     toc_float: TRUE
     toc_depth: 2
     number_sections: TRUE
+    code_folding: hide
     code_download: TRUE
 
 abstract: Part of the `R for Artists and Designers` course at the School of Foundation Studies, Srishti Manipal Institute of Art, Design, and Technology, Bangalore.

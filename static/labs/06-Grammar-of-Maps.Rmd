@@ -20,29 +20,26 @@ At the end of this Lab session, we should:
 - know the types and structures of `spatial data` and be able to work with them
 - understand the basics of modern spatial packages in R
 - be able to specify and download spatial data from the web, using R
-- plot static and interactive maps using `ggplot`, `tmap` and `leaflet` packages
+- plot *static* and *interactive* maps using `ggplot`, `tmap` and `leaflet` packages
 - add symbols and markers for places and regions of our own interest in these maps.
 - see directions for further work (e.g. maps + networks together)
 
-# Installation
-**rgdal** is R’s interface to the "Geospatial Abstraction Library (GDAL)" which is used by other open source GIS packages such as QGIS and enables R to handle a broader range of spatial data formats.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 # Getting Map Data into R
-library(prettymapr) # to search for map data based on location
-
 library(osmdata) # Import Open Street Data
 library(rnaturalearth)
-library(rnaturalearthdata) # Import Natural Earth Data
-library(rnaturalearthhires) # Hi Resolution..is your WiFi any good?
+
+library(prettymapr) # to search for map data based on location
 
 # Plotting Maps
+library(tidyverse) # Maps using ggplot + geom_sf
 library(osmplotr) # "Bespoke" Maps using OSM data
 library(tmap) # Thematic Maps, static and interactive
-library(leaflet) # Interactive Maps
-library(leaflet.providers)
 
+# For Spatial Data Frame Processing
+library(sf)
 ```
 
 ## Introduction to Maps in R
@@ -61,21 +58,23 @@ Bas. Onwards and Map-wards!!
 
 ## God made me a BengaluR-kaR...I think
 
-Let's get BLR data into R and see if we can plot an area of interest. Then we can order on Swiggy...never mind. 
+Let's get BLR data into R and see if we can plot an area of interest. Then we can order on Swiggy and...never mind. 
 
-Where is my home? Specify a "bounding box" first, using a rough longitude latitude info, or using a place name and searching for the long/lat:
+Where is my home? Specify a "bounding box" first, using a rough longitude latitude info directly, or using a place name to search for the long/lat info:
 
 ```{r I_am_going_home}
 # BLR Bounding Box
+# get_bbox needs lat and lon ranges
 bbox <- osmplotr::get_bbox(c(77.56,12.93,77.63,12.96))
-bbox_l <- osmdata::getbb("Bangalore, India")
-bbox_p <- prettymapr::searchbbox("Bangalore")
+
+bbox_l <- osmdata::getbb("Bangalore, India") # LARGE
+bbox_p <- prettymapr::searchbbox("Bangalore") # ALSO LARGE
 bbox
 bbox_l
 bbox_p # identical with bbox_l
 ```
 
-```{r get_osm_map_data, cache = TRUE}
+```{r get_osm_map_data, cache = TRUE, message=FALSE}
 # Get Map data
 
 dat_B <- extract_osm_objects (key = "building", bbox = bbox) 
@@ -84,89 +83,169 @@ dat_P <- extract_osm_objects (key = 'park', bbox = bbox)
 dat_G <- extract_osm_objects (key = 'landuse', value = 'grass', bbox = bbox)
 dat_T <- extract_osm_objects (key = 'natural', value = 'tree', bbox = bbox)
 
-#Useful keys include building, waterway, natural, grass, park, amenity, shop, boundary, and highway.
+# Useful keys include building, place, amenity, shop, waterway, natural, boundary, and highway.
 
 
 ```
+## Let's look at the data
+```{r}
+# How many buildings?
+nrow(dat_B)
+dat_B$geometry
+class(dat_B$geometry)
+```
+So `dat_B` has `r nrow(dat_B)` buildings and their geometry is naturally a POLYGON type of geometry column. 
+
+Do this check for all the other spatial data.
+
+```{r YOUR_TURN_1}
+
+```
+
+## YOUR_COMMENTS_1
+
+
+
+
 
 ## My first Map in R
 
-```{r plot osm data}
+We could quickly plot this using the package `osmplotr`. However, in my ( i.e. Arvind's opinion ) it is not as flexible as other packages. Maybe I need to study it in more detail. 
 
-blr_map <- osm_basemap(bbox = bbox, bg = "gray20") %>%
-  add_osm_objects(., dat_B, col = "gray40") %>% 
-  add_osm_objects(., dat_H, col = "gray80") %>% 
-  add_osm_objects(., dat_G, col = "darkseagreen1") %>% 
-  add_osm_objects(., dat_P, col = "darkseagreen") %>% 
-  add_osm_objects(., dat_T, col = "green")
-
-print_osm_map(blr_map)
-#print_osm_map (map, filename = "Blr.jpeg", device = "jpeg", width = 10, units = "cm")
-#print_osm_map (map, filename = "map.png", width = 10, units = "in", dpi = 300)
-```
-
+So we will continue with `ggplot`:
 
 ```{r}
-blr_map_2 <- osm_basemap(bbox = bbox, bg = "gray20") %>%
-  add_osm_objects(., dat_B, col = "gray40") %>% 
-  add_osm_objects(., dat_H, col = "gray80") %>% 
-  add_osm_objects(., dat_G, col = "darkseagreen1") %>% 
-  add_osm_objects(., dat_P, col = "darkseagreen") %>% 
-  add_osm_objects(., dat_T, col = "green")
 
-print_osm_map(blr_map)
+blr_map <- ggplot() +
+  geom_sf(data = dat_B, colour = "orange") +  # POLYGONS
+  geom_sf(data = dat_H, col = "gray20") +     # LINES
+  geom_sf(data = dat_G, col = "darkseagreen1") + 
+  geom_sf(data = dat_P, col = "darkseagreen") +
+  geom_sf(data = dat_T, col = "green")        # POINTS
+blr_map
+
+
 ```
 
-```{r look at OSM data, message=FALSE}
-class(dat_B)
-names(dat_B)
-class(dat_B$geometry)
-nrow(dat_B)
-```
 
-## Adding my "area" to the map
+Note how `geom_sf` is capable of handling *any* geometry in the `sfc` column !! 
+> `geom_sf()` is an unusual geom because it will draw different geometric objects depending on what simple features are present in the data: you can get points, lines, or polygons.
 
-We can create areas of interest around the map. Say based on metro stations or your restaurants etc. 
+
+## Adding my favourite "area" to the map
+
+We can create areas of interest around the map. 
+For a start: we are simply going to *zoom in* to an area and say that is our area of interest. 
+This area then needs to go **Through the Looking Glass** and become part of the projection of `dat_B`!!
+
+We can then try based on your favourite restaurants etc. 
 
 ```{r shapes_on_maps}
 
-my_area <- 
-  bbox %>% 
-  zoombbox(factor = 16, offset = c(0,0)) 
+my_area <- bbox %>% 
+  
+  # zooming in within our bounding box area
+  prettymapr::zoombbox(factor = 8, offset = c(0,0)) 
 my_area
 bbox
+```
+
+OK, `my area` is smalled and contained inside my `bbox`. So zoom works. Now to convert `my_area` into a spatial dataframe using `sf` and add it to the `blr_map` plot:
+
+```{r}
+my_area_in_blr <- matrix(
+  c(
+  my_area["x", "min"],
+  my_area["x", "max"],
+  my_area["x", "max"],
+  my_area["x", "min"],
+  my_area["x", "min"],
+  my_area["y", "min"],
+  my_area["y", "min"],
+  my_area["y", "max"],
+  my_area["y", "max"],
+  my_area["y", "min"]),
+  ncol = 2) %>% # Make a matrix
+  
+  list() %>% # Convert to list since POLYGON needs a list
+  
+  st_polygon() %>% # Convert to POLYGON
+  
+  st_sfc(., crs = st_crs(dat_B)) %>% # Convert POLYGON to an `sfc`
+  # Through the Looking Glass with dat_B
+  
+  st_as_sf(.) # Convert sfc to an sf spatial dataframe. Phew!!
+  
 
 
-my_area_in_blr <- 
-  sp::SpatialPoints(coords = cbind(
-  c(my_area["x", "min"], my_area["x", "max"],
-    my_area["x", "max"], my_area["x", "min"]),
-  c(my_area["y", "min"], my_area["y", "min"],
-    my_area["y", "max"], my_area["y", "max"])
-        )
-  )
 my_area_in_blr
 ```
 
 
 ```{r My_Blr_finally}
-blr_map %>% add_osm_groups(
-  .,
-  dat_B,
-  groups = my_area_in_blr,
-  cols = "yellow",
-  bg = "gray40",
-  colmat = FALSE
-) %>%
-  add_osm_objects(., dat_B, col = "red", size = 0.2) %>% 
-  print_osm_map(.)
+blr_map <- 
+  blr_map + geom_sf(data = my_area_in_blr, colour = "red")
+blr_map
+
 ```
 
-##### END OF CLASS 1
+## Adding my favourite "points" to the map
+Is it time to order on Swiggy...
 
+Let us adding interesting places to our map: say based on your favourite restaurants etc. We need restaurant data: lat/long + name + maybe type of restaurant. This can be manually created ( like all of OSMdata ) or if it is already there we can download using *key-value* pairs in our OSM data query.
 
+```{r restaurant_data_1}
+dat_R <- extract_osm_objects(bbox = bbox, key = "amenity", value = "restaurant", return_type = "point")
+```
+
+```{r restaurant_data_2}
+# How many restaurants have we got?
+dat_R %>% nrow()
+```
+
+```{r restaurant_data_3}
+names(dat_R)
+# Let's look at the `cuisine` column! 
+# ( I want pizza...)
+dat_R$cuisine
+```
+So let us plot the restaurants as POINTs using the `dat-R` data we have downloaded. The `cuisine` attribute looks interesting; let us colour the POINT based on the `cuisine` offered at that restaurant. 
+
+```{r}
+dat_R <- dat_R %>% 
+  drop_na(cuisine) %>% # Knock off nondescript restaurants
+  
+  # Some have more than on classification ;-()
+  # Separated by semicolon or comma, so....
+  separate(col = cuisine, into = c("cuisine", NA, NA), sep = ";") %>% 
+  separate(col = cuisine, into = c("cuisine", NA, NA), sep = ",")
+
+# Finally good food?
+dat_R$cuisine
+```
+
+Now let's plot the Restaurants as POINTs:
+
+```{r}
+# http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf
+# 
+ggplot() + 
+  geom_sf(data = dat_B, colour = "burlywood1") + 
+  geom_sf(data = dat_H, colour = "gray80") +
+  geom_sf(data = dat_R %>% drop_na(cuisine), aes(fill = cuisine), colour = "black", shape = 21) + 
+  theme(legend.position = "right") +
+  labs(title = "Restaurants in South Central Bangalore",
+       caption = "Based on osmdata")
+```
+We could have done a (much!) better job, by combining cuisines into simpler and fewer categories, but that is for another day!! 
+
+Let's go meet the Gryphon and the Mock Turtle...carrying this Pig!
+
+![](images/11.jpg)
 
 ## Using `rnaturalearth` and `tmap`
+
+
 
 ```{r World_Data}
 data("World")
@@ -178,9 +257,11 @@ head(metro, n = 3)
 
 ```{r My Static World}
 tmap_mode("plot")
+
+# Group 1
 tm_shape(World) +
     tm_polygons("HPI") +
-  
+# Group 2
 tm_shape(metro) + 
   tm_bubbles(size = "pop2020", col = "red")
 ```
@@ -205,7 +286,10 @@ india <-
             returnclass = "sf")
 
 india_neighbours <- 
-  ne_states(country= (c("india", "sri lanka", "pakistan", "afghanistan", "nepal","bangladesh")))
+  ne_states(country = (c("india", "sri lanka", "pakistan",
+                         "afghanistan", "nepal","bangladesh")
+                       )
+            )
 
 names(india)
 names(india_neighbours)
@@ -264,15 +348,29 @@ tm_basemap("Stamen.Watercolor") +
 ```
 
 
-## Scope and Packages for Exploration!!
+# Scope and Packages for Exploration!!
 
 ### sfnetworks
 ### mapsf
 ### ggspatial
 
 
-## Resources
+# Resources
 
 1. Emine Fidan, [Guide to Creating Interactive Maps in R](https://bookdown.org/eneminef/DRR_Bookdown/)
 
+2. Nikita Voevodin,[R, Not the Best Practices](https://bookdown.org/voevodin_nv/R_Not_the_Best_Practices/maps.html)
+
+
+# Assignments
+
+1. What if we have marked our favourite locations on our smartphones, using GPS? Umm...OK have to make our sf:Spatial Data Frame using these coordinates. 
+We will need to do this in the same way:
+- Create a matrix
+- Make POINTs
+- Make an sfc
+- Convert to sf
+- Project in the same way. 
+
+Draw a map of your home-town with your favourite restaurants shown. Pop-ups for each restaurant will win bonus points. 
 

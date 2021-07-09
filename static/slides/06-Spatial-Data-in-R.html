@@ -5,6 +5,20 @@
     <meta charset="utf-8" />
     <meta name="author" content="Arvind Venkatadri" />
     <script src="06-Spatial-Data-in-R_files/header-attrs/header-attrs.js"></script>
+    <script src="06-Spatial-Data-in-R_files/xaringanExtra-webcam/webcam.js"></script>
+    <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <script src="06-Spatial-Data-in-R_files/xaringanExtra_fit-screen/fit-screen.js"></script>
+    <link href="06-Spatial-Data-in-R_files/panelset/panelset.css" rel="stylesheet" />
+    <script src="06-Spatial-Data-in-R_files/panelset/panelset.js"></script>
+    <script src="06-Spatial-Data-in-R_files/htmlwidgets/htmlwidgets.js"></script>
+    <script src="06-Spatial-Data-in-R_files/jquery/jquery.min.js"></script>
+    <link href="06-Spatial-Data-in-R_files/leaflet/leaflet.css" rel="stylesheet" />
+    <script src="06-Spatial-Data-in-R_files/leaflet/leaflet.js"></script>
+    <link href="06-Spatial-Data-in-R_files/leafletfix/leafletfix.css" rel="stylesheet" />
+    <script src="06-Spatial-Data-in-R_files/proj4/proj4.min.js"></script>
+    <script src="06-Spatial-Data-in-R_files/Proj4Leaflet/proj4leaflet.js"></script>
+    <link href="06-Spatial-Data-in-R_files/rstudio_leaflet/rstudio_leaflet.css" rel="stylesheet" />
+    <script src="06-Spatial-Data-in-R_files/leaflet-binding/leaflet.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
   <body>
@@ -23,6 +37,39 @@ class: center, middle, inverse, title-slide
 
 
 
+
+
+layout: true
+# Let's get started
+---
+
+Look at a piece of Google Map.
+
+What different objects do you see?
+
+What information do you think went into making it?
+
+---
+
+.pull-left[
+- To make maps, we need data organized in a specific way
+
+- Let us look at the pieces that go into making spatial data
+
+- Our focus will be the r package `sf` ( "simple features")
+]
+
+.pull-right[
+**Data Structure in `sf`**
+
+![Spatial Data Frame](https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/sf.png)
+]
+
+
+The picture shows a familiar looking `data-frame` with the far-right column containing geometries....hmmm.
+
+---
+layout:false
 ## What is a Feature?
 
 - A Thing, or an Object in the real world, such as a building or a tree. 
@@ -76,8 +123,9 @@ class: center, middle, inverse, title-slide
 ![Spatial Geometries](images/sf-classes.png)
 ]
 ---
-
+layout:true
 ## How are these shapes represented?
+---
 
 .pull-left[
 ![Geometry Primitives](https://cengel.github.io/R-spatial/img/wkt_primitives.png)
@@ -87,10 +135,44 @@ class: center, middle, inverse, title-slide
 ![Multipart Geometry Representation](https://cengel.github.io/R-spatial/img/wkt_multipart.png)
 
 ]
-
 ---
 
-## The `sf` package and the Spatial Data Frame: Points
+
+```r
+nc &lt;- st_read(system.file("shape/nc.shp", package="sf"))
+```
+
+```
+Reading layer `nc' from data source 
+  `C:\Users\Arvind\Documents\R\win-library\4.1\sf\shape\nc.shp' 
+  using driver `ESRI Shapefile'
+*Simple feature collection with 100 features and 14 fields
+*Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+Geodetic CRS:  NAD27
+```
+
+
+```
+Simple feature collection with 3 features and 14 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -81.74107 ymin: 36.23388 xmax: -80.43531 ymax: 36.58965
+Geodetic CRS:  NAD27
+   AREA PERIMETER CNTY_ CNTY_ID      NAME  FIPS FIPSNO CRESS_ID BIR74 SID74
+1 0.114     1.442  1825    1825      Ashe 37009  37009        5  1091     1
+2 0.061     1.231  1827    1827 Alleghany 37005  37005        3   487     0
+3 0.143     1.630  1828    1828     Surry 37171  37171       86  3188     5
+  NWBIR74 BIR79 SID79 NWBIR79                       geometry
+*1      10  1364     0      19 MULTIPOLYGON (((-81.47276 3...
+*2      10   542     3      12 MULTIPOLYGON (((-81.23989 3...
+*3     208  3616     6     260 MULTIPOLYGON (((-80.45634 3...
+```
+
+---
+layout:false
+## The `sf` : Spatial Data Frame: Point Geometry
 
 .pull-left[
 
@@ -106,6 +188,7 @@ points &lt;-
              lat = rnorm(5, 23, 5)) %&gt;% 
   st_as_sf(., coords = c("lon", "lat"),
            crs = crs_india)
+
 str(points)
 
 *ggplot() +
@@ -118,7 +201,7 @@ str(points)
 
 ```
 Classes 'sf' and 'data.frame':	5 obs. of  1 variable:
- $ geometry:sfc_POINT of length 5; first list element:  'XY' num  76.2 20.4
+* $ geometry:sfc_POINT of length 5; first list element:  'XY' num  76.6 25.1
  - attr(*, "sf_column")= chr "geometry"
  - attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: 
   ..- attr(*, "names")= chr(0) 
@@ -129,19 +212,22 @@ Classes 'sf' and 'data.frame':	5 obs. of  1 variable:
 
 ---
 
-## The `sf` package and the Spatial Data Frame: MultiPolygons
+## The `sf`:Spatial Data Frame: Polygon Geometry
 
 .pull-left[
 
 
 ```r
-outer &lt;- matrix(c(0,0,10,0,10,10,0,10,0,0) + c(77,23), 
-               ncol = 2, byrow = TRUE)
+# outer &lt;- matrix(c(0,0,10,0,10,10,0,10,0,0) + c(77,23), 
+#                ncol = 2, byrow = TRUE)
 outer &lt;- matrix(c(0,0,10,0,10,10,0,10,0,0) + c(77,23), ncol=2, byrow=TRUE)
 hole1 &lt;- matrix(c(1,1,1,2,2,2,2,1,1,1) + c(77,23),ncol=2, byrow=TRUE)
 hole2 &lt;- matrix(c(5,5,5,6,6,6,6,5,5,5) + c(77,23),ncol=2, byrow=TRUE)
 pl1 &lt;- list(outer, hole1, hole2)
-pl1 &lt;- st_polygon(pl1) %&gt;% st_sfc() %&gt;% st_as_sf(crs = crs_india)
+pl1 &lt;- st_polygon(pl1) %&gt;% # feature geometry
+  st_sfc() %&gt;% # feature column
+  st_as_sf(crs = crs_india) # spatial data frame
+str(pl1)
 
 *ggplot() +
 *   geom_sf(data = india) +
@@ -151,34 +237,169 @@ pl1 &lt;- st_polygon(pl1) %&gt;% st_sfc() %&gt;% st_as_sf(crs = crs_india)
 
 .pull-right[
 
+
+```
+Classes 'sf' and 'data.frame':	1 obs. of  1 variable:
+* $ x:sfc_POLYGON of length 1; first list element: List of 3
+  ..$ : num [1:5, 1:2] 77 87 87 77 77 23 23 33 33 23
+  ..$ : num [1:5, 1:2] 78 78 79 79 78 24 25 25 24 24
+  ..$ : num [1:5, 1:2] 82 82 83 83 82 28 29 29 28 28
+  ..- attr(*, "class")= chr [1:3] "XY" "POLYGON" "sfg"
+ - attr(*, "sf_column")= chr "x"
+ - attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: 
+  ..- attr(*, "names")= chr(0) 
+```
+
 &lt;img src="06-Spatial-Data-in-R_files/figure-html/first-plot1b-out-1.png" width="90%" style="display: block; margin: auto;" /&gt;
 
 ]
 
+
 ---
-## Data Structure in `sf`
-![Spatial Data Frame](https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/sf.png)
+## The `sf`:Spatial Data Frame: Multi-Polygon Geometry
+
+.pull-left[
+
+```r
+pol1 &lt;-  list(outer, hole1, hole2)
+pol2 &lt;-  list(outer + 12, hole1 + 12)
+pol3 &lt;- list(outer - 12)
+mp &lt;-  list(pol1,pol2,pol3)
+
+mp1 &lt;- st_multipolygon(mp) %&gt;% #feature geometry
+  st_sfc() %&gt;% #feature column
+  st_as_sf(crs = crs_india) # sf dataframe
+```
+
+
+```r
+head(mp1,3)
+
+*ggplot() +
+*   geom_sf(data = india) +
+*   geom_sf(data = mp1, colour = "red")
+```
+]
+
+.pull-right[
+
+
+```
+Simple feature collection with 1 feature and 0 fields
+*Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: 65 ymin: 11 xmax: 99 ymax: 45
+CRS:           +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0
+                               x
+*1 MULTIPOLYGON (((77 23, 87 2...
+```
+
+&lt;img src="06-Spatial-Data-in-R_files/figure-html/first-plot1c-out-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+]
 
 
 ---
+background-image: url("images/2book11.jpg")
+background-position: 50% 50%
+class: center, bottom, inverse
+???
+Image credit: [alice-in-wonderland.net](https://www.alice-in-wonderland.net/resources/background/tenniel-and-his-illustrations/)
+
+---
+## Map Projections: Through the Looking Glass
+
+
+.pull-left[
+![](images/2book4.jpg){height=300px}
+]
+.pull-right[
+![](images/2book18.jpg)
+We see Maps Through The Looking Glass..  
+No Two Map Projections are Alike!
+]
+
+---
+# A 2D Flat projection
+
+
+
+---
+
+---
+
+class: inverse, center, middle
 ## Getting hold of Spatial Data
 
-Using `osmplot`
-Using `rnaturalearth`
+Using **osmdata**  
+Using **rnaturalearth**  
+
+
+---
+layout:true
+## Using `osmdata`
+---
+
+.pull-left[
+lorem ipsum
+![](https://youtu.be/zNzZ1PfUDNk)
+]
+
+.pull-right[
+lorem ipsum
+]
+---
+
+.pull-left[
+lorem ipsum
+
+]
+
+.pull-right[
+lorem ipsum
+]
+
+---
+layout: true
+## Using `rnaturalearth`
 
 
 ---
 
-## Using `osmplot` to get spatial data
+.pull-left[
+lorem ipsum
+
+]
+
+.pull-right[
+lorem ipsum
+]
+
+---
+
+.pull-left[
+lorem ipsum
+
+]
+
+.pull-right[
+lorem ipsum
+]
+
+---
+# Interactive Maps with `leaflet`
+
+```r
+library(leaflet)
+leaflet() %&gt;% addTiles() %&gt;% setView(-93.65, 42.0285, zoom = 17)
+```
+
+<div id="htmlwidget-f31e8a37f14e5ef0ee3c" style="width:100%;height:1800px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-f31e8a37f14e5ef0ee3c">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"http://openstreetmap.org\">OpenStreetMap<\/a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA<\/a>"}]}],"setView":[[42.0285,-93.65],17,[]]},"evals":[],"jsHooks":[]}</script>
 
 
 
 ---
-
-## Using `rnaturalearth` to get spatial data
-
----
-
 class: center, middle
 
 # Thanks!

@@ -1,7 +1,7 @@
 ---
-title: 'Lab-10: Wrap-Up'
-subtitle: 'Old Tortoise Taught Us'
-summary: 'Old Tortoise Taught Us'
+title: 'Lab-11: Old Tortoise Taught Us'
+subtitle: "Wrapping it all Up"
+summary: "Wrapping it all Up"
 date: "2021-06-20"
 featured: false
 draft: false
@@ -12,7 +12,7 @@ draft: false
 # Focal point options: Smart, Center, TopLeft, Top, TopRight, Left, Right, BottomLeft, Bottom, BottomRight
 image:
   placement: 2
-  caption: 'Image credit: [**Susie Ho on Unsplash**](https://unsplash.com/photos/tVyrFo50iiI)'
+  caption: 'Image credit: [**Alice In Wonderland dot Net**](https://www.alice-in-wonderland.net/)'
   focal_point: ""
   preview_only: true
 

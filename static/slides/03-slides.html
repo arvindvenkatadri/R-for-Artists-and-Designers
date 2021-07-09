@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>Lab 03: CS631</title>
+    <title>Lab 03</title>
     <meta charset="utf-8" />
-    <meta name="author" content="Alison Hill" />
-    <link href="libs/remark-css/default.css" rel="stylesheet" />
-    <link rel="stylesheet" href="css/ohsu.css" type="text/css" />
-    <link rel="stylesheet" href="css/ohsu-fonts.css" type="text/css" />
+    <meta name="author" content="Arvind Venkatadri" />
+    <meta name="date" content="2021-07-06" />
+    <script src="03-slides_files/header-attrs/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# Lab 03: CS631
-## Working with Data
-### Alison Hill
+# Lab 03
+## Working in the Tidyverse
+### Arvind Venkatadri
+### 2021-07-06
 
 ---
 
@@ -24,15 +25,32 @@ class: center, middle, inverse, title-slide
 
 
 
+
+# Tidyverse basics
+
+So far in this course you learned:
+
+- `&lt;-` (variable assignment)
+- `%&gt;%` (then...) ( aur phir...)
+- `dplyr`, `ggplot2` (packages)
+  - `install.packages("dplyr")` (1x per machine)
+  - `library(dplyr)` (1x per work session)
+
+---
+class: center, middle, inverse
+
+# 📇
+
+## Let's review
+
+---
 # Data for today
 
-We'll use data from [Wordbank](http://wordbank.stanford.edu)- an open source database of children's vocabulary development. The tool used to measure children's language and communicative development in this database is the [MacArthur-Bates Communicative Development Inventories (MB-CDI)](http://mb-cdi.stanford.edu). The MB-CDI is a parent-reported questionnaire.
+We'll use data from the Museum of Modern Art (MoMA)
 
-- R package [`wordbankr`](https://cran.r-project.org/web/packages/wordbankr/index.html)
-- [`wordbankr` vignette](https://cran.r-project.org/web/packages/wordbankr/vignettes/wordbankr.html)
-- More about [Wordbank](http://wordbank.stanford.edu)
-- More about [MB-CDI](http://mb-cdi.stanford.edu)
-
+- Publicly available on [GitHub](https://github.com/MuseumofModernArt/collection)
+- As analyzed by [fivethirtyeight.com](https://fivethirtyeight.com/features/a-nerds-guide-to-the-2229-paintings-at-moma/)
+- And by [others](https://medium.com/@foe/here-s-a-roundup-of-how-people-have-used-our-data-so-far-80862e4ce220)
 
 ---
 # Get the data
@@ -42,308 +60,56 @@ Use this code chunk to import my cleaned CSV file:
 
 ```r
 library(readr)
-sounds &lt;- read_csv("http://bit.ly/cs631-meow")
+moma &lt;- read_csv("http://bit.ly/cs631-moma")
 ```
 
 
 ---
-class: inverse, middle, center
 
-&lt;img src="../images/r-data-types.png" width="65%" style="display: block; margin: auto;" /&gt;
+# Data wrangling so far
 
-
-## RStudio Base R Cheatsheet
-
-https://github.com/rstudio/cheatsheets/blob/master/base-r.pdf
-
-
----
-
-## Know your data types
-
-
-* Numeric (2 subtypes)
-    - Integers (`1, 50`)
-    - Double (`1.5, 50.25`, `?double`)
-* Character (`"hello"`)
-* Factor (`grade = "A" | grade = "B"`)
-* Logical (`TRUE | FALSE`)
-
---
-
-
-```r
-typeof(sounds$age)
-```
-
-```
-[1] "double"
-```
-
-```r
-typeof(sounds$sound)
-```
-
-```
-[1] "character"
-```
-
-```r
-typeof(sounds$sound == "meow")
-```
-
-```
-[1] "logical"
-```
-
----
-# Even better: `glimpse`
-
-
-```r
-glimpse(sounds)
-```
-
-```
-Observations: 33
-Variables: 4
-$ age          &lt;dbl&gt; 8, 8, 8, 9, 9, 9, 10, 10, 10, 11, 11, 11, 12, 12, 12, 13…
-$ sound        &lt;chr&gt; "cockadoodledoo", "meow", "woof woof", "cockadoodledoo",…
-$ kids_produce &lt;dbl&gt; 1, 0, 3, 0, 2, 2, 0, 5, 4, 0, 5, 12, 0, 12, 28, 9, 125, …
-$ kids_respond &lt;dbl&gt; 35, 35, 35, 91, 93, 93, 139, 145, 143, 94, 94, 94, 141, …
-```
-
-
----
-# `sounds` (a subset)
-
-
-- `age`: child age in months
-- `sound`: a string describing a type of animal sound
-- `kids_produce`: the number of parents who answered "yes, my child produces this animal sound" 
-- `kids_respond`: the number of parents who responded to this question at all
-
-&lt;table&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:right;"&gt; age &lt;/th&gt;
-   &lt;th style="text-align:left;"&gt; sound &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; kids_produce &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; kids_respond &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; cockadoodledoo &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 35 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; meow &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 35 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; woof woof &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 35 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 9 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; cockadoodledoo &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 91 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 9 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; meow &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 93 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 9 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; woof woof &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 93 &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-
-
----
-# Data types
-
-&lt;img src="http://r4ds.had.co.nz/diagrams/data-structures-overview.png" width="65%" style="display: block; margin: auto;" /&gt;
-
-
----
-class: middle, center, inverse
-
-# ⌛️
-
-## Let's review 
-
----
-
-# Data wrangling with `dplyr` 
-
+All functions from `dplyr` package
 
 .pull-left[
-From DataCamp Chapter 3
+From DataCamp Chapter 1
 
-- `group_by`
-
-- `summarize`
-
-
-]
-
---
-
-.pull-right[
-Adding onto your arsenal of...
+- print a tibble
 
 - `filter`
 
 - `arrange`
 
 - `mutate`
+]
+
+--
+
+.pull-right[
+From Lab 01
+
 
 - `glimpse`
 
 - `distinct`
 
 - `count`
-
-- `tally`
-
-- `pull`
-
-- `top_n`
 ]
 
 ---
 class: middle, center, inverse
 
-# 😈
+![](../images/rladylego-pipe.jpg)
 
-## More on `mutate`
+## Plus: `%&gt;%`
 
----
-# 3 ways to `mutate` 
-
-1. &lt;font color="#ED1941"&gt;Create a new variable with a specific value&lt;/font&gt;  
-
-1. Create a new variable based on other variables 
-
-1. Change an existing variable
-
---
-
-
-```r
-sounds %&gt;% 
-  mutate(form = "WS")
-```
-
-```
-# A tibble: 33 x 5
-     age sound          kids_produce kids_respond form 
-   &lt;dbl&gt; &lt;chr&gt;                 &lt;dbl&gt;        &lt;dbl&gt; &lt;chr&gt;
- 1     8 cockadoodledoo            1           35 WS   
- 2     8 meow                      0           35 WS   
- 3     8 woof woof                 3           35 WS   
- 4     9 cockadoodledoo            0           91 WS   
- 5     9 meow                      2           93 WS   
- 6     9 woof woof                 2           93 WS   
- 7    10 cockadoodledoo            0          139 WS   
- 8    10 meow                      5          145 WS   
- 9    10 woof woof                 4          143 WS   
-10    11 cockadoodledoo            0           94 WS   
-# … with 23 more rows
-```
-
----
-# 3 ways to `mutate`
-
-
-1. Create a new variable with a specific value
-
-1. &lt;font color="#ED1941"&gt;Create a new variable based on other variables&lt;/font&gt; 
-
-1. Change an existing variable
-
---
-
-
-```r
-sounds %&gt;% 
-  mutate(prop_produce = kids_produce / kids_respond)
-```
-
-```
-# A tibble: 33 x 5
-     age sound          kids_produce kids_respond prop_produce
-   &lt;dbl&gt; &lt;chr&gt;                 &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;
- 1     8 cockadoodledoo            1           35       0.0286
- 2     8 meow                      0           35       0     
- 3     8 woof woof                 3           35       0.0857
- 4     9 cockadoodledoo            0           91       0     
- 5     9 meow                      2           93       0.0215
- 6     9 woof woof                 2           93       0.0215
- 7    10 cockadoodledoo            0          139       0     
- 8    10 meow                      5          145       0.0345
- 9    10 woof woof                 4          143       0.0280
-10    11 cockadoodledoo            0           94       0     
-# … with 23 more rows
-```
-
----
-# 3 ways to `mutate`
-
-1. Create a new variable with a specific value
-
-1. Create a new variable based on other variables
-
-1. &lt;font color="#ED1941"&gt;Change an existing variable&lt;/font&gt; 
-
---
-
-
-
-
-```r
-sounds %&gt;% 
-  mutate(prop_produce = prop_produce * 100)
-```
-
-```
-# A tibble: 33 x 5
-     age sound          kids_produce kids_respond prop_produce
-   &lt;dbl&gt; &lt;chr&gt;                 &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;
- 1     8 cockadoodledoo            1           35         2.86
- 2     8 meow                      0           35         0   
- 3     8 woof woof                 3           35         8.57
- 4     9 cockadoodledoo            0           91         0   
- 5     9 meow                      2           93         2.15
- 6     9 woof woof                 2           93         2.15
- 7    10 cockadoodledoo            0          139         0   
- 8    10 meow                      5          145         3.45
- 9    10 woof woof                 4          143         2.80
-10    11 cockadoodledoo            0           94         0   
-# … with 23 more rows
-```
+*image courtesy [@LegoRLady](https://twitter.com/LEGO_RLady/status/986661916855754752)*
 
 ---
 class: middle, center, inverse
 
 # ⌛️
 
-## Let's review some helpful functions for `mutate` + `summarize`
+## Let's review some helpful functions for `filter`
 
 ---
 class: inverse, bottom, center
@@ -351,10 +117,7 @@ background-image: url("../images/peapod.png")
 background-size: 25%
 
 
-## Remember:
-
 ## Base R + Tidyverse
-
 
 ---
 class: middle, center, inverse
@@ -363,19 +126,98 @@ class: middle, center, inverse
 
 ## First: 
 
-## Arithmetic
+## Logical Operators
 
-*especially useful for* `mutate`
 
-See:
-
-http://r4ds.had.co.nz/transform.html#mutate-funs
 
 ---
 
 
+
 ```r
-?Arithmetic
+?base::Logic
+```
+
+
+
+
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Operator &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Description &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Usage &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; &amp;amp; &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; and &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; x &amp;amp; y &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; | &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; or &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; x | y &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; xor &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; exactly x or y &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; xor(x, y) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ! &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; not &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; !x &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+Logical or (`|`) is inclusive, so `x | y` really means: 
+
+* x or 
+* y or 
+* both x &amp; y
+
+Exclusive or (`xor`) is exclusive, so `xor(x, y)` really means: 
+
+* x or
+* y...
+* but not both x &amp; y
+
+
+```r
+x &lt;- c(0, 1, 0, 1)
+y &lt;- c(0, 0, 1, 1)
+boolean_or &lt;- x | y
+exclusive_or &lt;- xor(x, y)
+cbind(x, y, boolean_or, exclusive_or)
+```
+
+```
+     x y boolean_or exclusive_or
+[1,] 0 0          0            0
+[2,] 1 0          1            1
+[3,] 0 1          1            1
+[4,] 1 1          1            0
+```
+
+---
+class: middle, center, inverse
+
+#💡
+
+## Second: 
+
+## Comparisons
+
+---
+
+```r
+?Comparison
 ```
 
 
@@ -391,210 +233,194 @@ http://r4ds.had.co.nz/transform.html#mutate-funs
  &lt;/thead&gt;
 &lt;tbody&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; + &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; addition &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; x + y &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; &amp;lt; &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; less than &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; x &amp;lt; y &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; - &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; subtraction &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; x - y &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; &amp;lt;= &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; less than or equal to &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; x &amp;lt;= y &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; * &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; multiplication &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; x * y &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; &amp;gt; &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; greater than &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; x &amp;gt; y &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; / &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; division &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; x / y &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; &amp;gt;= &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; greater than or equal to &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; x &amp;gt;= y &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; ^ &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; raised to the power of &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; x ^ y &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; == &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; exactly equal to &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; x == y &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; abs &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; absolute value &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; abs(x) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; != &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; not equal to &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; x != y &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; %/% &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; integer division &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; x %/% y &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; %in% &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; group membership* &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; x %in% y &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; %% &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; remainder after division &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; x %% y &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; is.na &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; is missing &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; is.na(x) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; !is.na &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; is not missing &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; !is.na(x) &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 
-
-```r
-5 %/% 2 # 2 goes into 5 two times with...
-```
-
-```
-[1] 2
-```
-
-```r
-5 %% 2 # 1 left over
-```
-
-```
-[1] 1
-```
-
+*(shortcut to using `|` repeatedly with `==`)
 
 ---
-class: middle, center, inverse
+## Lab 02: Challenge 1 (`dplyr`)
 
-#💡
+1. How many paintings (rows) are in `moma`? How many variables (columns) are in `moma`?
+1. What is the first painting acquired by MoMA? Which year? Which artist? What title?
+    - *Hint: you may want to look into `select` + `arrange`*
+1. What is the oldest painting in the collection? Which year? Which artist? What title? *(see above hint)*
+1. How many distinct artists are there?
+1. Which artist has the most paintings in the collection? How many paintings are by this artist?
+1. How many paintings are by male vs female artists?
 
-## Second: 
-
-## Summaries
-
-*especially useful for* `summarize`
-
-*even more useful after a* `group_by`
-
-See:
-
-http://r4ds.had.co.nz/transform.html#summarise-funs
+If you want more:
+1. How many artists of each gender are there?
+1. In what year were the most paintings acquired? Created?
+1. In what year was the first painting by a (solo) female artist acquired? When was that painting created? Which artist? What title? 
 
 
 
 ---
 
+# The Essence of ggplot
+
+all `ggplot2`
+
+- `aes(x = , y = )` (aesthetics)
+- `aes(x = , y = , color = )` (add color)
+- `aes(x = , y = , size = )` (add size)
+- `+ facet_wrap(~ )` (facetting)
+
+---
+# Old School (Challenge 2)&lt;sup&gt;1&lt;/sup&gt;
+
+- Sketch the graphics below on paper, where the `x`-axis is variable `year_created` and the `y`-axis is variable `year_acquired`
 
 
+```
+# A tibble: 4 x 4
+  painted acquired  area gender
+    &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; 
+1    1980     1985     3 male  
+2    1990     1995     2 male  
+3    2000     2005     1 female
+4    2010     2015     2 female
+```
 
-&lt;table&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:left;"&gt; Description &lt;/th&gt;
-   &lt;th style="text-align:left;"&gt; Usage &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; sum &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; sum(x) &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; minimum &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; min(x) &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; maximum &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; max(x) &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; mean &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; mean(x) &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; median &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; mean(x) &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; standard deviation &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; sd(x) &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; variance &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; var(x) &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; rank &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; rank(x) &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
+&lt;!-- Copy to chalkboard/whiteboard --&gt;
 
-* All allow for `na.rm` argument to remove `NA` values before summarizing. The default setting for this argument is *always* `na.rm = FALSE`, so if there is one `NA` value the summary will be `NA`.
+1. A scatter plot
+1. A scatter plot where the `color` of the points corresponds to `gender`
+1. A scatter plot where the `size` of the points corresponds to `area`
 
-* See "Maths Functions" in the RStudio Base R Cheatsheet:
-https://github.com/rstudio/cheatsheets/blob/master/base-r.pdf
+.footnote[
+[1] Shamelessly borrowed with much appreciation to [Chester Ismay](https://ismayc.github.io/talks/ness-infer/slide_deck.html)
+]
+
+---
+
+# 1. A scatterplot
+
+
+```r
+library(ggplot2)
+ggplot(moma_ex, aes(painted, acquired)) + 
+  geom_point()
+```
+--
+
+&lt;img src="03-slides_files/figure-html/unnamed-chunk-11-1.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+
+# 2. `color` points by `gender`
+
+
+```r
+library(ggplot2)
+ggplot(moma_ex, aes(painted, acquired, color = gender)) + 
+  geom_point()
+```
+--
+
+&lt;img src="03-slides_files/figure-html/unnamed-chunk-13-1.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# 3. `size` points by `area`
+
+
+```r
+library(ggplot2)
+ggplot(moma_ex, aes(painted, acquired, size = area)) + 
+  geom_point()
+```
+--
+
+&lt;img src="03-slides_files/figure-html/unnamed-chunk-15-1.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# [The Five-Named Graphs](http://moderndive.com/3-viz.html#FiveNG)
+
+
+- Scatterplot: `geom_point()`
+- Line graph: `geom_line()`
+- Histogram: `geom_histogram()`
+- Boxplot: `geom_boxplot()`
+- Bar graph: `geom_bar()` or `geom_col` (see [Lab 02](../02-Pronouns-and-Data.html))
+
+
 
 ---
 class: inverse, middle, center
 
-![](../images/alicedata-lego-colors.jpg)
-## &lt;small&gt;"Spent day pondering grayscale vs colourscale using `ggplot`"&lt;/small&gt;
 
-*photo and caption courtesy [@alice-data](https://twitter.com/alice_data)*
+# 📊
 
----
-# Today's lab: COLORS
+## Basics of `ggplot2` and `dplyr`:
 
-Specifically, discrete colors.
+[R4DS `ggplot2` chapter](http://r4ds.had.co.nz/data-visualisation.html)
 
-At the end of today's lab, you'll see an extra section on continuous colors. 
+[ModernDive `ggplot2` chapter](http://moderndive.com/3-viz.html)
 
----
-## But first: `shape`
+[RStudio `ggplot2` Cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf)
 
-&lt;img src="03-slides_files/figure-html/unnamed-chunk-18-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+[R4DS `dplyr` chapter](http://r4ds.had.co.nz/transform.html)
 
----
-## Shapes with `color = "hotpink"`
+[ModernDive `dplyr` chapter](http://moderndive.com/5-wrangling.html)
+
+[RStudio `dplyr` Cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf)
 
 
-&lt;img src="03-slides_files/figure-html/unnamed-chunk-19-1.png" width="65%" style="display: block; margin: auto;" /&gt;
-
-
----
-## Shapes with `fill = "gold"`
-
-
-&lt;img src="03-slides_files/figure-html/unnamed-chunk-20-1.png" width="65%" style="display: block; margin: auto;" /&gt;
-
----
-## Default shape for `geom_point`
-
-🕵🏽 Requires spelunking into the dark corners of the `ggplot2` code on [GitHub](https://github.com/tidyverse/ggplot2/blob/master/R/geom-point.r):
-
-
-```r
-default_aes = aes(
-    shape = 19, colour = "black", size = 1.5, fill = NA,
-    alpha = NA, stroke = 0.5
-  )
-```
-
-So, the default for `geom_point(shape = 19)`! This is important to remember: this shape only "understands" the *color* aesthetic, but not the *fill* aesthetic.
-
----
-
-class: inverse, middle, center
-
-# 👇🏽
-
-## R Markdown:
-
-https://www.markdowntutorial.com
-
-https://andrewbtran.github.io/NICAR/2018/workflow/docs/02-rmarkdown.html
-
-https://yihui.name/tinytex/ *(install!)*
-
-https://github.com/rstudio/cheatsheets/blob/master/rmarkdown-2.0.pdf
-
-https://rmarkdown.rstudio.com/html_document_format.html
-
-https://rmarkdown.rstudio.com/pdf_document_format.html
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
-"highlightStyle": "atelier-lakeside-light",
+"highlightStyle": "github",
 "highlightLines": true,
 "countIncrementalSlides": false
 });
@@ -637,6 +463,32 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
 // adds .remark-code-has-line-highlighted class to <pre> parent elements
 // of code chunks containing highlighted lines with class .remark-code-line-highlighted
 (function(d) {
@@ -654,17 +506,6 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   }
   preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
 })(document);</script>
-
-<script>
-(function() {
-  var links = document.getElementsByTagName('a');
-  for (var i = 0; i < links.length; i++) {
-    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
-      links[i].target = '_blank';
-    }
-  }
-})();
-</script>
 
 <script>
 slideshow._releaseMath = function(el) {

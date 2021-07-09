@@ -15,7 +15,7 @@ class: center, middle, inverse, title-slide
 ## R for Artists and Designers
 ### Arvind Venkatadri
 ### Srishti Manipal Institute
-### (2021-07-05)
+### (2021-07-06)
 
 ---
 
@@ -372,7 +372,13 @@ The bars are coloured by the `island` variable and are **stacked** in **position
 And here we use the `dodge` option:
 
 ```r
-  ggplot(penguins,
+ggplot(penguins,
+           aes(x = species,
+               fill = island)) + 
+* geom_bar() +
+* ggtitle(label = "A stacked bar chart")
+
+ggplot(penguins,
            aes(x = species,
                fill = island)) + 
 * geom_bar(position ="dodge") +
@@ -381,7 +387,7 @@ And here we use the `dodge` option:
 ```
 ]
 .pull-right[
-&lt;img src="04-Grammar-of-Graphics_files/figure-html/unnamed-chunk-10-1.png" width="90%" /&gt;
+&lt;img src="04-Grammar-of-Graphics_files/figure-html/unnamed-chunk-10-1.png" width="90%" /&gt;&lt;img src="04-Grammar-of-Graphics_files/figure-html/unnamed-chunk-10-2.png" width="90%" /&gt;
 ]
 
 ---

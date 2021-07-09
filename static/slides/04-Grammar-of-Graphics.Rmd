@@ -33,16 +33,11 @@ ggplot2::theme_set(my_theme)
 
 ```{r xaringan-themer, include=FALSE, warning=FALSE}
 library(xaringanthemer)
-#style_solarized_light()
-library(xaringanthemer)
-style_duo(primary_color = "#1F4257", secondary_color = "#F97B64")
-# style_mono_accent(
-#   base_color = "#1c5253",
-#   header_font_google = google_font("Josefin Sans"),
-#   text_font_google   = google_font("Montserrat", "300", "300i"),
-#   code_font_google   = google_font("Fira Mono"),
-#   text_bold_color = "orange"
-# )
+style_duo(primary_color = "#1F4257", secondary_color = "#F97B64",
+  header_font_google = google_font("Josefin Sans"),
+  text_font_google   = google_font("Montserrat", "300", "300i"),
+  code_font_google   = google_font("Fira Mono")
+)
 ```
 
 # What the Heck is a Grammar of Graphics?  
@@ -378,8 +373,14 @@ The bars are coloured by the `island` variable and are **stacked** in **position
 
 .pull-left[
 And here we use the `dodge` option:
-```{r 5c, eval=FALSE, message=FALSE, warning=FALSE}
-  ggplot(penguins,
+```{r 5c, eval=FALSE, message=FALSE, warning=FALSE, animation.hook='gifski'}
+ggplot(penguins,
+           aes(x = species,
+               fill = island)) + 
+  geom_bar() + #<<
+  ggtitle(label = "A stacked bar chart") #<<
+
+ggplot(penguins,
            aes(x = species,
                fill = island)) + 
   geom_bar(position ="dodge") + #<<

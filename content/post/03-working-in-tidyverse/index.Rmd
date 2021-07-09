@@ -1,7 +1,7 @@
 ---
-title: 'Lab-03: Tidy Data at the MoMa'
-subtitle: 'MoMA Museum Tour'
-summary: MoMA Museum Tour
+title: 'Lab-03: Twas brillig, and the slithy toves...'
+subtitle: 'Tidy Data at the ~~wabe~~ MoMA'
+summary: 'Tidy Data at the ~~wabe~~ MoMA'
 date: "2021-06-09T00:00:00Z"
 featured: false
 draft: false
