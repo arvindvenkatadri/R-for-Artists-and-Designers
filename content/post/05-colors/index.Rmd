@@ -13,7 +13,7 @@ weight: 5
 # Focal point options: Smart, Center, TopLeft, Top, TopRight, Left, Right, BottomLeft, Bottom, BottomRight
 image:
   placement: 2
-  caption: 'Image credit: [**Sven Brandsma on Unsplash**](https://unsplash.com/photos/6n3JxopeCKM)'
+  caption: 'Image credit: [Alice in Wonderland dot net](https:alice-in-wonderland.net)'
   focal_point: ""
   preview_only: true
 

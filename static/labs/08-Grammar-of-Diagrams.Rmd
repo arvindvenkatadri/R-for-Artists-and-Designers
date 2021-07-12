@@ -1,0 +1,376 @@
+---
+title: "The Grammar of Diagrams"
+subtitle: " Converting Text to Diagrams in R"
+author: Arvind Venkatadri
+affiliation: Srishti Manipal Institute of Art, Design, and Technology, Bangalore
+output:
+  html_document:
+    theme: flatly
+    toc: TRUE
+    toc_float: TRUE
+    toc_depth: 2
+    number_sections: TRUE
+    code_folding: hide
+    code_download: TRUE
+---
+
+# Introduction
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE)
+library(tidyverse)
+
+library(DiagrammeR)
+library(nomnoml)
+```
+
+There are many presentation and drawing tools out there. And these allow the user full control over the diagram so generally result in prettier diagrams that can convey more information to the audience at that point in time.
+
+But that point in time passes, and **pretty pictures can quickly become out-of-date** and, ironically, misinforming if they don't match the reality of the system they are describing. This is especially so if one team is drawing the pretty pictures, and another team is writing the software/implementing the system.
+
+Having **diagrams as code that can live beside the system design/code**, that the stakeholders are equally comfortable editing and viewing,reduces the gap i.e. "Where system diagrams meet system reality".
+
+We will "explore" two packages to do this: `DiagrammeR`
+and `nomnoml`. Each of these follows a specific grammar so that sets of "sentences" will morph into very different kinds of diagrams.
+
+
+
+
+# Using DiagrammeR
+
+`DiagrammeR` is a unique package since it allows you create diagrams **and** the Network Diagrams that you have created using `tidygraph` and `ggraph`. And it uses the tidyverse pipe `%>%` syntax too! But that is for another time, or perhaps you ca explore this yourself!!
+
+
+**Graphviz** support is an integral part of the `DiagrammeR` R package. It is another approach to creating diagrams using text. And hence the code you write is actually R code.
+
+Here is the basic structure of a `Graphviz` code:
+
+    [strict] (graph | digraph) [ID] '{' stmt_list '}'
+
+```{r DiagrammeR, fig.width=7, fig.height= 8, fig.align='center'}
+
+grViz("
+digraph boxes_and_circles {
+
+  # a 'graph' statement
+  graph [overlap = true, fontsize = 10,forcelabels = true]
+
+  # several 'node' statements
+  node [shape = box,fontname = Helvetica, color = red, style = filled]
+  A[label = 'This is \\n an internal \\n label', xlabel = 'This is \\nan external \\nlabel']; B; C; D; E; F
+
+  node [shape = circle, fixedsize = true, color = palegreen, width = 0.9] // sets as circles
+  1; 2; 3; 4; 5; 6; 7; 8
+
+  # several 'edge' statements
+  A->{1,2,3,4} B->2 B->3 B->4 C->A
+  1->D E->A 2->4 1->5 1->F
+  E->6 4->6 5->7 6->7 3->8 3->1
+}
+")
+```
+
+
+## Sequence Diagram
+
+## Sequence Diagram-2
+
+## Sequence Diagram 3
+
+## Mindmap
+
+
+
+## Gantt Chart
+
+
+
+## Flow chart
+
+
+
+
+
+
+# Using `nomnoml`
+
+`nomnoml` is touted as a "sassy" UML diagram creator, in R. It allows us
+to rapidly create many of diagrams that we can use in System Descriptions.
+
+The syntax options for nomnoml and what can be created is described here
+<https://nomnoml.com/>
+
+The R pdf Manual for nomnoml at
+[CRAN](https://cran.r-project.org/web/packages/nomnoml/nomnoml.pdf) (
+read just the first half-page and you are ready!!)
+
+So what can it do?
+
+```{nomnoml}
+#import: filename
+#arrowSize: 1
+#bendSize: 0.3
+#direction: down | right
+#gutter: 5
+#edgeMargin: 0
+#gravity: 1
+#edges: hard | rounded
+#background: lightgrey
+
+//nested list of colours
+//#fill: #fcfcfc; #eee8d5; #fdf6e3
+#fill: lightgreen; pink;
+#fillArrows: false
+#font: Calibri
+#fontSize: 12
+#leading: 1.25
+#lineWidth: 3
+#padding: 8
+#spacing: 40
+#stroke: #33322E
+#title: filename
+#zoom: 1
+#acyclicer: greedy
+#ranker: network-simplex | tight-tree | longest-path
+
+[Pirate|eyeCount: Int|raid()|pillage()|
+  [beard]--[parrot]
+  [beard]-:>[foul mouth]
+  ]
+
+[<table>mischief | bawl | sing || yell | drink]
+
+[<abstract>Marauder]<:--[Pirate]
+[Pirate]- 0..7[mischief]
+[jollyness]_>[Pirate]
+[jollyness]->[rum]
+[jollyness]->[singing]
+[Pirate]-> *[rum|tastiness: Int|swig()]
+[Pirate]->[singing]
+[singing]<->[rum]
+
+[<start>st]->[<state>plunder]
+[plunder]->[<choice>more loot]
+[more loot]->[st]
+[more loot] no ->[<end>e]
+
+[<actor>Sailor] - [<usecase>shiver me;timbers]
+```
+
+## Some definitions on the "grammar of shapes" in `nomnoml`
+
+1.  Association Types: Connectors between blocks( i.e. Classifiers)
+
+2.  Classifier Types: Kinds of **blocks**.
+
+3.  Directive Types: Directives change the nature of the diagram
+    rendered, by affective parameters like colour, direction and
+    margins. ( Ha! VC people!!)
+
+CSS colours <https://www.w3schools.com/cssref/css_colors.asp> Only these
+colours are permitted, so use either the names or these specific colour
+hash codes. Any general hash code will *not* render.
+
+```{nomnoml association-1}
+//association-1
+[a] - [b] 
+
+//association-2
+[b] -> [c] 
+
+//association_3
+[c] <-> [a]
+
+//dependency-1
+[a] <-->[d]
+
+//dependency-2
+#.ell: visual=ellipse fill=#fbfb09 bold
+#.arvind: visual=rhomb fill=#ff2234 bold
+[<ell>e]-->[a]
+//generalization-1
+[c]-:>[<arvind>k]
+
+//implementation --:>
+[k]--:>[d]
+```
+
+```{nomnoml association-2,svg=TRUE}
+//composition +-
+[a]+-[b]
+//composition +->
+[b]-+[c]
+//aggregation o-
+[c]o->[d]
+//aggregation o->
+[d]o->[a]
+//note --
+[d]--[everything happens;here]
+//hidden -/-
+[d]-/-[f]
+////////////////////////
+//weightless edge _>
+//[k]_>[d] //not working
+//weightless dashed__
+//[d]__[j] //not working
+```
+
+### Classifier Types
+
+These are different kinds of **blocks**.
+
+```{nomnoml, svg=TRUE}
+[class]->[<abstract> abstract]
+[<abstract> abstract]-:>[<instance> instance]
+[<instance> instance]-:>[<note> note]
+[<note> note]-->[<reference> reference]
+```
+
+```{nomnoml}
+[<package> package|components]-->[<frame> frame|]
+[<database> database]-->[<start> start]
+[<end> end]-o>[<state> state]
+```
+
+```{nomnoml}
+[<choice> choice]--->[<sync> sync]
+[<input> input]->[<sender> sender]
+[<receiver> receiver]o-[<transceiver> transceiver]
+```
+
+```{nomnoml, svg=TRUE}
+#direction:down
+#background:lightgrey
+#fill: fuchsia; green; purple
+#fillArrows: false
+#font: Courier
+[class]->[<abstract> abstract]
+[<abstract> abstract]-:>[<instance> instance]
+[<instance> instance]-:>[<note> note]
+[<note> note]-->[<reference> reference]
+```
+
+```{nomnoml}
+#font: CenturySchoolbook
+#fill: lightyellow
+#stroke: green
+
+[<actor> actor]---[<usecase> usecase]
+[<usecase> usecase]<-->[<label> label]
+[<usecase> usecase]-/-[<hidden> hidden]
+```
+
+```{nomnoml}
+[<table> table| a | 5 || b | 7]
+```
+
+```{nomnoml}
+[<table> table| c | 9 ]
+```
+
+## Directives
+
+Directives change the nature of the diagram rendered, by affective
+parameters like colour, direction and margins.
+
+## Custom classifier styles
+
+A directive that starts with "." define a **classifier's style**. The
+style is written as a space separated list of *modifiers* and *key/value
+pairs*.
+
+```{nomnoml}
+#.box: fill=#8f8 dashed
+#.blob: visual=ellipse title=bold
+#.arvind: visual=rhomb title=bold dashed fill=CornFlowerBlue
+[<box> GreenBox]
+[<blob> Blobby]
+[<arvind> Someone]
+```
+
+## `nomnoml` Key/value pairs
+
+-   fill=(any css color)
+-   stroke=(any css color)
+-   align=center align=left
+-   direction=right direction=down
+-   visual=actor
+-   visual=class
+-   visual=database
+-   visual=ellipse
+-   visual=end
+-   visual=frame
+-   visual=hidden
+-   visual=input
+-   visual=none
+-   visual=note
+-   visual=package
+-   visual=receiver
+-   visual=rhomb
+-   visual=roundrect
+-   visual=sender
+-   visual=start
+-   visual=sync
+-   visual=table
+-   visual=transceiver
+
+## Text modifiers
+
+bold center italic left underline
+
+```{nomnoml}
+# .box: fill=#8f8 dashed
+# .blob: visual=rhomb title=bold fill=#8f8 dashed
+
+[A]-[B]
+[B]--[<usecase>C]
+[C]-[<box> D]
+[B]--[<blob> Jabba;TheHut]
+```
+
+```{nomnoml}
+[a] ->[b]
+[b] -:> [c]
+[c]o->[d]
+[d]-/-[e]
+```
+
+```{nomnoml}
+#fill: lightgreen; lightblue; lightyellow; grey; white
+
+[<table> table | c | 9 ]
+
+[R | [<table> Packages |
+         Base R |
+         [ <table> tidyverse| ggplot | tidyr | readr |
+             [<table> dplyr|
+                 magrittr | Others]]]]
+```
+
+```{nomnoml}
+#fill: lightgreen; lightblue; lightyellow; pink; white
+
+[RStudio | [R | [<table> Packages |
+                   Base R | [ tidyverse |
+                               ggplot | tidyr | readr |
+                               [dplyr]--[magrittr]
+                               [dplyr]--[Others]
+                             | tibble
+                             ]
+                 | lubridate | DiagrammeR | Lattice]]]
+```
+
+```{nomnoml mindmap}
+[Linux]+-[Ubuntu]
+[Linux]+-[Mint]
+[Ubuntu]--[Mint]
+[Linux]+-[Rosa Linux]
+[Linux]+-[Mx Linux]
+[Debian]-+[Linux]
+
+
+[Fedora]-+[Linux]
+[Puppy Linux]-+[Linux]
+[Personal Pups]-+[Puppy Linux]
+
+```

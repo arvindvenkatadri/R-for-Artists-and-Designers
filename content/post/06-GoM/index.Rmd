@@ -1,5 +1,5 @@
 ---
-title: "Lab-06: If you please sir..which way to the Secret Garden?"
+title: "Lab-06: If you please sir...which way to the Secret Garden?"
 subtitle: "The Grammar of Maps"
 summary: "The Grammar of Maps"
 author: "Arvind Venkatadri"
@@ -28,3 +28,10 @@ links:
   name: Introduction Slides
   url: /slides/06-Spatial-Data-in-R.html
 ---
+
+# References
+
+1. [Nikita Voevodin](https://bookdown.org/voevodin_nv/R_Not_the_Best_Practices/maps.html)
+2. [Nico Hahn](https://bookdown.org/nicohahn/making_maps_with_r5/docs/introduction.html)
+3.[Emine Fidan](https://bookdown.org/eneminef/DRR_Bookdown/)
+4. Lovelace et al](https://geocompr.robinlovelace.net/adv-map.html)

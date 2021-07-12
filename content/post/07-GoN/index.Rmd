@@ -1,5 +1,5 @@
 ---
-title: "Lab-07: An Invitation from the Queen..to play Croquet"
+title: "Lab-07: An Invitation from the Queen...to play Croquet"
 subtitle: "The Grammar of Networks"
 summary: "The Grammar of Networks"
 author: Arvind Venkatadri
@@ -22,6 +22,6 @@ links:
 - icon: magic
   icon_pack: fas
   name: slides
-  url: /slides/07-slides.html
+  url: /slides/07-Grammar-of-Networks.html
 ---
 Hey, whom did Jon Snow marry?

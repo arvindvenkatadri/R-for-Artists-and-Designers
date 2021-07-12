@@ -1,0 +1,31 @@
+---
+title: "Lab-08: The Queen of Hearts, She Made some Tarts"
+subtitle: "The Grammar of Diagrams"
+summary: "The Grammar of Diagrams"
+author: Arvind Venkatadri
+date: '2021-06-16'
+featured: no
+image:
+  placement: 2
+  caption: 'Image credit: [**Alice In Wonderland dot Net**](https://www.alice-in-wonderland.net/)'
+  focal_point: ""
+  preview_only: true
+projects: []
+output: 
+  html_document:
+    code_download: TRUE
+links:
+- icon: flask
+  icon_pack: fas
+  name: lab
+  url: /labs/08-Grammar-of-Diagrams.html
+- icon: magic
+  icon_pack: fas
+  name: slides
+  url: /slides/08-Grammar-of-Diagrams.html
+---
+# References
+
+1. [The nomnoml package in R](https://nomnoml.com)
+
+2. [ Rich Iannone's DiagrammeR package](https://rich-iannone.github.io/DiagrammeR/graphviz_and_mermaid.html)

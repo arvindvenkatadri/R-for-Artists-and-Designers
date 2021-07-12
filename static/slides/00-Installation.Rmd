@@ -5,12 +5,14 @@ author: "Arvind Venkatadri"
 date: '`r Sys.Date()`'
 output:
   xaringan::moon_reader:
-    lib_ir: libs
-    css: xaringan-themer.css
+    css: ["default", "css/ohsu.css", "css/ohsu-fonts.css"]
+    lib_dir: libs
     nature:
-      highlightStyle: github
+      highlightStyle: atelier-lakeside-light
       highlightLines: true
-      countIncrementalSlides: false
+      slideNumberFormat: "%current%"
+      ratio: 16:9
+      countIncrementalSlides: true
 ---
 
 
@@ -32,15 +34,6 @@ library(here)
 here::set_here()
 ```
 
-
-```{r xaringan-themer, include=FALSE, warning=FALSE}
-library(xaringanthemer)
-style_duo(primary_color = "#1F4257", secondary_color = "#F97B64",
-  header_font_google = google_font("Josefin Sans"),
-  text_font_google   = google_font("Montserrat", "300", "300i"),
-  code_font_google   = google_font("Fira Mono")
-)
-```
 
 name: title_slide
 class: middle
@@ -101,7 +94,7 @@ layout:false
 ---
 
 background-image: url("https://64.media.tumblr.com/5b597a2ad23f997216ee85a0b4420ffe/tumblr_offcw8Xas61v85w7qo1_400.gifv")
-background-position: center
+background-position: bottom
 background-size: contain
 
 # R ! Whatever is it good for?
@@ -189,7 +182,7 @@ layout: true
 ---
 .pull-left[
 Create a working folder:`r emo::ji("file_folder")`
-` My_Documents/Irritating_R_Stuff`
+**` My_Documents/Irritating_R_Stuff`**
 
 Click on: **Tools -> Global Options**
 

@@ -1,5 +1,5 @@
 ---
-title: "Lab 03: Colors with Animal Sounds"
+title: "Lab 05: Colors with Animal Sounds"
 subtitle: "Using Colour Palettes in R"
 author: "Arvind Venkatadri"
 output:
@@ -25,14 +25,8 @@ library(here)
 
 # Overview
 
-There are 10 challenges total- none are in the "continuous colors" section, but you can use that section to complete the tenth challenge on your own. Upload your knitted html document by next Wednesday at noon to Sakai!
+There are 10 challenges total- none are in the "continuous colors" section, but you can use that section to complete the tenth challenge on your own. 
 
-# Slides for today
-
-```{r}
-knitr::include_url(here("static", "slides", "03-slides.html"))
-
-```
 
 # Packages
 

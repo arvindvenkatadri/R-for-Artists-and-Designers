@@ -32,7 +32,7 @@ links:
 - icon: magic
   icon_pack: fas
   name: slides
-  url: /slides/01-slides.html
+  url: /slides/02-working-in-R.html
 ---
 
 ## Readings

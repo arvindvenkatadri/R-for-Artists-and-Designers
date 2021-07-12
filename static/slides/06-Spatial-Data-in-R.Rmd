@@ -5,14 +5,14 @@ author: "Arvind Venkatadri"
 date: 03/July/2021
 output:
   xaringan::moon_reader:
-    css: xaringan-themer.css
+    css: ["default", "css/ohsu.css", "css/ohsu-fonts.css"]
+    lib_dir: libs
     nature:
-      slideNumberFormat: "%current%"
-      highlightStyle: github
+      highlightStyle: atelier-lakeside-light
       highlightLines: true
+      slideNumberFormat: "%current%"
       ratio: 16:9
       countIncrementalSlides: true
-  code_download: true
 ---
 
 ```{r setup, include=FALSE}
