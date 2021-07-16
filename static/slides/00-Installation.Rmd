@@ -143,8 +143,7 @@ This will fire up your RStudio.]
 ---
 
 This is **RStudio**, a integrated development environment ( IDE ) for **R** ( And Python, JS, SQL, D3 and a few other computer languages. )
-
-![RStudio](https://bookdown.org/maddocent/exploratory_data_analysis/_book/images/rstudio_interface.png)
+<center><img src="https://bookdown.org/maddocent/exploratory_data_analysis/_book/images/rstudio_interface.png" height="350px"/></center>
 
 ---
 layout:true
@@ -184,7 +183,7 @@ layout: true
 Create a working folder:`r emo::ji("file_folder")`
 **` My_Documents/Irritating_R_Stuff`**
 
-Click on: **Tools -> Global Options**
+In RStudio: Click on: **Tools -> Global Options**
 
 Click on `Browse`
 
@@ -196,7 +195,7 @@ Apply and close
 ]
 
 .pull-right[
-<center><img src="https://d33wubrfki0l68.cloudfront.net/c41935ca0c88dd9ef2ee02b65222837b86d813d4/00505/2020/02/18/rstudio-1-3-preview-configuration/global-options.png" height="350px"/></center>
+<center><img src="https://d33wubrfki0l68.cloudfront.net/c41935ca0c88dd9ef2ee02b65222837b86d813d4/00505/2020/02/18/rstudio-1-3-preview-configuration/global-options.png" height="450px"/></center>
 ]
 
 ---

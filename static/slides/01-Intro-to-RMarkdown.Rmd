@@ -18,35 +18,17 @@ output:
 
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
-knitr::opts_chunk$set(fig.dim=c(4.8, 8), fig.retina=2, out.width="100%")
+knitr::opts_chunk$set(fig.align = "center", warning = FALSE, message = FALSE, comment = NA, dpi = 300, cache = FALSE)
 library(tidyverse)
 library(knitr)
 library(palmerpenguins)
-
 # install.packages("devtools")
 # devtools::install_github("hadley/emo")
 library(emo)
 library(emojifont) 
 #https://cran.r-project.org/web/packages/emojifont/vignettes/emojifont.html
-library(here)
-here::set_here()
-```
 
-```{r xaringan-themer, include=FALSE, warning=FALSE}
-# library(xaringanthemer)
-# style_duo(primary_color = "#1F4257", secondary_color = "#F97B64",
-#   header_font_google = google_font("Josefin Sans"),
-#   text_font_google   = google_font("Montserrat", "300", "300i"),
-#   code_font_google   = google_font("Fira Mono")
-# )
-# output:
-#   xaringan::moon_reader:
-#     lib_ir: libs
-#     css: xaringan-themer.css
-#     nature:
-#       highlightStyle: github
-#       highlightLines: true
-#       countIncrementalSlides: false
+
 ```
 
 name: title_slide
@@ -59,12 +41,15 @@ class: middle
 
 ---
 
-layout:true
-
 # What is RMarkdown?
+
+```{r echo=FALSE, out.width= "1000px", out.height="550px", fig.align='center'}
+knitr::include_graphics("https://github.com/allisonhorst/stats-illustrations/raw/master/rstats-artwork/rmarkdown_wizards.png")
+```
 
 ---
 
+# What is RMarkdown?
 In an RMarkdown document:
 
 - What you type in **text** becomes your *story*
@@ -83,14 +68,18 @@ In an RMarkdown document:
 
 ---
 
+# What is RMarkdown?
 
 Click on the File -> RMarkdown
 
-```{r echo=FALSE}
+```{r out.height = "400px", out.width= "850px", echo=FALSE}
+
 knitr::include_graphics("./images/New-Rmd.png")
 ```
 
 ---
+
+# Editing your Markdown
 
 .pull-left[Edit the **YAML** header now. ( The stuff at the top between the three dashes)
 
@@ -104,17 +93,17 @@ SAVE.
 ]
 
 .pull-right[
-```{r echo=FALSE}
+```{r echo=FALSE, out.width= "500px", out.height="450px", fig.align='center'}
+
 knitr::include_graphics("./images/YAML.png")
+
 ```
 
 ]
 
 ---
-layout: true
-# Editing your Markdown
 
----
+# Editing your Markdown
 
 - Everything is text
 - Wrap Words in stars:
@@ -125,7 +114,11 @@ layout: true
     - ```***bold italic***```: Three stars ***bold italics***
     
     - ```~~deleted~~```: Tildes give you ~~deleted~~ text
+
 ---
+
+# Editing your Markdown
+
 
 - Hashes(`##`) become new Section Titles in text
 
@@ -140,6 +133,8 @@ layout: true
 
 ---
 
+# Editing your Markdown
+
 - All this done with `plain text`. 
 
 - Just your keyboard and you. 
@@ -148,11 +143,9 @@ layout: true
 
 ---
 
-layout: false
-# Knitting your Markdown
+# Knitting your Markdown `r emo::ji("knit")`
 
 Hitting the knit button `r emo::ji("knit")` does one of many things:
-
 .pull-left[
 Changes your plain text to:
 
@@ -166,7 +159,7 @@ Changes your plain text to:
 ]
 
 .pull-right[
-```{r echo=FALSE, height = "30px"}
+```{r echo=FALSE, out.width= "450px", out.height="450px", fig.align='center'}
 knitr::include_graphics("./images/17.jpg")
 ```
 

@@ -12,17 +12,10 @@ output:
     number_sections: TRUE
     code_folding: hide
     code_download: TRUE
+abstract: Part of the `R for Artists and Designers` workshop course at the School of Foundation Studies, Srishti Manipal Institute of Art, Design, and Technology, Bangalore.
 ---
 
 # Introduction
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, message = FALSE)
-library(tidyverse)
-
-library(DiagrammeR)
-library(nomnoml)
-```
 
 There are many presentation and drawing tools out there. And these allow the user full control over the diagram so generally result in prettier diagrams that can convey more information to the audience at that point in time.
 
@@ -34,22 +27,228 @@ We will "explore" two packages to do this: `DiagrammeR`
 and `nomnoml`. Each of these follows a specific grammar so that sets of "sentences" will morph into very different kinds of diagrams.
 
 
+# Goals
+
+At the end of this Lab session, we will be able to:
+
+- Make conceptual Block Diagrams of different types, using `text`
+- Be able to create Flow Charts, Sequence Diagrams, Gantt Charts etc. to represent diverse realities in diagram form
+- Be able to use `mermaid` and `nomoml` syntax in R
+
+# Packages
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE)
+library(tidyverse)
+library(DiagrammeR)
+library(nomnoml)
+```
+
+We will work with `Diagrammer` first and then with `nomnoml`. 
 
 
 # Using DiagrammeR
 
-`DiagrammeR` is a unique package since it allows you create diagrams **and** the Network Diagrams that you have created using `tidygraph` and `ggraph`. And it uses the tidyverse pipe `%>%` syntax too! But that is for another time, or perhaps you ca explore this yourself!!
+`DiagrammeR` is a unique package since it allows you create Diagrams **and** the Network Diagrams that you have created using `tidygraph` and `ggraph`. And it uses the tidyverse pipe `%>%` syntax too! So it is worth exploring in its entirety. But that is for another time, or perhaps you can explore this yourself!!
 
 
-**Graphviz** support is an integral part of the `DiagrammeR` R package. It is another approach to creating diagrams using text. And hence the code you write is actually R code.
+**Mermaid** language (**What !! Another language?!!!**) is an approach to creating diagrams using text.  It is an integral part of the `DiagrammeR` R package. And hence the code you write is actually R code, to create Diagrams.
 
-Here is the basic structure of a `Graphviz` code:
+## Sequence Diagram
 
-    [strict] (graph | digraph) [ID] '{' stmt_list '}'
+Look at the code below: What do you think it represents?
+
+```{r Sequence_1}
+DiagrammeR("
+sequenceDiagram
+Arvind ->> Anamika: Why are you late today?
+Anamika ->> Anamika: Ulp...
+Anamika ->> Arvind: I am sorry... <br> may I come in please?
+
+Arvind ->> Komal: And you? What kept you?
+Komal ->> Anamika: (Quietly) He's having a bad day, dude...
+Anamika ->> Komal: (Whisper) Boomer...
+")
+
+```
+This is a simple Sequence Diagram! Shows a **strictly** imaginary exchange between a pair of students and an unknown Faculty Member.
+
+Let us now see how we can embellish this kind of diagram. Can we have a Garden of Forking Paths?
+
+```{r}
+DiagrammeR("
+    mermaid.sequenceConfig = {
+    diagramMarginX: 50,
+    diagramMarginY: 10,
+    boxTextMargin: 5,
+    noteMargin: 10,
+    messageMargin: 35,
+    mirrorActors: true
+};
+")
+```
+
+
+```{r Sequence_2}
+
+DiagrammeR("
+        sequenceDiagram
+        
+        alt Anamika is always punctual
+        Arvind ->> Anamika: Why haven't you put up your Daily Reflection?
+        Anamika ->> Anamika: Ulp...
+        Note right of Anamika : I have had it today..
+        Anamika ->> Arvind: I am sorry... 
+        Arvind ->> Anamika: Ok write it today
+        
+        else Anamika is usually tardy
+        Arvind ->> Anamika: Why haven't you put up your Daily Reflection?
+        Anamika ->> Anamika: Ulp...
+        Anamika ->> Arvind: I am sorry... 
+        Arvind ->> Anamika: This is not acceptable and will reflect in your grade
+        end
+        
+        Arvind ->> Komal: And you? What kept you?
+        Komal ->> Anamika: (Quietly) He's having a bad day, dude...
+        Anamika ->> Komal: (Whisper) Boomer...
+        Note over Anamika,Komal: Giggle...
+")
+
+```
+
+From here: <https://cyberhelp.sesync.org/blog/visualization-with-diagrammeR.html>
+
+
+```{r}
+grViz("digraph{
+
+      graph[rankdir = LR]
+  
+      node[shape = rectangle, style = filled]
+  
+      node[fillcolor = Coral, margin = 0.2]
+      A[label = 'Figure 1: Map']
+      B[label = 'Figure 2: Metrics']
+  
+      node[fillcolor = Cyan, margin = 0.2]
+      C[label = 'Figures.Rmd']
+  
+      node[fillcolor = Violet, margin = 0.2]
+      D[label = 'Analysis_1.R']
+      E[label = 'Analysis_2.R']
+  
+      subgraph cluster_0 {
+        graph[shape = rectangle]
+        style = rounded
+        bgcolor = Gold
+    
+        label = 'Data Source 1'
+        node[shape = rectangle, fillcolor = LemonChiffon, margin = 0.25]
+        F[label = 'my_dataframe_1.csv']
+        G[label = 'my_dataframe_2.csv']
+      }
+  
+      subgraph cluster_1 {
+         graph[shape = rectangle]
+         style = rounded
+         bgcolor = Gold
+    
+         label = 'Data Source 2'
+         node[shape = rectangle, fillcolor = LemonChiffon, margin = 0.25]
+         H[label = 'my_dataframe_3.csv']
+         I[label = 'my_dataframe_4.csv']
+      }
+  
+      edge[color = black, arrowhead = vee, arrowsize = 1.25]
+      C -> {A B}
+      D -> C
+      E -> C
+      F -> D
+      G -> D
+      H -> E
+      I -> E
+      
+      }")
+
+```
+
+
+```{r}
+mermaid("
+        graph BT
+        A((Salinity))
+        A-->B(Barnacles)
+        B-.->|-0.10|B1{Mussels}
+        A-- 0.30 -->B1
+
+        C[Air Temp]
+        C-->B
+        C-.->E(Macroalgae)
+        E-->B1
+        C== 0.89 ==>B1
+
+        style A fill:#FFF, stroke:#333, stroke-width:4px
+        style B fill:#9AA, stroke:#9AA, stroke-width:2px
+        style B1 fill:#879, stroke:#333, stroke-width:1px
+        style C fill:#ADF, stroke:#333, stroke-width:2px
+        style E fill:#9C2, stroke:#9C2, stroke-width:2px
+
+        ")
+```
+
+```{r}
+DiagrammeR("
+sequenceDiagram
+  Arvind ->>ticket seller: ask ticket
+  ticket seller->>database: seats
+  alt tickets available
+    database->>ticket seller: ok
+    ticket seller->>customer: confirm
+    Arvind ->>ticket seller: ok
+    ticket seller->>database: book a seat
+    ticket seller->>printer: print ticket
+  else sold out
+    database->>ticket seller: none left
+    ticket seller->>customer: sorry
+  end
+")
+```
+```{r}
+DiagrammeR("
+  graph LR
+    A-->B
+    A-->C
+    C-->E
+    B-->D
+    C-->D
+    D-->F
+    E-->F
+")
+
+```
+
+```{r }
+DiagrammeR(
+"graph TB;
+A(Rounded)-->B[Squared];
+B-->C{A Decision};
+C-->D[Square One];
+C-->E[Square Two];
+
+%% Now styling these blocks
+style A fill:#E5E25F;  
+style B fill:#87AB51; 
+style C fill:#3C8937;
+style D fill:#23772C;  
+style E fill:#B6E6E6;
+"
+)
+```
+
 
 ```{r DiagrammeR, fig.width=7, fig.height= 8, fig.align='center'}
 
-grViz("
+  grViz("
 digraph boxes_and_circles {
 
   # a 'graph' statement
@@ -68,10 +267,11 @@ digraph boxes_and_circles {
   E->6 4->6 5->7 6->7 3->8 3->1
 }
 ")
+
 ```
 
 
-## Sequence Diagram
+
 
 ## Sequence Diagram-2
 

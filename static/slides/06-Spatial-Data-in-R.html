@@ -11,15 +11,6 @@
     <script src="libs/xaringanExtra_fit-screen/fit-screen.js"></script>
     <link href="libs/panelset/panelset.css" rel="stylesheet" />
     <script src="libs/panelset/panelset.js"></script>
-    <script src="libs/htmlwidgets/htmlwidgets.js"></script>
-    <script src="libs/jquery/jquery.min.js"></script>
-    <link href="libs/leaflet/leaflet.css" rel="stylesheet" />
-    <script src="libs/leaflet/leaflet.js"></script>
-    <link href="libs/leafletfix/leafletfix.css" rel="stylesheet" />
-    <script src="libs/proj4/proj4.min.js"></script>
-    <script src="libs/Proj4Leaflet/proj4leaflet.js"></script>
-    <link href="libs/rstudio_leaflet/rstudio_leaflet.css" rel="stylesheet" />
-    <script src="libs/leaflet-binding/leaflet.js"></script>
     <link rel="stylesheet" href="css/ohsu.css" type="text/css" />
     <link rel="stylesheet" href="css/ohsu-fonts.css" type="text/css" />
   </head>
@@ -41,9 +32,7 @@ class: center, middle, inverse, title-slide
 
 
 
-layout: true
 # Let's get started
----
 
 Look at a piece of Google Map.
 
@@ -52,6 +41,8 @@ What different objects do you see?
 What information do you think went into making it?
 
 ---
+
+# Let's get started
 
 .pull-left[
 - To make maps, we need data organized in a specific way
@@ -71,8 +62,8 @@ What information do you think went into making it?
 The picture shows a familiar looking `data-frame` with the far-right column containing geometries....hmmm.
 
 ---
-layout:false
-## What is a Feature?
+
+# What is a Feature?
 
 - A Thing, or an Object in the real world, such as a building or a tree. 
 - As is the case with Objects, they often consist of other objects.  
@@ -88,7 +79,7 @@ layout:false
   - and does not intersect itself.
 ---
 
-## What is a Geometry?
+# What is a Geometry?
 
 - Features have a geometry describing where on Earth the feature is located  
 - they have attributes, which describe other properties.  
@@ -102,7 +93,7 @@ layout:false
 
 ---
 
-## What is Geospatial Data?
+# What is Geospatial Data?
 
 .pull-left[
 
@@ -124,10 +115,11 @@ layout:false
 .pull-right[
 ![Spatial Geometries](images/sf-classes.png)
 ]
+
 ---
-layout:true
-## How are these shapes represented?
----
+
+# How are these shapes represented?
+
 
 .pull-left[
 ![Geometry Primitives](https://cengel.github.io/R-spatial/img/wkt_primitives.png)
@@ -137,7 +129,13 @@ layout:true
 ![Multipart Geometry Representation](https://cengel.github.io/R-spatial/img/wkt_multipart.png)
 
 ]
+
+These formulaic descriptions are called **WKT: Well Known Text**
+
 ---
+# How are these shapes represented?
+
+Let's read a spatial file available with `sf`:
 
 
 ```r
@@ -156,24 +154,8 @@ Geodetic CRS:  NAD27
 ```
 
 
-```
-Simple feature collection with 3 features and 14 fields
-Geometry type: MULTIPOLYGON
-Dimension:     XY
-Bounding box:  xmin: -81.74107 ymin: 36.23388 xmax: -80.43531 ymax: 36.58965
-Geodetic CRS:  NAD27
-   AREA PERIMETER CNTY_ CNTY_ID      NAME  FIPS FIPSNO CRESS_ID BIR74 SID74
-1 0.114     1.442  1825    1825      Ashe 37009  37009        5  1091     1
-2 0.061     1.231  1827    1827 Alleghany 37005  37005        3   487     0
-3 0.143     1.630  1828    1828     Surry 37171  37171       86  3188     5
-  NWBIR74 BIR79 SID79 NWBIR79                       geometry
-*1      10  1364     0      19 MULTIPOLYGON (((-81.47276 3...
-*2      10   542     3      12 MULTIPOLYGON (((-81.23989 3...
-*3     208  3616     6     260 MULTIPOLYGON (((-80.45634 3...
-```
-
 ---
-layout:false
+
 ## The `sf` : Spatial Data Frame: Point Geometry
 
 .pull-left[
@@ -190,9 +172,7 @@ points &lt;-
              lat = rnorm(5, 23, 5)) %&gt;% 
   st_as_sf(., coords = c("lon", "lat"),
            crs = crs_india)
-
 str(points)
-
 *ggplot() +
 *   geom_sf(data = india) +
 *   geom_sf(data = points, colour = "red", size = 4)
@@ -201,9 +181,10 @@ str(points)
 
 .pull-right[
 
+
 ```
 Classes 'sf' and 'data.frame':	5 obs. of  1 variable:
-* $ geometry:sfc_POINT of length 5; first list element:  'XY' num  76.2 30
+* $ geometry:sfc_POINT of length 5; first list element:  'XY' num  70.1 17.8
  - attr(*, "sf_column")= chr "geometry"
  - attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: 
   ..- attr(*, "names")= chr(0) 
@@ -230,7 +211,6 @@ pl1 &lt;- st_polygon(pl1) %&gt;% # feature geometry
   st_sfc() %&gt;% # feature column
   st_as_sf(crs = crs_india) # spatial data frame
 str(pl1)
-
 *ggplot() +
 *   geom_sf(data = india) +
 *   geom_sf(data = pl1, colour = "red")
@@ -309,6 +289,7 @@ class: center, bottom, inverse
 Image credit: [alice-in-wonderland.net](https://www.alice-in-wonderland.net/resources/background/tenniel-and-his-illustrations/)
 
 ---
+
 ## Map Projections: Through the Looking Glass
 
 
@@ -317,92 +298,248 @@ Image credit: [alice-in-wonderland.net](https://www.alice-in-wonderland.net/reso
 ]
 .pull-right[
 ![](images/2book18.jpg)
-We see Maps Through The Looking Glass..  
+We see Maps Through The Looking Glass...  
 No Two Map Projections are Alike!
 ]
-
----
-# A 2D Flat projection
-
-
-
 ---
 
----
+## The Gall-Peters Projection
 
-class: inverse, center, middle
-## Getting hold of Spatial Data
+&lt;iframe width="629" height="352" src="https://www.youtube.com/embed/vVX-PrBRtTY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen&gt;&lt;/iframe&gt;
 
-Using **osmdata**  
-Using **rnaturalearth**  
-
+From "The West Wing" Season 2 Episode 16.
 
 ---
-layout:true
-## Using `osmdata`
----
+
+# Projections with `coord_sf()`
 
 .pull-left[
-lorem ipsum
-![](https://youtu.be/zNzZ1PfUDNk)
-]
-
-.pull-right[
-lorem ipsum
-]
----
-
-.pull-left[
-lorem ipsum
-
-]
-
-.pull-right[
-lorem ipsum
-]
-
----
-layout: true
-## Using `rnaturalearth`
-
-
----
-
-.pull-left[
-lorem ipsum
-
-]
-
-.pull-right[
-lorem ipsum
-]
-
----
-
-.pull-left[
-lorem ipsum
-
-]
-
-.pull-right[
-lorem ipsum
-]
-
----
-# Interactive Maps with `leaflet`
 
 ```r
-library(leaflet)
-leaflet() %&gt;% addTiles() %&gt;% setView(-93.65, 42.0285, zoom = 17)
+ggplot() + 
+  geom_sf(data = world) + 
+    geom_sf(data = india) + 
+    geom_sf(data = points, colour = "red", size = 4) +
+* coord_sf(crs = "+proj=laea +lat_0=23 +lon_0=77 +x_0=4321000 #&lt;&lt; +y_0=3210000 +ellps=GRS80 +units=m  +no_defs")
+```
+]
+.pull-right[
+&lt;img src="06-Spatial-Data-in-R_files/figure-html/csf-1.png" width="672" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+class: center, middle
+
+# Map Making with `tmap`
+### Adapted from SIGR2021 Conference (*Sciences de l'information géographique reproductibles*)
+#### Saint-Pierre-d'Oléron (France)
+#### 27/June/2021 to 3/July/2021
+#### "GIS and mapping": "A workshop on GIS and mapping with R: part 2"
+#### Jakub Nowosad &amp; Robin Lovelace
+
+---
+
+# Mapping
+
+- We have seen a bit of `ggplot + geom_sf + coord_sf()`
+- This is good for static plots
+- `tmap` can give us both static and interactive plots
+- And some fancy map templates too!!
+
+---
+
+
+# Mapping
+
+Let's look at London Boroughs and places where we can hire bicycles.
+
+
+```r
+data("lnd", package = "spData") # Boroughs of London
+data("cycle_hire_osm", package = "spData") # Cycle Hire locations
+
+str(lnd)
 ```
 
-<div id="htmlwidget-2b0dd12048ea10a3b609" style="width:100%;height:1800px;" class="leaflet html-widget"></div>
-<script type="application/json" data-for="htmlwidget-2b0dd12048ea10a3b609">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"http://openstreetmap.org\">OpenStreetMap<\/a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA<\/a>"}]}],"setView":[[42.0285,-93.65],17,[]]},"evals":[],"jsHooks":[]}</script>
+```
+Classes 'sf' and 'data.frame':	33 obs. of  8 variables:
+ $ NAME      : Factor w/ 33 levels "Barking and Dagenham",..: 21 8 5 18 9 16 17 15 4 2 ...
+ $ GSS_CODE  : Factor w/ 33 levels "E09000001","E09000002",..: 21 8 6 18 9 16 17 15 5 3 ...
+ $ HECTARES  : num  3726 8649 15013 5659 5554 ...
+ $ NONLD_AREA: num  0 0 0 60.8 0 ...
+ $ ONS_INNER : Factor w/ 2 levels "F","T": 1 1 1 1 1 1 1 1 1 1 ...
+ $ SUB_2009  : Factor w/ 0 levels: NA NA NA NA NA NA NA NA NA NA ...
+ $ SUB_2006  : Factor w/ 0 levels: NA NA NA NA NA NA NA NA NA NA ...
+ $ geometry  :sfc_MULTIPOLYGON of length 33; first list element: List of 1
+  ..$ :List of 1
+  .. ..$ : num [1:1271, 1:2] -0.331 -0.331 -0.331 -0.33 -0.33 ...
+  ..- attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"
+ - attr(*, "sf_column")= chr "geometry"
+ - attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA
+  ..- attr(*, "names")= chr [1:7] "NAME" "GSS_CODE" "HECTARES" "NONLD_AREA" ...
+```
+
+---
+
+# Mapping
+
+
+```r
+str(cycle_hire_osm)
+```
+
+```
+Classes 'sf' and 'data.frame':	540 obs. of  6 variables:
+ $ osm_id         : Factor w/ 540 levels "1010857552","1012775602",..: 8 228 229 230 231 232 233 234 235 236 ...
+ $ name           : Factor w/ 445 levels "Abbey Orchard Street",..: 440 298 71 NA NA 128 244 67 138 100 ...
+ $ capacity       : num  14 NA 11 NA NA NA NA 20 6 17 ...
+ $ cyclestreets_id: Factor w/ 1 level "26743": NA NA NA NA NA NA NA NA NA NA ...
+ $ description    : Factor w/ 1 level "Barclays Cycle Hire": NA NA NA NA NA NA NA NA NA NA ...
+ $ geometry       :sfc_POINT of length 540; first list element:  'XY' num  -0.0934 51.5291
+ - attr(*, "sf_column")= chr "geometry"
+ - attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA
+  ..- attr(*, "names")= chr [1:5] "osm_id" "name" "capacity" "cyclestreets_id" ...
+```
+
+---
+# Mapping
+
+.pull-left[
+
+```r
+*tm_shape(lnd) +
+* tm_borders(col = "black", lwd = 1) +
+* tm_fill("NAME", legend.show = FALSE)
+```
+]
+.pull-right[
+&lt;img src="06-Spatial-Data-in-R_files/figure-html/tm1-1.png" width="672" style="display: block; margin: auto;" /&gt;
+]
+
+---
+# `tmap` Layers are in *groups*
+
+Groups start with `tm_shape(data = ...)` 
+
+.pull-left[
+
+```r
+*# Group 1
+tm_shape(lnd) +
+  tm_borders(col = "black",lwd = 1) + 
+  tm_fill("NAME", legend.show = FALSE) +
+
+*# Group 2 = Layer 2
+* tm_shape(cycle_hire_osm) +
+* tm_symbols(size = 0.2, col = "red")
+```
+]
+.pull-right[
+&lt;img src="06-Spatial-Data-in-R_files/figure-html/tm1a-1.png" width="672" style="display: block; margin: auto;" /&gt;
+]
+
+---
+# Add graticules and legends
+
+.pull-left[
+
+```r
+# Group 1
+tm_shape(lnd) +
+  tm_borders(col = "black",lwd = 1) + 
+  tm_fill("NAME", legend.show = FALSE) +
+# Group 2 = Layer 2
+  tm_shape(cycle_hire_osm) + 
+  tm_symbols(size = 0.2, col = "red") +
+  
+* tm_graticules() +
+* tm_add_legend(type = "symbol", col = "red",
+*               title = "Hire Cycles Here")
+```
+]
+.pull-right[
+&lt;img src="06-Spatial-Data-in-R_files/figure-html/tm2-1.png" width="672" style="display: block; margin: auto;" /&gt;
+]
+
+---
+# Add Scale and Compass to the Map
+
+.pull-left[
+
+https://geocompr.github.io/post/2019/tmap-color-scales/
+
+
+```r
+# Group 1
+tm_shape(lnd) +
+  tm_borders(col = "black",lwd = 1) + 
+  tm_fill("NAME", legend.show = FALSE) +
+# Group 2 = Layer 2
+  tm_shape(cycle_hire_osm) + 
+  tm_symbols(size = 0.2, col = "red") +
+  tm_graticules() +
+  tm_add_legend(type = "symbol", col = "red",
+                title = "Hire Cycles Here") +
+
+* tm_scale_bar(position=c("left", "bottom"),
+*              text.size = 1) +
+* tm_compass(position = c("right", "top"),
+*            type = "rose",
+*            size = 2)
+```
+]
+
+.pull-right[
+&lt;img src="06-Spatial-Data-in-R_files/figure-html/tm1b-1.png" width="672" style="display: block; margin: auto;" /&gt;
+]
+
+---
+# Add Credits and Layout Options
+
+.pull-left[
+
+
+```r
+mymap &lt;- 
+# Group 1
+tm_shape(lnd) +
+  tm_borders(col = "black", lwd = 1) + 
+  tm_fill("NAME", legend.show = FALSE) +
+# Group 2 = Layer 2
+  tm_shape(cycle_hire_osm) + 
+  tm_symbols(size = 0.2, col = "red") +
+  tm_graticules() +
+  tm_add_legend(type = "symbol", col = "red",
+                title = "Hire Cycles Here") +
+  tm_scale_bar(position=c("left", "bottom"),text.size = 1) + 
+  tm_compass(position = c("right", "top"), type = "rose",
+             size = 2) +
+  
+* tm_credits(text = "Arvind V, 2021",
+*            position = c("left", "bottom")) +
+* tm_layout(main.title = "London Bike Share",
+*           bg.color = "lightblue",
+*           inner.margins = c(0, 0, 0, 0))
+mymap
+```
+]
+.pull-right[
+&lt;img src="06-Spatial-Data-in-R_files/figure-html/tm1c-1.png" width="672" style="display: block; margin: auto;" /&gt;
+]
 
 
 
 ---
-class: center, middle
+
+# Saving
+
+
+```r
+tmap_save(my_map, filename = "my_map.png", width = 300, height = 800, dpi = 300)
+```
+
+---
 
 # Thanks!
 

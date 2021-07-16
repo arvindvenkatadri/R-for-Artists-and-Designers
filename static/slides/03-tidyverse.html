@@ -4,7 +4,7 @@
     <title>Slides 03</title>
     <meta charset="utf-8" />
     <meta name="author" content="Arvind Venkatadri" />
-    <meta name="date" content="2021-07-12" />
+    <meta name="date" content="2021-07-13" />
     <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/ohsu.css" type="text/css" />
@@ -17,7 +17,7 @@ class: center, middle, inverse, title-slide
 # Slides 03
 ## Working in the Tidyverse
 ### Arvind Venkatadri
-### 2021-07-12
+### 2021-07-13
 
 ---
 
@@ -26,18 +26,6 @@ class: center, middle, inverse, title-slide
 
 
 
-
-# Tidyverse basics
-
-So far in this course you learned:
-
-- `&lt;-` (variable assignment)
-- `%&gt;%` (then...) ( aur phir...)
-- `dplyr`, `ggplot2` (packages)
-  - `install.packages("dplyr")` (1x per machine)
-  - `library(dplyr)` (1x per work session)
-
----
 class: center, middle, inverse
 
 # 📇
@@ -45,6 +33,53 @@ class: center, middle, inverse
 ## Let's review
 
 ---
+
+## Some Basic Operations/Things in R
+
+- `&lt;-` (variable assignment) ( Alt and - keys together)
+- `%&gt;%` (then...) ( aur phir...) (Shift + Ctrl + M / Cmd + Ctrl + M)
+
+- `dplyr`, `ggplot2` (packages)
+  - `install.packages("dplyr")` (1x per machine)
+  - `library(dplyr)` (1x per work session)
+
+
+---
+
+layout: true
+# What is the Tidyverse?
+
+---
+
+Yesterday we saw that: The tidyverse is 
+
+- an opinionated collection of R `packages` designed for data science
+- All packages share an underlying design philosophy, grammar, and data structures.
+
+---
+
+- Packages are:
+    - `readr`: to parse and read in data in various formats
+    - `tidyr`: to clean up data, rows and columns
+    - `dplyr`: to manipulate data, add new columns, create summaries
+    - `ggplot`: Data Visualization
+
+- And a few others...
+    - `stringr`: to process character/string data
+    - `forcats`: Not about cats 🐱, but to deal with factors. We will touch factors, but won't work with forcats. 
+    - `purrr`: also not about cats, but about loops and iterations
+
+- No the Cheshire Cat was not involved, but there were others who were found guilty
+
+---
+
+layout: false
+# What does "tidy data" mean?
+
+![](https://www.openscapes.org/img/blog/tidydata/tidydata_1.jpg)
+
+---
+
 # Data for today
 
 We'll use data from the Museum of Modern Art (MoMA)
@@ -54,49 +89,82 @@ We'll use data from the Museum of Modern Art (MoMA)
 - And by [others](https://medium.com/@foe/here-s-a-roundup-of-how-people-have-used-our-data-so-far-80862e4ce220)
 
 ---
+
 # Get the data
 
-Use this code chunk to import my cleaned CSV file:
+Use this code chunk to import the cleaned CSV file:
 
 
 ```r
 library(readr)
-moma &lt;- read_csv("http://bit.ly/cs631-moma")
+moma &lt;- read_csv(here::here("static", "labs", "data", "artworks-cleaned.csv"))
 ```
 
 
 ---
 
-# Data wrangling so far
+layout: true
 
-All functions from `dplyr` package
+# Data wrangling
+
+---
+
+
+When working with data you must:
+
+* Figure out what you want to do. Be able to state that in English.
+
+* Describe those tasks in the form of a computer program.
+
+* Execute the program.
+
+The `dplyr` package makes these steps fast and easy:
+
+* By constraining your options, it helps you think about your data manipulation challenges.
+
+* It provides simple English **"verbs"**, functions that correspond to the most common data manipulation tasks, to help you translate your thoughts into code.
+
+---
+
+`dplyr` aims to provide a function for each basic verb of data manipulation. These verbs can be organised into three categories based on the component of the dataset that they work with:
 
 .pull-left[
-From DataCamp Chapter 1
 
-- print a tibble
-
-- `filter`
-
-- `arrange`
-
-- `mutate`
+* Rows:
+  * `filter()` chooses rows based on *column* values.
+  * `slice()` chooses rows based on location.
+  * `arrange()` changes the order of the rows.
+  
 ]
 
 --
 
 .pull-right[
-From Lab 01
 
-
-- `glimpse`
-
-- `distinct`
-
-- `count`
+* Columns:
+  * `select()` changes whether or not a column is included.
+  * `rename()` changes the name of columns.
+  * `mutate()` changes the values of columns and creates new columns.
+  * `relocate()` changes the order of the columns.
+  * `distinct()` unique values in each column
+  * `count` number of occurrences of each unique value in a column
 ]
 
+Some of you may be able to relate this to MS Excel...
+
+
 ---
+
+* Groups of rows:
+  * `summarise()` collapses a group into a single row.
+
+* Whole data.frame/tibble
+  * `glimpse()` see what variables are there
+
+
+---
+
+layout:false
 class: middle, center, inverse
 
 ![](../images/rladylego-pipe.jpg)
@@ -105,186 +173,13 @@ class: middle, center, inverse
 
 *image courtesy [@LegoRLady](https://twitter.com/LEGO_RLady/status/986661916855754752)*
 
----
-class: middle, center, inverse
-
-# ⌛️
-
-## Let's review some helpful functions for `filter`
-
----
-class: inverse, bottom, center
-background-image: url("../images/peapod.png")
-background-size: 25%
-
-
-## Base R + Tidyverse
-
----
-class: middle, center, inverse
-
-#💡
-
-## First: 
-
-## Logical Operators
-
-
 
 ---
 
-
-
-```r
-?base::Logic
-```
-
-
-
-
-
-&lt;table&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:left;"&gt; Operator &lt;/th&gt;
-   &lt;th style="text-align:left;"&gt; Description &lt;/th&gt;
-   &lt;th style="text-align:left;"&gt; Usage &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; &amp;amp; &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; and &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; x &amp;amp; y &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; | &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; or &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; x | y &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; xor &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; exactly x or y &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; xor(x, y) &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; ! &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; not &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; !x &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
+layout: true
+## Some Sample Questions!
 
 ---
-
-Logical or (`|`) is inclusive, so `x | y` really means: 
-
-* x or 
-* y or 
-* both x &amp; y
-
-Exclusive or (`xor`) is exclusive, so `xor(x, y)` really means: 
-
-* x or
-* y...
-* but not both x &amp; y
-
-
-```r
-x &lt;- c(0, 1, 0, 1)
-y &lt;- c(0, 0, 1, 1)
-boolean_or &lt;- x | y
-exclusive_or &lt;- xor(x, y)
-cbind(x, y, boolean_or, exclusive_or)
-```
-
-```
-     x y boolean_or exclusive_or
-[1,] 0 0          0            0
-[2,] 1 0          1            1
-[3,] 0 1          1            1
-[4,] 1 1          1            0
-```
-
----
-class: middle, center, inverse
-
-#💡
-
-## Second: 
-
-## Comparisons
-
----
-
-```r
-?Comparison
-```
-
-
-
-
-&lt;table&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:left;"&gt; Operator &lt;/th&gt;
-   &lt;th style="text-align:left;"&gt; Description &lt;/th&gt;
-   &lt;th style="text-align:left;"&gt; Usage &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; &amp;lt; &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; less than &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; x &amp;lt; y &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; &amp;lt;= &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; less than or equal to &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; x &amp;lt;= y &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; &amp;gt; &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; greater than &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; x &amp;gt; y &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; &amp;gt;= &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; greater than or equal to &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; x &amp;gt;= y &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; == &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; exactly equal to &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; x == y &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; != &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; not equal to &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; x != y &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; %in% &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; group membership* &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; x %in% y &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; is.na &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; is missing &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; is.na(x) &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; !is.na &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; is not missing &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; !is.na(x) &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-*(shortcut to using `|` repeatedly with `==`)
-
----
-## Lab 02: Challenge 1 (`dplyr`)
 
 1. How many paintings (rows) are in `moma`? How many variables (columns) are in `moma`?
 1. What is the first painting acquired by MoMA? Which year? Which artist? What title?
@@ -299,104 +194,234 @@ If you want more:
 1. In what year were the most paintings acquired? Created?
 1. In what year was the first painting by a (solo) female artist acquired? When was that painting created? Which artist? What title? 
 
-
-
 ---
 
-# The Essence of ggplot
-
-all `ggplot2`
-
-- `aes(x = , y = )` (aesthetics)
-- `aes(x = , y = , color = )` (add color)
-- `aes(x = , y = , size = )` (add size)
-- `+ facet_wrap(~ )` (facetting)
-
----
-# Old School (Challenge 2)&lt;sup&gt;1&lt;/sup&gt;
-
-- Sketch the graphics below on paper, where the `x`-axis is variable `year_created` and the `y`-axis is variable `year_acquired`
-
-
-```
-# A tibble: 4 x 4
-  painted acquired  area gender
-    &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; 
-1    1980     1985     3 male  
-2    1990     1995     2 male  
-3    2000     2005     1 female
-4    2010     2015     2 female
-```
-
-&lt;!-- Copy to chalkboard/whiteboard --&gt;
-
-1. A scatter plot
-1. A scatter plot where the `color` of the points corresponds to `gender`
-1. A scatter plot where the `size` of the points corresponds to `area`
-
-.footnote[
-[1] Shamelessly borrowed with much appreciation to [Chester Ismay](https://ismayc.github.io/talks/ness-infer/slide_deck.html)
-]
-
----
-
-# 1. A scatterplot
+1. How many paintings (rows) are in `moma`? How many variables (columns) are in `moma`?
 
 
 ```r
-library(ggplot2)
-ggplot(moma_ex, aes(painted, acquired)) + 
-  geom_point()
+glimpse(moma)
 ```
---
 
-&lt;img src="03-tidyverse_files/figure-html/unnamed-chunk-11-1.png" width="80%" style="display: block; margin: auto;" /&gt;
-
+```
+Rows: 2,253
+Columns: 23
+$ title             &lt;chr&gt; "Rope and People, I", "Fire in the Evening", "P~
+$ artist            &lt;chr&gt; "Joan Miró", "Paul Klee", "Paul Klee", "Pablo P~
+$ artist_bio        &lt;chr&gt; "(Spanish, 1893–1983)", "(German, born Switzerl~
+$ artist_birth_year &lt;dbl&gt; 1893, 1879, 1879, 1881, 1880, 1879, 1943, 1880,~
+$ artist_death_year &lt;dbl&gt; 1983, 1940, 1940, 1973, 1946, 1953, 1977, 1950,~
+$ num_artists       &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,~
+$ n_female_artists  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ n_male_artists    &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,~
+$ artist_gender     &lt;chr&gt; "Male", "Male", "Male", "Male", "Male", "Male",~
+$ year_acquired     &lt;dbl&gt; 1936, 1970, 1966, 1955, 1939, 1968, 1997, 1931,~
+$ year_created      &lt;dbl&gt; 1935, 1929, 1927, 1919, 1925, 1919, 1970, 1929,~
+$ circumference_cm  &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+$ depth_cm          &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+$ diameter_cm       &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+$ height_cm         &lt;dbl&gt; 104.8, 33.8, 60.3, 215.9, 50.8, 129.2, 200.0, 5~
+$ length_cm         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+$ width_cm          &lt;dbl&gt; 74.6, 33.3, 36.8, 78.7, 54.0, 89.9, 200.0, 38.1~
+$ seat_height_cm    &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+$ purchase          &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE~
+$ gift              &lt;lgl&gt; TRUE, FALSE, FALSE, TRUE, TRUE, FALSE, TRUE, TR~
+$ exchange          &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE,~
+$ classification    &lt;chr&gt; "Painting", "Painting", "Painting", "Painting",~
+$ department        &lt;chr&gt; "Painting &amp; Sculpture", "Painting &amp; Sculpture",~
+```
 
 ---
 
+2. What is the first painting acquired by MoMA? Which year? Which artist? What title?
+    - *Hint: you may want to look into `select` + `arrange`*
 
-# 2. `color` points by `gender`
+```r
+moma %&gt;% 
+  select(year_acquired) %&gt;% 
+  arrange(year_acquired)
+```
+
+```
+# A tibble: 2,253 x 1
+   year_acquired
+           &lt;dbl&gt;
+ 1          1930
+ 2          1930
+ 3          1931
+ 4          1931
+ 5          1932
+ 6          1934
+ 7          1934
+ 8          1934
+ 9          1934
+10          1934
+# ... with 2,243 more rows
+```
+
+```r
+moma %&gt;% 
+  select(title,artist,year_acquired) %&gt;% 
+  arrange(year_acquired)
+```
+
+```
+# A tibble: 2,253 x 3
+   title                                       artist         year_acquired
+   &lt;chr&gt;                                       &lt;chr&gt;                  &lt;dbl&gt;
+ 1 House by the Railroad                       Edward Hopper           1930
+ 2 Seated Nude                                 Bernard Karfi~          1930
+ 3 Daylight Savings Time                       Pierre Roy              1931
+ 4 Plums on a Plate                            Preston Dicki~          1931
+ 5 Dr. Mayer-Hermann                           Otto Dix                1932
+ 6 The Bather                                  Paul Cézanne            1934
+ 7 Pines and Rocks (Fontainebleau?)            Paul Cézanne            1934
+ 8 Still Life with Ginger Jar, Sugar Bowl, an~ Paul Cézanne            1934
+ 9 Still Life with Apples                      Paul Cézanne            1934
+10 Italian Landscape                           Arthur B. Dav~          1934
+# ... with 2,243 more rows
+```
+
+---
+
+1. What is the oldest painting in the collection? Which year? Which artist? What title? *(see above hint)*
 
 
 ```r
-library(ggplot2)
-ggplot(moma_ex, aes(painted, acquired, color = gender)) + 
-  geom_point()
+moma %&gt;% 
+  select(title,artist,year_created) %&gt;% 
+  arrange(year_created)
 ```
---
 
-&lt;img src="03-tidyverse_files/figure-html/unnamed-chunk-13-1.png" width="80%" style="display: block; margin: auto;" /&gt;
-
+```
+# A tibble: 2,253 x 3
+   title                                    artist       year_created
+   &lt;chr&gt;                                    &lt;chr&gt;               &lt;dbl&gt;
+ 1 Landscape at Daybreak                    Odilon Redon         1872
+ 2 Apache (Man on Horseback)                Odilon Redon         1875
+ 3 Apache (Man on Horseback II)             Odilon Redon         1875
+ 4 Fishing Boat                             Odilon Redon         1875
+ 5 Rocky Peak                               Odilon Redon         1875
+ 6 The Rocky Slope                          Odilon Redon         1875
+ 7 Landscape with Rocks, near Royan         Odilon Redon         1875
+ 8 Still Life with Fruit Dish               Paul Cézanne         1879
+ 9 L'Estaque                                Paul Cézanne         1879
+10 On the Cliff at Pourville, Clear Weather Claude Monet         1882
+# ... with 2,243 more rows
+```
 
 ---
 
-# 3. `size` points by `area`
+1. How many distinct artists are there?
 
 
 ```r
-library(ggplot2)
-ggplot(moma_ex, aes(painted, acquired, size = area)) + 
-  geom_point()
+moma %&gt;% distinct(artist) %&gt;% count()
 ```
---
 
-&lt;img src="03-tidyverse_files/figure-html/unnamed-chunk-15-1.png" width="80%" style="display: block; margin: auto;" /&gt;
+```
+# A tibble: 1 x 1
+      n
+  &lt;int&gt;
+1   989
+```
+
+---
+
+1. Which artist has the most paintings in the collection? How many paintings are by this artist?
+
+
+```r
+moma %&gt;% 
+  group_by(artist) %&gt;% 
+  summarise(paintings = n()) %&gt;% 
+  arrange(desc(paintings))
+```
+
+```
+# A tibble: 989 x 2
+   artist           paintings
+   &lt;chr&gt;                &lt;int&gt;
+ 1 Pablo Picasso           55
+ 2 Henri Matisse           32
+ 3 On Kawara               32
+ 4 Jacob Lawrence          30
+ 5 Batiste Madalena        25
+ 6 Jean Dubuffet           25
+ 7 Odilon Redon            25
+ 8 Ben Vautier             24
+ 9 Frank Stella            23
+10 Philip Guston           23
+# ... with 979 more rows
+```
 
 ---
 
-# [The Five-Named Graphs](http://moderndive.com/3-viz.html#FiveNG)
+1. How many paintings are by male vs female artists?
 
 
-- Scatterplot: `geom_point()`
-- Line graph: `geom_line()`
-- Histogram: `geom_histogram()`
-- Boxplot: `geom_boxplot()`
-- Bar graph: `geom_bar()` or `geom_col` (see [Lab 02](../02-Pronouns-and-Data.html))
+```r
+moma %&gt;% 
+  group_by(artist_gender) %&gt;% 
+  summarise(count = n())
+```
+
+```
+# A tibble: 3 x 2
+  artist_gender count
+  &lt;chr&gt;         &lt;int&gt;
+1 Female          252
+2 Male           1991
+3 &lt;NA&gt;             10
+```
+
+
+---
+
+1. In what year was the first painting by a (solo) female artist acquired? When was that painting created? Which artist? What title?
+
+
+
+```r
+moma %&gt;% 
+  select(title, artist, year_acquired, artist_gender) %&gt;%  arrange(year_acquired, artist_gender)
+```
+
+```
+# A tibble: 2,253 x 4
+   title                           artist       year_acquired artist_gender
+   &lt;chr&gt;                           &lt;chr&gt;                &lt;dbl&gt; &lt;chr&gt;        
+ 1 House by the Railroad           Edward Hopp~          1930 Male         
+ 2 Seated Nude                     Bernard Kar~          1930 Male         
+ 3 Daylight Savings Time           Pierre Roy            1931 Male         
+ 4 Plums on a Plate                Preston Dic~          1931 Male         
+ 5 Dr. Mayer-Hermann               Otto Dix              1932 Male         
+ 6 The Bather                      Paul Cézanne          1934 Male         
+ 7 Pines and Rocks (Fontainebleau~ Paul Cézanne          1934 Male         
+ 8 Still Life with Ginger Jar, Su~ Paul Cézanne          1934 Male         
+ 9 Still Life with Apples          Paul Cézanne          1934 Male         
+10 Italian Landscape               Arthur B. D~          1934 Male         
+# ... with 2,243 more rows
+```
+
+
+
+
+
+
 
 
 
 ---
+
+buffer
+
+
+
+---
+
+
+
 class: inverse, middle, center
 
 
@@ -415,6 +440,7 @@ class: inverse, middle, center
 [ModernDive `dplyr` chapter](http://moderndive.com/5-wrangling.html)
 
 [RStudio `dplyr` Cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf)
+
 
 
     </textarea>

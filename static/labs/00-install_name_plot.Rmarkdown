@@ -1,7 +1,7 @@
 ---
 title: 'Lab 00 - Introduce Yourself'
 author: "Arvind Venkatadri"
-date: 05/July/2021
+date: 06/July/2021
 output:
   html_document:
     theme: flatly
@@ -35,10 +35,10 @@ library(babynames)
 
 # Instructions
 
->Keep this tab open in your browser as you work through it.  
-Read all the way through step 7, and complete this lab before you come to class on Day 1!   
-Download this file using the `Code->Download Rmd` button at the top right corner.   
-Change the author name to your own!
+1. Keep this tab open in your browser as you work through it.  
+2. Read all the way through step 8.
+3. Download this file using the `Code->Download Rmd` button at the top right corner.   
+4. Change the author name to your own!
 
 # Overview
 
@@ -93,7 +93,7 @@ Launch RStudio. You should get a window similar to the screenshot you see [here]
 The version of R that you just downloaded is considered base R, which provides you with good but basic statistical computing and graphics powers. For analytical and graphical super-powers, you'll need to install add-on packages, which are user-written, to extend/expand your R capabilities. Packages can live in one of two places:
 
 * They may be carefully curated by CRAN (which involves a thorough submission and review process), and thus are easy install using `install.packages("name_of_package", dependencies = TRUE)`. 
-* Alternatively, they may be available via GitHub. To download these packages, you first need to install the `devtools` package.
+* Alternatively, they may be available via GitHub ( a code repository maintained by the coding community. Owned by Microsoft). To download these packages, you first need to install the `devtools` package.
 
 ```{r devtools, eval = FALSE}
 install.packages("devtools")
@@ -117,14 +117,14 @@ install.packages(c("dplyr", "ggplot2", "babynames"),
 <p class="text-info"> __Heads up:__ We should formally introduce the combine command, [`c()`](http://stat.ethz.ch/R-manual/R-patched/library/base/html/c.html), used above. You will use this often- any time you want to combine things into a vector.</p>
 
 ```{r c_demo}
-c("hello", "my", "name", "is", "alison")
+c("hello", "my", "name", "is", "arvind")
 c(1:3, 20, 50)
 ```
 
 Mind your use of quotes carefully with packages.
 
 * To *install* a package, you put the name of the package in quotes as in `install.packages("name_of_package")`. 
-* To *use* an already installed package, you must load it first, as in `library(name_of_package)`, leaving the name of the package bare. You only need to do this once per RStudio session.
+* To *use* an already installed package, you must load it first, as in `library(name_of_package)`, leaving the name of the package bare. You only need to do this **once** per RStudio session.
 * If you want *help*, no quotes are needed: `help(name_of_package)` or `?name_of_package`.
 * If you want the *citation* for a package (and you should give credit where credit is due), ask R as in `citation("name_of_package")`.
 
@@ -143,7 +143,7 @@ citation("ggplot2")
 
 # Make a name plot
 
-Open a new R script in RStudio by going to `File --> New File --> R Script`. For this first foray into R, I'll give you the code, so sit back and relax and feel free to copy and paste my code with some small tweaks.
+Open a new R script in RStudio by going to `File --> New File --> R Script`. For this first foray into R, I'll give you the code ( right here ), so sit back and relax and feel free to copy and paste my code with some small tweaks.
 
 First load the packages:
 
@@ -164,7 +164,7 @@ names(babynames) # same
 ```
 
 
-If you have done the above and produced sane-looking output, you are ready for the next bit. Use the code below to create a new data frame called `alison`.
+If you have done the above and produced sane-looking output, you are ready for the next bit. Use the code below to create a new data frame called `arvind`. 
 
 ```{r manipulate_name_data}
 arvind <- babynames %>%
@@ -218,7 +218,9 @@ help(ggsave)
 ggsave("arvind_v.pdf", plot) # please make the filename unique!
 ```
 
-Upload this exported plot to Teams -> Assignments before Wednesday at noon. You can add a cat picture also along with this, if you are an ailurophile like me. 
+Upload this exported plot to Teams -> Assignments. 
+
+**Before you do that**, check that you can submit stuff/assignments on Teams by uploading a cat picture first, especially if you are an ailurophile like me. (Acceptable Breeds: Scottish Folds or Maine Coons)
 
 # Other cool `babynames` projects
 

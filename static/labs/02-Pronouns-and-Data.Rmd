@@ -1,5 +1,5 @@
 ---
-title: "Lab-02: Pronouns and data"
+title: "Lab-02: Pronouns and Data"
 author: "Arvind Venkatadri"
 date: 06/July/2021
 output:
@@ -9,44 +9,96 @@ output:
     toc_float: TRUE
     toc_depth: 2
     number_sections: TRUE
+    code_folding: hide
     code_download: TRUE
 
-abstract: Part of the `R for Artists and Designers` course at the School of Foundation Studies, Srishti Manipal Institute of Art, Design, and Technology, Bangalore.
+abstract: Part of the `R for Artists and Designers` workshop course at the School of Foundation Studies, Srishti Manipal Institute of Art, Design, and Technology, Bangalore.
 ---
+
+# Goals for Lab 02
+
+- Understand different kinds of data variables
+- Appreciate how they can be identified based on the *Interrogative Pronouns* they answer to
+- Understand how each kind of variable lends itself to a specific geometric aspect in the data visualization.
+- Understand how ask Questions of Data to develop Visualizations
+
+
+# Packages needed
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
-library(ggformula)
 library(palmerpenguins)
-library(mosaic)
-library(mosaicCore)
-library(mosaicData)
 library(RColorBrewer)
 ```
 
 # Introduction
-In this document, we try to connect story-making questions with two other ideas:
 
-a) a Variable in a dataset
-b) A computed Quantity or a Visual based on one or more Variables
-c) Add to our story-line, questions and wonderments...
+In this RMarkdown document, we try to connect story-making **questions** with two ideas:
 
-The idea is to get the intuition behind data, and develop the right questions and hypotheses, that lead to the appropriate direction in exploratory data analysis (EDA) using graphs and charts in R.
+a) a *Variable* in a dataset
+b) A computed *Quantity* or a *Visual*, based on one or more Variables
 
-# References
-1. Daniel Kaplan and Randall Prium, [Formula Interface for ggplot2](https://cran.r-project.org/web/packages/ggformula/vignettes/ggformula.html)
-- **Short** Note on `ggformula`. Absolutely must see and work through to get jump-started on `ggformula`. 
+So: a question identifies a variable and a question also leads to a data visualization. The idea is to get the intuition behind data, and develop the right questions and hypotheses, that lead to the appropriate direction in exploratory data analysis (EDA) using graphs and charts in R.
 
-2. Data Visualization with R, [Robert Kabacoff](https://rkabacoff.github.io/datavis/)
-- Good crisp descriptions of many kinds of graphs, no nonsense book. Available free on the web. 
+<div class="panel panel-success">
+  <div class="panel-heading">When it is YOUR TURN:</div>
+  <div class="panel-body">
+In the following, wherever you see **YOUR TURN**, please respond with explanations, more questions and if you are already confident, code chunks to create new graphs. This will be one of your submissions for this module, on Teams!
+  </div>
+</div>
+ 
 
-3. Wickham and Grolemund, [R for Data Science](https://r4ds.had.co.nz/)
- - R Bible. Available free on the web.
+# Interrogative Pronouns for Data Variables
+
+So how do we ask questions? These are usually with *interrogative pronouns* in English: What? Who? Where? Which? What Kind? How? How Much? How Many? and and so on.
+
+## The `penguins` dataset
 
 
-# Interrogative Pronouns
-These are the usually heard *interrogative pronouns* in English.
+```{r Look at Penguins}
+names(penguins) # Column, i.e. Variable names
+head(penguins) # first six rows
+tail(penguins) # Last six rows
+dim(penguins) # Size of dataset
+
+# Check for missing data
+any(is.na(penguins) == TRUE)
+```
+
+1. What are the variable `names()`?
+2. What would be the Question you might have asked to obtain that variable?
+3. How would you process that variable? 
+4. What meta questions could you ask of each variable?
+5. Where might the answers take your story?
+
+### YOUR TURN-1
+
+
+
+
+## The `mpg` dataset
+
+```{r Look at mpg}
+names(mpg) # Column, i.e. Variable names
+head(mpg) # first six rows
+tail(mpg) # Last six rows
+dim(mpg) # Size of dataset
+
+# Check for missing data
+any(is.na(mpg) == TRUE)
+```
+
+Look carefully at the variables here. How would you interpret say the `cyl` variable? Is it a number and therefore Quantitative, or could it be something else?
+
+### YOUR TURN-2
+
+
+
+
+## Pronouns and Variables
+
+In the Table below, we have a rough mapping of interrogative pronouns to the kinds of variables in the data:
 
 Pronoun | Answer| English Character | Kind of Data Variable | R Character
 --------| ------|------------------ |-----------------------|------------
@@ -67,261 +119,205 @@ Think of :
  - How often? / How seldom? : Frequency
  - ..? 
 
-## Look at the dataset `penguins`
 
-1. What are the variable `names()`?
-2. What would be the question you might have asked to obtain that variable?
-3. How would you process that variable? 
-4. What meta questions could you ask of each variable?
-5. Where might the answers take your story?
 
-```{r Look at Penguins}
-names(penguins) # Column, i.e. Variable names
-head(penguins) # first six rows
-tail(penguins) # LAst six rows
-dim(penguins) # Size of dataset
 
-# Check for missing data
-any(is.na(penguins))
-```
+# Interrogations and Graphs
 
-## Interrogations and Graphs
+We can also respond to ( more complex ) Questions, with not just a *variable* but a *data visualization*. This visualization can even involve more than one variable, as we will see
+
 What sort of measures, and visuals charts can we create with different kinds of variables, taken singly or together? Let us write some simple English descriptions of measures and visuals and see what commands they use in R.
 
-### Quick Intro to `ggformula`
-All computations and graphs work with the following structure
+Here we will use the Grammar of a package called `ggplot`, which we will encounter in Lab:04. Let us go with our intuition with the code in the following sections. 
 
-- Simple Structure 
+Note: since we saw a couple of missing entries in the `penguins` dataset, let us remove them for now. 
 
-`goal( y ~ x | z, data = my_data)`
-
-- Bells and Whistles
-
-`goal( y ~ x | z, data = my_data, `
-
-`                 color = ~ some_variable, `
-
-`                 shape = ~ some_variable, `
-
-`                 size = ~ some_variable)`
-
-Usually safe; unused variables are ignored. But keep your eyes open !!
- 
-- Still more Bells and Whistles !
- add: `gf_refine(.....)`
- 
- Look at the `Using Colours in R.Rmd` file for ideas. 
+```{r}
+penguins <- penguins %>% drop_na()
+```
 
 
-### Single Qualitative/Categorical Variable
+## Single Quantitative Variable
 
-1) Questions: How? Which? What Kind?
+1) Questions: How many? How few? How often? How much?
+
+2) Measures: max / min / mean / mode / (units)
+  - `max()`, `min()`, `range()`, `mean()`, `mode()`
+  
+3) Charts: Bar Chart / Histogram / Density  
+    - `geom_histogram()` / `geom_density()` 
+
+```{r Single Quant-1}
+max(penguins$bill_length_mm)
+
+range(penguins$bill_length_mm, na.rm =TRUE) 
+# Note this. Try deleting this option!
+
+ggplot(penguins) + geom_histogram(aes(x = bill_length_mm))
+```
+
+```{r Single Quant-2}
+
+ggplot(penguins) + geom_density(aes(bill_length_mm))
+
+```
+
+
+### YOUR TURN-3
+
+
+
+
+
+
+## Two Variables: Quantitative vs Quantitative
+We can easily extend our intuition about one quantitative variable, to a pair of them. What Questions can we ask?
+
+1) Questions: How many of this vs How many of that? Does this depend upon that? How are they related? (Remember $y = mx + c$ and friends?)
+
+2) Measures: Correlation / Covariance / T-test / Chi-Square Test for Two Means etc. We won't go into this here!
+
+3) Charts: Scatter Plot / Line Plot / Regression i.e. best fit lines 
+
+```{r Quant vs Quant-1}
+
+ggplot(penguins) + geom_point(aes(x = flipper_length_mm, 
+                                  y = body_mass_g))
+
+```
+
+
+```{r Quant vs Quant-2}
+ggplot(penguins) + 
+  geom_point(aes(y = body_mass_g , x = flipper_length_mm)) 
+# Why do we get a warning?
+
+
+ggplot(penguins) + 
+  geom_point(aes(x = flipper_length_mm, y = bill_length_mm))
+```
+
+### YOUR TURN-4
+
+
+
+
+
+
+## Single Qualitative/Categorical Variable
+
+1) Questions: Which? What Kind? How?
 
 2) Measures: No of `levels` / Counts for each `level`
   - `counts` / ` tally` (very similar syntax to ggformula)
   
 3) Charts: Bar Chart / Pie Chart / Tree Map 
-  - `gf_bar` / `gf_bar %>% coord_polar()` / Find out !!
+  - `geom_bar` / `geom_bar + coord_polar()` / Find out!!
 
 ```{r Single Cat Var-1}
-mosaic::counts( ~ island, data = penguins)
-mosaic::counts(~ species, data = penguins)
-counts(~ sex, data = penguins)
-mosaic::tally( ~ island, data = penguins)
-# Curious: what's the difference in output between tally and counts?
-# 
-gf_bar( ~ island, fill = ~ island, data = penguins)
-gf_bar(~ island, fill = ~ sex, data = penguins)
+ggplot(penguins) + geom_bar(aes(x = island))
+ggplot(penguins) + geom_bar(aes(x = sex))
 ```
 
 
-```{r Single Cat Var-2}
-# YOUR TURN
-# Run names(penguins) is you have forgotten
-counts(~ species, data  = penguins)
-tally( ~ species, data = penguins)
-
-gf_bar( ~ species, data = penguins)
-```
-Storyline: Where do most of the penguins live? On Treasure Island....?
-Most of the Penguins live on Biscoe island. And Adelie penguins are most frequent in this dataset.
-
-
-### Single Quantitative Variable
-
-1) Questions: How many? How few? How often? How much?
-
-2) Measures: max / min / mean / mode / (units)
-  - `max()`, `min()`, `range()`, `mean()`, `favstats`
-  - `mode()` # non-formula ;-(
-  
-3) Charts: Bar Chart / Histogram / Density  
-    - `gf_bar()` / `gf_histogram()` / `gf_density()` 
-
-```{r Single Quant-1}
-range(~ bill_length_mm, na.rm =TRUE, data = penguins) 
-# Note this. Try deleting this option!
-favstats(~ bill_length_mm, data = penguins, groups = ~island)
-
-gf_histogram(~ bill_length_mm, data = penguins)
-```
-
-```{r Single Quant-2}
-# YOUR TURN BELOW
-gf_density(~ bill_length_mm | island, data = penguins)
-gf_density(~body_mass_g | island, data  = penguins)
-
-```
-
-Storyline: Some of those penguins have really big bills. I mean beaks!! 59 cms !!!
-Are those the ones with a lot of body mass as well? Bite more, eat more, weigh more...
+### YOUR TURN-5
 
 
 
-### Two Variables: Categorical vs Categorical
 
-1) Questions: What Kind(x) vs What Kind(y)? 
+
+
+
+## Two Variables: Categorical vs Categorical
+
+What sort of question could we ask that involves *two* categorical variables?
+
+1) Questions: How Many of this Kind(x) are How Many of that Kind(y) ? 
 
 2) Measures: Counts and Tallies sliced by Category
-    - `counts` , `tally`(very similar syntax to ggformula)
+    - `counts` , `tally`
     
 3) Charts: Stacked Bar Charts / Grouped Bar Charts / Segmented Bar Chart / Mosaic Chart
-    - `gf_bar()` 
-    - Use with second Categorical variables to modify `fill`, `color`. 
+    - `geom_bar()` 
+    - Use the second Categorical variables to modify `fill`, `color`. 
     - Also try to vary the parameter `position` of the bars. 
 
 ```{r Cat vs Cat-1}
-counts(~ species | sex , data = penguins)
-counts(~ species + sex , data = penguins)
-tally(~ species + sex  , data = penguins)
-
-# try other pairs of Categorical variables. Interpret. 
-
-```
-Storyline: We have larger numbers of Adelie penguins...
-
-
-```{r Cat vs Cat-2}
-gf_bar(~ species, fill = ~ sex, data = penguins, position = "fill")
-# Try position = "dodge" and "fill"
+ggplot(penguins) + geom_bar(aes(x = island, 
+                                fill = species),
+                            position = "stack")
 ```
 
-Storyline: तीन पेनगीन। और तुम भी तीन
+Storyline: तीन पेनगीन। और तुम भी  तीन
 
-(Oh never mind!
-
-```{r Cat vs Cat-3}
-## YOUR TURN BELOW
-gf_bar(~ species, fill = ~ sex, data = penguins, 
-       position = "fill") %>% 
-  gf_refine(scale_fill_brewer(palette = "Set3"))
+(Oh never mind!)
 
 
-
-```
-
-
-
-### Two Variables: Quantitative vs Quantitative
-
-1) Questions: How many vs How many? Does this depend upon that?
-
-2) Measures: Correlation / Covariance / T-test / Chi-Square Test for Two Means etc. We won't go too deep into this !!
-
-3) Charts: Scatter Plot / Line Plot / Regression i.e. best fit lines (Remember $ y = mx + c $ and friends?)
-
-```{r Quant vs Quant-1}
-
-#cor(penguins$body, penguins$flipper_length_mm) # Error! Why?
-penguins %>% 
-  drop_na() %>% # remove entries that are missing (NA)
-  mosaic::cor(body_mass_g ~ bill_length_mm, data = .)
-
-```
-Storyline: More weight, bigger the flipper, at least 59% of the time. They need to swim...but then there must be some overweight penguins with small flippers? I mean, 59%...
-
-
-```{r Quant vs Quant-2}
-gf_point(body_mass_g ~ flipper_length_mm, data = penguins) # Why do we get a warning?
-
-gf_point(flipper_length_mm ~ body_mass_g, data = penguins) %>% 
-  gf_smooth(method = "lm") # Try other methods
-```
-
-Storyline: More weight, bigger the flipper...looks like a fairly predictable trend. Is this what Darwin meant?
-
-```{r Quant vs Quant-3}
-# YOUR TURN BELOW
-
-
-```
+### YOUR TURN-6
 
 
 
 
 
-### Two Variables: Quantitative vs Qualitative
 
-1) Questions: How many vs What Kind? How many vs Which? How many vs How?
+## Two Variables: Quantitative vs Qualitative
 
-We usually do stuff on the Quant Variable, after `grouping` using the Qual variable. (See `Cat vs Cat` above)
+Finally, what if we want to look at Quant variables and Qual variables together? What questions could we ask?
 
-2) Measures: Quant Variable summaries, grouped by Categorical variable. 
- - Think!!
+1) Questions: How much of this is Which Kind of that? How many vs Which? How many vs How?
+
+2) Measures: Counts, Means, Ranges etc., grouped by Categorical variable. 
 
 3) Charts: Bar Chart using group / density plots by group / violin plots by group / box plots by group
- - `gf_bar` / `gf_density` / `gf_violin` / `gf_boxplot` using Categorical Variable for grouping
+ - `geom_bar` / `geom_density` / `geom_violin` / `geom_boxplot` using Categorical Variable for grouping
 
 ```{r Quant vs Qual-1}
-penguins %>% 
-  group_by(island) %>% 
-    gf_density(~ body_mass_g, color = ~island, fill = ~ island, alpha = 0.3, data = .)
-
-penguins %>% 
-  group_by(species) %>% 
-  gf_histogram(~ flipper_length_mm, data = .)
-
-penguins %>% 
-  group_by(species) %>% 
-  gf_violin(flipper_length_mm ~ species, data = .)
+ggplot(penguins) + 
+    geom_density(aes(x = body_mass_g, 
+                 color = island, 
+                 fill = island), 
+                 alpha = 0.3)
 ```
 
-Storyline: Hmm....there are significantly different weight distributions among Antarctic penguins...based on the island they live on!
-What do they eat?
-
-What else lives there?
 
 ```{r Quant vs Qual-2}
-#library(dplyr) # this package is part of the tidyverse.
-penguins %>% 
-  group_by(island) %>% 
-  summarise(mean_weight = median(body_mass_g, na.rm = TRUE)) %>% 
-# sd, var, median
-
-  gf_col(mean_weight ~ island, color = ~island, fill = ~ island, data = .)
-```
-
-Storyline: Why are all heavier penguins are on one island....???
-
- Let's try one last plot: the Boxplot. ![boxplot](https://rkabacoff.github.io/datavis/img/boxplot.png)
-
-
-```{r Quant vs Qual-3}
-#library(dplyr) # this package is part of the tidyverse.
-penguins %>% 
-    gf_boxplot(body_mass_g ~ island, color = ~island, data = .,notch = FALSE)
+ggplot(penguins) + 
+  geom_histogram(aes(x = flipper_length_mm,
+                 fill = sex))
 
 ```
-Storyline: Clearly there is a relationship between Species, Island and BodyWeight. 
-How do we discover that?
-
-Ah, welcome to **Predictive Modelling** and **Machine Learning**....
 
 
-```{r Quant vs Qual-4}
-# YOUR TURN HERE
+
+### YOUR TURN-7
 
 
-```
+
+
+
+# References
+
+1. Data Visualization with R, [Robert Kabacoff](https://rkabacoff.github.io/datavis/)
+- Good crisp descriptions of many kinds of graphs, no nonsense book. Available free on the web. 
+
+2. Wickham and Grolemund, [R for Data Science](https://r4ds.had.co.nz/)
+ - R Bible. Available free on the web.
+ 
+3. [The best stats you've ever seen | Hans Rosling](https://www.youtube.com/watch?v=hVimVzgtD6w)
+
+ 
+# Assignments
+
+1. Use the PRIMM process to add comments, questions, inferences to this document, wherever you see YOUR TURN.
+
+2. Create a fresh RMarkdown and similarly analyse one ( or both! ) of the following data sets
+
+- `diamonds` . This dataset is part of the tidyverse package so just type `diamonds` in your code and there it is. 
+
+- `gapminder` !! Yes!!
+
+You will need to install the `gapminder` package to access this dataset.
+
+Ask me for help any time. 
 
 

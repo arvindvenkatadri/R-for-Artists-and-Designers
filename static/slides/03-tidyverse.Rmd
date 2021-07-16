@@ -25,20 +25,9 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE,
 library(tidyverse)
 library(palmerpenguins)
 library(xaringanthemer)
+library(emo)
 ```
 
-
-# Tidyverse basics
-
-So far in this course you learned:
-
-- `<-` (variable assignment)
-- `%>%` (then...) ( aur phir...)
-- `dplyr`, `ggplot2` (packages)
-  - `install.packages("dplyr")` (1x per machine)
-  - `library(dplyr)` (1x per work session)
-
----
 class: center, middle, inverse
 
 # 📇
@@ -46,6 +35,53 @@ class: center, middle, inverse
 ## Let's review
 
 ---
+
+## Some Basic Operations/Things in R
+
+- `<-` (variable assignment) ( Alt and - keys together)
+- `%>%` (then...) ( aur phir...) (Shift + Ctrl + M / Cmd + Ctrl + M)
+
+- `dplyr`, `ggplot2` (packages)
+  - `install.packages("dplyr")` (1x per machine)
+  - `library(dplyr)` (1x per work session)
+
+
+---
+
+layout: true
+# What is the Tidyverse?
+
+---
+
+Yesterday we saw that: The tidyverse is 
+
+- an opinionated collection of R `packages` designed for data science
+- All packages share an underlying design philosophy, grammar, and data structures.
+
+---
+
+- Packages are:
+    - `readr`: to parse and read in data in various formats
+    - `tidyr`: to clean up data, rows and columns
+    - `dplyr`: to manipulate data, add new columns, create summaries
+    - `ggplot`: Data Visualization
+
+- And a few others...
+    - `stringr`: to process character/string data
+    - `forcats`: Not about cats `r emo::ji("cat")`, but to deal with factors. We will touch factors, but won't work with forcats. 
+    - `purrr`: also not about cats, but about loops and iterations
+
+- No the Cheshire Cat was not involved, but there were others who were found guilty
+
+---
+
+layout: false
+# What does "tidy data" mean?
+
+![](https://www.openscapes.org/img/blog/tidydata/tidydata_1.jpg)
+
+---
+
 # Data for today
 
 We'll use data from the Museum of Modern Art (MoMA)
@@ -55,48 +91,82 @@ We'll use data from the Museum of Modern Art (MoMA)
 - And by [others](https://medium.com/@foe/here-s-a-roundup-of-how-people-have-used-our-data-so-far-80862e4ce220)
 
 ---
+
 # Get the data
 
-Use this code chunk to import my cleaned CSV file:
+Use this code chunk to import the cleaned CSV file:
 
 ```{r}
 library(readr)
-moma <- read_csv("http://bit.ly/cs631-moma")
+moma <- read_csv(here::here("static", "labs", "data", "artworks-cleaned.csv"))
+
 ```
 
 
 ---
 
-# Data wrangling so far
+layout: true
 
-All functions from `dplyr` package
+# Data wrangling
+
+---
+
+
+When working with data you must:
+
+* Figure out what you want to do. Be able to state that in English.
+
+* Describe those tasks in the form of a computer program.
+
+* Execute the program.
+
+The `dplyr` package makes these steps fast and easy:
+
+* By constraining your options, it helps you think about your data manipulation challenges.
+
+* It provides simple English **"verbs"**, functions that correspond to the most common data manipulation tasks, to help you translate your thoughts into code.
+
+---
+
+`dplyr` aims to provide a function for each basic verb of data manipulation. These verbs can be organised into three categories based on the component of the dataset that they work with:
 
 .pull-left[
-From DataCamp Chapter 1
 
-- print a tibble
-
-- `filter`
-
-- `arrange`
-
-- `mutate`
+* Rows:
+  * `filter()` chooses rows based on *column* values.
+  * `slice()` chooses rows based on location.
+  * `arrange()` changes the order of the rows.
+  
 ]
 
 --
 
 .pull-right[
-From Lab 01
 
-
-- `glimpse`
-
-- `distinct`
-
-- `count`
+* Columns:
+  * `select()` changes whether or not a column is included.
+  * `rename()` changes the name of columns.
+  * `mutate()` changes the values of columns and creates new columns.
+  * `relocate()` changes the order of the columns.
+  * `distinct()` unique values in each column
+  * `count` number of occurrences of each unique value in a column
 ]
 
+Some of you may be able to relate this to MS Excel...
+
+
 ---
+
+* Groups of rows:
+  * `summarise()` collapses a group into a single row.
+
+* Whole data.frame/tibble
+  * `glimpse()` see what variables are there
+
+
+---
+
+layout:false
 class: middle, center, inverse
 
 ![](../images/rladylego-pipe.jpg)
@@ -105,115 +175,13 @@ class: middle, center, inverse
 
 *image courtesy [@LegoRLady](https://twitter.com/LEGO_RLady/status/986661916855754752)*
 
----
-class: middle, center, inverse
-
-# ⌛️
-
-## Let's review some helpful functions for `filter`
-
----
-class: inverse, bottom, center
-background-image: url("../images/peapod.png")
-background-size: 25%
-
-
-## Base R + Tidyverse
-
----
-class: middle, center, inverse
-
-#💡
-
-## First: 
-
-## Logical Operators
-
-
 
 ---
 
-
-```{r}
-?base::Logic
-```
-
-
-```{r include = FALSE}
-logic_table <- tibble::tribble(
-  ~Operator, ~Description, ~Usage,
-  "&", "and", "x & y",
-  "|", "or", "x | y",
-  "xor", "exactly x or y", "xor(x, y)",
-  "!", "not", "!x"
-)
-```
-
-
-```{r echo = FALSE, results = 'asis'}
-knitr::kable(logic_table, format = "html")
-```
+layout: true
+## Some Sample Questions!
 
 ---
-
-Logical or (`|`) is inclusive, so `x | y` really means: 
-
-* x or 
-* y or 
-* both x & y
-
-Exclusive or (`xor`) is exclusive, so `xor(x, y)` really means: 
-
-* x or
-* y...
-* but not both x & y
-
-```{r}
-x <- c(0, 1, 0, 1)
-y <- c(0, 0, 1, 1)
-boolean_or <- x | y
-exclusive_or <- xor(x, y)
-cbind(x, y, boolean_or, exclusive_or)
-```
-
----
-class: middle, center, inverse
-
-#💡
-
-## Second: 
-
-## Comparisons
-
----
-```{r}
-?Comparison
-```
-
-```{r include = FALSE}
-comp_table <- tibble::tribble(
-  ~Operator, ~Description, ~Usage,
-  "<", "less than", "x < y",
-  "<=", "less than or equal to", "x <= y",
-  ">", "greater than", "x > y",
-  ">=", "greater than or equal to", "x >= y",
-  "==", "exactly equal to", "x == y",
-  "!=", "not equal to", "x != y",
-  "%in%", "group membership*", "x %in% y",
-  "is.na", "is missing", "is.na(x)",
-  "!is.na", "is not missing", "!is.na(x)"
-)
-```
-
-
-```{r echo = FALSE, results = 'asis'}
-knitr::kable(comp_table, format = "html")
-```
-
-*(shortcut to using `|` repeatedly with `==`)
-
----
-## Lab 02: Challenge 1 (`dplyr`)
 
 1. How many paintings (rows) are in `moma`? How many variables (columns) are in `moma`?
 1. What is the first painting acquired by MoMA? Which year? Which artist? What title?
@@ -228,110 +196,99 @@ If you want more:
 1. In what year were the most paintings acquired? Created?
 1. In what year was the first painting by a (solo) female artist acquired? When was that painting created? Which artist? What title? 
 
+---
 
+1. How many paintings (rows) are in `moma`? How many variables (columns) are in `moma`?
+
+```{r}
+glimpse(moma)
+
+```
 
 ---
 
-# The Essence of ggplot
+2. What is the first painting acquired by MoMA? Which year? Which artist? What title?
+    - *Hint: you may want to look into `select` + `arrange`*
+```{r}
+moma %>% 
+  select(year_acquired) %>% 
+  arrange(year_acquired)
 
-all `ggplot2`
+moma %>% 
+  select(title,artist,year_acquired) %>% 
+  arrange(year_acquired)
 
-- `aes(x = , y = )` (aesthetics)
-- `aes(x = , y = , color = )` (add color)
-- `aes(x = , y = , size = )` (add size)
-- `+ facet_wrap(~ )` (facetting)
-
----
-# Old School (Challenge 2)<sup>1</sup>
-
-- Sketch the graphics below on paper, where the `x`-axis is variable `year_created` and the `y`-axis is variable `year_acquired`
-
-```{r echo=FALSE}
-moma_ex <-
-  data_frame(
-    painted = c(1980, 1990, 2000, 2010),
-    acquired = c(1985, 1995, 2005, 2015),
-    area = c(3, 2, 1, 2),
-    gender = c("male", "male", "female", "female")
-  )
-moma_ex
 ```
-
-<!-- Copy to chalkboard/whiteboard -->
-
-1. A scatter plot
-1. A scatter plot where the `color` of the points corresponds to `gender`
-1. A scatter plot where the `size` of the points corresponds to `area`
-
-.footnote[
-[1] Shamelessly borrowed with much appreciation to [Chester Ismay](https://ismayc.github.io/talks/ness-infer/slide_deck.html)
-]
 
 ---
 
-# 1. A scatterplot
+1. What is the oldest painting in the collection? Which year? Which artist? What title? *(see above hint)*
 
-```{r, eval=FALSE}
-library(ggplot2)
-ggplot(moma_ex, aes(painted, acquired)) + 
-  geom_point()
+```{r}
+moma %>% 
+  select(title,artist,year_created) %>% 
+  arrange(year_created)
+
 ```
---
-
-```{r, echo=FALSE, fig.height=4.4}
-ggplot(moma_ex, aes(painted, acquired)) + 
-  geom_point()
-```
-
 
 ---
 
+1. How many distinct artists are there?
 
-# 2. `color` points by `gender`
-
-```{r, eval=FALSE}
-library(ggplot2)
-ggplot(moma_ex, aes(painted, acquired, color = gender)) + 
-  geom_point()
+```{r}
+moma %>% distinct(artist) %>% count()
 ```
---
 
-```{r, echo=FALSE, fig.height=4.4}
-ggplot(moma_ex, aes(painted, acquired, color = gender)) + 
-  geom_point()
+---
+
+1. Which artist has the most paintings in the collection? How many paintings are by this artist?
+
+```{r}
+moma %>% 
+  group_by(artist) %>% 
+  summarise(paintings = n()) %>% 
+  arrange(desc(paintings))
+```
+
+---
+
+1. How many paintings are by male vs female artists?
+
+```{r}
+moma %>% 
+  group_by(artist_gender) %>% 
+  summarise(count = n())
 ```
 
 
 ---
 
-# 3. `size` points by `area`
+1. In what year was the first painting by a (solo) female artist acquired? When was that painting created? Which artist? What title?
 
-```{r, eval=FALSE}
-library(ggplot2)
-ggplot(moma_ex, aes(painted, acquired, size = area)) + 
-  geom_point()
-```
---
 
-```{r, echo=FALSE, fig.height=4.4}
-ggplot(moma_ex, aes(painted, acquired, size = area)) + 
-  geom_point()
+```{r}
+moma %>% 
+  select(title, artist, year_acquired, artist_gender) %>%  arrange(year_acquired, artist_gender)
 ```
 
----
-
-# [The Five-Named Graphs](http://moderndive.com/3-viz.html#FiveNG)
 
 
-- Scatterplot: `geom_point()`
-- Line graph: `geom_line()`
-- Histogram: `geom_histogram()`
-- Boxplot: `geom_boxplot()`
-- Bar graph: `geom_bar()` or `geom_col` (see [Lab 02](../02-Pronouns-and-Data.html))
+
+
+
 
 
 
 ---
+
+buffer
+
+
+
+---
+
+
+
 class: inverse, middle, center
 
 
@@ -350,5 +307,6 @@ class: inverse, middle, center
 [ModernDive `dplyr` chapter](http://moderndive.com/5-wrangling.html)
 
 [RStudio `dplyr` Cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf)
+
 
 

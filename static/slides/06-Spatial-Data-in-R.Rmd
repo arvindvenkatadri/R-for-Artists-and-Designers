@@ -17,28 +17,18 @@ output:
 
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
-options(htmltools.dir.version = FALSE)
-knitr::opts_chunk$set(warning = FALSE, message = FALSE, 
-  comment = NA, dpi = 300,
-  fig.align = "center", out.width = "65%", cache = FALSE)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, comment = NA, dpi = 300,fig.align = "center", cache = FALSE)
 library(xaringanthemer)
 library(xaringanExtra)
 library(tidyverse)
 library(sf)
+library(tmap)
+library(spData)
+library(spDataLarge)
 library(rnaturalearth)
 library(rnaturalearthdata)
 ```
 
-```{r xaringan-themer, include=FALSE, warning=FALSE}
-library(xaringanthemer)
-style_duo(primary_color = "#1F4257", secondary_color = "#F97B64",
-  header_font_google = google_font("Josefin Sans"),
-  text_font_google   = google_font("Montserrat", "300", "300i"),
-  code_font_google   = google_font("Fira Mono"),
-  text_bold_color = "#1E90FF"
-)
-# https://htmlcolorcodes.com/color-names/
-```
 
 ```{r xaringanExtra, include=FALSE}
 use_webcam()
@@ -46,9 +36,8 @@ use_fit_screen()
 use_panelset()
 ```
 
-layout: true
+
 # Let's get started
----
 
 Look at a piece of Google Map.
 
@@ -57,6 +46,8 @@ What different objects do you see?
 What information do you think went into making it?
 
 ---
+
+# Let's get started
 
 .pull-left[
 - To make maps, we need data organized in a specific way
@@ -76,8 +67,8 @@ What information do you think went into making it?
 The picture shows a familiar looking `data-frame` with the far-right column containing geometries....hmmm.
 
 ---
-layout:false
-## What is a Feature?
+
+# What is a Feature?
 
 - A Thing, or an Object in the real world, such as a building or a tree. 
 - As is the case with Objects, they often consist of other objects.  
@@ -93,7 +84,7 @@ layout:false
   - and does not intersect itself.
 ---
 
-## What is a Geometry?
+# What is a Geometry?
 
 - Features have a geometry describing where on Earth the feature is located  
 - they have attributes, which describe other properties.  
@@ -107,7 +98,7 @@ layout:false
 
 ---
 
-## What is Geospatial Data?
+# What is Geospatial Data?
 
 .pull-left[
 
@@ -129,10 +120,11 @@ layout:false
 .pull-right[
 ![Spatial Geometries](images/sf-classes.png)
 ]
+
 ---
-layout:true
-## How are these shapes represented?
----
+
+# How are these shapes represented?
+
 
 .pull-left[
 ![Geometry Primitives](https://cengel.github.io/R-spatial/img/wkt_primitives.png)
@@ -142,18 +134,21 @@ layout:true
 ![Multipart Geometry Representation](https://cengel.github.io/R-spatial/img/wkt_multipart.png)
 
 ]
+
+These formulaic descriptions are called **WKT: Well Known Text**
+
 ---
+# How are these shapes represented?
+
+Let's read a spatial file available with `sf`:
 
 ```{r highlight.output = c(4:5)}
 nc <- st_read(system.file("shape/nc.shp", package="sf"))
 ```
 
-```{r, echo=FALSE,highlight.output= c(11:13)}
-head(nc, 3)
-```
 
 ---
-layout:false
+
 ## The `sf` : Spatial Data Frame: Point Geometry
 
 .pull-left[
@@ -169,17 +164,15 @@ points <-
              lat = rnorm(5, 23, 5)) %>% 
   st_as_sf(., coords = c("lon", "lat"),
            crs = crs_india)
-
 str(points)
-
 ggplot() + #<<
     geom_sf(data = india) + #<<
     geom_sf(data = points, colour = "red", size = 4) #<<
-
 ```
 ]
 
 .pull-right[
+
 ```{r first-plot1a-out, ref.label='plot1a', echo=FALSE,message=FALSE,warning=FALSE, out.width ="90%", highlight.output = 2}
 ```
 ]
@@ -201,7 +194,6 @@ pl1 <- st_polygon(pl1) %>% # feature geometry
   st_sfc() %>% # feature column
   st_as_sf(crs = crs_india) # spatial data frame
 str(pl1)
-
 ggplot() + #<<
     geom_sf(data = india) + #<<
     geom_sf(data = pl1, colour = "red") #<<
@@ -257,6 +249,7 @@ class: center, bottom, inverse
 Image credit: [alice-in-wonderland.net](https://www.alice-in-wonderland.net/resources/background/tenniel-and-his-illustrations/)
 
 ---
+
 ## Map Projections: Through the Looking Glass
 
 
@@ -265,88 +258,235 @@ Image credit: [alice-in-wonderland.net](https://www.alice-in-wonderland.net/reso
 ]
 .pull-right[
 ![](images/2book18.jpg)
-We see Maps Through The Looking Glass..  
+We see Maps Through The Looking Glass...  
 No Two Map Projections are Alike!
 ]
-
----
-# A 2D Flat projection
-
-
-
 ---
 
----
+## The Gall-Peters Projection
 
-class: inverse, center, middle
-## Getting hold of Spatial Data
+<iframe width="629" height="352" src="https://www.youtube.com/embed/vVX-PrBRtTY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-Using **osmdata**  
-Using **rnaturalearth**  
-
+From "The West Wing" Season 2 Episode 16.
 
 ---
-layout:true
-## Using `osmdata`
----
+
+# Projections with `coord_sf()`
 
 .pull-left[
-lorem ipsum
-![](https://youtu.be/zNzZ1PfUDNk)
-]
+```{r csf, warning=FALSE, fig.show='hide', message=FALSE}
+ggplot() + 
+  geom_sf(data = world) + 
+    geom_sf(data = india) + 
+    geom_sf(data = points, colour = "red", size = 4) +
+  coord_sf(crs = "+proj=laea +lat_0=23 +lon_0=77 +x_0=4321000 #<< +y_0=3210000 +ellps=GRS80 +units=m  +no_defs") #<<
 
+```
+]
 .pull-right[
-lorem ipsum
-]
----
-
-.pull-left[
-lorem ipsum
-
-]
-
-.pull-right[
-lorem ipsum
-]
-
----
-layout: true
-## Using `rnaturalearth`
-
-
----
-
-.pull-left[
-lorem ipsum
-
-]
-
-.pull-right[
-lorem ipsum
+```{r, echo=FALSE}
+knitr::include_graphics(
+  knitr::fig_chunk("csf", "png")
+)
+```
 ]
 
 ---
 
-.pull-left[
-lorem ipsum
+class: center, middle
 
-]
-
-.pull-right[
-lorem ipsum
-]
+# Map Making with `tmap`
+### Adapted from SIGR2021 Conference (*Sciences de l'information géographique reproductibles*)
+#### Saint-Pierre-d'Oléron (France)
+#### 27/June/2021 to 3/July/2021
+#### "GIS and mapping": "A workshop on GIS and mapping with R: part 2"
+#### Jakub Nowosad & Robin Lovelace
 
 ---
-# Interactive Maps with `leaflet`
-```{r out.width='100%', fig.height=6, eval=require('leaflet')}
-library(leaflet)
-leaflet() %>% addTiles() %>% setView(-93.65, 42.0285, zoom = 17)
+
+# Mapping
+
+- We have seen a bit of `ggplot + geom_sf + coord_sf()`
+- This is good for static plots
+- `tmap` can give us both static and interactive plots
+- And some fancy map templates too!!
+
+---
+
+
+# Mapping
+
+Let's look at London Boroughs and places where we can hire bicycles.
+
+```{r}
+data("lnd", package = "spData") # Boroughs of London
+data("cycle_hire_osm", package = "spData") # Cycle Hire locations
+
+str(lnd)
 ```
 
+---
+
+# Mapping
+
+```{r}
+str(cycle_hire_osm)
+
+```
+
+---
+# Mapping
+
+.pull-left[
+```{r tm1, warning=FALSE, fig.show='hide', message=FALSE}
+tm_shape(lnd) + #<<
+  tm_borders(col = "black", lwd = 1) + #<<
+  tm_fill("NAME", legend.show = FALSE) #<<
+```
+]
+.pull-right[
+```{r, echo=FALSE}
+knitr::include_graphics(
+  knitr::fig_chunk("tm1", "png")
+)
+```
+]
+
+---
+# `tmap` Layers are in *groups*
+
+Groups start with `tm_shape(data = ...)` 
+
+.pull-left[
+```{r tm1a, warning=FALSE, fig.show='hide', message=FALSE}
+# Group 1 #<<
+tm_shape(lnd) +
+  tm_borders(col = "black",lwd = 1) + 
+  tm_fill("NAME", legend.show = FALSE) +
+
+# Group 2 = Layer 2 #<<
+  tm_shape(cycle_hire_osm) + #<<
+  tm_symbols(size = 0.2, col = "red") #<<
+
+```
+]
+.pull-right[
+```{r, echo=FALSE}
+knitr::include_graphics(
+  knitr::fig_chunk("tm1a", "png")
+)
+```
+]
+
+---
+# Add graticules and legends
+
+.pull-left[
+```{r tm2, warning=FALSE, fig.show='hide', message=FALSE}
+# Group 1
+tm_shape(lnd) +
+  tm_borders(col = "black",lwd = 1) + 
+  tm_fill("NAME", legend.show = FALSE) +
+# Group 2 = Layer 2
+  tm_shape(cycle_hire_osm) + 
+  tm_symbols(size = 0.2, col = "red") +
+  
+  tm_graticules() + #<<
+  tm_add_legend(type = "symbol", col = "red", #<<
+                title = "Hire Cycles Here") #<<
+```
+]
+.pull-right[
+```{r, echo=FALSE}
+knitr::include_graphics(
+  knitr::fig_chunk("tm2", "png")
+)
+```
+]
+
+---
+# Add Scale and Compass to the Map
+
+.pull-left[
+
+https://geocompr.github.io/post/2019/tmap-color-scales/
+
+```{r tm1b, warning=FALSE, fig.show='hide', message=FALSE}
+# Group 1
+tm_shape(lnd) +
+  tm_borders(col = "black",lwd = 1) + 
+  tm_fill("NAME", legend.show = FALSE) +
+# Group 2 = Layer 2
+  tm_shape(cycle_hire_osm) + 
+  tm_symbols(size = 0.2, col = "red") +
+  tm_graticules() +
+  tm_add_legend(type = "symbol", col = "red",
+                title = "Hire Cycles Here") +
+
+  tm_scale_bar(position=c("left", "bottom"),#<<
+               text.size = 1) + #<<
+  tm_compass(position = c("right", "top"), #<<
+             type = "rose", #<<
+             size = 2)  #<<
+```
+]
+
+.pull-right[
+```{r, echo=FALSE}
+knitr::include_graphics(
+  knitr::fig_chunk("tm1b", "png")
+)
+```
+]
+
+---
+# Add Credits and Layout Options
+
+.pull-left[
+
+```{r tm1c, warning=FALSE, fig.show='hide', message=FALSE}
+mymap <- 
+# Group 1
+tm_shape(lnd) +
+  tm_borders(col = "black", lwd = 1) + 
+  tm_fill("NAME", legend.show = FALSE) +
+# Group 2 = Layer 2
+  tm_shape(cycle_hire_osm) + 
+  tm_symbols(size = 0.2, col = "red") +
+  tm_graticules() +
+  tm_add_legend(type = "symbol", col = "red",
+                title = "Hire Cycles Here") +
+  tm_scale_bar(position=c("left", "bottom"),text.size = 1) + 
+  tm_compass(position = c("right", "top"), type = "rose",
+             size = 2) +
+  
+  tm_credits(text = "Arvind V, 2021", #<<
+             position = c("left", "bottom")) + #<<
+  tm_layout(main.title = "London Bike Share", #<<
+            bg.color = "lightblue", #<<
+            inner.margins = c(0, 0, 0, 0)) #<<
+mymap
+```
+]
+.pull-right[
+```{r, echo=FALSE}
+knitr::include_graphics(
+  knitr::fig_chunk("tm1c", "png")
+)
+```
+]
+
 
 
 ---
-class: center, middle
+
+# Saving
+
+```{r tm8, eval=FALSE}
+tmap_save(my_map, filename = "my_map.png", width = 300, height = 800, dpi = 300)
+```
+
+---
 
 # Thanks!
 

@@ -1,6 +1,6 @@
 ---
 title: "Lab-06: The Grammar of Maps"
-subtitle: "Which is your native?"
+subtitle: "Where is the Secret Garden?"
 author: "Arvind Venkatadri"
 date: 22/April/2021
 output:
@@ -10,8 +10,9 @@ output:
     toc_float: TRUE
     toc_depth: 2
     number_sections: TRUE
+    code_folding: hide
     code_download: TRUE
-abstract: Part of the `R for Artists and Designers` course at the School of Foundation Studies, Srishti Manipal Institute of Art, Design, and Technology, Bangalore.
+abstract: Part of the `R for Artists and Designers` workshop course at the School of Foundation Studies, Srishti Manipal Institute of Art, Design, and Technology, Bangalore.
 ---
 
 # Goals
@@ -42,7 +43,7 @@ library(tmap) # Thematic Maps, static and interactive
 library(sf)
 ```
 
-## Introduction to Maps in R
+# Introduction to Maps in R
 
 We will take small steps in making maps using just two of the several map making packages in R.
 
@@ -56,7 +57,7 @@ The steps we will use are:
 Bas. Onwards and Map-wards!!
 
 
-## God made me a BengaluR-kaR...I think
+# God made me a BengaluR-kaR...I think
 
 Let's get BLR data into R and see if we can plot an area of interest. Then we can order on Swiggy and...never mind. 
 
@@ -88,6 +89,7 @@ dat_T <- extract_osm_objects (key = 'natural', value = 'tree', bbox = bbox)
 
 ```
 ## Let's look at the data
+
 ```{r}
 # How many buildings?
 nrow(dat_B)
@@ -99,6 +101,8 @@ So `dat_B` has `r nrow(dat_B)` buildings and their geometry is naturally a POLYG
 Do this check for all the other spatial data.
 
 ```{r YOUR_TURN_1}
+
+
 
 ```
 
@@ -129,6 +133,7 @@ blr_map
 
 
 Note how `geom_sf` is capable of handling *any* geometry in the `sfc` column !! 
+
 > `geom_sf()` is an unusual geom because it will draw different geometric objects depending on what simple features are present in the data: you can get points, lines, or polygons.
 
 
@@ -209,7 +214,15 @@ names(dat_R)
 # ( I want pizza...)
 dat_R$cuisine
 ```
+
 So let us plot the restaurants as POINTs using the `dat-R` data we have downloaded. The `cuisine` attribute looks interesting; let us colour the POINT based on the `cuisine` offered at that restaurant. 
+
+<div class="panel panel-success">
+  <div class="panel-heading">The `cuisine` attribute:</div>
+  <div class="panel-body">
+Note: The `cuisine` variable has more than one entry for a given restaurant.  We use `tidyr::separate()` to make multiple columns out of the cuisine column and retain the first one only. Since the entries are badly entered using both ";" and "," we need to do this twice ;-()
+  </div>
+</div>
 
 ```{r}
 dat_R <- dat_R %>% 
@@ -237,47 +250,74 @@ ggplot() +
   labs(title = "Restaurants in South Central Bangalore",
        caption = "Based on osmdata")
 ```
+
+
 We could have done a (much!) better job, by combining cuisines into simpler and fewer categories, but that is for another day!! 
 
-Let's go meet the Gryphon and the Mock Turtle...carrying this Pig!
+By now we know that we can use `geom_sf()` multiple number of times with different datasets to create layered maps in R.
 
-![](images/11.jpg)
-
-## Using `rnaturalearth` and `tmap`
+Let us now try to make **interactive** maps using `tmap`.
 
 
+# Using `rnaturalearth` and `tmap`
 
-```{r World_Data}
+Let's plot a first map using datasets built into `tmap`. Then we can download other datasets from `rnaturalearth` and plot them next.
+
+`tmap` has a few built-in spatial datasets: `World` and `metro`, `rivers`, `land` and a few others. Check help on these.
+
+```{r World_Data_tmap}
 data("World")
-data("metro")
-
-head(metro, n = 3)
+head(World, n = 3)
 ```
 
+We have several 14 attribute variables in `World`. Attribute variables such as `gdp_cap_est`, `HPI` are numeric. Others such as `income_grp` appear to be factors. 
+`iso_a3` is the standard three letter name for the country. 
 
-```{r My Static World}
-tmap_mode("plot")
+
+```{r World_metro_tmap}
+data("metro")
+head(metro, n = 3)
+```
+Here too we have attribute variables for the metros, and they seem predominantly numeric. Again `iso_a3` is the three letter name for the city.
+
+
+`tmap` plots are made with code in "groups": each group starts with a `tm_shape()` command. 
+
+```{r My_Static_World}
+tmap_mode("plot") # Making this a static plot
 
 # Group 1
-tm_shape(World) +
-    tm_polygons("HPI") +
+tm_shape(World) + # dataset = World. 
+    tm_polygons("HPI") + # Colour polygons by HPI numeric variable
+
+  # Note the "+" sign continuation
+  
 # Group 2
-tm_shape(metro) + 
-  tm_bubbles(size = "pop2020", col = "red")
+tm_shape(metro) + # dataset = metro
+  tm_bubbles(size = "pop2020", 
+             col = "red") 
+# Plot cities as bubbles
+# Size proportional to numeric variable `pop2020`
 ```
 
 
 
 ```{r My Interactive Water Colour World}
-tmap_mode("view")
+tmap_mode("view") # Change to Interactive
 
 tm_shape(World) +
     tm_polygons("HPI") +
+  
+  
 tm_shape(metro) + 
-  tm_bubbles(size = "pop2020", col = "red") +
+  tm_bubbles(size = "pop2020", 
+             col = "red") +
+
+# Let's use WaterColor Map this time!!
 tm_tiles("Stamen.TonerLabels")
 ```
 
+## Using data from `rnaturalearth`
 
 ```{r spatial_data}
 india <- 
@@ -288,53 +328,76 @@ india <-
 india_neighbours <- 
   ne_states(country = (c("india", "sri lanka", "pakistan",
                          "afghanistan", "nepal","bangladesh")
-                       )
-            )
+                       ),
+            returnclass = "sf")
 
+```
+
+
+Let's look at the attribute variable columns to colour our graph and to shape our symbols:
+
+```{r}
 names(india)
 names(india_neighbours)
+
+# Look only at attributes
+india %>% st_drop_geometry() %>% head()
+india_neighbours%>% st_drop_geometry() %>% head()
 ```
 
-
-## Subsetting Spatial data by attributes
-
-```{r Spatial_data_subsetting_by_attributes}
-#ind <- metro$iso_a3 == "IND"
-#metro_ind1 <- metro[ind,]
-metro_ind2 <- subset(metro, iso_a3 == "IND")
-metro_neighbours <- metro %>% dplyr::filter(iso_a3 %in% c("IND","PAK", "LKA", "BGD","NPL"))
-```
 
 ## Map 1
 ```{r Map_1}
-tm_shape(World %>% dplyr::filter(iso_a3 %in% c("IND", "AFG", "PAK", "NPL", "BGD", "LKA"))) + 
-  tm_borders() + 
-tm_shape(india) + 
-  tm_polygons("name") + 
-  tm_shape(metro_ind2)+
-  tm_dots(size = "pop2020") + 
-  tm_layout(legend.outside = TRUE,legend.outside.position = "right") +
-  tm_credits("Geographical Boundaries are not accurate",size = 0.5,position = "right") + 
-  tm_compass(position = c("right", "top")) + 
-  tm_scale_bar(position = "left") + 
-  tmap_style("watercolor") #cobalt #gray #white #col_blind #beaver #classic #watercolor #albatross #bw
+tmap_mode("view")
+
+# Plot the Neighbours
+tm_shape(World %>% dplyr::filter(iso_a3 %in% c("IND", "AFG", "PAK", "NPL", "BGD", "LKA"))) +
+  tm_borders() +
+  
+# Plot India
+  tm_shape(india) +
+  tm_polygons("name") +
+  
+# Plot Neighbours
+  tm_shape(india_neighbours) +
+  tm_polygons("name") +
+  
+# Plot the cities in India alone
+  tm_shape(metro %>% dplyr::filter(iso_a3 == "IND")) +
+  tm_dots(size = "pop2020") +
+  tm_layout(legend.outside = TRUE,
+            legend.outside.position = "right") +
+  tm_credits("Geographical Boundaries are not accurate",
+             size = 0.5,
+             position = "right") +
+  tm_compass(position = c("right", "top")) +
+  tm_scale_bar(position = "left") +
+  tmap_style("watercolor") 
+
+#Try other map styles
+#cobalt #gray #white #col_blind #beaver #classic #watercolor #albatross #bw
+
 ```
+
 
 
 
 ## Map 2
+
 ```{r Map_2}
 tm_shape(india_neighbours) + 
   tm_polygons("name") + 
-  tm_shape(metro_neighbours) +
+  
+  tm_shape( metro %>% dplyr::filter(iso_a3 %in% c("IND","PAK", "LKA", "BGD","NPL"))) +
   tm_dots(size = "pop2020") + 
-  tm_layout(legend.outside = TRUE,legend.outside.position = "right") +
+  tm_layout(legend.show = FALSE) + # no effect
   tmap_options(max.categories = 10) + 
   tm_credits("Geographical Boundaries are not accurate",size = 0.5,position = "center")
+
 ```
 
 ```{r}
-tmap_mode("plot")
+tmap_mode("view")
 tm_basemap("Stamen.Watercolor") +
   tm_shape(metro, bbox = "India") + 
   tm_dots(col = "red", 
@@ -342,7 +405,7 @@ tm_basemap("Stamen.Watercolor") +
           group = "Metropolitan Areas") +
   tm_shape(World) + 
   tm_borders() + 
-  tm_tiles(server = "Stamen.TonerLabels",group = "Labels") + # ADDS LABELS!!!
+  tm_tiles(server = "Stamen.TonerLabels", group = "Labels") + # ADDS LABELS!!!
   tm_graticules()
 
 ```
@@ -372,5 +435,12 @@ We will need to do this in the same way:
 - Convert to sf
 - Project in the same way. 
 
-Draw a map of your home-town with your favourite restaurants shown. Pop-ups for each restaurant will win bonus points. 
+2. Draw a map of your home-town with your favourite restaurants shown. Pop-ups for each restaurant will win bonus points. 
 
+# Inspiration
+
+1. Burkhart, Christian. n.d. “Streetmaps.” [StreetMaps](https://ggplot2tutor.com/tutorials/streetmaps)
+
+![](https://ggplot2tutor.com/static/093466a0f94f04f36e2c028fe7ae3f23/fd84e/maps.png)
+
+2. *Making Vector Maps*, Computing for the Social Sciences, [Univ. of Chicago](https://cfss.uchicago.edu/notes/vector-maps/)

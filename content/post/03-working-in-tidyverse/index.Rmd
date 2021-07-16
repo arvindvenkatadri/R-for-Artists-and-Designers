@@ -2,7 +2,7 @@
 title: 'Lab-03: Twas brillig, and the slithy toves...'
 subtitle: 'Tidy Data at the ~~wabe~~ MoMA'
 summary: 'Tidy Data at the ~~wabe~~ MoMA'
-date: "2021-06-09T00:00:00Z"
+date: "2021-07-04"
 featured: false
 draft: false
 weight: 4
@@ -29,20 +29,15 @@ links:
   icon_pack: fas
   name: lab
   url: /labs/03-moma.html
-- icon: magic
-  icon_pack: fas
-  name: slides
-  url: /slides/03-tidyverse.html
+# - icon: magic
+#   icon_pack: fas
+#   name: slides
+#   url: /slides/03-tidyverse.html
 ---
 
 ## Readings
 
 
-+ [R4DS `ggplot2` chapter](http://r4ds.had.co.nz/data-visualisation.html)
-
-+ [ModernDive `ggplot2` chapter](http://moderndive.com/3-viz.html)
-
-+ [RStudio `ggplot2` Cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf)
 
 + [R4DS `dplyr` chapter](http://r4ds.had.co.nz/transform.html)
 

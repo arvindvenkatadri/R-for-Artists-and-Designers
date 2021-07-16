@@ -3,7 +3,8 @@ title: "Lab-06: If you please sir...which way to the Secret Garden?"
 subtitle: "The Grammar of Maps"
 summary: "The Grammar of Maps"
 author: "Arvind Venkatadri"
-date: 2021-06-12
+date: "2021-07-07"
+weight : 7
 featured: no
 image:
   placement: 2
@@ -31,7 +32,7 @@ links:
 
 # References
 
-1. [Nikita Voevodin](https://bookdown.org/voevodin_nv/R_Not_the_Best_Practices/maps.html)
-2. [Nico Hahn](https://bookdown.org/nicohahn/making_maps_with_r5/docs/introduction.html)
-3.[Emine Fidan](https://bookdown.org/eneminef/DRR_Bookdown/)
-4. Lovelace et al](https://geocompr.robinlovelace.net/adv-map.html)
+1. Nikita Voevodin, [R, Not the Best Practices](https://bookdown.org/voevodin_nv/R_Not_the_Best_Practices/maps.html)
+2. Nico Hahn, [Making Maps with R](https://bookdown.org/nicohahn/making_maps_with_r5/docs/introduction.html)
+3.Emine Fidan, [Interactive Maps in R](https://bookdown.org/eneminef/DRR_Bookdown/)
+4. Lovelace et al, [Geocomputation in R](https://geocompr.robinlovelace.net/adv-map.html)

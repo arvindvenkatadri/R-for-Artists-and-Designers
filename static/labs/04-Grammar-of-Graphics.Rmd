@@ -1,14 +1,16 @@
 ---
 title: "The Grammar of Graphics"
-subtitle: "R for Artists and Designers"
 author: "Arvind Venkatadri"
-date: 22/April/2021
+date: 06/July/2021
 output:
   html_document:
-    toc_float: true
-    theme: yeti
-    toc: true
-    code_download: true
+    theme: flatly
+    toc: TRUE
+    toc_float: TRUE
+    toc_depth: 2
+    number_sections: TRUE
+    code_folding: hide
+    code_download: TRUE
 abstract: Part of the `R for Artists and Designers` at the School of Foundation Studies, Srishti Manipal Institute of Art, Design, and Technology, Bangalore.
 ---
 

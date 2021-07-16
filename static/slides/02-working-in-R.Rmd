@@ -22,30 +22,10 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE,
   fig.align = "center", out.width = "80%", cache = FALSE)
 library(tidyverse)
 library(babynames)
+library(here)
 ```
 
-```{r xaringan-themer, include=FALSE, warning=FALSE}
-# library(xaringanthemer)
-# style_duo(primary_color = "#1F4257", secondary_color = "#F97B64",
-#   header_font_google = google_font("Josefin Sans"),
-#   text_font_google   = google_font("Montserrat", "300", "300i"),
-#   text_font_size = 14,
-#   code_font_google   = google_font("Fira Mono"),
-#   text_bold_color = "dodgerblue",
-#   code_inline_color = "dodgerblue",
-#   code_inline_font_size = 16
-# )
-# output:
-#   xaringan::moon_reader:
-#     css: xaringan-themer.css
-#     nature:
-#       slideNumberFormat: "%current%"
-#       highlightStyle: github
-#       highlightLines: true
-#       ratio: 16:9
-#       countIncrementalSlides: true
-#   code_download: true
-```
+
 ## R Basics
 
 --
@@ -354,32 +334,8 @@ class: center, middle, inverse
 
 ## Functions
 
-
-
-
-
-
 ---
-background-image: url("static")
-background-size: cover
 
----
-background-image: url("../images/Slide07.png")
-background-size: cover
-
----
-background-image: url("../images/Slide08.png")
-background-size: cover
-
----
-background-image: url("../images/Slide10.png")
-background-size: cover
-
-
-
-
-
----
 
 ## Functions 
 
