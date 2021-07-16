@@ -20,35 +20,84 @@ library(ggthemes)
 #devtools::install_github("dill/beyonce")
 library(beyonce)
 library(viridis)
+library(tidyverse)
+library(downloadthis)
 library(here)
 ```
 
-# Overview
+# Introduction
 
-There are 10 challenges total- none are in the "continuous colors" section, but you can use that section to complete the tenth challenge on your own. 
+This RMarkdown document is part of the Generic Skills Component  (GSK) of the Course of the  Foundation Studies Programme at Srishti Manipal Institute of Art, Design, and Technology, Bangalore India. The material is based on *A Layered Grammar of Graphics* by Hadley Wickham. The course is meant for First Year students pursuing a Degree in Art and Design. 
+
+The intent of this GSK part is to build Skill in coding in R, and also appreciate R as a way to metaphorically visualize information of various kinds, using predominantly geometric figures and structures.
+
+All RMarkdown files combine code, text, web-images, and figures developed using code. Everything is text; code chunks are enclosed in **fences** (```)
+
+(This Lab has been taken from Allison Hill's blogdown tutorial)
+
+# Goals
+
+- (Re)Understand different kinds of data variables
+- Appreciate how they can be identified based on the *Interrogative Pronouns* they answer to
+- Understand how each kind of variable lends itself to a specific choice of **colour scale** in the data visualization.
 
 
-# Packages
+# Pedagogical Note
 
-Other packages will be needed to be installed as you go- reveal the first code chunks when in doubt!
+The method followed will be based on
+[PRIMM](https://blogs.kcl.ac.uk/cser/2017/09/01/primm-a-structured-approach-to-teaching-programming/):
+
+-   **PREDICT** Inspect the code and guess at what the code might do,
+    **write predictions**
+-   **RUN** the code provided and check what happens
+-   **INFER** what the `parameters` of the code do and **write comments to explain**. What bells and whistles can you see?
+-   **MODIFY** the `parameters` code provided to understand the
+    `options` available. **Write comments** to show what you have aimed for and achieved.
+-   **MAKE** : take an idea/concept of your own, and graph it.
+
+
+# Data
+
+For today, we'll play with the `sounds` dataset. This data was derived from the R package [`wordbankr`](http://langcog.github.io/wordbankr/), an R interface to access [Wordbank](http://wordbank.stanford.edu)- an open source database of children's vocabulary development. The tool used to measure children's language and communicative development in this database is the [MacArthur-Bates Communicative Development Inventories (MB-CDI)](http://mb-cdi.stanford.edu). The MD-CDI is a parent-reported questionnaire.
+
 
 ```{r}
-library(tidyverse)
+sounds <- read_csv("./data/animal_sounds_summary.csv")
+```
+```{r, echo=FALSE}
+sounds %>% 
+  download_this(
+    output_name = "sounds dataset",
+    output_extension = ".csv",
+    button_label = "Download data as csv",
+    button_type = "default",
+    has_icon = TRUE,
+    icon = "fa fa-save",
+    class = "hvr-sweep-to-left"
+  )
+
 ```
 
-# Read in the data
-
-Use this code chunk to read in the data available at [http://bit.ly/cs631-meow](http://bit.ly/cs631-meow):
+Here is a glimpse of the data:
 
 ```{r}
-sounds <- read_csv("http://bit.ly/cs631-meow")
+glimpse(sounds)
 ```
 
-Or store it locally:
+Note that the unit of observation here is one-row-per-age-group/animal sound.
 
-```{r}
-sounds <- read_csv(here::here("static/labs/data", "animal_sounds_summary.csv"))
-```
+Variables you need for this lab:
+
+- `age`: child age in months
+- `sound`: a string describing a type of animal sound
+- `kids_produce`: the number of parents who answered "yes, my child produces this animal sound" (note that if the child produces a sound it is assumed that they understand it as well)
+- `kids_respond`: the number of parents who responded to this question at all
+- `prop_produce`: the proportion of kids whose parents endorsed that their child produces this animal sound, out of all questionnaires administered (i.e., `kids_produce / kids_respond`)
+
+Other variables in this dataset:
+
+- `kids_understand`: the number of parents who answered "yes, my child understands what this animal sound means" (note that a child can understand the sound but not produce it)
+- `prop_understand`: the proportion of kids whose parents endorsed that their child understands this animal sound, out of all questionnaires administered (i.e., `kids_understand / kids_respond`)
 
 
 
@@ -87,35 +136,6 @@ s + geom_point(aes(shape = z), size = 4, colour = "navy", fill = "orchid")
 ```
 
 
-# Data
-
-For the rest of today, we'll play with the `sounds` dataset. This data was derived from the R package [`wordbankr`](http://langcog.github.io/wordbankr/), an R interface to access [Wordbank](http://wordbank.stanford.edu)- an open source database of children's vocabulary development. The tool used to measure children's language and communicative development in this database is the [MacArthur-Bates Communicative Development Inventories (MB-CDI)](http://mb-cdi.stanford.edu). The MD-CDI is a parent-reported questionnaire.
-
-Here is a glimpse of the data:
-
-```{r}
-glimpse(sounds)
-```
-
-
-Note that the unit of observation here is one-row-per-age-group/animal sound.
-
-
-Variables you need for this lab:
-
-- `age`: child age in months
-- `sound`: a string describing a type of animal sound
-- `kids_produce`: the number of parents who answered "yes, my child produces this animal sound" (note that if the child produces a sound it is assumed that they understand it as well)
-- `kids_respond`: the number of parents who responded to this question at all
-- `prop_produce`: the proportion of kids whose parents endorsed that their child produces this animal sound, out of all questionnaires administered (i.e., `kids_produce / kids_respond`)
-
-Other variables in this dataset:
-
-- `kids_understand`: the number of parents who answered "yes, my child understands what this animal sound means" (note that a child can understand the sound but not produce it)
-- `prop_understand`: the proportion of kids whose parents endorsed that their child understands this animal sound, out of all questionnaires administered (i.e., `kids_understand / kids_respond`)
-
-
-
 # Discrete vs continuous variables
 
 [WHAT IS THE DIFFERENCE BETWEEN CATEGORICAL, ORDINAL AND INTERVAL VARIABLES?](https://stats.idre.ucla.edu/other/mult-pkg/whatstat/what-is-the-difference-between-categorical-ordinal-and-interval-variables/)
@@ -124,7 +144,7 @@ In order to use color with your data, most importantly, you need to know if youâ
 
 ## Discrete color palettes
 
-Discrete color palettes work best when you want to color by a qualitative variable. Qualitative variables tend to be either categorical or ordinal. Different variables can be qualitative or quantitative depending on context. 
+Discrete color palettes work best when you want to color by a qualitative variable. Qualitative variables tend to be either **categorical** or **ordinal**. Different variables can be qualitative or quantitative depending on context. 
 
 In this dataset, `sound` is a categorical variable with 3 possible values:
 ```{r}
@@ -133,7 +153,7 @@ sounds %>%
   knitr::kable()
 ```
 
-We could map arbitrary numbers onto each of these sounds, like 1, 2, and 3- but the numbers still would not mean anything. That is, there is no intrinsic ordering to these categories. Examples of common pure categorical variables are race or ethnicity, gender, hair color, eye color, etc. Coloring by sound is used as a way to *distinguish* the data for different sounds from each other (read more here: http://serialmentor.com/dataviz/color-basics.html#color-as-a-tool-to-distinguish)
+We could map arbitrary numbers onto each of these sounds, like 1, 2, and 3- but the numbers still would not mean anything. **That is, there is no intrinsic ordering to these categories.** Examples of common pure categorical variables are race or ethnicity, gender, hair color, eye color, etc. Coloring by sound is used as a way to *distinguish* the data for different sounds from each other (read more here: http://serialmentor.com/dataviz/color-basics.html#color-as-a-tool-to-distinguish)
 
 ## Continuous color palettes
 
@@ -525,10 +545,10 @@ To use these palettes, use `scale_color_manual` where `values` is set to `wes_pa
 
 ```{r}
 sound_traj +
-  scale_color_manual(values = wes_palette("Darjeeling"))
+  scale_color_manual(values = wes_palette("Darjeeling1"))
 
 sound_traj +
-  scale_color_manual(values = wes_palette("FantasticFox"))
+  scale_color_manual(values = wes_palette("FantasticFox1"))
 ```
 
 
@@ -541,10 +561,10 @@ If this was easy, try using colors 2, 3, and 5 instead.
 
 ```{r}
 sound_traj +
-  scale_color_manual(values = wes_palette("Darjeeling")[3:5])
+  scale_color_manual(values = wes_palette("Darjeeling2")[3:5])
 
 sound_traj +
-  scale_color_manual(values = wes_palette("FantasticFox")[c(2, 3, 5)])
+  scale_color_manual(values = wes_palette("FantasticFox1")[c(2, 3, 5)])
 ```
   </div>
 </div>

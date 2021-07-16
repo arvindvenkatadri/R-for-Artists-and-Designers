@@ -15,6 +15,16 @@ output:
 abstract: Part of the `R for Artists and Designers` workshop course at the School of Foundation Studies, Srishti Manipal Institute of Art, Design, and Technology, Bangalore.
 ---
 
+
+# Introduction
+
+This RMarkdown document is part of the Generic Skills Component  (GSK) of the Course of the  Foundation Studies Programme at Srishti Manipal Institute of Art, Design, and Technology, Bangalore India. The material is based on *A Layered Grammar of Graphics* by Hadley Wickham. The course is meant for First Year students pursuing a Degree in Art and Design. 
+
+The intent of this GSK part is to build Skill in coding in R, and also appreciate R as a way to metaphorically visualize information of various kinds, using predominantly geometric figures and structures.
+
+All RMarkdown files combine code, text, web-images, and figures developed using code. Everything is text; code chunks are enclosed in **fences** (```)
+
+
 # Goals
 
 At the end of this Lab session, we should:
@@ -25,6 +35,27 @@ At the end of this Lab session, we should:
 - add symbols and markers for places and regions of our own interest in these maps.
 - see directions for further work (e.g. maps + networks together)
 
+
+
+# Pedagogical Note
+
+The method followed will be based on
+[PRIMM](https://blogs.kcl.ac.uk/cser/2017/09/01/primm-a-structured-approach-to-teaching-programming/):
+
+-   **PREDICT** Inspect the code and guess at what the code might do,
+    **write predictions**
+-   **RUN** the code provided and check what happens
+-   **INFER** what the `parameters` of the code do and **write comments to explain**. What bells and whistles can you see?
+-   **MODIFY** the `parameters` code provided to understand the
+    `options` available. **Write comments** to show what you have aimed for and achieved.
+-   **MAKE** : take an idea/concept of your own, and graph it.
+
+
+## Set Up
+
+The `setup` code **chunk** below brings into our coding session **R packages** that provide specific computational abilities and also **datasets** which we can use. 
+
+To reiterate: Packages and datasets are **not** the same thing !! Packages are (small) collections of programs. Datasets are just....information.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)

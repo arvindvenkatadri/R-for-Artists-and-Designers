@@ -20,9 +20,9 @@ links:
   icon_pack: fas
   name: lab
   url: /labs/07-Grammar-of-Networks.html
-- icon: magic
-  icon_pack: fas
-  name: slides
-  url: /slides/07-Grammar-of-Networks.html
+# - icon: magic
+#   icon_pack: fas
+#   name: slides
+#   url: /slides/07-Grammar-of-Networks.html
 ---
 Hey, whom did Jon Snow marry?
