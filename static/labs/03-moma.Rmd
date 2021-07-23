@@ -60,7 +60,7 @@ We'll use data from the Museum of Modern Art (MoMA)
 ```{r}
 
 library(tidyverse) # readr, ggplot2, dplyr
-
+library(downloadthis)
 ```
 
 
@@ -79,6 +79,18 @@ moma <- read_csv("data/artworks-cleaned.csv")
 
 ```
 
+```{r, echo=FALSE}
+moma %>% 
+  download_this(
+    output_name = "Moma dataset",
+    output_extension = ".csv",
+    button_label = "Download data as csv",
+    button_type = "default",
+    has_icon = TRUE,
+    icon = "fa fa-save",
+    class = "hvr-sweep-to-left"
+  )
+```
 
 # Getting to Know your data: Make up some Questions
 
