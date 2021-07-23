@@ -6,7 +6,7 @@ institute: "Srishti Manipal Institute"
 date: "(`r Sys.Date()`)"
 output:
   xaringan::moon_reader:
-    css: ["default", "css/ohsu.css", "css/ohsu-fonts.css"]
+    css: ["default", "css/ohsu.css", "css/ohsu-fonts.css", "gentle-ggplot2.css"]
     lib_dir: libs
     nature:
       highlightStyle: atelier-lakeside-light
@@ -31,7 +31,16 @@ my_theme <- ggplot2::theme(text = element_text(size = 20))
 ggplot2::theme_set(my_theme)
 ```
 
-# What the Heck is a Grammar of Graphics?  
+class: middle, center
+## How does one read Shakespeare? 
+
+![shakespeare](https://media.giphy.com/media/oveqQA2LxpwYg/giphy.gif)
+
+~~To code or not to code, that is the question...~~
+
+---
+
+# What is a Grammar of Graphics?  
 
 ## Code looks and reads like **English**.   
 ## Has **verbs**, **nouns**, some **adjectives**....
@@ -43,102 +52,49 @@ ggplot2::theme_set(my_theme)
 --
 
 - **GEOMETRY** as the *target domain* : What comes out of R is predominantly "geometry"
+
 ---
 
-# What are we going to do
-## We will:
+
+layout: false
+# How do we express visuals in words?
+
+.font120[
+- **Data** to be visualized
+]
 
 --
-
-### 1.  Examine data and geometric graphics from a metaphoric standpoint.
-
---
-
-### 2.  Develop graphics using a bunch of "graphical metaphors"
+.font120[
+- **.hlb[Geom]etric objects** that appear on the plot
+]
 
 --
-
-### 3.  Try to do that in something resembling **English gRammaR** ( well, nearly, it is code after all !!)
-
-
----
-
-# How R we going to do it?
-
-
-- In R, we will take data from diverse **source Domains**
-
-  - Ecology
-  
-  - Finance
-  
-  - Jewellery ( yeah!)
-  
-  - Weather
-  
-  - Star Wars
-  
-  - GoT
-  
-  - ...
+.font120[
+- **.hlb[Aes]thetic mappings** from data to visual component
+]
 
 --
+.font120[
+- **.hlb[Stat]istics** transform data on the way to visualization
+]
 
+--
+.font120[
+- **.hlb[Coord]inates** organize location of geometric objects
+]
 
-- And make graphical metaphors out of them
+--
+.font120[
+- **.hlb[Scale]s** define the range of values for aesthetics
+]
 
-
--  Only our **target Domain** will be...Geometry. 
-
-
----
-
-class: middle, center
-## How does one read Shakespeare? 
-
-![shakespeare](https://media.giphy.com/media/oveqQA2LxpwYg/giphy.gif)
-
-~~To code or not to code, that is the question...~~
-
-
----
-
-# PRIMM Process
-
-- **Predict**: What could happen?
-
-- **Run**: the code and see
-
-- **Investigate**: What could really be happening?
-
-- **Modify**: Mess with the code and try
-
-- **Make**: Some thing brand new for yourself
-
-
-### Reference: 
-
-https://blogs.kcl.ac.uk/cser/2017/09/01/primm-a-structured-approach-to-teaching-programming/
+--
+.font120[
+- **.hlb[Facet]s** group into subplots
+]
 
 ---
 
-class: center middle
-
-# Let the R-ring begin
-
-### Please open the **`Grammar-of-Graphics.Rmd`** file, which you have downloaded and placed in your default R Work folder. 
-
-
----
-class: middle center inverse
-## Code Step-by-Step
-
----
-
-background-image: url("https://allisonhorst.github.io/palmerpenguins/reference/figures/lter_penguins.png")
-background-size: cover
-
----
 
 
 # The Essence of ggplot
@@ -149,9 +105,45 @@ all `ggplot2`
 - `aes(x = , y = , color = )` (add color)
 - `aes(x = , y = , size = )` (add size)
 - `+ facet_wrap(~ )` (facetting)
+- `+ scale_` ( add a scale)
 
 ---
+# gg is for Grammar of Graphics
 
+.left-column[
+### Data
+### Aesthetics
+### Geoms
+
+```r
++ geom_*()
+```
+]
+
+.right-column[
+
+```{r geom_demo, echo=FALSE, out.width = "850px", out.height="350px"}
+
+set.seed(4242)
+df_geom <- tibble(y = rnorm(10), x = 1:10)
+
+g_geom <- list()
+g_geom$point <- ggplot(df_geom, aes(x, y)) + geom_point() + ggtitle("geom_point()")
+g_geom$line <- ggplot(df_geom, aes(x, y)) + geom_line() + ggtitle("geom_line()")
+g_geom$bar <- ggplot(df_geom, aes(x, y)) + geom_col() + ggtitle("geom_col()")
+g_geom$boxplot <- ggplot(df_geom, aes(y = y)) + geom_boxplot() + ggtitle("geom_boxplot()")
+g_geom$histogram <- ggplot(df_geom, aes(y)) + geom_histogram(binwidth = 1) + ggtitle("geom_histogram()")
+g_geom$density <- ggplot(df_geom, aes(y)) + geom_density(fill = "grey40", alpha = 0.25) + ggtitle("geom_density()") + xlim(-4, 4)
+
+g_geom <- map(g_geom, ~ . + theme_minimal())
+
+cowplot::plot_grid(plotlist = g_geom)
+```
+]
+
+
+
+---
 
 
 # [The Five-Named Graphs](http://moderndive.com/3-viz.html#FiveNG)
@@ -351,7 +343,7 @@ Many `geom_s` have internal computation that are accessible to programmers.
 
 ---
 layout: true
-#### Chunk: Geom_Bar_Position_Stack_and_Dodge
+## Geom_Bar_Position_Stack_and_Dodge
 
 ---
 
@@ -390,12 +382,7 @@ The bars are coloured by the `island` variable and are **stacked** in **position
 
 .pull-left[
 And here we use the `dodge` option:
-```{r 5c, eval=FALSE, message=FALSE, warning=FALSE, animation.hook='gifski'}
-ggplot(penguins,
-           aes(x = species,
-               fill = island)) + 
-  geom_bar() + #<<
-  ggtitle(label = "A stacked bar chart") #<<
+```{r 5c, eval=FALSE, message=FALSE, warning=FALSE}
 
 ggplot(penguins,
            aes(x = species,
@@ -413,7 +400,7 @@ ggplot(penguins,
 ---
 
 layout: true
-#### Chunk: Facetting
+## Facetting
 
 ---
 
@@ -475,6 +462,89 @@ The graph has **split** into multiples, based on the **number** of islands.
 
 ---
 layout:false
+
+## Alpha
+.pull-left[
+```{r 7a, eval=FALSE, message=FALSE, warning=FALSE}
+diamonds %>% 
+  slice_sample(prop = 0.2) %>% 
+  ggplot(.) +
+  geom_point(aes(x = carat, y = price)) #<<
+```
+]
+
+.pull-right[
+  
+```{r, ref.label='7a', echo=FALSE,message=FALSE,warning=FALSE, out.width="90%"}
+```
+]
+
+---
+
+layout:false
+## Alpha
+.pull-left[
+```{r 7b, eval=FALSE, message=FALSE, warning=FALSE}
+diamonds %>% 
+  slice_sample(prop = 0.2) %>% 
+  ggplot(.) +
+  geom_point(aes(x = carat, y = price), alpha = 0.2) #<<
+```
+]
+.pull-right[
+```{r, ref.label='7b', echo=FALSE,message=FALSE,warning=FALSE, out.width="90%"}
+```
+]
+---
+
+## Finally...Colour !! ( Just a bit )
+.pull-left[
+```{r 8a, eval=FALSE, message=FALSE, warning=FALSE}
+diamonds %>% 
+  slice_sample(prop = 0.2) %>% 
+  ggplot(.) +
+  geom_point(aes(x = carat, y = price)) #<<
+```
+]
+.pull-right[
+```{r, ref.label='8a', echo=FALSE,message=FALSE,warning=FALSE, out.width="90%"}
+```
+]
+---
+
+## Finally...Colour !! ( Just a bit )
+.pull-left[
+```{r 8b, eval=FALSE, message=FALSE, warning=FALSE}
+diamonds %>% 
+  slice_sample(prop = 0.2) %>% 
+  ggplot(.) +
+  geom_point(aes(x = carat, y = price, colour = cut)) +
+               scale_colour_brewer(palette = "Set3") #<<
+```
+]
+.pull-right[
+```{r, ref.label='8b', echo=FALSE,message=FALSE,warning=FALSE, out.width="90%"}
+```
+]
+
+
+---
+
+## Chunk: Colour !! ( Just a bit )
+.pull-left[
+```{r 8c, eval=FALSE, message=FALSE, warning=FALSE}
+diamonds %>% 
+  slice_sample(prop = 0.2) %>% 
+  ggplot(.) +
+  geom_point(aes(x = carat, y = price, colour = cut)) +
+               scale_colour_viridis_d() #<<
+```
+]
+.pull-right[
+```{r, ref.label='8c', echo=FALSE,message=FALSE,warning=FALSE, out.width="90%"}
+```
+]
+
 
 # Conclusion
 - `ggplot` takes a dataframe/tibble as the data argument

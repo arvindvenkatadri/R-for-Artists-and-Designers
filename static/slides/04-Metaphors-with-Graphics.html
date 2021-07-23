@@ -8,6 +8,7 @@
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/ohsu.css" type="text/css" />
     <link rel="stylesheet" href="css/ohsu-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="gentle-ggplot2.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
@@ -17,14 +18,23 @@ class: center, middle, inverse, title-slide
 ## From Code to Geometry
 ### Arvind Venkatadri
 ### Srishti Manipal Institute
-### (2021-07-15)
+### (2021-07-23)
 
 ---
 
 
 
 
-# What the Heck is a Grammar of Graphics?  
+class: middle, center
+## How does one read Shakespeare? 
+
+![shakespeare](https://media.giphy.com/media/oveqQA2LxpwYg/giphy.gif)
+
+~~To code or not to code, that is the question...~~
+
+---
+
+# What is a Grammar of Graphics?  
 
 ## Code looks and reads like **English**.   
 ## Has **verbs**, **nouns**, some **adjectives**....
@@ -36,102 +46,49 @@ class: center, middle, inverse, title-slide
 --
 
 - **GEOMETRY** as the *target domain* : What comes out of R is predominantly "geometry"
+
 ---
 
-# What are we going to do
-## We will:
+
+layout: false
+# How do we express visuals in words?
+
+.font120[
+- **Data** to be visualized
+]
 
 --
-
-### 1.  Examine data and geometric graphics from a metaphoric standpoint.
-
---
-
-### 2.  Develop graphics using a bunch of "graphical metaphors"
+.font120[
+- **.hlb[Geom]etric objects** that appear on the plot
+]
 
 --
-
-### 3.  Try to do that in something resembling **English gRammaR** ( well, nearly, it is code after all !!)
-
-
----
-
-# How R we going to do it?
-
-
-- In R, we will take data from diverse **source Domains**
-
-  - Ecology
-  
-  - Finance
-  
-  - Jewellery ( yeah!)
-  
-  - Weather
-  
-  - Star Wars
-  
-  - GoT
-  
-  - ...
+.font120[
+- **.hlb[Aes]thetic mappings** from data to visual component
+]
 
 --
+.font120[
+- **.hlb[Stat]istics** transform data on the way to visualization
+]
 
+--
+.font120[
+- **.hlb[Coord]inates** organize location of geometric objects
+]
 
-- And make graphical metaphors out of them
+--
+.font120[
+- **.hlb[Scale]s** define the range of values for aesthetics
+]
 
-
--  Only our **target Domain** will be...Geometry. 
-
-
----
-
-class: middle, center
-## How does one read Shakespeare? 
-
-![shakespeare](https://media.giphy.com/media/oveqQA2LxpwYg/giphy.gif)
-
-~~To code or not to code, that is the question...~~
-
-
----
-
-# PRIMM Process
-
-- **Predict**: What could happen?
-
-- **Run**: the code and see
-
-- **Investigate**: What could really be happening?
-
-- **Modify**: Mess with the code and try
-
-- **Make**: Some thing brand new for yourself
-
-
-### Reference: 
-
-https://blogs.kcl.ac.uk/cser/2017/09/01/primm-a-structured-approach-to-teaching-programming/
+--
+.font120[
+- **.hlb[Facet]s** group into subplots
+]
 
 ---
 
-class: center middle
-
-# Let the R-ring begin
-
-### Please open the **`Grammar-of-Graphics.Rmd`** file, which you have downloaded and placed in your default R Work folder. 
-
-
----
-class: middle center inverse
-## Code Step-by-Step
-
----
-
-background-image: url("https://allisonhorst.github.io/palmerpenguins/reference/figures/lter_penguins.png")
-background-size: cover
-
----
 
 
 # The Essence of ggplot
@@ -142,9 +99,29 @@ all `ggplot2`
 - `aes(x = , y = , color = )` (add color)
 - `aes(x = , y = , size = )` (add size)
 - `+ facet_wrap(~ )` (facetting)
+- `+ scale_` ( add a scale)
 
 ---
+# gg is for Grammar of Graphics
 
+.left-column[
+### Data
+### Aesthetics
+### Geoms
+
+```r
++ geom_*()
+```
+]
+
+.right-column[
+
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/geom_demo-1.png" width="850px" height="350px" /&gt;
+]
+
+
+
+---
 
 
 # [The Five-Named Graphs](http://moderndive.com/3-viz.html#FiveNG)
@@ -356,7 +333,7 @@ Many `geom_s` have internal computation that are accessible to programmers.
 
 ---
 layout: true
-#### Chunk: Geom_Bar_Position_Stack_and_Dodge
+## Geom_Bar_Position_Stack_and_Dodge
 
 ---
 
@@ -400,25 +377,19 @@ And here we use the `dodge` option:
 ggplot(penguins,
            aes(x = species,
                fill = island)) + 
-* geom_bar() +
-* ggtitle(label = "A stacked bar chart")
-
-ggplot(penguins,
-           aes(x = species,
-               fill = island)) + 
 * geom_bar(position ="dodge") +
 * ggtitle(label =
 *           "A dodged bar chart")
 ```
 ]
 .pull-right[
-&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-10-1.png" width="90%" /&gt;&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-10-2.png" width="90%" /&gt;
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-10-1.png" width="90%" /&gt;
 ]
 
 ---
 
 layout: true
-#### Chunk: Facetting
+## Facetting
 
 ---
 
@@ -479,6 +450,89 @@ The graph has **split** into multiples, based on the **number** of islands.
 
 ---
 layout:false
+
+## Alpha
+.pull-left[
+
+```r
+diamonds %&gt;% 
+  slice_sample(prop = 0.2) %&gt;% 
+  ggplot(.) +
+* geom_point(aes(x = carat, y = price))
+```
+]
+
+.pull-right[
+  
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-15-1.png" width="90%" /&gt;
+]
+
+---
+
+layout:false
+## Alpha
+.pull-left[
+
+```r
+diamonds %&gt;% 
+  slice_sample(prop = 0.2) %&gt;% 
+  ggplot(.) +
+* geom_point(aes(x = carat, y = price), alpha = 0.2)
+```
+]
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-16-1.png" width="90%" /&gt;
+]
+---
+
+## Finally...Colour !! ( Just a bit )
+.pull-left[
+
+```r
+diamonds %&gt;% 
+  slice_sample(prop = 0.2) %&gt;% 
+  ggplot(.) +
+* geom_point(aes(x = carat, y = price))
+```
+]
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-17-1.png" width="90%" /&gt;
+]
+---
+
+## Finally...Colour !! ( Just a bit )
+.pull-left[
+
+```r
+diamonds %&gt;% 
+  slice_sample(prop = 0.2) %&gt;% 
+  ggplot(.) +
+  geom_point(aes(x = carat, y = price, colour = cut)) +
+*              scale_colour_brewer(palette = "Set3")
+```
+]
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-18-1.png" width="90%" /&gt;
+]
+
+
+---
+
+## Chunk: Colour !! ( Just a bit )
+.pull-left[
+
+```r
+diamonds %&gt;% 
+  slice_sample(prop = 0.2) %&gt;% 
+  ggplot(.) +
+  geom_point(aes(x = carat, y = price, colour = cut)) +
+*              scale_colour_viridis_d()
+```
+]
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-19-1.png" width="90%" /&gt;
+]
+
 
 # Conclusion
 - `ggplot` takes a dataframe/tibble as the data argument
