@@ -4,9 +4,18 @@
     <title>Slides 08 - The Grammar of Diagrams</title>
     <meta charset="utf-8" />
     <meta name="author" content="Arvind Venkatadri" />
-    <meta name="date" content="2021-07-12" />
+    <meta name="date" content="2021-07-18" />
     <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-webcam/webcam.js"></script>
+    <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <script src="libs/xaringanExtra_fit-screen/fit-screen.js"></script>
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+    <script src="libs/htmlwidgets/htmlwidgets.js"></script>
+    <script src="libs/viz/viz.js"></script>
+    <link href="libs/DiagrammeR-styles/styles.css" rel="stylesheet" />
+    <script src="libs/grViz-binding/grViz.js"></script>
     <link rel="stylesheet" href="css/ohsu.css" type="text/css" />
     <link rel="stylesheet" href="css/ohsu-fonts.css" type="text/css" />
   </head>
@@ -16,12 +25,105 @@ class: center, middle, inverse, title-slide
 
 # Slides 08 - The Grammar of Diagrams
 ### Arvind Venkatadri
-### 2021-07-12
+### 2021-07-18
 
 ---
 
 
 
+
+
+
+
+
+# Let's see how to use DiagrammeR
+
+- `DiagrammeR` uses the processing function called `grViz()`
+- What you pass into grViz() is a valid graph specification in the **DOT language**. 
+- The DOT graph description is delivered to grViz() in the form of a string, enclosed in quotes.
+
+---
+
+# Let's see how to use DiagrammeR
+
+Diagrams can be **undirected**...
+
+.pull-left[
+
+```r
+DiagrammeR::grViz(
+* "graph {A -- B}"
+  )
+```
+]
+
+.pull-right[
+
+<div id="htmlwidget-887df3e4cbeb97abe77d" style="width:50%;height:50%;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-887df3e4cbeb97abe77d">{"x":{"diagram":"graph {A -- B}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+]
+
+---
+
+# Let's see how to use DiagrammeR
+
+Diagrams can be undirected...or **directed**
+
+.pull-left[
+
+```r
+DiagrammeR::grViz(
+* "digraph {A -&gt; B}"
+  )
+```
+]
+
+.pull-right[
+
+<div id="htmlwidget-213c19b2f21500aed5d7" style="width:50%;height:50%;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-213c19b2f21500aed5d7">{"x":{"diagram":"digraph {A -> B}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+]
+
+---
+
+# Nodes and Labels
+
+.pull-left[
+
+
+```r
+grViz("
+digraph boxes_and_circles {
+
+  # a 'graph' statement
+  graph [overlap = true, fontsize = 10]
+
+  # several 'node' statements
+  node [shape = box,
+        fontname = Helvetica]
+  A; B; C; D; E; F
+
+  node [shape = circle,
+        fixedsize = true,
+        width = 0.9] // sets as circles
+  1; 2; 3; 4; 5; 6; 7; 8
+
+  # several 'edge' statements
+  A-&gt;1 B-&gt;2 B-&gt;3 B-&gt;4 C-&gt;A
+  1-&gt;D E-&gt;A 2-&gt;4 1-&gt;5 1-&gt;F
+  E-&gt;6 4-&gt;6 5-&gt;7 6-&gt;7 3-&gt;8
+}
+")
+```
+]
+
+
+.pull-right[
+
+<div id="htmlwidget-1e6c422b75f138fce09e" style="width:50%;height:50%;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1e6c422b75f138fce09e">{"x":{"diagram":"\ndigraph boxes_and_circles {\n\n  # a \"graph\" statement\n  graph [overlap = true, fontsize = 10]\n\n  # several \"node\" statements\n  node [shape = box,\n        fontname = Helvetica]\n  A; B; C; D; E; F\n\n  node [shape = circle,\n        fixedsize = true,\n        width = 0.9] // sets as circles\n  1; 2; 3; 4; 5; 6; 7; 8\n\n  # several \"edge\" statements\n  A->1 B->2 B->3 B->4 C->A\n  1->D E->A 2->4 1->5 1->F\n  E->6 4->6 5->7 6->7 3->8\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+
+]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

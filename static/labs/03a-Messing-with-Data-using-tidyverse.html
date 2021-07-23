@@ -331,11 +331,11 @@ starwars
 #&gt; # A tibble: 87 x 14
 #&gt;   name     height  mass hair_color skin_color  eye_color birth_year sex   gender
 #&gt;   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
-#&gt; 1 Luke Sk…    172    77 blond      fair        blue            19   male  mascu…
-#&gt; 2 C-3PO       167    75 &lt;NA&gt;       gold        yellow         112   none  mascu…
-#&gt; 3 R2-D2        96    32 &lt;NA&gt;       white, blue red             33   none  mascu…
-#&gt; 4 Darth V…    202   136 none       white       yellow          41.9 male  mascu…
-#&gt; # … with 83 more rows, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,
+#&gt; 1 Luke Sk~    172    77 blond      fair        blue            19   male  mascu~
+#&gt; 2 C-3PO       167    75 &lt;NA&gt;       gold        yellow         112   none  mascu~
+#&gt; 3 R2-D2        96    32 &lt;NA&gt;       white, blue red             33   none  mascu~
+#&gt; 4 Darth V~    202   136 none       white       yellow          41.9 male  mascu~
+#&gt; # ... with 83 more rows, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,
 #&gt; #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
 <p>Note that <code>starwars</code> is a <code>tibble</code>, a modern reimagining of the data frame. It’s particularly useful for large datasets because it only prints the first few rows. You can learn more about tibbles at <a href="https://tibble.tidyverse.org" class="uri">https://tibble.tidyverse.org</a>; in particular you can convert data frames to tibbles with <code>as_tibble()</code>.</p>
 <p>Check your Environment Tab to inspect <code>starwars</code> in a separate tab.</p>
@@ -376,11 +376,11 @@ starwars
 #&gt; # A tibble: 7 x 14
 #&gt;   name     height  mass hair_color skin_color eye_color birth_year sex    gender
 #&gt;   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; 
-#&gt; 1 Leia Or…    150    49 brown      light      brown             19 female femin…
-#&gt; 2 Biggs D…    183    84 black      light      brown             24 male   mascu…
-#&gt; 3 Cordé       157    NA brown      light      brown             NA female femin…
-#&gt; 4 Dormé       165    NA brown      light      brown             NA female femin…
-#&gt; # … with 3 more rows, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,
+#&gt; 1 Leia Or~    150    49 brown      light      brown             19 female femin~
+#&gt; 2 Biggs D~    183    84 black      light      brown             24 male   mascu~
+#&gt; 3 Cordé       157    NA brown      light      brown             NA female femin~
+#&gt; 4 Dormé       165    NA brown      light      brown             NA female femin~
+#&gt; # ... with 3 more rows, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,
 #&gt; #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
 </div>
 <div id="arrange-rows-with-arrange" class="section level3" number="4.2.3">
@@ -390,22 +390,22 @@ starwars
 #&gt; # A tibble: 87 x 14
 #&gt;   name      height  mass hair_color skin_color eye_color birth_year sex   gender
 #&gt;   &lt;chr&gt;      &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
-#&gt; 1 Yoda          66    17 white      green      brown            896 male  mascu…
-#&gt; 2 Ratts Ty…     79    15 none       grey, blue unknown           NA male  mascu…
-#&gt; 3 Wicket S…     88    20 brown      brown      brown              8 male  mascu…
-#&gt; 4 Dud Bolt      94    45 none       blue, grey yellow            NA male  mascu…
-#&gt; # … with 83 more rows, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,
+#&gt; 1 Yoda          66    17 white      green      brown            896 male  mascu~
+#&gt; 2 Ratts Ty~     79    15 none       grey, blue unknown           NA male  mascu~
+#&gt; 3 Wicket S~     88    20 brown      brown      brown              8 male  mascu~
+#&gt; 4 Dud Bolt      94    45 none       blue, grey yellow            NA male  mascu~
+#&gt; # ... with 83 more rows, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,
 #&gt; #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
 <p>Use <code>desc()</code> to order a column in descending order:</p>
 <pre class="r"><code>starwars %&gt;% arrange(desc(height))
 #&gt; # A tibble: 87 x 14
 #&gt;   name     height  mass hair_color skin_color eye_color birth_year sex   gender 
 #&gt;   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  
-#&gt; 1 Yarael …    264    NA none       white      yellow            NA male  mascul…
-#&gt; 2 Tarfful     234   136 brown      brown      blue              NA male  mascul…
-#&gt; 3 Lama Su     229    88 none       grey       black             NA male  mascul…
-#&gt; 4 Chewbac…    228   112 brown      unknown    blue             200 male  mascul…
-#&gt; # … with 83 more rows, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,
+#&gt; 1 Yarael ~    264    NA none       white      yellow            NA male  mascul~
+#&gt; 2 Tarfful     234   136 brown      brown      blue              NA male  mascul~
+#&gt; 3 Lama Su     229    88 none       grey       black             NA male  mascul~
+#&gt; 4 Chewbac~    228   112 brown      unknown    blue             200 male  mascul~
+#&gt; # ... with 83 more rows, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,
 #&gt; #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
 </div>
 <div id="choose-rows-using-their-position-with-slice" class="section level3" number="4.2.4">
@@ -419,11 +419,11 @@ starwars
 #&gt; # A tibble: 6 x 14
 #&gt;   name     height  mass hair_color  skin_color eye_color birth_year sex   gender
 #&gt;   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
-#&gt; 1 Leia Or…    150    49 brown       light      brown             19 fema… femin…
-#&gt; 2 Owen La…    178   120 brown, grey light      blue              52 male  mascu…
-#&gt; 3 Beru Wh…    165    75 brown       light      blue              47 fema… femin…
-#&gt; 4 R5-D4        97    32 &lt;NA&gt;        white, red red               NA none  mascu…
-#&gt; # … with 2 more rows, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,
+#&gt; 1 Leia Or~    150    49 brown       light      brown             19 fema~ femin~
+#&gt; 2 Owen La~    178   120 brown, grey light      blue              52 male  mascu~
+#&gt; 3 Beru Wh~    165    75 brown       light      blue              47 fema~ femin~
+#&gt; 4 R5-D4        97    32 &lt;NA&gt;        white, red red               NA none  mascu~
+#&gt; # ... with 2 more rows, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,
 #&gt; #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
 <p>It is accompanied by a number of helpers for common use cases:</p>
 <ul>
@@ -433,10 +433,10 @@ starwars
 #&gt; # A tibble: 3 x 14
 #&gt;   name     height  mass hair_color skin_color  eye_color birth_year sex   gender
 #&gt;   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
-#&gt; 1 Luke Sk…    172    77 blond      fair        blue              19 male  mascu…
-#&gt; 2 C-3PO       167    75 &lt;NA&gt;       gold        yellow           112 none  mascu…
-#&gt; 3 R2-D2        96    32 &lt;NA&gt;       white, blue red               33 none  mascu…
-#&gt; # … with 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
+#&gt; 1 Luke Sk~    172    77 blond      fair        blue              19 male  mascu~
+#&gt; 2 C-3PO       167    75 &lt;NA&gt;       gold        yellow           112 none  mascu~
+#&gt; 3 R2-D2        96    32 &lt;NA&gt;       white, blue red               33 none  mascu~
+#&gt; # ... with 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
 #&gt; #   vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
 <ul>
 <li><code>slice_sample()</code> randomly selects rows. Use the option prop to choose a certain proportion of the cases.</li>
@@ -445,21 +445,21 @@ starwars
 #&gt; # A tibble: 5 x 14
 #&gt;   name   height  mass hair_color skin_color   eye_color birth_year sex    gender
 #&gt;   &lt;chr&gt;   &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;        &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; 
-#&gt; 1 Dud B…     94    45 none       blue, grey   yellow            NA male   mascu…
-#&gt; 2 Bossk     190   113 none       green        red               53 male   mascu…
-#&gt; 3 Shaak…    178    57 none       red, blue, … black             NA female femin…
-#&gt; 4 Dormé     165    NA brown      light        brown             NA female femin…
-#&gt; # … with 1 more row, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,
+#&gt; 1 Dud B~     94    45 none       blue, grey   yellow            NA male   mascu~
+#&gt; 2 Bossk     190   113 none       green        red               53 male   mascu~
+#&gt; 3 Shaak~    178    57 none       red, blue, ~ black             NA female femin~
+#&gt; 4 Dormé     165    NA brown      light        brown             NA female femin~
+#&gt; # ... with 1 more row, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,
 #&gt; #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;
 starwars %&gt;% slice_sample(prop = 0.1)
 #&gt; # A tibble: 8 x 14
 #&gt;   name     height  mass hair_color skin_color  eye_color birth_year sex   gender
 #&gt;   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
-#&gt; 1 Qui-Gon…    193    89 brown      fair        blue              92 male  mascu…
-#&gt; 2 Dexter …    198   102 none       brown       yellow            NA male  mascu…
-#&gt; 3 R4-P17       96    NA none       silver, red red, blue         NA none  femin…
-#&gt; 4 Lama Su     229    88 none       grey        black             NA male  mascu…
-#&gt; # … with 4 more rows, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,
+#&gt; 1 Qui-Gon~    193    89 brown      fair        blue              92 male  mascu~
+#&gt; 2 Dexter ~    198   102 none       brown       yellow            NA male  mascu~
+#&gt; 3 R4-P17       96    NA none       silver, red red, blue         NA none  femin~
+#&gt; 4 Lama Su     229    88 none       grey        black             NA male  mascu~
+#&gt; # ... with 4 more rows, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,
 #&gt; #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
 <p>Use <code>replace = TRUE</code> to perform a bootstrap sample. If needed, you can weight the sample with the <code>weight</code> argument.</p>
 <pre><code>    Note : ` Bootstrap samples` are a special statistical sampling method. Counterintuitive perhaps, since you sample **with replacement**. Should remind you of your high school Permutation and Combination class, with all those urn models and so on. If you remember. </code></pre>
@@ -472,10 +472,10 @@ starwars %&gt;% slice_sample(prop = 0.1)
 #&gt; # A tibble: 3 x 14
 #&gt;   name      height  mass hair_color skin_color eye_color birth_year sex   gender
 #&gt;   &lt;chr&gt;      &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
-#&gt; 1 Yoda          66    17 white      green      brown            896 male  mascu…
-#&gt; 2 Ratts Ty…     79    15 none       grey, blue unknown           NA male  mascu…
-#&gt; 3 Wicket S…     88    20 brown      brown      brown              8 male  mascu…
-#&gt; # … with 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
+#&gt; 1 Yoda          66    17 white      green      brown            896 male  mascu~
+#&gt; 2 Ratts Ty~     79    15 none       grey, blue unknown           NA male  mascu~
+#&gt; 3 Wicket S~     88    20 brown      brown      brown              8 male  mascu~
+#&gt; # ... with 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
 #&gt; #   vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
 </div>
 <div id="select-columns-with-select" class="section level3" number="4.2.5">
@@ -490,7 +490,7 @@ starwars %&gt;% select(hair_color, skin_color, eye_color)
 #&gt; 2 &lt;NA&gt;       gold        yellow   
 #&gt; 3 &lt;NA&gt;       white, blue red      
 #&gt; 4 none       white       yellow   
-#&gt; # … with 83 more rows
+#&gt; # ... with 83 more rows
 # Select all columns between hair_color and eye_color (inclusive)
 starwars %&gt;% select(hair_color:eye_color)
 #&gt; # A tibble: 87 x 3
@@ -500,17 +500,17 @@ starwars %&gt;% select(hair_color:eye_color)
 #&gt; 2 &lt;NA&gt;       gold        yellow   
 #&gt; 3 &lt;NA&gt;       white, blue red      
 #&gt; 4 none       white       yellow   
-#&gt; # … with 83 more rows
+#&gt; # ... with 83 more rows
 # Select all columns except those from hair_color to eye_color (inclusive)
 starwars %&gt;% select(!(hair_color:eye_color))
 #&gt; # A tibble: 87 x 11
 #&gt;   name    height  mass birth_year sex   gender  homeworld species films vehicles
 #&gt;   &lt;chr&gt;    &lt;int&gt; &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;   &lt;lis&gt; &lt;list&gt;  
-#&gt; 1 Luke S…    172    77       19   male  mascul… Tatooine  Human   &lt;chr… &lt;chr [2…
-#&gt; 2 C-3PO      167    75      112   none  mascul… Tatooine  Droid   &lt;chr… &lt;chr [0…
-#&gt; 3 R2-D2       96    32       33   none  mascul… Naboo     Droid   &lt;chr… &lt;chr [0…
-#&gt; 4 Darth …    202   136       41.9 male  mascul… Tatooine  Human   &lt;chr… &lt;chr [0…
-#&gt; # … with 83 more rows, and 1 more variable: starships &lt;list&gt;
+#&gt; 1 Luke S~    172    77       19   male  mascul~ Tatooine  Human   &lt;chr~ &lt;chr [2~
+#&gt; 2 C-3PO      167    75      112   none  mascul~ Tatooine  Droid   &lt;chr~ &lt;chr [0~
+#&gt; 3 R2-D2       96    32       33   none  mascul~ Naboo     Droid   &lt;chr~ &lt;chr [0~
+#&gt; 4 Darth ~    202   136       41.9 male  mascul~ Tatooine  Human   &lt;chr~ &lt;chr [0~
+#&gt; # ... with 83 more rows, and 1 more variable: starships &lt;list&gt;
 # Select all columns ending with color
 starwars %&gt;% select(ends_with(&quot;color&quot;))
 #&gt; # A tibble: 87 x 3
@@ -520,7 +520,7 @@ starwars %&gt;% select(ends_with(&quot;color&quot;))
 #&gt; 2 &lt;NA&gt;       gold        yellow   
 #&gt; 3 &lt;NA&gt;       white, blue red      
 #&gt; 4 none       white       yellow   
-#&gt; # … with 83 more rows</code></pre>
+#&gt; # ... with 83 more rows</code></pre>
 <p>There are a number of helper functions you can use within <code>select()</code>, like <code>starts_with()</code>, <code>ends_with()</code>, <code>matches()</code> and <code>contains()</code>. These let you quickly match larger blocks of variables that meet some criterion. See <code>?select</code> for more details.</p>
 <p>You can even rename variables with <code>select()</code> by using named arguments:</p>
 <pre class="r"><code>starwars %&gt;% select(home_world = homeworld)
@@ -531,17 +531,17 @@ starwars %&gt;% select(ends_with(&quot;color&quot;))
 #&gt; 2 Tatooine  
 #&gt; 3 Naboo     
 #&gt; 4 Tatooine  
-#&gt; # … with 83 more rows</code></pre>
+#&gt; # ... with 83 more rows</code></pre>
 <p>But because <code>select()</code> drops all the variables not explicitly mentioned, it’s not that useful. Instead, use <code>rename()</code>:</p>
 <pre class="r"><code>starwars %&gt;% rename(home_world = homeworld)
 #&gt; # A tibble: 87 x 14
 #&gt;   name     height  mass hair_color skin_color  eye_color birth_year sex   gender
 #&gt;   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
-#&gt; 1 Luke Sk…    172    77 blond      fair        blue            19   male  mascu…
-#&gt; 2 C-3PO       167    75 &lt;NA&gt;       gold        yellow         112   none  mascu…
-#&gt; 3 R2-D2        96    32 &lt;NA&gt;       white, blue red             33   none  mascu…
-#&gt; 4 Darth V…    202   136 none       white       yellow          41.9 male  mascu…
-#&gt; # … with 83 more rows, and 5 more variables: home_world &lt;chr&gt;, species &lt;chr&gt;,
+#&gt; 1 Luke Sk~    172    77 blond      fair        blue            19   male  mascu~
+#&gt; 2 C-3PO       167    75 &lt;NA&gt;       gold        yellow         112   none  mascu~
+#&gt; 3 R2-D2        96    32 &lt;NA&gt;       white, blue red             33   none  mascu~
+#&gt; 4 Darth V~    202   136 none       white       yellow          41.9 male  mascu~
+#&gt; # ... with 83 more rows, and 5 more variables: home_world &lt;chr&gt;, species &lt;chr&gt;,
 #&gt; #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
 </div>
 <div id="add-new-columns-with-mutate" class="section level3" number="4.2.6">
@@ -551,11 +551,11 @@ starwars %&gt;% select(ends_with(&quot;color&quot;))
 #&gt; # A tibble: 87 x 15
 #&gt;   name     height  mass hair_color skin_color  eye_color birth_year sex   gender
 #&gt;   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
-#&gt; 1 Luke Sk…    172    77 blond      fair        blue            19   male  mascu…
-#&gt; 2 C-3PO       167    75 &lt;NA&gt;       gold        yellow         112   none  mascu…
-#&gt; 3 R2-D2        96    32 &lt;NA&gt;       white, blue red             33   none  mascu…
-#&gt; 4 Darth V…    202   136 none       white       yellow          41.9 male  mascu…
-#&gt; # … with 83 more rows, and 6 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,
+#&gt; 1 Luke Sk~    172    77 blond      fair        blue            19   male  mascu~
+#&gt; 2 C-3PO       167    75 &lt;NA&gt;       gold        yellow         112   none  mascu~
+#&gt; 3 R2-D2        96    32 &lt;NA&gt;       white, blue red             33   none  mascu~
+#&gt; 4 Darth V~    202   136 none       white       yellow          41.9 male  mascu~
+#&gt; # ... with 83 more rows, and 6 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,
 #&gt; #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;, height_m &lt;dbl&gt;</code></pre>
 <p>We can’t see the height in meters we just calculated, but we can fix that using a select command.</p>
 <pre class="r"><code>starwars %&gt;%
@@ -564,11 +564,11 @@ starwars %&gt;% select(ends_with(&quot;color&quot;))
 #&gt; # A tibble: 87 x 15
 #&gt;   height_m height name     mass hair_color skin_color eye_color birth_year sex  
 #&gt;      &lt;dbl&gt;  &lt;int&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;
-#&gt; 1     1.72    172 Luke S…    77 blond      fair       blue            19   male 
+#&gt; 1     1.72    172 Luke S~    77 blond      fair       blue            19   male 
 #&gt; 2     1.67    167 C-3PO      75 &lt;NA&gt;       gold       yellow         112   none 
-#&gt; 3     0.96     96 R2-D2      32 &lt;NA&gt;       white, bl… red             33   none 
-#&gt; 4     2.02    202 Darth …   136 none       white      yellow          41.9 male 
-#&gt; # … with 83 more rows, and 6 more variables: gender &lt;chr&gt;, homeworld &lt;chr&gt;,
+#&gt; 3     0.96     96 R2-D2      32 &lt;NA&gt;       white, bl~ red             33   none 
+#&gt; 4     2.02    202 Darth ~   136 none       white      yellow          41.9 male 
+#&gt; # ... with 83 more rows, and 6 more variables: gender &lt;chr&gt;, homeworld &lt;chr&gt;,
 #&gt; #   species &lt;chr&gt;, films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
 <p><code>dplyr::mutate()</code> is similar to the base <code>transform()</code>, but allows you to refer to columns that you’ve just created:</p>
 <pre class="r"><code>starwars %&gt;%
@@ -580,11 +580,11 @@ starwars %&gt;% select(ends_with(&quot;color&quot;))
 #&gt; # A tibble: 87 x 16
 #&gt;     BMI name       height  mass hair_color skin_color eye_color birth_year sex  
 #&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;
-#&gt; 1  26.0 Luke Skyw…    172    77 blond      fair       blue            19   male 
+#&gt; 1  26.0 Luke Skyw~    172    77 blond      fair       blue            19   male 
 #&gt; 2  26.9 C-3PO         167    75 &lt;NA&gt;       gold       yellow         112   none 
-#&gt; 3  34.7 R2-D2          96    32 &lt;NA&gt;       white, bl… red             33   none 
-#&gt; 4  33.3 Darth Vad…    202   136 none       white      yellow          41.9 male 
-#&gt; # … with 83 more rows, and 7 more variables: gender &lt;chr&gt;, homeworld &lt;chr&gt;,
+#&gt; 3  34.7 R2-D2          96    32 &lt;NA&gt;       white, bl~ red             33   none 
+#&gt; 4  33.3 Darth Vad~    202   136 none       white      yellow          41.9 male 
+#&gt; # ... with 83 more rows, and 7 more variables: gender &lt;chr&gt;, homeworld &lt;chr&gt;,
 #&gt; #   species &lt;chr&gt;, films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;,
 #&gt; #   height_m &lt;dbl&gt;</code></pre>
 <p>If you only want to keep the new variables, use <code>transmute()</code>:</p>
@@ -600,7 +600,7 @@ starwars %&gt;% select(ends_with(&quot;color&quot;))
 #&gt; 2     1.67  26.9
 #&gt; 3     0.96  34.7
 #&gt; 4     2.02  33.3
-#&gt; # … with 83 more rows</code></pre>
+#&gt; # ... with 83 more rows</code></pre>
 </div>
 <div id="change-column-order-with-relocate" class="section level3" number="4.2.7">
 <h3 number="4.2.7"><span class="header-section-number">4.2.7</span> Change column order with <code>relocate()</code></h3>
@@ -609,11 +609,11 @@ starwars %&gt;% select(ends_with(&quot;color&quot;))
 #&gt; # A tibble: 87 x 14
 #&gt;   name      sex   gender  homeworld height  mass hair_color skin_color eye_color
 #&gt;   &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;    
-#&gt; 1 Luke Sky… male  mascul… Tatooine     172    77 blond      fair       blue     
-#&gt; 2 C-3PO     none  mascul… Tatooine     167    75 &lt;NA&gt;       gold       yellow   
-#&gt; 3 R2-D2     none  mascul… Naboo         96    32 &lt;NA&gt;       white, bl… red      
-#&gt; 4 Darth Va… male  mascul… Tatooine     202   136 none       white      yellow   
-#&gt; # … with 83 more rows, and 5 more variables: birth_year &lt;dbl&gt;, species &lt;chr&gt;,
+#&gt; 1 Luke Sky~ male  mascul~ Tatooine     172    77 blond      fair       blue     
+#&gt; 2 C-3PO     none  mascul~ Tatooine     167    75 &lt;NA&gt;       gold       yellow   
+#&gt; 3 R2-D2     none  mascul~ Naboo         96    32 &lt;NA&gt;       white, bl~ red      
+#&gt; 4 Darth Va~ male  mascul~ Tatooine     202   136 none       white      yellow   
+#&gt; # ... with 83 more rows, and 5 more variables: birth_year &lt;dbl&gt;, species &lt;chr&gt;,
 #&gt; #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
 </div>
 <div id="summarise-values-with-summarise" class="section level3" number="4.2.8">
@@ -656,11 +656,11 @@ starwars %&gt;% select(ends_with(&quot;color&quot;))
 #&gt; 2 Besalisk male          198       102
 #&gt; 3 Cerean   male          198        82
 #&gt; 4 Chagrian male          196       NaN
-#&gt; # … with 37 more rows</code></pre>
+#&gt; # ... with 37 more rows</code></pre>
 </div>
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiTGFiIDAzYTogQW4gSW50cm9kdWN0aW9uIHRvIHRoZSBkcGx5ciBwYWNrYWdlIgphdXRob3I6ICJBcnZpbmQgVmVua2F0YWRyaSIKZGF0ZTogMDYvSnVseS8yMDIxCm91dHB1dDoKICBodG1sX2RvY3VtZW50OgogICAgdGhlbWU6IGZsYXRseQogICAgdG9jOiBUUlVFCiAgICB0b2NfZmxvYXQ6IFRSVUUKICAgIHRvY19kZXB0aDogMgogICAgbnVtYmVyX3NlY3Rpb25zOiBUUlVFCiAgICBjb2RlX2ZvbGRpbmc6IGhpZGUKICAgIGNvZGVfZG93bmxvYWQ6IFRSVUUKYWJzdHJhY3Q6IFBhcnQgb2YgdGhlIGBSIGZvciBBcnRpc3RzIGFuZCBEZXNpZ25lcnNgIGNvdXJzZSBhdCB0aGUgU2Nob29sIG9mIEZvdW5kYXRpb24gU3R1ZGllcywgU3Jpc2h0aSBNYW5pcGFsIEluc3RpdHV0ZSBvZiBBcnQsIERlc2lnbiwgYW5kIFRlY2hub2xvZ3ksIEJhbmdhbG9yZS4KCi0tLQojIEludHJvZHVjdGlvbgoKVGhpcyBSTWFya2Rvd24gZG9jdW1lbnQgaXMgcGFydCBvZiB0aGUgR2VuZXJpYyBTa2lsbHMgQ29tcG9uZW50ICAoR1NLKSBvZiB0aGUgQ291cnNlIG9mIHRoZSAgRm91bmRhdGlvbiBTdHVkaWVzIFByb2dyYW1tZSBhdCBTcmlzaHRpIE1hbmlwYWwgSW5zdGl0dXRlIG9mIEFydCwgRGVzaWduLCBhbmQgVGVjaG5vbG9neSwgQmFuZ2Fsb3JlIEluZGlhLiBUaGUgbWF0ZXJpYWwgaXMgYmFzZWQgb24gKkEgTGF5ZXJlZCBHcmFtbWFyIG9mIEdyYXBoaWNzKiBieSBIYWRsZXkgV2lja2hhbS4gVGhlIGNvdXJzZSBpcyBtZWFudCBmb3IgRmlyc3QgWWVhciBzdHVkZW50cyBwdXJzdWluZyBhIERlZ3JlZSBpbiBBcnQgYW5kIERlc2lnbi4gCgpUaGUgaW50ZW50IG9mIHRoaXMgR1NLIHBhcnQgaXMgdG8gYnVpbGQgU2tpbGwgaW4gY29kaW5nIGluIFIsIGFuZCBhbHNvIGFwcHJlY2lhdGUgUiBhcyBhIHdheSB0byBtZXRhcGhvcmljYWxseSB2aXN1YWxpemUgaW5mb3JtYXRpb24gb2YgdmFyaW91cyBraW5kcywgdXNpbmcgcHJlZG9taW5hbnRseSBnZW9tZXRyaWMgZmlndXJlcyBhbmQgc3RydWN0dXJlcy4KCkFsbCBSTWFya2Rvd24gZmlsZXMgY29tYmluZSBjb2RlLCB0ZXh0LCB3ZWItaW1hZ2VzLCBhbmQgZmlndXJlcyBkZXZlbG9wZWQgdXNpbmcgY29kZS4gRXZlcnl0aGluZyBpcyB0ZXh0OyBjb2RlIGNodW5rcyBhcmUgZW5jbG9zZWQgaW4gKipmZW5jZXMqKiAoYGBgKQoKIyBHb2FscyBmb3IgTGFiIDAzYQoKLSBVbmRlcnN0YW5kIHRoZSBpZGVhIG9mICJ0aWR5IiBkYXRhCi0gVXNpbmcgInRpZHkgZGF0YSIgYW5kIHRoZSAidGlkeXZlcnNlIiB3YXkgb2YgcHJvZ3JhbW1pbmcgaW4gUiBhbGxvd3MgdG8gdHJhbnNsYXRlIG91ciB0aG91Z2h0cyByZWFkaWx5IGludG8gY29kZS4gCi0gVW5kZXJzdGFuZCBgZHBseXJgIFZFUkIgZnVuY3Rpb25zIHRvIGdldCB0byBrbm93IGFuZCBtYW5pcHVsYXRlIGEgZGF0YXNldAoKIyBQZWRhZ29naWNhbCBOb3RlCgpUaGUgbWV0aG9kIGZvbGxvd2VkIHdpbGwgYmUgYmFzZWQgb24KW1BSSU1NXShodHRwczovL2Jsb2dzLmtjbC5hYy51ay9jc2VyLzIwMTcvMDkvMDEvcHJpbW0tYS1zdHJ1Y3R1cmVkLWFwcHJvYWNoLXRvLXRlYWNoaW5nLXByb2dyYW1taW5nLyk6CgotICAgKipQUkVESUNUKiogSW5zcGVjdCB0aGUgY29kZSBhbmQgZ3Vlc3MgYXQgd2hhdCB0aGUgY29kZSBtaWdodCBkbywKICAgICoqd3JpdGUgcHJlZGljdGlvbnMqKgotICAgKipSVU4qKiB0aGUgY29kZSBwcm92aWRlZCBhbmQgY2hlY2sgd2hhdCBoYXBwZW5zCi0gICAqKklORkVSKiogd2hhdCB0aGUgYHBhcmFtZXRlcnNgIG9mIHRoZSBjb2RlIGRvIGFuZCAqKndyaXRlIGNvbW1lbnRzIHRvIGV4cGxhaW4qKi4gV2hhdCBiZWxscyBhbmQgd2hpc3RsZXMgY2FuIHlvdSBzZWU/Ci0gICAqKk1PRElGWSoqIHRoZSBgcGFyYW1ldGVyc2AgY29kZSBwcm92aWRlZCB0byB1bmRlcnN0YW5kIHRoZQogICAgYG9wdGlvbnNgIGF2YWlsYWJsZS4gKipXcml0ZSBjb21tZW50cyoqIHRvIHNob3cgd2hhdCB5b3UgaGF2ZSBhaW1lZCBmb3IgYW5kIGFjaGlldmVkLgotICAgKipNQUtFKiogOiB0YWtlIGFuIGlkZWEvY29uY2VwdCBvZiB5b3VyIG93biwgYW5kIGdyYXBoIGl0LgojIEluc3BpcmF0aW9uICsgZGF0YQoKV2UnbGwgdXNlIGRhdGEgZnJvbSB0aGUgU3RhciBXYXJzIHNlcmllcyBvZiBtb3ZpZXMuIE1heSB0aGUgRm9yY2UgYmUgd2l0aCB5b3UhIQoKIyBQYWNrYWdlcyBuZWVkZWQKCmBgYHtyLCBlY2hvID0gRkFMU0UsIG1lc3NhZ2UgPSBGQUxTRX0Ka25pdHI6Om9wdHNfY2h1bmskc2V0KGNvbGxhcHNlID0gVCwgY29tbWVudCA9ICIjPiIpCm9wdGlvbnModGliYmxlLnByaW50X21pbiA9IDRMLCB0aWJibGUucHJpbnRfbWF4ID0gNEwpCmxpYnJhcnkodGlkeXZlcnNlKQpzZXQuc2VlZCgxMDE0KQpgYGAKCldoZW4gd29ya2luZyB3aXRoIGRhdGEgeW91IG11c3Q6CgoqIEZpZ3VyZSBvdXQgd2hhdCB5b3Ugd2FudCB0byBkby4KCiogRGVzY3JpYmUgdGhvc2UgdGFza3MgaW4gdGhlIGZvcm0gb2YgYSBjb21wdXRlciBwcm9ncmFtLgoKKiBFeGVjdXRlIHRoZSBwcm9ncmFtLgoKVGhlIGBkcGx5cmAgcGFja2FnZSBtYWtlcyB0aGVzZSBzdGVwcyBmYXN0IGFuZCBlYXN5OgoKKiBCeSBjb25zdHJhaW5pbmcgeW91ciBvcHRpb25zLCBpdCBoZWxwcyB5b3UgdGhpbmsgYWJvdXQgeW91ciBkYXRhIG1hbmlwdWxhdGlvbiBjaGFsbGVuZ2VzLgoKKiBJdCBwcm92aWRlcyBzaW1wbGUgKioidmVyYnMiKiosIGZ1bmN0aW9ucyB0aGF0IGNvcnJlc3BvbmQgdG8gdGhlIG1vc3QgY29tbW9uIGRhdGEgbWFuaXB1bGF0aW9uIHRhc2tzLCB0byBoZWxwIHlvdSB0cmFuc2xhdGUgeW91ciB0aG91Z2h0cyBpbnRvIGNvZGUuCgpUaGlzIGRvY3VtZW50IGludHJvZHVjZXMgeW91IHRvIGRwbHlyJ3MgYmFzaWMgc2V0IG9mIHRvb2xzLCBhbmQgc2hvd3MgeW91IGhvdyB0byBhcHBseSB0aGVtIHRvIGRhdGEgZnJhbWVzLiBgZHBseXJgIGFsc28gc3VwcG9ydHMgZGF0YWJhc2VzIHZpYSB0aGUgYGRicGx5cmAgcGFja2FnZSwgb25jZSB5b3UndmUgaW5zdGFsbGVkLCByZWFkIGB2aWduZXR0ZSgiZGJwbHlyIilgIHRvIGxlYXJuIG1vcmUuCgojIyBEYXRhOiBzdGFyd2FycwoKVG8gZXhwbG9yZSB0aGUgYmFzaWMgZGF0YSBtYW5pcHVsYXRpb24gdmVyYnMgb2YgYGRwbHlyYCwgd2UnbGwgdXNlIHRoZSBkYXRhc2V0IGBzdGFyd2Fyc2AuIFRoaXMgZGF0YXNldCBjb250YWlucyBgciBucm93KHN0YXJ3YXJzKWAgY2hhcmFjdGVycyBhbmQgY29tZXMgZnJvbSB0aGUgW1N0YXIgV2FycyBBUEldKGh0dHBzOi8vc3dhcGkuZGV2KSwgYW5kIGlzIGRvY3VtZW50ZWQgaW4gYD9zdGFyd2Fyc2AgCgpUaGlzIG1lYW5zOiB0eXBlIGA/c3RhcndhcnNgIGluIHRoZSBDb25zb2xlLiBUcnkuCgpgYGB7cn0KZGltKHN0YXJ3YXJzKQpzdGFyd2FycwpgYGAKCk5vdGUgdGhhdCBgc3RhcndhcnNgIGlzIGEgYHRpYmJsZWAsIGEgbW9kZXJuIHJlaW1hZ2luaW5nIG9mIHRoZSBkYXRhIGZyYW1lLiBJdCdzIHBhcnRpY3VsYXJseSB1c2VmdWwgZm9yIGxhcmdlIGRhdGFzZXRzIGJlY2F1c2UgaXQgb25seSBwcmludHMgdGhlIGZpcnN0IGZldyByb3dzLiBZb3UgY2FuIGxlYXJuIG1vcmUgYWJvdXQgdGliYmxlcyBhdCA8aHR0cHM6Ly90aWJibGUudGlkeXZlcnNlLm9yZz47IGluIHBhcnRpY3VsYXIgeW91IGNhbiBjb252ZXJ0IGRhdGEgZnJhbWVzIHRvIHRpYmJsZXMgd2l0aCBgYXNfdGliYmxlKClgLgoKQ2hlY2sgeW91ciBFbnZpcm9ubWVudCBUYWIgdG8gaW5zcGVjdCBgc3RhcndhcnNgIGluIGEgc2VwYXJhdGUgdGFiLgoKIyMgU2luZ2xlIHRhYmxlIHZlcmJzCgpgZHBseXJgIGFpbXMgdG8gcHJvdmlkZSBhIGZ1bmN0aW9uIGZvciBlYWNoIGJhc2ljIHZlcmIgb2YgZGF0YSBtYW5pcHVsYXRpb24uIFRoZXNlIHZlcmJzIGNhbiBiZSBvcmdhbmlzZWQgaW50byB0aHJlZSBjYXRlZ29yaWVzIGJhc2VkIG9uIHRoZSBjb21wb25lbnQgb2YgdGhlIGRhdGFzZXQgdGhhdCB0aGV5IHdvcmsgd2l0aDoKCiogUm93czoKICAqIGBmaWx0ZXIoKWAgY2hvb3NlcyByb3dzIGJhc2VkIG9uIGNvbHVtbiB2YWx1ZXMuCiAgKiBgc2xpY2UoKWAgY2hvb3NlcyByb3dzIGJhc2VkIG9uIGxvY2F0aW9uLgogICogYGFycmFuZ2UoKWAgY2hhbmdlcyB0aGUgb3JkZXIgb2YgdGhlIHJvd3MuCiAgCiogQ29sdW1uczoKICAqIGBzZWxlY3QoKWAgY2hhbmdlcyB3aGV0aGVyIG9yIG5vdCBhIGNvbHVtbiBpcyBpbmNsdWRlZC4KICAqIGByZW5hbWUoKWAgY2hhbmdlcyB0aGUgbmFtZSBvZiBjb2x1bW5zLgogICogYG11dGF0ZSgpYCBjaGFuZ2VzIHRoZSB2YWx1ZXMgb2YgY29sdW1ucyBhbmQgY3JlYXRlcyBuZXcgY29sdW1ucy4KICAqIGByZWxvY2F0ZSgpYCBjaGFuZ2VzIHRoZSBvcmRlciBvZiB0aGUgY29sdW1ucy4KCiogR3JvdXBzIG9mIHJvd3M6CiAgKiBgc3VtbWFyaXNlKClgIGNvbGxhcHNlcyBhIGdyb3VwIGludG8gYSBzaW5nbGUgcm93LgoKVGhpbmsgb2YgdGhlIHBhcmFsbGVscyBmcm9tIE1pY3Jvc29mdCBFeGNlbC4gCgojIyMgVGhlIHBpcGUKCkFsbCBvZiB0aGUgYGRwbHlyYCBmdW5jdGlvbnMgdGFrZSBhIGRhdGEgZnJhbWUgKG9yIGB0aWJibGVgKSBhcyB0aGUgZmlyc3QgYXJndW1lbnQuIFJhdGhlciB0aGFuIGZvcmNpbmcgdGhlIHVzZXIgdG8gZWl0aGVyIHNhdmUgaW50ZXJtZWRpYXRlIG9iamVjdHMgb3IgbmVzdCBmdW5jdGlvbnMsIGRwbHlyIHByb3ZpZGVzIHRoZSBgJT4lYCBvcGVyYXRvciBmcm9tIGBtYWdyaXR0cmAuIGB4ICU+JSBmKHkpYCB0dXJucyBpbnRvIGBmKHgsIHkpYCBzbyB0aGUgcmVzdWx0IGZyb20gb25lIHN0ZXAgaXMgdGhlbiAicGlwZWQiIGludG8gdGhlIG5leHQgc3RlcC4gWW91IGNhbiB1c2UgdGhlIHBpcGUgdG8gcmV3cml0ZSBtdWx0aXBsZSBvcGVyYXRpb25zIHRoYXQgeW91IGNhbiByZWFkIGxlZnQtdG8tcmlnaHQsIHRvcC10by1ib3R0b20gKCoqcmVhZGluZyB0aGUgcGlwZSBvcGVyYXRvciBhcyAidGhlbiIqKikuIAoKIyMjIEZpbHRlciByb3dzIHdpdGggYGZpbHRlcigpYAoKYGZpbHRlcigpYCBhbGxvd3MgeW91IHRvIHNlbGVjdCBhIHN1YnNldCBvZiByb3dzIGluIGEgZGF0YSBmcmFtZS4gTGlrZSBhbGwgc2luZ2xlIHZlcmJzLCB0aGUgZmlyc3QgYXJndW1lbnQgaXMgdGhlIHRpYmJsZSAob3IgZGF0YSBmcmFtZSkuIFRoZSBzZWNvbmQgYW5kIHN1YnNlcXVlbnQgYXJndW1lbnRzIHJlZmVyIHRvIHZhcmlhYmxlcyB3aXRoaW4gdGhhdCBkYXRhIGZyYW1lLCBzZWxlY3Rpbmcgcm93cyB3aGVyZSB0aGUgZXhwcmVzc2lvbiBpcyBgVFJVRWAuCgpGb3IgZXhhbXBsZSwgd2UgY2FuIHNlbGVjdCBhbGwgY2hhcmFjdGVyIHdpdGggbGlnaHQgc2tpbiBjb2xvciBhbmQgYnJvd24gZXllcyB3aXRoOgoKTm90ZSB0aGUgZG91YmxlIGVxdWFsIHRvIHNpZ24gKD09KSBiZWxvdyEgRXF1aXZhbGVudCB0byBNUyBFeGNlbCBEYXRhIC0+IEZpbHRlcgoKYGBge3J9CnN0YXJ3YXJzICU+JSBmaWx0ZXIoc2tpbl9jb2xvciA9PSAibGlnaHQiLCBleWVfY29sb3IgPT0gImJyb3duIikKYGBgCgoKIyMjIEFycmFuZ2Ugcm93cyB3aXRoIGBhcnJhbmdlKClgCgpgYXJyYW5nZSgpYCB3b3JrcyBzaW1pbGFybHkgdG8gYGZpbHRlcigpYCBleGNlcHQgdGhhdCBpbnN0ZWFkIG9mIGZpbHRlcmluZyBvciBzZWxlY3Rpbmcgcm93cywgaXQgKipyZW9yZGVycyoqIHRoZW0uIEl0IHRha2VzIGEgZGF0YSBmcmFtZSwgYW5kIGEgc2V0IG9mIGNvbHVtbiBuYW1lcyAob3IgbW9yZSBjb21wbGljYXRlZCBleHByZXNzaW9ucykgdG8gb3JkZXIgYnkuIElmIHlvdSBwcm92aWRlIG1vcmUgdGhhbiBvbmUgY29sdW1uIG5hbWUsIGVhY2ggYWRkaXRpb25hbCBjb2x1bW4gd2lsbCBiZSB1c2VkIHRvIGJyZWFrIHRpZXMgaW4gdGhlIHZhbHVlcyBvZiBwcmVjZWRpbmcgY29sdW1uczoKCmBgYHtyfQpzdGFyd2FycyAlPiUgYXJyYW5nZShoZWlnaHQsIG1hc3MpCmBgYAoKVXNlIGBkZXNjKClgIHRvIG9yZGVyIGEgY29sdW1uIGluIGRlc2NlbmRpbmcgb3JkZXI6CgpgYGB7cn0Kc3RhcndhcnMgJT4lIGFycmFuZ2UoZGVzYyhoZWlnaHQpKQpgYGAKCiMjIyAgQ2hvb3NlIHJvd3MgdXNpbmcgdGhlaXIgcG9zaXRpb24gd2l0aCBgc2xpY2UoKWAKCmBzbGljZSgpYCBsZXRzIHlvdSBpbmRleCByb3dzIGJ5IHRoZWlyIChpbnRlZ2VyKSBsb2NhdGlvbnMuIEl0IGFsbG93cyB5b3UgdG8gc2VsZWN0LCByZW1vdmUsIGFuZCBkdXBsaWNhdGUgcm93cy4gCgo+IFRoaXMgaXMgYW4gaW1wb3J0YW50IHN0ZXAgaW4gUHJlZGljdGlvbiwgTW9kZWxsaW5nIGFuZCBNYWNoaW5lIExlYXJuaW5nLiAKCldlIGNhbiBnZXQgY2hhcmFjdGVycyBmcm9tIHJvdyBudW1iZXJzIDUgdGhyb3VnaCAxMC4KYGBge3J9CnN0YXJ3YXJzICU+JSBzbGljZSg1OjEwKQpgYGAKCkl0IGlzIGFjY29tcGFuaWVkIGJ5IGEgbnVtYmVyIG9mIGhlbHBlcnMgZm9yIGNvbW1vbiB1c2UgY2FzZXM6CgoqIGBzbGljZV9oZWFkKClgIGFuZCBgc2xpY2VfdGFpbCgpYCBzZWxlY3QgdGhlIGZpcnN0IG9yIGxhc3Qgcm93cy4KCmBgYHtyfQpzdGFyd2FycyAlPiUgc2xpY2VfaGVhZChuID0gMykKYGBgCgoqIGBzbGljZV9zYW1wbGUoKWAgcmFuZG9tbHkgc2VsZWN0cyByb3dzLiBVc2UgdGhlIG9wdGlvbiBwcm9wIHRvIGNob29zZSBhIGNlcnRhaW4gcHJvcG9ydGlvbiBvZiB0aGUgY2FzZXMuCgpgYGB7cn0Kc3RhcndhcnMgJT4lIHNsaWNlX3NhbXBsZShuID0gNSkKc3RhcndhcnMgJT4lIHNsaWNlX3NhbXBsZShwcm9wID0gMC4xKQpgYGAKClVzZSBgcmVwbGFjZSA9IFRSVUVgIHRvIHBlcmZvcm0gYSBib290c3RyYXAgc2FtcGxlLiBJZiBuZWVkZWQsIHlvdSBjYW4gd2VpZ2h0IHRoZSBzYW1wbGUgd2l0aCB0aGUgYHdlaWdodGAgYXJndW1lbnQuCgogICAgICAgIE5vdGUgOiBgIEJvb3RzdHJhcCBzYW1wbGVzYCBhcmUgYSBzcGVjaWFsIHN0YXRpc3RpY2FsIHNhbXBsaW5nIG1ldGhvZC4gQ291bnRlcmludHVpdGl2ZSBwZXJoYXBzLCBzaW5jZSB5b3Ugc2FtcGxlICoqd2l0aCByZXBsYWNlbWVudCoqLiBTaG91bGQgcmVtaW5kIHlvdSBvZiB5b3VyIGhpZ2ggc2Nob29sIFBlcm11dGF0aW9uIGFuZCBDb21iaW5hdGlvbiBjbGFzcywgd2l0aCBhbGwgdGhvc2UgdXJuIG1vZGVscyBhbmQgc28gb24uIElmIHlvdSByZW1lbWJlci4gCgoqIGBzbGljZV9taW4oKWAgYW5kIGBzbGljZV9tYXgoKWAgc2VsZWN0IHJvd3Mgd2l0aCBoaWdoZXN0IG9yIGxvd2VzdCB2YWx1ZXMgb2YgYSB2YXJpYWJsZS4gTm90ZSB0aGF0IHdlIGZpcnN0IG11c3QgY2hvb3NlICBvbmx5IHRoZSB2YWx1ZXMgd2hpY2ggYXJlIG5vdCBOQS4KCmBgYHtyfQpzdGFyd2FycyAlPiUKICBmaWx0ZXIoIWlzLm5hKGhlaWdodCkpICU+JQogIHNsaWNlX21pbihoZWlnaHQsIG4gPSAzKQpgYGAKCiMjIyBTZWxlY3QgY29sdW1ucyB3aXRoIGBzZWxlY3QoKWAKCk9mdGVuIHlvdSB3b3JrIHdpdGggbGFyZ2UgZGF0YXNldHMgd2l0aCBtYW55IGNvbHVtbnMgYnV0IG9ubHkgYSBmZXcgYXJlIGFjdHVhbGx5IG9mIGludGVyZXN0IHRvIHlvdS4gYHNlbGVjdCgpYCBhbGxvd3MgeW91IHRvIHJhcGlkbHkgem9vbSBpbiBvbiBhIHVzZWZ1bCBzdWJzZXQgdXNpbmcgb3BlcmF0aW9ucyB0aGF0IHVzdWFsbHkgb25seSB3b3JrIG9uIG51bWVyaWMgdmFyaWFibGUgcG9zaXRpb25zOgoKYGBge3J9CiMgU2VsZWN0IGNvbHVtbnMgYnkgbmFtZQpzdGFyd2FycyAlPiUgc2VsZWN0KGhhaXJfY29sb3IsIHNraW5fY29sb3IsIGV5ZV9jb2xvcikKIyBTZWxlY3QgYWxsIGNvbHVtbnMgYmV0d2VlbiBoYWlyX2NvbG9yIGFuZCBleWVfY29sb3IgKGluY2x1c2l2ZSkKc3RhcndhcnMgJT4lIHNlbGVjdChoYWlyX2NvbG9yOmV5ZV9jb2xvcikKIyBTZWxlY3QgYWxsIGNvbHVtbnMgZXhjZXB0IHRob3NlIGZyb20gaGFpcl9jb2xvciB0byBleWVfY29sb3IgKGluY2x1c2l2ZSkKc3RhcndhcnMgJT4lIHNlbGVjdCghKGhhaXJfY29sb3I6ZXllX2NvbG9yKSkKIyBTZWxlY3QgYWxsIGNvbHVtbnMgZW5kaW5nIHdpdGggY29sb3IKc3RhcndhcnMgJT4lIHNlbGVjdChlbmRzX3dpdGgoImNvbG9yIikpCmBgYAoKVGhlcmUgYXJlIGEgbnVtYmVyIG9mIGhlbHBlciBmdW5jdGlvbnMgeW91IGNhbiB1c2Ugd2l0aGluIGBzZWxlY3QoKWAsIGxpa2UgYHN0YXJ0c193aXRoKClgLCBgZW5kc193aXRoKClgLCBgbWF0Y2hlcygpYCBhbmQgYGNvbnRhaW5zKClgLiBUaGVzZSBsZXQgeW91IHF1aWNrbHkgbWF0Y2ggbGFyZ2VyIGJsb2NrcyBvZiB2YXJpYWJsZXMgdGhhdCBtZWV0IHNvbWUgY3JpdGVyaW9uLiBTZWUgYD9zZWxlY3RgIGZvciBtb3JlIGRldGFpbHMuCgpZb3UgY2FuIGV2ZW4gcmVuYW1lIHZhcmlhYmxlcyB3aXRoIGBzZWxlY3QoKWAgYnkgdXNpbmcgbmFtZWQgYXJndW1lbnRzOgoKYGBge3J9CnN0YXJ3YXJzICU+JSBzZWxlY3QoaG9tZV93b3JsZCA9IGhvbWV3b3JsZCkKYGBgCgpCdXQgYmVjYXVzZSBgc2VsZWN0KClgIGRyb3BzIGFsbCB0aGUgdmFyaWFibGVzIG5vdCBleHBsaWNpdGx5IG1lbnRpb25lZCwgaXQncyBub3QgdGhhdCB1c2VmdWwuIEluc3RlYWQsIHVzZSBgcmVuYW1lKClgOgoKYGBge3J9CnN0YXJ3YXJzICU+JSByZW5hbWUoaG9tZV93b3JsZCA9IGhvbWV3b3JsZCkKYGBgCgojIyMgQWRkIG5ldyBjb2x1bW5zIHdpdGggYG11dGF0ZSgpYAoKQmVzaWRlcyBzZWxlY3Rpbmcgc2V0cyBvZiBleGlzdGluZyBjb2x1bW5zLCBpdCdzIG9mdGVuIHVzZWZ1bCB0byBhZGQgbmV3IGNvbHVtbnMgdGhhdCBhcmUgZnVuY3Rpb25zIG9mIGV4aXN0aW5nIGNvbHVtbnMuIFRoaXMgaXMgdGhlIGpvYiBvZiBgbXV0YXRlKClgOgoKYGBge3J9CnN0YXJ3YXJzICU+JSBtdXRhdGUoaGVpZ2h0X20gPSBoZWlnaHQgLyAxMDApCmBgYAoKV2UgY2FuJ3Qgc2VlIHRoZSBoZWlnaHQgaW4gbWV0ZXJzIHdlIGp1c3QgY2FsY3VsYXRlZCwgYnV0IHdlIGNhbiBmaXggdGhhdCB1c2luZyBhIHNlbGVjdCBjb21tYW5kLgoKYGBge3J9CnN0YXJ3YXJzICU+JQogIG11dGF0ZShoZWlnaHRfbSA9IGhlaWdodCAvIDEwMCkgJT4lCiAgc2VsZWN0KGhlaWdodF9tLCBoZWlnaHQsIGV2ZXJ5dGhpbmcoKSkKYGBgCgpgZHBseXI6Om11dGF0ZSgpYCBpcyBzaW1pbGFyIHRvIHRoZSBiYXNlIGB0cmFuc2Zvcm0oKWAsIGJ1dCBhbGxvd3MgeW91IHRvIHJlZmVyIHRvIGNvbHVtbnMgdGhhdCB5b3UndmUganVzdCBjcmVhdGVkOgoKYGBge3J9CnN0YXJ3YXJzICU+JQogIG11dGF0ZSgKICAgIGhlaWdodF9tID0gaGVpZ2h0IC8gMTAwLAogICAgQk1JID0gbWFzcyAvIChoZWlnaHRfbV4yKQogICkgJT4lCiAgc2VsZWN0KEJNSSwgZXZlcnl0aGluZygpKQpgYGAKCklmIHlvdSBvbmx5IHdhbnQgdG8ga2VlcCB0aGUgbmV3IHZhcmlhYmxlcywgdXNlIGB0cmFuc211dGUoKWA6CgpgYGB7cn0Kc3RhcndhcnMgJT4lCiAgdHJhbnNtdXRlKAogICAgaGVpZ2h0X20gPSBoZWlnaHQgLyAxMDAsCiAgICBCTUkgPSBtYXNzIC8gKGhlaWdodF9tXjIpCiAgKQpgYGAKCiMjIyBDaGFuZ2UgY29sdW1uIG9yZGVyIHdpdGggYHJlbG9jYXRlKClgCgpVc2UgYSBzaW1pbGFyIHN5bnRheCBhcyBgc2VsZWN0KClgIHRvIG1vdmUgYmxvY2tzIG9mIGNvbHVtbnMgYXQgb25jZQoKYGBge3J9CnN0YXJ3YXJzICU+JSByZWxvY2F0ZShzZXg6aG9tZXdvcmxkLCAuYmVmb3JlID0gaGVpZ2h0KQpgYGAKCgojIyMgU3VtbWFyaXNlIHZhbHVlcyB3aXRoIGBzdW1tYXJpc2UoKWAKClRoZSBsYXN0IHZlcmIgaXMgYHN1bW1hcmlzZSgpYC4gSXQgY29sbGFwc2VzIGEgZGF0YSBmcmFtZSB0byBhIHNpbmdsZSByb3cuCgpgYGB7cn0Kc3RhcndhcnMgJT4lIHN1bW1hcmlzZShtZWFuX2hlaWdodCA9IG1lYW4oaGVpZ2h0LCBuYS5ybSA9IFRSVUUpKQpgYGAKCkl0J3Mgbm90IHRoYXQgdXNlZnVsIHVudGlsIHdlIGxlYXJuIHRoZSBgZ3JvdXBfYnkoKWAgdmVyYiBiZWxvdy4KCgojIyMgQ29tbW9uYWxpdGllcwoKWW91IG1heSBoYXZlIG5vdGljZWQgdGhhdCB0aGUgc3ludGF4IGFuZCBmdW5jdGlvbiBvZiBhbGwgdGhlc2UgdmVyYnMgYXJlIHZlcnkgc2ltaWxhcjoKCiogVGhlIGZpcnN0IGFyZ3VtZW50IGlzIGEgZGF0YSBmcmFtZS4KCiogVGhlIHN1YnNlcXVlbnQgYXJndW1lbnRzIGRlc2NyaWJlIHdoYXQgdG8gZG8gd2l0aCB0aGUgZGF0YSBmcmFtZS4gWW91IGNhbgogIHJlZmVyIHRvIGNvbHVtbnMgaW4gdGhlIGRhdGEgZnJhbWUgZGlyZWN0bHkgd2l0aG91dCB1c2luZyBgJGAuCgoqIFRoZSByZXN1bHQgaXMgYSBuZXcgZGF0YSBmcmFtZQoKVG9nZXRoZXIgdGhlc2UgcHJvcGVydGllcyBtYWtlIGl0IGVhc3kgdG8gY2hhaW4gdG9nZXRoZXIgbXVsdGlwbGUgc2ltcGxlIHN0ZXBzIHRvIGFjaGlldmUgYSBjb21wbGV4IHJlc3VsdC4gCgpUaGVzZSBmaXZlIGZ1bmN0aW9ucyBwcm92aWRlIHRoZSBiYXNpcyBvZiBhIGxhbmd1YWdlIG9mIGRhdGEgbWFuaXB1bGF0aW9uLiBBdCB0aGUgbW9zdCBiYXNpYyBsZXZlbCwgeW91IGNhbiBvbmx5IGFsdGVyIGEgdGlkeSBkYXRhIGZyYW1lIGluIGZpdmUgdXNlZnVsIHdheXM6IHlvdSBjYW4gcmVvcmRlciB0aGUgcm93cyAoYGFycmFuZ2UoKWApLCBwaWNrIG9ic2VydmF0aW9ucyBhbmQgdmFyaWFibGVzIG9mIGludGVyZXN0IChgZmlsdGVyKClgIGFuZCBgc2VsZWN0KClgKSwgYWRkIG5ldyB2YXJpYWJsZXMgdGhhdCBhcmUgZnVuY3Rpb25zIG9mIGV4aXN0aW5nIHZhcmlhYmxlcyAoYG11dGF0ZSgpYCksIG9yIGNvbGxhcHNlIG1hbnkgdmFsdWVzIHRvIGEgc3VtbWFyeSAoYHN1bW1hcmlzZSgpYCkuIAoKIyMgQ29tYmluaW5nIGZ1bmN0aW9ucyB3aXRoIGAlPiVgIAoKVGhlIGRwbHlyIEFQSSBpcyBmdW5jdGlvbmFsIGluIHRoZSBzZW5zZSB0aGF0IGZ1bmN0aW9uIGNhbGxzIGRvbid0IGhhdmUgc2lkZS1lZmZlY3RzLiBkcGx5ciBwcm92aWRlcyB0aGUgYCU+JWAgb3BlcmF0b3IgZnJvbSBtYWdyaXR0ci4gYHggJT4lIGYoeSlgIHR1cm5zIGludG8gYGYoeCwgeSlgIHNvIHlvdSBjYW4gdXNlIGl0IHRvIHJld3JpdGUgbXVsdGlwbGUgb3BlcmF0aW9ucyB0aGF0IHlvdSBjYW4gcmVhZCBsZWZ0LXRvLXJpZ2h0LCB0b3AtdG8tYm90dG9tIChyZWFkaW5nIHRoZSBwaXBlIG9wZXJhdG9yIGFzICJ0aGVuIik6CgpgYGB7cn0Kc3RhcndhcnMgJT4lCiAgZ3JvdXBfYnkoc3BlY2llcywgc2V4KSAlPiUKICBzdW1tYXJpc2UoCiAgICBtZWFuX2hlaWdodCA9IG1lYW4oaGVpZ2h0LCBuYS5ybSA9IFRSVUUpLAogICAgbWVhbl9tYXNzID0gbWVhbihtYXNzLCBuYS5ybSA9IFRSVUUpCiAgKQpgYGAKCg==</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkxhYiAwM2E6IEFuIEludHJvZHVjdGlvbiB0byB0aGUgZHBseXIgcGFja2FnZSINCmF1dGhvcjogIkFydmluZCBWZW5rYXRhZHJpIg0KZGF0ZTogMDYvSnVseS8yMDIxDQpvdXRwdXQ6DQogIGh0bWxfZG9jdW1lbnQ6DQogICAgdGhlbWU6IGZsYXRseQ0KICAgIHRvYzogVFJVRQ0KICAgIHRvY19mbG9hdDogVFJVRQ0KICAgIHRvY19kZXB0aDogMg0KICAgIG51bWJlcl9zZWN0aW9uczogVFJVRQ0KICAgIGNvZGVfZm9sZGluZzogaGlkZQ0KICAgIGNvZGVfZG93bmxvYWQ6IFRSVUUNCmFic3RyYWN0OiBQYXJ0IG9mIHRoZSBgUiBmb3IgQXJ0aXN0cyBhbmQgRGVzaWduZXJzYCBjb3Vyc2UgYXQgdGhlIFNjaG9vbCBvZiBGb3VuZGF0aW9uIFN0dWRpZXMsIFNyaXNodGkgTWFuaXBhbCBJbnN0aXR1dGUgb2YgQXJ0LCBEZXNpZ24sIGFuZCBUZWNobm9sb2d5LCBCYW5nYWxvcmUuDQoNCi0tLQ0KIyBJbnRyb2R1Y3Rpb24NCg0KVGhpcyBSTWFya2Rvd24gZG9jdW1lbnQgaXMgcGFydCBvZiB0aGUgR2VuZXJpYyBTa2lsbHMgQ29tcG9uZW50ICAoR1NLKSBvZiB0aGUgQ291cnNlIG9mIHRoZSAgRm91bmRhdGlvbiBTdHVkaWVzIFByb2dyYW1tZSBhdCBTcmlzaHRpIE1hbmlwYWwgSW5zdGl0dXRlIG9mIEFydCwgRGVzaWduLCBhbmQgVGVjaG5vbG9neSwgQmFuZ2Fsb3JlIEluZGlhLiBUaGUgbWF0ZXJpYWwgaXMgYmFzZWQgb24gKkEgTGF5ZXJlZCBHcmFtbWFyIG9mIEdyYXBoaWNzKiBieSBIYWRsZXkgV2lja2hhbS4gVGhlIGNvdXJzZSBpcyBtZWFudCBmb3IgRmlyc3QgWWVhciBzdHVkZW50cyBwdXJzdWluZyBhIERlZ3JlZSBpbiBBcnQgYW5kIERlc2lnbi4gDQoNClRoZSBpbnRlbnQgb2YgdGhpcyBHU0sgcGFydCBpcyB0byBidWlsZCBTa2lsbCBpbiBjb2RpbmcgaW4gUiwgYW5kIGFsc28gYXBwcmVjaWF0ZSBSIGFzIGEgd2F5IHRvIG1ldGFwaG9yaWNhbGx5IHZpc3VhbGl6ZSBpbmZvcm1hdGlvbiBvZiB2YXJpb3VzIGtpbmRzLCB1c2luZyBwcmVkb21pbmFudGx5IGdlb21ldHJpYyBmaWd1cmVzIGFuZCBzdHJ1Y3R1cmVzLg0KDQpBbGwgUk1hcmtkb3duIGZpbGVzIGNvbWJpbmUgY29kZSwgdGV4dCwgd2ViLWltYWdlcywgYW5kIGZpZ3VyZXMgZGV2ZWxvcGVkIHVzaW5nIGNvZGUuIEV2ZXJ5dGhpbmcgaXMgdGV4dDsgY29kZSBjaHVua3MgYXJlIGVuY2xvc2VkIGluICoqZmVuY2VzKiogKGBgYCkNCg0KIyBHb2FscyBmb3IgTGFiIDAzYQ0KDQotIFVuZGVyc3RhbmQgdGhlIGlkZWEgb2YgInRpZHkiIGRhdGENCi0gVXNpbmcgInRpZHkgZGF0YSIgYW5kIHRoZSAidGlkeXZlcnNlIiB3YXkgb2YgcHJvZ3JhbW1pbmcgaW4gUiBhbGxvd3MgdG8gdHJhbnNsYXRlIG91ciB0aG91Z2h0cyByZWFkaWx5IGludG8gY29kZS4gDQotIFVuZGVyc3RhbmQgYGRwbHlyYCBWRVJCIGZ1bmN0aW9ucyB0byBnZXQgdG8ga25vdyBhbmQgbWFuaXB1bGF0ZSBhIGRhdGFzZXQNCg0KIyBQZWRhZ29naWNhbCBOb3RlDQoNClRoZSBtZXRob2QgZm9sbG93ZWQgd2lsbCBiZSBiYXNlZCBvbg0KW1BSSU1NXShodHRwczovL2Jsb2dzLmtjbC5hYy51ay9jc2VyLzIwMTcvMDkvMDEvcHJpbW0tYS1zdHJ1Y3R1cmVkLWFwcHJvYWNoLXRvLXRlYWNoaW5nLXByb2dyYW1taW5nLyk6DQoNCi0gICAqKlBSRURJQ1QqKiBJbnNwZWN0IHRoZSBjb2RlIGFuZCBndWVzcyBhdCB3aGF0IHRoZSBjb2RlIG1pZ2h0IGRvLA0KICAgICoqd3JpdGUgcHJlZGljdGlvbnMqKg0KLSAgICoqUlVOKiogdGhlIGNvZGUgcHJvdmlkZWQgYW5kIGNoZWNrIHdoYXQgaGFwcGVucw0KLSAgICoqSU5GRVIqKiB3aGF0IHRoZSBgcGFyYW1ldGVyc2Agb2YgdGhlIGNvZGUgZG8gYW5kICoqd3JpdGUgY29tbWVudHMgdG8gZXhwbGFpbioqLiBXaGF0IGJlbGxzIGFuZCB3aGlzdGxlcyBjYW4geW91IHNlZT8NCi0gICAqKk1PRElGWSoqIHRoZSBgcGFyYW1ldGVyc2AgY29kZSBwcm92aWRlZCB0byB1bmRlcnN0YW5kIHRoZQ0KICAgIGBvcHRpb25zYCBhdmFpbGFibGUuICoqV3JpdGUgY29tbWVudHMqKiB0byBzaG93IHdoYXQgeW91IGhhdmUgYWltZWQgZm9yIGFuZCBhY2hpZXZlZC4NCi0gICAqKk1BS0UqKiA6IHRha2UgYW4gaWRlYS9jb25jZXB0IG9mIHlvdXIgb3duLCBhbmQgZ3JhcGggaXQuDQojIEluc3BpcmF0aW9uICsgZGF0YQ0KDQpXZSdsbCB1c2UgZGF0YSBmcm9tIHRoZSBTdGFyIFdhcnMgc2VyaWVzIG9mIG1vdmllcy4gTWF5IHRoZSBGb3JjZSBiZSB3aXRoIHlvdSEhDQoNCiMgUGFja2FnZXMgbmVlZGVkDQoNCmBgYHtyLCBlY2hvID0gRkFMU0UsIG1lc3NhZ2UgPSBGQUxTRX0NCmtuaXRyOjpvcHRzX2NodW5rJHNldChjb2xsYXBzZSA9IFQsIGNvbW1lbnQgPSAiIz4iKQ0Kb3B0aW9ucyh0aWJibGUucHJpbnRfbWluID0gNEwsIHRpYmJsZS5wcmludF9tYXggPSA0TCkNCmxpYnJhcnkodGlkeXZlcnNlKQ0Kc2V0LnNlZWQoMTAxNCkNCmBgYA0KDQpXaGVuIHdvcmtpbmcgd2l0aCBkYXRhIHlvdSBtdXN0Og0KDQoqIEZpZ3VyZSBvdXQgd2hhdCB5b3Ugd2FudCB0byBkby4NCg0KKiBEZXNjcmliZSB0aG9zZSB0YXNrcyBpbiB0aGUgZm9ybSBvZiBhIGNvbXB1dGVyIHByb2dyYW0uDQoNCiogRXhlY3V0ZSB0aGUgcHJvZ3JhbS4NCg0KVGhlIGBkcGx5cmAgcGFja2FnZSBtYWtlcyB0aGVzZSBzdGVwcyBmYXN0IGFuZCBlYXN5Og0KDQoqIEJ5IGNvbnN0cmFpbmluZyB5b3VyIG9wdGlvbnMsIGl0IGhlbHBzIHlvdSB0aGluayBhYm91dCB5b3VyIGRhdGEgbWFuaXB1bGF0aW9uIGNoYWxsZW5nZXMuDQoNCiogSXQgcHJvdmlkZXMgc2ltcGxlICoqInZlcmJzIioqLCBmdW5jdGlvbnMgdGhhdCBjb3JyZXNwb25kIHRvIHRoZSBtb3N0IGNvbW1vbiBkYXRhIG1hbmlwdWxhdGlvbiB0YXNrcywgdG8gaGVscCB5b3UgdHJhbnNsYXRlIHlvdXIgdGhvdWdodHMgaW50byBjb2RlLg0KDQpUaGlzIGRvY3VtZW50IGludHJvZHVjZXMgeW91IHRvIGRwbHlyJ3MgYmFzaWMgc2V0IG9mIHRvb2xzLCBhbmQgc2hvd3MgeW91IGhvdyB0byBhcHBseSB0aGVtIHRvIGRhdGEgZnJhbWVzLiBgZHBseXJgIGFsc28gc3VwcG9ydHMgZGF0YWJhc2VzIHZpYSB0aGUgYGRicGx5cmAgcGFja2FnZSwgb25jZSB5b3UndmUgaW5zdGFsbGVkLCByZWFkIGB2aWduZXR0ZSgiZGJwbHlyIilgIHRvIGxlYXJuIG1vcmUuDQoNCiMjIERhdGE6IHN0YXJ3YXJzDQoNClRvIGV4cGxvcmUgdGhlIGJhc2ljIGRhdGEgbWFuaXB1bGF0aW9uIHZlcmJzIG9mIGBkcGx5cmAsIHdlJ2xsIHVzZSB0aGUgZGF0YXNldCBgc3RhcndhcnNgLiBUaGlzIGRhdGFzZXQgY29udGFpbnMgYHIgbnJvdyhzdGFyd2FycylgIGNoYXJhY3RlcnMgYW5kIGNvbWVzIGZyb20gdGhlIFtTdGFyIFdhcnMgQVBJXShodHRwczovL3N3YXBpLmRldiksIGFuZCBpcyBkb2N1bWVudGVkIGluIGA/c3RhcndhcnNgIA0KDQpUaGlzIG1lYW5zOiB0eXBlIGA/c3RhcndhcnNgIGluIHRoZSBDb25zb2xlLiBUcnkuDQoNCmBgYHtyfQ0KZGltKHN0YXJ3YXJzKQ0Kc3RhcndhcnMNCmBgYA0KDQpOb3RlIHRoYXQgYHN0YXJ3YXJzYCBpcyBhIGB0aWJibGVgLCBhIG1vZGVybiByZWltYWdpbmluZyBvZiB0aGUgZGF0YSBmcmFtZS4gSXQncyBwYXJ0aWN1bGFybHkgdXNlZnVsIGZvciBsYXJnZSBkYXRhc2V0cyBiZWNhdXNlIGl0IG9ubHkgcHJpbnRzIHRoZSBmaXJzdCBmZXcgcm93cy4gWW91IGNhbiBsZWFybiBtb3JlIGFib3V0IHRpYmJsZXMgYXQgPGh0dHBzOi8vdGliYmxlLnRpZHl2ZXJzZS5vcmc+OyBpbiBwYXJ0aWN1bGFyIHlvdSBjYW4gY29udmVydCBkYXRhIGZyYW1lcyB0byB0aWJibGVzIHdpdGggYGFzX3RpYmJsZSgpYC4NCg0KQ2hlY2sgeW91ciBFbnZpcm9ubWVudCBUYWIgdG8gaW5zcGVjdCBgc3RhcndhcnNgIGluIGEgc2VwYXJhdGUgdGFiLg0KDQojIyBTaW5nbGUgdGFibGUgdmVyYnMNCg0KYGRwbHlyYCBhaW1zIHRvIHByb3ZpZGUgYSBmdW5jdGlvbiBmb3IgZWFjaCBiYXNpYyB2ZXJiIG9mIGRhdGEgbWFuaXB1bGF0aW9uLiBUaGVzZSB2ZXJicyBjYW4gYmUgb3JnYW5pc2VkIGludG8gdGhyZWUgY2F0ZWdvcmllcyBiYXNlZCBvbiB0aGUgY29tcG9uZW50IG9mIHRoZSBkYXRhc2V0IHRoYXQgdGhleSB3b3JrIHdpdGg6DQoNCiogUm93czoNCiAgKiBgZmlsdGVyKClgIGNob29zZXMgcm93cyBiYXNlZCBvbiBjb2x1bW4gdmFsdWVzLg0KICAqIGBzbGljZSgpYCBjaG9vc2VzIHJvd3MgYmFzZWQgb24gbG9jYXRpb24uDQogICogYGFycmFuZ2UoKWAgY2hhbmdlcyB0aGUgb3JkZXIgb2YgdGhlIHJvd3MuDQogIA0KKiBDb2x1bW5zOg0KICAqIGBzZWxlY3QoKWAgY2hhbmdlcyB3aGV0aGVyIG9yIG5vdCBhIGNvbHVtbiBpcyBpbmNsdWRlZC4NCiAgKiBgcmVuYW1lKClgIGNoYW5nZXMgdGhlIG5hbWUgb2YgY29sdW1ucy4NCiAgKiBgbXV0YXRlKClgIGNoYW5nZXMgdGhlIHZhbHVlcyBvZiBjb2x1bW5zIGFuZCBjcmVhdGVzIG5ldyBjb2x1bW5zLg0KICAqIGByZWxvY2F0ZSgpYCBjaGFuZ2VzIHRoZSBvcmRlciBvZiB0aGUgY29sdW1ucy4NCg0KKiBHcm91cHMgb2Ygcm93czoNCiAgKiBgc3VtbWFyaXNlKClgIGNvbGxhcHNlcyBhIGdyb3VwIGludG8gYSBzaW5nbGUgcm93Lg0KDQpUaGluayBvZiB0aGUgcGFyYWxsZWxzIGZyb20gTWljcm9zb2Z0IEV4Y2VsLiANCg0KIyMjIFRoZSBwaXBlDQoNCkFsbCBvZiB0aGUgYGRwbHlyYCBmdW5jdGlvbnMgdGFrZSBhIGRhdGEgZnJhbWUgKG9yIGB0aWJibGVgKSBhcyB0aGUgZmlyc3QgYXJndW1lbnQuIFJhdGhlciB0aGFuIGZvcmNpbmcgdGhlIHVzZXIgdG8gZWl0aGVyIHNhdmUgaW50ZXJtZWRpYXRlIG9iamVjdHMgb3IgbmVzdCBmdW5jdGlvbnMsIGRwbHlyIHByb3ZpZGVzIHRoZSBgJT4lYCBvcGVyYXRvciBmcm9tIGBtYWdyaXR0cmAuIGB4ICU+JSBmKHkpYCB0dXJucyBpbnRvIGBmKHgsIHkpYCBzbyB0aGUgcmVzdWx0IGZyb20gb25lIHN0ZXAgaXMgdGhlbiAicGlwZWQiIGludG8gdGhlIG5leHQgc3RlcC4gWW91IGNhbiB1c2UgdGhlIHBpcGUgdG8gcmV3cml0ZSBtdWx0aXBsZSBvcGVyYXRpb25zIHRoYXQgeW91IGNhbiByZWFkIGxlZnQtdG8tcmlnaHQsIHRvcC10by1ib3R0b20gKCoqcmVhZGluZyB0aGUgcGlwZSBvcGVyYXRvciBhcyAidGhlbiIqKikuIA0KDQojIyMgRmlsdGVyIHJvd3Mgd2l0aCBgZmlsdGVyKClgDQoNCmBmaWx0ZXIoKWAgYWxsb3dzIHlvdSB0byBzZWxlY3QgYSBzdWJzZXQgb2Ygcm93cyBpbiBhIGRhdGEgZnJhbWUuIExpa2UgYWxsIHNpbmdsZSB2ZXJicywgdGhlIGZpcnN0IGFyZ3VtZW50IGlzIHRoZSB0aWJibGUgKG9yIGRhdGEgZnJhbWUpLiBUaGUgc2Vjb25kIGFuZCBzdWJzZXF1ZW50IGFyZ3VtZW50cyByZWZlciB0byB2YXJpYWJsZXMgd2l0aGluIHRoYXQgZGF0YSBmcmFtZSwgc2VsZWN0aW5nIHJvd3Mgd2hlcmUgdGhlIGV4cHJlc3Npb24gaXMgYFRSVUVgLg0KDQpGb3IgZXhhbXBsZSwgd2UgY2FuIHNlbGVjdCBhbGwgY2hhcmFjdGVyIHdpdGggbGlnaHQgc2tpbiBjb2xvciBhbmQgYnJvd24gZXllcyB3aXRoOg0KDQpOb3RlIHRoZSBkb3VibGUgZXF1YWwgdG8gc2lnbiAoPT0pIGJlbG93ISBFcXVpdmFsZW50IHRvIE1TIEV4Y2VsIERhdGEgLT4gRmlsdGVyDQoNCmBgYHtyfQ0Kc3RhcndhcnMgJT4lIGZpbHRlcihza2luX2NvbG9yID09ICJsaWdodCIsIGV5ZV9jb2xvciA9PSAiYnJvd24iKQ0KYGBgDQoNCg0KIyMjIEFycmFuZ2Ugcm93cyB3aXRoIGBhcnJhbmdlKClgDQoNCmBhcnJhbmdlKClgIHdvcmtzIHNpbWlsYXJseSB0byBgZmlsdGVyKClgIGV4Y2VwdCB0aGF0IGluc3RlYWQgb2YgZmlsdGVyaW5nIG9yIHNlbGVjdGluZyByb3dzLCBpdCAqKnJlb3JkZXJzKiogdGhlbS4gSXQgdGFrZXMgYSBkYXRhIGZyYW1lLCBhbmQgYSBzZXQgb2YgY29sdW1uIG5hbWVzIChvciBtb3JlIGNvbXBsaWNhdGVkIGV4cHJlc3Npb25zKSB0byBvcmRlciBieS4gSWYgeW91IHByb3ZpZGUgbW9yZSB0aGFuIG9uZSBjb2x1bW4gbmFtZSwgZWFjaCBhZGRpdGlvbmFsIGNvbHVtbiB3aWxsIGJlIHVzZWQgdG8gYnJlYWsgdGllcyBpbiB0aGUgdmFsdWVzIG9mIHByZWNlZGluZyBjb2x1bW5zOg0KDQpgYGB7cn0NCnN0YXJ3YXJzICU+JSBhcnJhbmdlKGhlaWdodCwgbWFzcykNCmBgYA0KDQpVc2UgYGRlc2MoKWAgdG8gb3JkZXIgYSBjb2x1bW4gaW4gZGVzY2VuZGluZyBvcmRlcjoNCg0KYGBge3J9DQpzdGFyd2FycyAlPiUgYXJyYW5nZShkZXNjKGhlaWdodCkpDQpgYGANCg0KIyMjICBDaG9vc2Ugcm93cyB1c2luZyB0aGVpciBwb3NpdGlvbiB3aXRoIGBzbGljZSgpYA0KDQpgc2xpY2UoKWAgbGV0cyB5b3UgaW5kZXggcm93cyBieSB0aGVpciAoaW50ZWdlcikgbG9jYXRpb25zLiBJdCBhbGxvd3MgeW91IHRvIHNlbGVjdCwgcmVtb3ZlLCBhbmQgZHVwbGljYXRlIHJvd3MuIA0KDQo+IFRoaXMgaXMgYW4gaW1wb3J0YW50IHN0ZXAgaW4gUHJlZGljdGlvbiwgTW9kZWxsaW5nIGFuZCBNYWNoaW5lIExlYXJuaW5nLiANCg0KV2UgY2FuIGdldCBjaGFyYWN0ZXJzIGZyb20gcm93IG51bWJlcnMgNSB0aHJvdWdoIDEwLg0KYGBge3J9DQpzdGFyd2FycyAlPiUgc2xpY2UoNToxMCkNCmBgYA0KDQpJdCBpcyBhY2NvbXBhbmllZCBieSBhIG51bWJlciBvZiBoZWxwZXJzIGZvciBjb21tb24gdXNlIGNhc2VzOg0KDQoqIGBzbGljZV9oZWFkKClgIGFuZCBgc2xpY2VfdGFpbCgpYCBzZWxlY3QgdGhlIGZpcnN0IG9yIGxhc3Qgcm93cy4NCg0KYGBge3J9DQpzdGFyd2FycyAlPiUgc2xpY2VfaGVhZChuID0gMykNCmBgYA0KDQoqIGBzbGljZV9zYW1wbGUoKWAgcmFuZG9tbHkgc2VsZWN0cyByb3dzLiBVc2UgdGhlIG9wdGlvbiBwcm9wIHRvIGNob29zZSBhIGNlcnRhaW4gcHJvcG9ydGlvbiBvZiB0aGUgY2FzZXMuDQoNCmBgYHtyfQ0Kc3RhcndhcnMgJT4lIHNsaWNlX3NhbXBsZShuID0gNSkNCnN0YXJ3YXJzICU+JSBzbGljZV9zYW1wbGUocHJvcCA9IDAuMSkNCmBgYA0KDQpVc2UgYHJlcGxhY2UgPSBUUlVFYCB0byBwZXJmb3JtIGEgYm9vdHN0cmFwIHNhbXBsZS4gSWYgbmVlZGVkLCB5b3UgY2FuIHdlaWdodCB0aGUgc2FtcGxlIHdpdGggdGhlIGB3ZWlnaHRgIGFyZ3VtZW50Lg0KDQogICAgICAgIE5vdGUgOiBgIEJvb3RzdHJhcCBzYW1wbGVzYCBhcmUgYSBzcGVjaWFsIHN0YXRpc3RpY2FsIHNhbXBsaW5nIG1ldGhvZC4gQ291bnRlcmludHVpdGl2ZSBwZXJoYXBzLCBzaW5jZSB5b3Ugc2FtcGxlICoqd2l0aCByZXBsYWNlbWVudCoqLiBTaG91bGQgcmVtaW5kIHlvdSBvZiB5b3VyIGhpZ2ggc2Nob29sIFBlcm11dGF0aW9uIGFuZCBDb21iaW5hdGlvbiBjbGFzcywgd2l0aCBhbGwgdGhvc2UgdXJuIG1vZGVscyBhbmQgc28gb24uIElmIHlvdSByZW1lbWJlci4gDQoNCiogYHNsaWNlX21pbigpYCBhbmQgYHNsaWNlX21heCgpYCBzZWxlY3Qgcm93cyB3aXRoIGhpZ2hlc3Qgb3IgbG93ZXN0IHZhbHVlcyBvZiBhIHZhcmlhYmxlLiBOb3RlIHRoYXQgd2UgZmlyc3QgbXVzdCBjaG9vc2UgIG9ubHkgdGhlIHZhbHVlcyB3aGljaCBhcmUgbm90IE5BLg0KDQpgYGB7cn0NCnN0YXJ3YXJzICU+JQ0KICBmaWx0ZXIoIWlzLm5hKGhlaWdodCkpICU+JQ0KICBzbGljZV9taW4oaGVpZ2h0LCBuID0gMykNCmBgYA0KDQojIyMgU2VsZWN0IGNvbHVtbnMgd2l0aCBgc2VsZWN0KClgDQoNCk9mdGVuIHlvdSB3b3JrIHdpdGggbGFyZ2UgZGF0YXNldHMgd2l0aCBtYW55IGNvbHVtbnMgYnV0IG9ubHkgYSBmZXcgYXJlIGFjdHVhbGx5IG9mIGludGVyZXN0IHRvIHlvdS4gYHNlbGVjdCgpYCBhbGxvd3MgeW91IHRvIHJhcGlkbHkgem9vbSBpbiBvbiBhIHVzZWZ1bCBzdWJzZXQgdXNpbmcgb3BlcmF0aW9ucyB0aGF0IHVzdWFsbHkgb25seSB3b3JrIG9uIG51bWVyaWMgdmFyaWFibGUgcG9zaXRpb25zOg0KDQpgYGB7cn0NCiMgU2VsZWN0IGNvbHVtbnMgYnkgbmFtZQ0Kc3RhcndhcnMgJT4lIHNlbGVjdChoYWlyX2NvbG9yLCBza2luX2NvbG9yLCBleWVfY29sb3IpDQojIFNlbGVjdCBhbGwgY29sdW1ucyBiZXR3ZWVuIGhhaXJfY29sb3IgYW5kIGV5ZV9jb2xvciAoaW5jbHVzaXZlKQ0Kc3RhcndhcnMgJT4lIHNlbGVjdChoYWlyX2NvbG9yOmV5ZV9jb2xvcikNCiMgU2VsZWN0IGFsbCBjb2x1bW5zIGV4Y2VwdCB0aG9zZSBmcm9tIGhhaXJfY29sb3IgdG8gZXllX2NvbG9yIChpbmNsdXNpdmUpDQpzdGFyd2FycyAlPiUgc2VsZWN0KCEoaGFpcl9jb2xvcjpleWVfY29sb3IpKQ0KIyBTZWxlY3QgYWxsIGNvbHVtbnMgZW5kaW5nIHdpdGggY29sb3INCnN0YXJ3YXJzICU+JSBzZWxlY3QoZW5kc193aXRoKCJjb2xvciIpKQ0KYGBgDQoNClRoZXJlIGFyZSBhIG51bWJlciBvZiBoZWxwZXIgZnVuY3Rpb25zIHlvdSBjYW4gdXNlIHdpdGhpbiBgc2VsZWN0KClgLCBsaWtlIGBzdGFydHNfd2l0aCgpYCwgYGVuZHNfd2l0aCgpYCwgYG1hdGNoZXMoKWAgYW5kIGBjb250YWlucygpYC4gVGhlc2UgbGV0IHlvdSBxdWlja2x5IG1hdGNoIGxhcmdlciBibG9ja3Mgb2YgdmFyaWFibGVzIHRoYXQgbWVldCBzb21lIGNyaXRlcmlvbi4gU2VlIGA/c2VsZWN0YCBmb3IgbW9yZSBkZXRhaWxzLg0KDQpZb3UgY2FuIGV2ZW4gcmVuYW1lIHZhcmlhYmxlcyB3aXRoIGBzZWxlY3QoKWAgYnkgdXNpbmcgbmFtZWQgYXJndW1lbnRzOg0KDQpgYGB7cn0NCnN0YXJ3YXJzICU+JSBzZWxlY3QoaG9tZV93b3JsZCA9IGhvbWV3b3JsZCkNCmBgYA0KDQpCdXQgYmVjYXVzZSBgc2VsZWN0KClgIGRyb3BzIGFsbCB0aGUgdmFyaWFibGVzIG5vdCBleHBsaWNpdGx5IG1lbnRpb25lZCwgaXQncyBub3QgdGhhdCB1c2VmdWwuIEluc3RlYWQsIHVzZSBgcmVuYW1lKClgOg0KDQpgYGB7cn0NCnN0YXJ3YXJzICU+JSByZW5hbWUoaG9tZV93b3JsZCA9IGhvbWV3b3JsZCkNCmBgYA0KDQojIyMgQWRkIG5ldyBjb2x1bW5zIHdpdGggYG11dGF0ZSgpYA0KDQpCZXNpZGVzIHNlbGVjdGluZyBzZXRzIG9mIGV4aXN0aW5nIGNvbHVtbnMsIGl0J3Mgb2Z0ZW4gdXNlZnVsIHRvIGFkZCBuZXcgY29sdW1ucyB0aGF0IGFyZSBmdW5jdGlvbnMgb2YgZXhpc3RpbmcgY29sdW1ucy4gVGhpcyBpcyB0aGUgam9iIG9mIGBtdXRhdGUoKWA6DQoNCmBgYHtyfQ0Kc3RhcndhcnMgJT4lIG11dGF0ZShoZWlnaHRfbSA9IGhlaWdodCAvIDEwMCkNCmBgYA0KDQpXZSBjYW4ndCBzZWUgdGhlIGhlaWdodCBpbiBtZXRlcnMgd2UganVzdCBjYWxjdWxhdGVkLCBidXQgd2UgY2FuIGZpeCB0aGF0IHVzaW5nIGEgc2VsZWN0IGNvbW1hbmQuDQoNCmBgYHtyfQ0Kc3RhcndhcnMgJT4lDQogIG11dGF0ZShoZWlnaHRfbSA9IGhlaWdodCAvIDEwMCkgJT4lDQogIHNlbGVjdChoZWlnaHRfbSwgaGVpZ2h0LCBldmVyeXRoaW5nKCkpDQpgYGANCg0KYGRwbHlyOjptdXRhdGUoKWAgaXMgc2ltaWxhciB0byB0aGUgYmFzZSBgdHJhbnNmb3JtKClgLCBidXQgYWxsb3dzIHlvdSB0byByZWZlciB0byBjb2x1bW5zIHRoYXQgeW91J3ZlIGp1c3QgY3JlYXRlZDoNCg0KYGBge3J9DQpzdGFyd2FycyAlPiUNCiAgbXV0YXRlKA0KICAgIGhlaWdodF9tID0gaGVpZ2h0IC8gMTAwLA0KICAgIEJNSSA9IG1hc3MgLyAoaGVpZ2h0X21eMikNCiAgKSAlPiUNCiAgc2VsZWN0KEJNSSwgZXZlcnl0aGluZygpKQ0KYGBgDQoNCklmIHlvdSBvbmx5IHdhbnQgdG8ga2VlcCB0aGUgbmV3IHZhcmlhYmxlcywgdXNlIGB0cmFuc211dGUoKWA6DQoNCmBgYHtyfQ0Kc3RhcndhcnMgJT4lDQogIHRyYW5zbXV0ZSgNCiAgICBoZWlnaHRfbSA9IGhlaWdodCAvIDEwMCwNCiAgICBCTUkgPSBtYXNzIC8gKGhlaWdodF9tXjIpDQogICkNCmBgYA0KDQojIyMgQ2hhbmdlIGNvbHVtbiBvcmRlciB3aXRoIGByZWxvY2F0ZSgpYA0KDQpVc2UgYSBzaW1pbGFyIHN5bnRheCBhcyBgc2VsZWN0KClgIHRvIG1vdmUgYmxvY2tzIG9mIGNvbHVtbnMgYXQgb25jZQ0KDQpgYGB7cn0NCnN0YXJ3YXJzICU+JSByZWxvY2F0ZShzZXg6aG9tZXdvcmxkLCAuYmVmb3JlID0gaGVpZ2h0KQ0KYGBgDQoNCg0KIyMjIFN1bW1hcmlzZSB2YWx1ZXMgd2l0aCBgc3VtbWFyaXNlKClgDQoNClRoZSBsYXN0IHZlcmIgaXMgYHN1bW1hcmlzZSgpYC4gSXQgY29sbGFwc2VzIGEgZGF0YSBmcmFtZSB0byBhIHNpbmdsZSByb3cuDQoNCmBgYHtyfQ0Kc3RhcndhcnMgJT4lIHN1bW1hcmlzZShtZWFuX2hlaWdodCA9IG1lYW4oaGVpZ2h0LCBuYS5ybSA9IFRSVUUpKQ0KYGBgDQoNCkl0J3Mgbm90IHRoYXQgdXNlZnVsIHVudGlsIHdlIGxlYXJuIHRoZSBgZ3JvdXBfYnkoKWAgdmVyYiBiZWxvdy4NCg0KDQojIyMgQ29tbW9uYWxpdGllcw0KDQpZb3UgbWF5IGhhdmUgbm90aWNlZCB0aGF0IHRoZSBzeW50YXggYW5kIGZ1bmN0aW9uIG9mIGFsbCB0aGVzZSB2ZXJicyBhcmUgdmVyeSBzaW1pbGFyOg0KDQoqIFRoZSBmaXJzdCBhcmd1bWVudCBpcyBhIGRhdGEgZnJhbWUuDQoNCiogVGhlIHN1YnNlcXVlbnQgYXJndW1lbnRzIGRlc2NyaWJlIHdoYXQgdG8gZG8gd2l0aCB0aGUgZGF0YSBmcmFtZS4gWW91IGNhbg0KICByZWZlciB0byBjb2x1bW5zIGluIHRoZSBkYXRhIGZyYW1lIGRpcmVjdGx5IHdpdGhvdXQgdXNpbmcgYCRgLg0KDQoqIFRoZSByZXN1bHQgaXMgYSBuZXcgZGF0YSBmcmFtZQ0KDQpUb2dldGhlciB0aGVzZSBwcm9wZXJ0aWVzIG1ha2UgaXQgZWFzeSB0byBjaGFpbiB0b2dldGhlciBtdWx0aXBsZSBzaW1wbGUgc3RlcHMgdG8gYWNoaWV2ZSBhIGNvbXBsZXggcmVzdWx0LiANCg0KVGhlc2UgZml2ZSBmdW5jdGlvbnMgcHJvdmlkZSB0aGUgYmFzaXMgb2YgYSBsYW5ndWFnZSBvZiBkYXRhIG1hbmlwdWxhdGlvbi4gQXQgdGhlIG1vc3QgYmFzaWMgbGV2ZWwsIHlvdSBjYW4gb25seSBhbHRlciBhIHRpZHkgZGF0YSBmcmFtZSBpbiBmaXZlIHVzZWZ1bCB3YXlzOiB5b3UgY2FuIHJlb3JkZXIgdGhlIHJvd3MgKGBhcnJhbmdlKClgKSwgcGljayBvYnNlcnZhdGlvbnMgYW5kIHZhcmlhYmxlcyBvZiBpbnRlcmVzdCAoYGZpbHRlcigpYCBhbmQgYHNlbGVjdCgpYCksIGFkZCBuZXcgdmFyaWFibGVzIHRoYXQgYXJlIGZ1bmN0aW9ucyBvZiBleGlzdGluZyB2YXJpYWJsZXMgKGBtdXRhdGUoKWApLCBvciBjb2xsYXBzZSBtYW55IHZhbHVlcyB0byBhIHN1bW1hcnkgKGBzdW1tYXJpc2UoKWApLiANCg0KIyMgQ29tYmluaW5nIGZ1bmN0aW9ucyB3aXRoIGAlPiVgIA0KDQpUaGUgZHBseXIgQVBJIGlzIGZ1bmN0aW9uYWwgaW4gdGhlIHNlbnNlIHRoYXQgZnVuY3Rpb24gY2FsbHMgZG9uJ3QgaGF2ZSBzaWRlLWVmZmVjdHMuIGRwbHlyIHByb3ZpZGVzIHRoZSBgJT4lYCBvcGVyYXRvciBmcm9tIG1hZ3JpdHRyLiBgeCAlPiUgZih5KWAgdHVybnMgaW50byBgZih4LCB5KWAgc28geW91IGNhbiB1c2UgaXQgdG8gcmV3cml0ZSBtdWx0aXBsZSBvcGVyYXRpb25zIHRoYXQgeW91IGNhbiByZWFkIGxlZnQtdG8tcmlnaHQsIHRvcC10by1ib3R0b20gKHJlYWRpbmcgdGhlIHBpcGUgb3BlcmF0b3IgYXMgInRoZW4iKToNCg0KYGBge3J9DQpzdGFyd2FycyAlPiUNCiAgZ3JvdXBfYnkoc3BlY2llcywgc2V4KSAlPiUNCiAgc3VtbWFyaXNlKA0KICAgIG1lYW5faGVpZ2h0ID0gbWVhbihoZWlnaHQsIG5hLnJtID0gVFJVRSksDQogICAgbWVhbl9tYXNzID0gbWVhbihtYXNzLCBuYS5ybSA9IFRSVUUpDQogICkNCmBgYA0KDQo=</div>
 
 
 </div>
@@ -698,7 +698,7 @@ $(document).ready(function () {
 <!-- code folding -->
 <script>
 $(document).ready(function () {
-  window.initializeSourceEmbed("03-Messing-with-Data-using-tidyverse.Rmd");
+  window.initializeSourceEmbed("03a-Messing-with-Data-using-tidyverse.Rmd");
   window.initializeCodeFolding("hide" === "show");
 });
 </script>

@@ -53,7 +53,11 @@ We will get acquainted with the RMarkdown format, which allows us to mix text na
 
 ## Assignment(s)
 
-1. Complete the markdowntutorial in [^1]
+1. Complete the markdowntutorial in [reference 1]
 
-2. Create a fresh RMarkdown document and use as many as possible of the RMarkdown constructs from the Cheatsheet [^3]
+2. Create a fresh RMarkdown document and use as many as possible of the RMarkdown constructs from the Cheatsheet [reference 4]
+
+## Optional
+
+3. Go to reference 3 and install **tinytex**. Try to `knit` your document into PDF also, using `tinytex`.
 

@@ -38,7 +38,7 @@ links:
 
 Welcome! 
 
-Let's start our journey to the Garden of Dat Visualization, with this terrific presentation by the great ( and sadly late..) **Hans Rosling**
+Let's start our journey to the Garden of Data Visualization, with this terrific presentation by the great ( and sadly late..) **Hans Rosling**
 
 [The best stats you've ever seen | Hans Rosling](https://www.youtube.com/watch?v=hVimVzgtD6w)
 

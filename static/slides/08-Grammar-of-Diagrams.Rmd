@@ -17,13 +17,112 @@ output:
 
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
-knitr::opts_chunk$set(
-  fig.width=9, fig.height=3.5, fig.retina=3,
-  out.width = "100%",
-  cache = FALSE,
-  echo = TRUE,
-  message = FALSE, 
-  warning = FALSE,
-  hiline = TRUE
-)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, comment = NA, dpi = 300,fig.align = "center", cache = FALSE, fig.path= "08-figs/")
+library(xaringanthemer)
+library(xaringanExtra)
+library(tidyverse)
+library(DiagrammeR)
+library(nomnoml)
 ```
+
+
+```{r xaringanExtra, include=FALSE}
+use_webcam()
+use_fit_screen()
+use_panelset()
+```
+
+
+# Let's see how to use DiagrammeR
+
+- `DiagrammeR` uses the processing function called `grViz()`
+- What you pass into grViz() is a valid graph specification in the **DOT language**. 
+- The DOT graph description is delivered to grViz() in the form of a string, enclosed in quotes.
+
+---
+
+# Let's see how to use DiagrammeR
+
+Diagrams can be **undirected**...
+
+.pull-left[
+```{r basics1,  message=FALSE, eval=FALSE, warning=FALSE}
+
+DiagrammeR::grViz(
+  "graph {A -- B}" #<<
+  )
+
+```
+]
+
+.pull-right[
+
+```{r ref.label='basics1', echo=FALSE,message=FALSE,warning=FALSE, out.width= "50%", out.height="50%", fig.align='center'}
+
+```
+]
+
+---
+
+# Let's see how to use DiagrammeR
+
+Diagrams can be undirected...or **directed**
+
+.pull-left[
+```{r basics2,  message=FALSE, eval=FALSE, warning=FALSE}
+
+DiagrammeR::grViz(
+  "digraph {A -> B}" #<<
+  )
+
+```
+]
+
+.pull-right[
+
+```{r ref.label='basics2', echo=FALSE,message=FALSE,warning=FALSE, out.width= "50%", out.height="50%", fig.align='center'}
+
+```
+]
+
+---
+
+# Nodes and Labels
+
+.pull-left[
+
+```{r big,message=FALSE, eval=FALSE, warning=FALSE }
+grViz("
+digraph boxes_and_circles {
+
+  # a 'graph' statement
+  graph [overlap = true, fontsize = 10]
+
+  # several 'node' statements
+  node [shape = box,
+        fontname = Helvetica]
+  A; B; C; D; E; F
+
+  node [shape = circle,
+        fixedsize = true,
+        width = 0.9] // sets as circles
+  1; 2; 3; 4; 5; 6; 7; 8
+
+  # several 'edge' statements
+  A->1 B->2 B->3 B->4 C->A
+  1->D E->A 2->4 1->5 1->F
+  E->6 4->6 5->7 6->7 3->8
+}
+")
+
+```
+]
+
+
+.pull-right[
+
+```{r ref.label='big', echo=FALSE,message=FALSE,warning=FALSE, out.width= "50%", out.height="50%", fig.align='center'}
+
+```
+
+]
