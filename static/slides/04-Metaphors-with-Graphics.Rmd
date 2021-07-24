@@ -174,11 +174,9 @@ penguins <- penguins %>% drop_na()
 
 
 ---
-layout:true
 
 ## Chunk: Mapping
 
----
 
 .pull-left[
 ```{r plot1a, eval= FALSE, message=FALSE, warning=FALSE}
@@ -193,6 +191,10 @@ ggplot(penguins) #<<
 ]
 
 ---
+
+## Chunk: Mapping
+
+
 .pull-left[
 ```{r plot1b, eval= FALSE, message=FALSE, warning=FALSE}
 ggplot(penguins, 
@@ -205,7 +207,12 @@ ggplot(penguins,
 ```{r first-plot1b-out, ref.label='plot1b', echo=FALSE, message=FALSE,warning=FALSE}
 ```
 ]
+
+
 ---
+
+## Chunk: Mapping
+
 .pull-left[
 ```{r plot1c, eval= FALSE, message=FALSE,warning=FALSE}
 ggplot(penguins, 
@@ -221,6 +228,7 @@ ggplot(penguins,
 ]
 
 ---
+## Chunk: Mapping
 
 .pull-left[
 ```{r plot1d, eval= FALSE, message=FALSE,warning=FALSE}
@@ -236,24 +244,26 @@ ggplot(penguins,
 ```{r first-plot1d-out, ref.label='plot1d', echo=FALSE,message=FALSE,warning=FALSE}
 ```
 ]
+
 ---
 
-
-layout:true
 ### Chunk: Geom_Point_Position_Colour
 
----
 .pull-left[
 ```{r 2a, eval=FALSE, message=FALSE, warning=FALSE}
 ggplot(data = penguins) #<<
 ```
 ]
 .pull-right[
-```{r, ref.label='2a', echo=FALSE,message=FALSE,warning=FALSE, out.width="90%"}
+```{r, ref.label='2a', echo=FALSE,message=FALSE,warning=FALSE}
 ```
 ]
 
 ---
+
+### Chunk: Geom_Point_Position_Colour
+
+
 .pull-left[
 ```{r 2b, eval=FALSE, message=FALSE, warning=FALSE}
 ggplot(data = penguins) +
@@ -266,15 +276,19 @@ We can leave out the "mapping" word and just use **aes** .
 Why is there no plot?
 
 
+`r emo::ji("thinking")` `r emo::ji("thought_balloon")`
 
 Right !! We have not used a `geom` command yet!!
 ]
 .pull-right[
-```{r, ref.label='2b', echo=FALSE, message=FALSE, warning=FALSE, out.width="90%"}
+```{r, ref.label='2b', echo=FALSE, message=FALSE, warning=FALSE}
 ```
 ]
 
 ---
+
+### Chunk: Geom_Point_Position_Colour
+
 
 .pull-left[
 ```{r 2c, eval=FALSE, message=FALSE, warning=FALSE}
@@ -283,20 +297,137 @@ ggplot(data = penguins)  +
       y = body_mass_g,
       color = island) +  
  geom_point() + #<<
-  ggtitle("A point geom with position and color aesthetics") #<<
+  ggtitle("A point geom with position, color aesthetics") #<<
 ```
 Note that the points are located by **position** coordinates on both x and y axis, and **coloured** by the island variable.
 
+
 ]
 .pull-right[
-```{r, ref.label='2c', echo=FALSE,message=FALSE,warning=FALSE, out.width="90%"}
+```{r, ref.label='2c', echo=FALSE,message=FALSE,warning=FALSE}
+```
+]
+
+---
+
+### Chunk: Geom_Point_Position_Colour
+
+
+.pull-left[
+```{r 2d, eval=FALSE, message=FALSE, warning=FALSE}
+ggplot(data = penguins)  +
+  aes(x = bill_length_mm,
+      y = body_mass_g,
+      color = island) +  
+ geom_point(size = 4) + #<<
+  ggtitle("A point geom with position color and size aesthetics")#<<
+
+```
+Note that the points are located by **position** coordinates on both x and y axis, and **coloured** by the island variable.
+
+And we've fixed size = 4!
+
+
+]
+.pull-right[
+```{r, ref.label='2d', echo=FALSE,message=FALSE,warning=FALSE}
+```
+]
+
+---
+
+## Alpha
+
+.pull-left[
+```{r 7a, eval=FALSE, message=FALSE, warning=FALSE}
+diamonds %>% 
+  slice_sample(prop = 0.2) %>% 
+  ggplot(.) +
+  geom_point(aes(x = carat, y = price)) #<<
+```
+
+Are the points all overlapping?
+Can we see them better?
+]
+
+
+
+.pull-right[
+  
+```{r, ref.label='7a', echo=FALSE,message=FALSE,warning=FALSE}
+```
+]
+
+---
+
+## Alpha
+
+.pull-left[
+```{r 7b, eval=FALSE, message=FALSE, warning=FALSE}
+diamonds %>% 
+  slice_sample(prop = 0.2) %>% 
+  ggplot(.) +
+  geom_point(aes(x = carat, y = price), #<<
+             # Outside the aes() !!! #<<
+             alpha = 0.2) + #<< 
+  labs(title = "Points plotted with Alpha")
+```
+
+Are the points all overlapping?
+Can we see them better?
+
+]
+
+
+.pull-right[
+```{r, ref.label='7b', echo=FALSE,message=FALSE,warning=FALSE, out.width="90%"}
+```
+]
+
+---
+
+## Chunk: Box Plot
+.pull-left[
+```{r bp1, eval=FALSE, message=FALSE, warning=FALSE}
+diamonds %>% 
+  slice_sample(prop = 0.2) %>% 
+  ggplot(.) +
+  geom_boxplot(aes(x = cut, y = price)) + #<<
+  labs(title = "Box Plot")
+```
+
+]
+
+
+.pull-right[
+```{r, ref.label='bp1', echo=FALSE,message=FALSE,warning=FALSE, out.width="90%"}
+```
+]
+
+
+---
+
+## Chunk: Box Plot
+.pull-left[
+```{r bp2, eval=FALSE, message=FALSE, warning=FALSE}
+diamonds %>% 
+  slice_sample(prop = 0.2) %>% 
+  ggplot(.) +
+  geom_boxplot(aes(x = cut, y = price, #<<
+                   fill = cut)) + #<<
+  labs(title = "Box Plot")
+```
+
+]
+
+
+.pull-right[
+```{r, ref.label='bp2', echo=FALSE,message=FALSE,warning=FALSE, out.width="90%"}
 ```
 ]
 ---
-layout: true
-## Chunk: Geom_Bar_1
 
----
+## Chunk: Geom_Bar_1
 
 .pull-left[
 ```{r 3a, eval=FALSE, message=FALSE, warning=FALSE}
@@ -309,6 +440,9 @@ ggplot(data = penguins) #<<
 ]
 
 ---
+
+## Chunk: Geom_Bar_1
+
 .pull-left[
 ```{r 3b, eval=FALSE, message=FALSE, warning=FALSE}
 ggplot(data = penguins) +  
@@ -321,6 +455,8 @@ ggplot(data = penguins) +
 ]
 
 ---
+
+## Chunk: Geom_Bar_1
 
 .pull-left[
 ```{r 3c, eval=FALSE, message=FALSE, warning=FALSE}
@@ -342,10 +478,9 @@ Many `geom_s` have internal computation that are accessible to programmers.
 ]
 
 ---
-layout: true
+
 ## Geom_Bar_Position_Stack_and_Dodge
 
----
 
 .pull-left[
 When using more than a pair of variables with a bar chart, we have a few more **position** options:
@@ -362,6 +497,8 @@ When using more than a pair of variables with a bar chart, we have a few more **
 
 ---
 
+## Geom_Bar_Position_Stack_and_Dodge
+
 .pull-left[
 When using more than a pair of variables with a bar chart, we have a few more **position** options:
 ```{r 4c, eval=FALSE, message=FALSE, warning=FALSE}
@@ -371,6 +508,7 @@ ggplot(penguins,
   geom_bar() + #<<
   ggtitle(label = "A stacked bar chart") #<<
 ```
+
 The bars are coloured by the `island` variable and are **stacked** in **position**.
 ]
 .pull-right[
@@ -379,6 +517,7 @@ The bars are coloured by the `island` variable and are **stacked** in **position
 ]
 ---
 
+## Geom_Bar_Position_Stack_and_Dodge
 
 .pull-left[
 And here we use the `dodge` option:
@@ -392,6 +531,7 @@ ggplot(penguins,
             "A dodged bar chart") #<<
 ```
 ]
+
 .pull-right[
 ```{r, ref.label='5c', echo=FALSE,message=FALSE,warning=FALSE, out.width="90%"}
 ```
@@ -399,10 +539,8 @@ ggplot(penguins,
 
 ---
 
-layout: true
 ## Facetting
 
----
 
 .pull-left[
 ```{r 6a, eval=FALSE, message=FALSE, warning=FALSE}
@@ -415,6 +553,9 @@ ggplot(penguins) #<<
 ]
 
 ---
+
+## Facetting
+
 .pull-left[
 ```{r 6b, eval=FALSE, message=FALSE, warning=FALSE}
 ggplot(penguins) +
@@ -423,12 +564,15 @@ ggplot(penguins) +
 
 ```
 ]
+
 .pull-right[
 ```{r, ref.label='6b', echo=FALSE, message=FALSE, warning=FALSE, out.width="90%"}
 ```
 ]
 
 ---
+
+## Facetting
 
 .pull-left[
 ```{r 6c, eval=FALSE, message=FALSE, warning=FALSE}
@@ -438,12 +582,16 @@ ggplot(penguins) +
   geom_point() #<<
 ```
 ]
+
 .pull-right[
 ```{r, ref.label='6c', echo=FALSE,message=FALSE,warning=FALSE, out.width="90%"}
 ```
 ]
 
 ---
+
+## Facetting
+
 .pull-left[
 ```{r 6d, eval=FALSE, message=FALSE, warning=FALSE}
 ggplot(penguins) +
@@ -453,51 +601,70 @@ ggplot(penguins) +
   facet_wrap(~island) + #<<
   ggtitle("A point geom graph with facets") #<<
 ```
+
+
 The graph has **split** into multiples, based on the **number** of islands. 
 ]
+
+
 .pull-right[
 ```{r, ref.label='6d', echo=FALSE,message=FALSE,warning=FALSE, out.width="90%"}
 ```
 ]
-
----
-layout:false
-
-## Alpha
-.pull-left[
-```{r 7a, eval=FALSE, message=FALSE, warning=FALSE}
-diamonds %>% 
-  slice_sample(prop = 0.2) %>% 
-  ggplot(.) +
-  geom_point(aes(x = carat, y = price)) #<<
-```
-]
-
-.pull-right[
-  
-```{r, ref.label='7a', echo=FALSE,message=FALSE,warning=FALSE, out.width="90%"}
-```
-]
-
 ---
 
-layout:false
-## Alpha
+## Still more Facetting
+
 .pull-left[
-```{r 7b, eval=FALSE, message=FALSE, warning=FALSE}
-diamonds %>% 
-  slice_sample(prop = 0.2) %>% 
-  ggplot(.) +
-  geom_point(aes(x = carat, y = price), alpha = 0.2) #<<
+```{r 6e, eval=FALSE, message=FALSE, warning=FALSE}
+ggplot(penguins) +
+  aes(x = flipper_length_mm,
+      y = body_mass_g) +
+  geom_point() #<<
 ```
+
+What if we have even more "factor" variables?
+We have `island` and `species`...can we split further?
+
+]
+
+
+.pull-right[
+```{r, ref.label='6e', echo=FALSE,message=FALSE,warning=FALSE, out.width="90%"}
+```
+]
+
+---
+
+## Still more Facetting
+
+.pull-left[
+```{r 6f, eval=FALSE, message=FALSE, warning=FALSE}
+ggplot(penguins) +
+  aes(x = flipper_length_mm,
+      y = body_mass_g) +
+  geom_point() +
+  facet_grid(species~island) + #<<
+  ggtitle("A point geom graph with grid facets") #<<
+```
+The graph has **split** into multiples, based on the **number** of islands **and** the number of species. 
+
 ]
 .pull-right[
-```{r, ref.label='7b', echo=FALSE,message=FALSE,warning=FALSE, out.width="90%"}
+```{r, ref.label='6f', echo=FALSE,message=FALSE,warning=FALSE, out.width="90%"}
 ```
 ]
+
+
+---
+
+class:middle, center, inverse
+## And shall we look briefly at colour?
+
 ---
 
 ## Finally...Colour !! ( Just a bit )
+
 .pull-left[
 ```{r 8a, eval=FALSE, message=FALSE, warning=FALSE}
 diamonds %>% 
@@ -513,14 +680,19 @@ diamonds %>%
 ---
 
 ## Finally...Colour !! ( Just a bit )
+
 .pull-left[
 ```{r 8b, eval=FALSE, message=FALSE, warning=FALSE}
 diamonds %>% 
   slice_sample(prop = 0.2) %>% 
   ggplot(.) +
-  geom_point(aes(x = carat, y = price, colour = cut)) +
-               scale_colour_brewer(palette = "Set3") #<<
+  geom_point(aes(x = carat, y = price, colour = cut), size = 3) +
+  scale_colour_brewer(palette = "Set3") +  #<<
+  labs(title = "Brewer Colour Pallette (Set3)")
 ```
+We are using the `RColorBrewer` package here. 
+Type `RColorBrewer::display.brewer.all()` in your Console and see what palettes are available.
+
 ]
 .pull-right[
 ```{r, ref.label='8b', echo=FALSE,message=FALSE,warning=FALSE, out.width="90%"}
@@ -531,22 +703,69 @@ diamonds %>%
 ---
 
 ## Chunk: Colour !! ( Just a bit )
+
 .pull-left[
 ```{r 8c, eval=FALSE, message=FALSE, warning=FALSE}
 diamonds %>% 
   slice_sample(prop = 0.2) %>% 
   ggplot(.) +
-  geom_point(aes(x = carat, y = price, colour = cut)) +
-               scale_colour_viridis_d() #<<
+  geom_point(aes(x = carat, y = price, colour = cut), size = 3) +
+               scale_colour_viridis_d() + #<<
+  labs(title = "Viridis Palette",
+       subtitle = "The Default in ggplot")
 ```
 ]
 .pull-right[
-```{r, ref.label='8c', echo=FALSE,message=FALSE,warning=FALSE, out.width="90%"}
+```{r, ref.label='8c', echo=FALSE,message=FALSE,warning=FALSE}
 ```
 ]
 
+---
 
-# Conclusion
+
+## Chunk: Colour !! ( Just a bit )
+
+.pull-left[
+```{r 8d, eval=FALSE, message=FALSE, warning=FALSE}
+diamonds %>% 
+  slice_sample(prop = 0.2) %>% 
+  ggplot(.) +
+  geom_point(aes(x = carat, y = price, colour = cut), size = 3) +
+               scale_colour_viridis_d(option = "magma") + #<<
+  labs(title = "Viridis Palette, Option Magma")#<<
+
+```
+]
+.pull-right[
+```{r, ref.label='8d', echo=FALSE,message=FALSE,warning=FALSE}
+```
+]
+
+---
+
+
+
+## Chunk: Colour !! ( Just a bit )
+
+.pull-left[
+```{r 8e, eval=FALSE, message=FALSE, warning=FALSE}
+diamonds %>% 
+  slice_sample(prop = 0.2) %>% 
+  ggplot(.) +
+  geom_point(aes(x = carat, y = price, colour = cut), size = 3) +
+               scale_colour_viridis_d(option = "inferno") + #<<
+  labs(title = "Viridis Palette, Option Inferno")
+```
+]
+.pull-right[
+```{r, ref.label='8e', echo=FALSE,message=FALSE,warning=FALSE}
+```
+]
+
+---
+
+
+## Conclusion
 - `ggplot` takes a dataframe/tibble as the data argument
 - The `aes`-thetic arguments can be `x`, `y`, `colour`, `shape`, `alpha` for example...
 - The `geom_*()` commands specify the kind of plot

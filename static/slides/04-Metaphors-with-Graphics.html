@@ -18,7 +18,7 @@ class: center, middle, inverse, title-slide
 ## From Code to Geometry
 ### Arvind Venkatadri
 ### Srishti Manipal Institute
-### (2021-07-23)
+### (2021-07-24)
 
 ---
 
@@ -165,11 +165,9 @@ penguins &lt;- penguins %&gt;% drop_na()
 
 
 ---
-layout:true
 
 ## Chunk: Mapping
 
----
 
 .pull-left[
 
@@ -183,6 +181,10 @@ layout:true
 ]
 
 ---
+
+## Chunk: Mapping
+
+
 .pull-left[
 
 ```r
@@ -195,7 +197,12 @@ ggplot(penguins,
 .pull-right[
 &lt;img src="04-Metaphors-with-Graphics_files/figure-html/first-plot1b-out-1.png" width="504" /&gt;
 ]
+
+
 ---
+
+## Chunk: Mapping
+
 .pull-left[
 
 ```r
@@ -211,6 +218,7 @@ ggplot(penguins,
 ]
 
 ---
+## Chunk: Mapping
 
 .pull-left[
 
@@ -226,13 +234,11 @@ ggplot(penguins,
 .pull-right[
 &lt;img src="04-Metaphors-with-Graphics_files/figure-html/first-plot1d-out-1.png" width="504" /&gt;
 ]
+
 ---
 
-
-layout:true
 ### Chunk: Geom_Point_Position_Colour
 
----
 .pull-left[
 
 ```r
@@ -240,10 +246,14 @@ layout:true
 ```
 ]
 .pull-right[
-&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-2-1.png" width="90%" /&gt;
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-2-1.png" width="504" /&gt;
 ]
 
 ---
+
+### Chunk: Geom_Point_Position_Colour
+
+
 .pull-left[
 
 ```r
@@ -257,14 +267,18 @@ We can leave out the "mapping" word and just use **aes** .
 Why is there no plot?
 
 
+🤔 💭
 
 Right !! We have not used a `geom` command yet!!
 ]
 .pull-right[
-&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-3-1.png" width="90%" /&gt;
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-3-1.png" width="504" /&gt;
 ]
 
 ---
+
+### Chunk: Geom_Point_Position_Colour
+
 
 .pull-left[
 
@@ -274,19 +288,135 @@ ggplot(data = penguins)  +
       y = body_mass_g,
       color = island) +  
 *geom_point() +
-* ggtitle("A point geom with position and color aesthetics")
+* ggtitle("A point geom with position, color aesthetics")
 ```
 Note that the points are located by **position** coordinates on both x and y axis, and **coloured** by the island variable.
 
+
 ]
 .pull-right[
-&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-4-1.png" width="90%" /&gt;
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-4-1.png" width="504" /&gt;
 ]
----
-layout: true
-## Chunk: Geom_Bar_1
 
 ---
+
+### Chunk: Geom_Point_Position_Colour
+
+
+.pull-left[
+
+```r
+ggplot(data = penguins)  +
+  aes(x = bill_length_mm,
+      y = body_mass_g,
+      color = island) +  
+*geom_point(size = 4) +
+* ggtitle("A point geom with position color and size aesthetics")
+```
+Note that the points are located by **position** coordinates on both x and y axis, and **coloured** by the island variable.
+
+And we've fixed size = 4!
+
+
+]
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-5-1.png" width="504" /&gt;
+]
+
+---
+
+## Alpha
+
+.pull-left[
+
+```r
+diamonds %&gt;% 
+  slice_sample(prop = 0.2) %&gt;% 
+  ggplot(.) +
+* geom_point(aes(x = carat, y = price))
+```
+
+Are the points all overlapping?
+Can we see them better?
+]
+
+
+
+.pull-right[
+  
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-6-1.png" width="504" /&gt;
+]
+
+---
+
+## Alpha
+
+.pull-left[
+
+```r
+diamonds %&gt;% 
+  slice_sample(prop = 0.2) %&gt;% 
+  ggplot(.) +
+* geom_point(aes(x = carat, y = price),
+*            # Outside the aes() !!!
+*            alpha = 0.2) +
+  labs(title = "Points plotted with Alpha")
+```
+
+Are the points all overlapping?
+Can we see them better?
+
+]
+
+
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-7-1.png" width="90%" /&gt;
+]
+
+---
+
+## Chunk: Box Plot
+.pull-left[
+
+```r
+diamonds %&gt;% 
+  slice_sample(prop = 0.2) %&gt;% 
+  ggplot(.) +
+* geom_boxplot(aes(x = cut, y = price)) +
+  labs(title = "Box Plot")
+```
+
+]
+
+
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-8-1.png" width="90%" /&gt;
+]
+
+
+---
+
+## Chunk: Box Plot
+.pull-left[
+
+```r
+diamonds %&gt;% 
+  slice_sample(prop = 0.2) %&gt;% 
+  ggplot(.) +
+* geom_boxplot(aes(x = cut, y = price,
+*                  fill = cut)) +
+  labs(title = "Box Plot")
+```
+
+]
+
+
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-9-1.png" width="90%" /&gt;
+]
+---
+
+## Chunk: Geom_Bar_1
 
 .pull-left[
 
@@ -295,10 +425,13 @@ layout: true
 ```
 ]
 .pull-right[
-&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-5-1.png" width="90%" /&gt;
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-10-1.png" width="90%" /&gt;
 ]
 
 ---
+
+## Chunk: Geom_Bar_1
+
 .pull-left[
 
 ```r
@@ -307,10 +440,12 @@ ggplot(data = penguins) +
 ```
 ]
 .pull-right[
-&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-6-1.png" width="90%" /&gt;
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-11-1.png" width="90%" /&gt;
 ]
 
 ---
+
+## Chunk: Geom_Bar_1
 
 .pull-left[
 
@@ -328,14 +463,13 @@ Many `geom_s` have internal computation that are accessible to programmers.
 
 ]
 .pull-right[
-&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-7-1.png" width="90%" /&gt;
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-12-1.png" width="90%" /&gt;
 ]
 
 ---
-layout: true
+
 ## Geom_Bar_Position_Stack_and_Dodge
 
----
 
 .pull-left[
 When using more than a pair of variables with a bar chart, we have a few more **position** options:
@@ -347,10 +481,12 @@ When using more than a pair of variables with a bar chart, we have a few more **
 ```
 ]
 .pull-right[
-&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-8-1.png" width="90%" /&gt;
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-13-1.png" width="90%" /&gt;
 ]
 
 ---
+
+## Geom_Bar_Position_Stack_and_Dodge
 
 .pull-left[
 When using more than a pair of variables with a bar chart, we have a few more **position** options:
@@ -362,13 +498,15 @@ ggplot(penguins,
 * geom_bar() +
 * ggtitle(label = "A stacked bar chart")
 ```
+
 The bars are coloured by the `island` variable and are **stacked** in **position**.
 ]
 .pull-right[
-&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-9-1.png" width="90%" /&gt;
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-14-1.png" width="90%" /&gt;
 ]
 ---
 
+## Geom_Bar_Position_Stack_and_Dodge
 
 .pull-left[
 And here we use the `dodge` option:
@@ -382,16 +520,15 @@ ggplot(penguins,
 *           "A dodged bar chart")
 ```
 ]
+
 .pull-right[
-&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-10-1.png" width="90%" /&gt;
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-15-1.png" width="90%" /&gt;
 ]
 
 ---
 
-layout: true
 ## Facetting
 
----
 
 .pull-left[
 
@@ -400,10 +537,13 @@ layout: true
 ```
 ]
 .pull-right[
-&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-11-1.png" width="90%" /&gt;
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-16-1.png" width="90%" /&gt;
 ]
 
 ---
+
+## Facetting
+
 .pull-left[
 
 ```r
@@ -412,11 +552,14 @@ ggplot(penguins) +
 *     y = body_mass_g)
 ```
 ]
+
 .pull-right[
-&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-12-1.png" width="90%" /&gt;
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-17-1.png" width="90%" /&gt;
 ]
 
 ---
+
+## Facetting
 
 .pull-left[
 
@@ -427,11 +570,15 @@ ggplot(penguins) +
 * geom_point()
 ```
 ]
+
 .pull-right[
-&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-13-1.png" width="90%" /&gt;
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-18-1.png" width="90%" /&gt;
 ]
 
 ---
+
+## Facetting
+
 .pull-left[
 
 ```r
@@ -442,16 +589,69 @@ ggplot(penguins) +
 * facet_wrap(~island) +
 * ggtitle("A point geom graph with facets")
 ```
+
+
 The graph has **split** into multiples, based on the **number** of islands. 
 ]
+
+
 .pull-right[
-&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-14-1.png" width="90%" /&gt;
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-19-1.png" width="90%" /&gt;
+]
+---
+
+## Still more Facetting
+
+.pull-left[
+
+```r
+ggplot(penguins) +
+  aes(x = flipper_length_mm,
+      y = body_mass_g) +
+* geom_point()
+```
+
+What if we have even more "factor" variables?
+We have `island` and `species`...can we split further?
+
+]
+
+
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-20-1.png" width="90%" /&gt;
 ]
 
 ---
-layout:false
 
-## Alpha
+## Still more Facetting
+
+.pull-left[
+
+```r
+ggplot(penguins) +
+  aes(x = flipper_length_mm,
+      y = body_mass_g) +
+  geom_point() +
+* facet_grid(species~island) +
+* ggtitle("A point geom graph with grid facets")
+```
+The graph has **split** into multiples, based on the **number** of islands **and** the number of species. 
+
+]
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-21-1.png" width="90%" /&gt;
+]
+
+
+---
+
+class:middle, center, inverse
+## And shall we look briefly at colour?
+
+---
+
+## Finally...Colour !! ( Just a bit )
+
 .pull-left[
 
 ```r
@@ -461,80 +661,97 @@ diamonds %&gt;%
 * geom_point(aes(x = carat, y = price))
 ```
 ]
-
 .pull-right[
-  
-&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-15-1.png" width="90%" /&gt;
-]
-
----
-
-layout:false
-## Alpha
-.pull-left[
-
-```r
-diamonds %&gt;% 
-  slice_sample(prop = 0.2) %&gt;% 
-  ggplot(.) +
-* geom_point(aes(x = carat, y = price), alpha = 0.2)
-```
-]
-.pull-right[
-&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-16-1.png" width="90%" /&gt;
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-22-1.png" width="90%" /&gt;
 ]
 ---
 
 ## Finally...Colour !! ( Just a bit )
+
 .pull-left[
 
 ```r
 diamonds %&gt;% 
   slice_sample(prop = 0.2) %&gt;% 
   ggplot(.) +
-* geom_point(aes(x = carat, y = price))
+  geom_point(aes(x = carat, y = price, colour = cut), size = 3) +
+* scale_colour_brewer(palette = "Set3") +
+  labs(title = "Brewer Colour Pallette (Set3)")
 ```
+We are using the `RColorBrewer` package here. 
+Type `RColorBrewer::display.brewer.all()` in your Console and see what palettes are available.
+
 ]
 .pull-right[
-&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-17-1.png" width="90%" /&gt;
-]
----
-
-## Finally...Colour !! ( Just a bit )
-.pull-left[
-
-```r
-diamonds %&gt;% 
-  slice_sample(prop = 0.2) %&gt;% 
-  ggplot(.) +
-  geom_point(aes(x = carat, y = price, colour = cut)) +
-*              scale_colour_brewer(palette = "Set3")
-```
-]
-.pull-right[
-&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-18-1.png" width="90%" /&gt;
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-23-1.png" width="90%" /&gt;
 ]
 
 
 ---
 
 ## Chunk: Colour !! ( Just a bit )
+
 .pull-left[
 
 ```r
 diamonds %&gt;% 
   slice_sample(prop = 0.2) %&gt;% 
   ggplot(.) +
-  geom_point(aes(x = carat, y = price, colour = cut)) +
-*              scale_colour_viridis_d()
+  geom_point(aes(x = carat, y = price, colour = cut), size = 3) +
+*              scale_colour_viridis_d() +
+  labs(title = "Viridis Palette",
+       subtitle = "The Default in ggplot")
 ```
 ]
 .pull-right[
-&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-19-1.png" width="90%" /&gt;
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-24-1.png" width="504" /&gt;
 ]
 
+---
 
-# Conclusion
+
+## Chunk: Colour !! ( Just a bit )
+
+.pull-left[
+
+```r
+diamonds %&gt;% 
+  slice_sample(prop = 0.2) %&gt;% 
+  ggplot(.) +
+  geom_point(aes(x = carat, y = price, colour = cut), size = 3) +
+*              scale_colour_viridis_d(option = "magma") +
+* labs(title = "Viridis Palette, Option Magma")
+```
+]
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-25-1.png" width="504" /&gt;
+]
+
+---
+
+
+
+## Chunk: Colour !! ( Just a bit )
+
+.pull-left[
+
+```r
+diamonds %&gt;% 
+  slice_sample(prop = 0.2) %&gt;% 
+  ggplot(.) +
+  geom_point(aes(x = carat, y = price, colour = cut), size = 3) +
+*              scale_colour_viridis_d(option = "inferno") +
+  labs(title = "Viridis Palette, Option Inferno")
+```
+]
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-26-1.png" width="504" /&gt;
+]
+
+---
+
+
+## Conclusion
 - `ggplot` takes a dataframe/tibble as the data argument
 - The `aes`-thetic arguments can be `x`, `y`, `colour`, `shape`, `alpha` for example...
 - The `geom_*()` commands specify the kind of plot
