@@ -11,6 +11,12 @@
     <script src="libs/xaringanExtra_fit-screen/fit-screen.js"></script>
     <link href="libs/panelset/panelset.css" rel="stylesheet" />
     <script src="libs/panelset/panelset.js"></script>
+    <script src="libs/js-cookie/js.cookie.js"></script>
+    <script src="libs/peerjs/peerjs.min.js"></script>
+    <script src="libs/tiny.toast/toast.min.js"></script>
+    <link href="libs/xaringanExtra-broadcast/broadcast.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-broadcast/broadcast.js"></script>
+    <link href="libs/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/ohsu.css" type="text/css" />
     <link rel="stylesheet" href="css/ohsu-fonts.css" type="text/css" />
   </head>
@@ -44,20 +50,19 @@ What information do you think went into making it?
 
 # Let's get started
 
-.pull-left[
+
 - To make maps, we need data organized in a specific way
 
 - Let us look at the pieces that go into making spatial data
 
 - Our focus will be the r package `sf` ( "simple features")
-]
 
-.pull-right[
-**Data Structure in `sf`**
+---
+class: inverse, center, middle
+## Data Structure in `sf`
 
-![Spatial Data Frame](https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/sf.png)
-]
-
+---
+&lt;img src="https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/sf.png" width="900px" height="550px" style="display: block; margin: auto;" /&gt;
 
 The picture shows a familiar looking `data-frame` with the far-right column containing geometries....hmmm.
 
@@ -65,51 +70,59 @@ The picture shows a familiar looking `data-frame` with the far-right column cont
 
 # What is a Feature?
 
-- A Thing, or an Object in the real world, such as a building or a tree. 
-- As is the case with Objects, they often consist of other objects.  
-- This is the case with features too: a set of features can form a single feature. 
-- Examples of Features:  
--- A forest stand  
--- a city with building, streets, and parks  
--- A satellite image pixel   
--- a complete image can be a feature too.
+- A Thing, or an Object in the real world
 
+- Examples of Features: 
+
+ - A Tree or a Lamp-post
+ - A forest stand  
+ - A city with building, streets, and parks  
+ - A satellite image pixel   ( Raster Data? )
+ - a complete image can be a feature too. (Raster Data? )
+
+---
+
+# What is a Feature Geometry?
+
+Features have a **geometry** describing **where** on Earth the feature is located  
+- Features = Geometries ( Location Data )
+ - The geometry of a tree can be the delineation of its crown ( Polygon )
+ - Of its stem,  (Polygon )
+ - or the point indicating its centre.  (Point )
+ 
 -  A feature geometry is called **simple**  
-  - when it consists of points connected by straight line pieces,  
-  - and does not intersect itself.
----
-
-# What is a Geometry?
-
-- Features have a geometry describing where on Earth the feature is located  
-- they have attributes, which describe other properties.  
-- Examples:  
--- The geometry of a tree can be the delineation of its crown,  
--- of its stem,  
--- or the point indicating its centre.   
-
-- Other properties may include its height, color, diameter at breast height at a particular date, species and so on.
-
+ - when it consists of points connected by straight line pieces,  
+ - and does not intersect itself.
 
 ---
 
-# What is Geospatial Data?
+# So Finally, What is Spatial Data?
+.pull-left[
+- Features Geometries + **Attribute** data in a single Data Frame
+    - Geometries give **where** the feature is located **and** its shape
+- **Attributes** describe other properties:  
+    - Tree height
+    - Flower or foliage colour
+    - Trunk diameter at breast height at a particular date, 
+    - Tree species and so on.
+- As is the case with Objects, they often consist of other objects.  
+- This is the case with features too: a set of features can form a single feature
+]
+.pull-right[
+&lt;img src="https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/sf.png" width="900px" height="550px" style="display: block; margin: auto;" /&gt;
+]
+---
+
+# Kinds of Geospatial Data
 
 .pull-left[
 
-- Geospatial vector data consist of geometries defined based on geographic coordinates. 
-
-- Geospatial Data describes **features** 
-
-- Features are represented by any combination of these shapes ( And there are more shapes if you want them!!)
-
-- And shows up in a special **geometry** column in the data
 
 - Examples:  
--- Point: buildings, offices, venues, etc in a city  
--- LineString: Roads, rivers and railways  
--- Polygon: a lake, a golf course, or the border of a country  
--- MultiPolygon: Any non-contiguous set of areas  
+    - Point: buildings, offices, venues, etc in a city  
+    - LineString: Roads, rivers and railways  
+    - Polygon: a lake, a golf course, or the border of a country  
+    - MultiPolygon: Any non-contiguous set of areas, a set of suburbs for example
 ]
 
 .pull-right[
@@ -131,8 +144,10 @@ The picture shows a familiar looking `data-frame` with the far-right column cont
 ]
 
 These formulaic descriptions are called **WKT: Well Known Text**
+Note: Polygons can have **"holes"** in them!!
 
 ---
+
 # How are these shapes represented?
 
 Let's read a spatial file available with `sf`:
@@ -156,26 +171,57 @@ Geodetic CRS:  NAD27
 
 ---
 
+# How are these shapes represented?
+
+
+```r
+print(nc[9:15], n = 3)
+```
+
+```
+Simple feature collection with 100 features and 6 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+Geodetic CRS:  NAD27
+First 3 features:
+  BIR74 SID74 NWBIR74 BIR79 SID79 NWBIR79                       geometry
+1  1091     1      10  1364     0      19 MULTIPOLYGON (((-81.47276 3...
+2   487     0      10   542     3      12 MULTIPOLYGON (((-81.23989 3...
+3  3188     5     208  3616     6     260 MULTIPOLYGON (((-80.45634 3...
+```
+
+---
+
+# How are these shapes represented?
+If we examine a spatial data fram in `sf` we get:
+![](https://r-spatial.github.io/sf/articles/sf_xfig.png)
+
+---
+
+class: inverse, middle, center
+## Let us plot some hand-crafted simple geometries
+
+---
+
 ## The `sf` : Spatial Data Frame: Point Geometry
 
 .pull-left[
 
 
 ```r
+# Let's get the India Boundary
 india &lt;- 
   ne_states(country =  "india", 
             geounit = "india", 
             returnclass = "sf")
 crs_india &lt;- st_crs(india)
-points &lt;- 
-  data.frame(lon = rnorm(5, 77, 2), 
-             lat = rnorm(5, 23, 5)) %&gt;% 
-  st_as_sf(., coords = c("lon", "lat"),
-           crs = crs_india)
-str(points)
-*ggplot() +
-*   geom_sf(data = india) +
-*   geom_sf(data = points, colour = "red", size = 4)
+
+*points &lt;- # Create 5 random points
+* data.frame(lon = rnorm(5, 77, 2),
+*            lat = rnorm(5, 23, 5))
+
+*str(points)
 ```
 ]
 
@@ -183,14 +229,154 @@ str(points)
 
 
 ```
+*'data.frame':	5 obs. of  2 variables:
+* $ lon: num  77.6 80.5 74.3 76.2 74.8
+* $ lat: num  28.2 27.4 31.3 20.7 19.1
+```
+]
+
+---
+## The `sf` : Spatial Data Frame: Point Geometry
+
+.pull-left[
+
+
+```r
+# Let's get the India Boundary
+india &lt;- 
+  ne_states(country =  "india", 
+            geounit = "india", 
+            returnclass = "sf")
+crs_india &lt;- st_crs(india)
+
+points &lt;- # Create 5 random points
+  data.frame(lon = rnorm(5, 77, 2),
+             lat = rnorm(5, 23, 5))
+
+str(points) 
+
+# Convert to spatial data frame
+points_sf &lt;- st_as_sf(points, 
+         coords = c("lon", "lat"),
+           crs = crs_india) 
+
+*str(points_sf)
+```
+]
+
+.pull-right[
+
+
+```
+'data.frame':	5 obs. of  2 variables:
+* $ lon: num  77.4 77.4 75.9 75.8 75.4
+* $ lat: num  21.3 26.1 21.4 32.3 28.9
+```
+
+```
 Classes 'sf' and 'data.frame':	5 obs. of  1 variable:
-* $ geometry:sfc_POINT of length 5; first list element:  'XY' num  70.1 17.8
- - attr(*, "sf_column")= chr "geometry"
+* $ geometry:sfc_POINT of length 5; first list element:  'XY' num  77.4 21.3
+* - attr(*, "sf_column")= chr "geometry"
  - attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: 
   ..- attr(*, "names")= chr(0) 
 ```
+]
 
-&lt;img src="06-Spatial-Data-in-R_files/figure-html/first-plot1a-out-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+---
+
+## The `sf` : Spatial Data Frame: Point Geometry
+
+.pull-left[
+
+
+```r
+# Let's get the India Boundary
+india &lt;- 
+  ne_states(country =  "india", 
+            geounit = "india", 
+            returnclass = "sf")
+crs_india &lt;- st_crs(india)
+
+points &lt;- # Create 5 random points
+  data.frame(lon = rnorm(5, 77, 2),
+             lat = rnorm(5, 23, 5))
+
+#str(points) 
+
+# Convert to spatial data frame
+points_sf &lt;- st_as_sf(points,
+         coords = c("lon", "lat"),
+           crs = crs_india)
+
+#str(points_sf)
+
+*ggplot() +
+*   geom_sf(data = india) +
+*   geom_sf(data = points_sf, colour = "red", size = 4)
+```
+]
+
+.pull-right[
+
+&lt;img src="06-Spatial-Data-in-R_files/figure-html/first-plot1c-out-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+]
+
+
+
+---
+
+class:inverse, center, middle
+## Let's now plot a handcrafted Polygon Geometry
+
+---
+
+## The `sf`:Spatial Data Frame: Polygon Geometry
+
+.pull-left[
+
+
+```r
+# Let's create three SQUARES
+# (Using matrices)
+# Center them over Central India 
+# (Lon: 77, Lat: 13)
+# 
+outer &lt;- matrix(c(0,0,10,0,10,10,0,10,0,0) + 
+                  c(77,13), ncol=2, byrow=TRUE)
+hole1 &lt;- matrix(c(1,1,1,2,2,2,2,1,1,1) + 
+                  c(77,13),ncol=2, byrow=TRUE)
+hole2 &lt;- matrix(c(5,5,5,6,6,6,6,5,5,5) + 
+                  c(77,13),ncol=2, byrow=TRUE)
+
+*outer
+
+# Now pile all matrices into a **LIST*
+# 
+*pl1 &lt;- list(outer, hole1, hole2)
+*str(pl1)
+```
+]
+
+.pull-right[
+
+
+```
+     [,1] [,2]
+*[1,]   77   13
+*[2,]   87   13
+*[3,]   87   23
+*[4,]   77   23
+*[5,]   77   13
+```
+
+```
+List of 3
+* $ : num [1:5, 1:2] 77 87 87 77 77 13 13 23 23 13
+* $ : num [1:5, 1:2] 78 78 79 79 78 14 15 15 14 14
+* $ : num [1:5, 1:2] 82 82 83 83 82 18 19 19 18 18
+*
+*NA```
+
 ]
 
 ---
@@ -201,19 +387,24 @@ Classes 'sf' and 'data.frame':	5 obs. of  1 variable:
 
 
 ```r
-# outer &lt;- matrix(c(0,0,10,0,10,10,0,10,0,0) + c(77,23), 
-#                ncol = 2, byrow = TRUE)
-outer &lt;- matrix(c(0,0,10,0,10,10,0,10,0,0) + c(77,23), ncol=2, byrow=TRUE)
-hole1 &lt;- matrix(c(1,1,1,2,2,2,2,1,1,1) + c(77,23),ncol=2, byrow=TRUE)
-hole2 &lt;- matrix(c(5,5,5,6,6,6,6,5,5,5) + c(77,23),ncol=2, byrow=TRUE)
-pl1 &lt;- list(outer, hole1, hole2)
-pl1 &lt;- st_polygon(pl1) %&gt;% # feature geometry
-  st_sfc() %&gt;% # feature column
-  st_as_sf(crs = crs_india) # spatial data frame
-str(pl1)
-*ggplot() +
-*   geom_sf(data = india) +
-*   geom_sf(data = pl1, colour = "red")
+# Let's create three SQUARES
+# (Using matrices)
+# Center them over Central India 
+# (Lon: 77, Lat: 13)
+# 
+outer &lt;- matrix(c(0,0,10,0,10,10,0,10,0,0) + 
+                  c(77,13), ncol=2, byrow=TRUE)
+hole1 &lt;- matrix(c(1,1,1,2,2,2,2,1,1,1) + 
+                  c(77,13),ncol=2, byrow=TRUE)
+hole2 &lt;- matrix(c(5,5,5,6,6,6,6,5,5,5) + 
+                  c(77,13),ncol=2, byrow=TRUE)
+
+*outer
+
+# Now pile all matrices into a **LIST*
+# 
+*pl1 &lt;- list(outer, hole1, hole2)
+*str(pl1)
 ```
 ]
 
@@ -221,21 +412,116 @@ str(pl1)
 
 
 ```
-Classes 'sf' and 'data.frame':	1 obs. of  1 variable:
+     [,1] [,2]
+*[1,]   77   13
+*[2,]   87   13
+*[3,]   87   23
+[4,]   77   23
+[5,]   77   13
+```
+
+```
+List of 3
+* $ : num [1:5, 1:2] 77 87 87 77 77 13 13 23 23 13
+* $ : num [1:5, 1:2] 78 78 79 79 78 14 15 15 14 14
+* $ : num [1:5, 1:2] 82 82 83 83 82 18 19 19 18 18
+```
+
+]
+
+---
+
+## The `sf`:Spatial Data Frame: Polygon Geometry
+
+.pull-left[
+
+
+```r
+# Let's create three SQUARES
+# (Using matrices)
+# Center them over Central India 
+# (Lon: 77, Lat: 13)
+# 
+outer &lt;- matrix(c(0,0,10,0,10,10,0,10,0,0) + 
+                  c(77,13), ncol=2, byrow=TRUE)
+hole1 &lt;- matrix(c(1,1,1,2,2,2,2,1,1,1) + 
+                  c(77,13),ncol=2, byrow=TRUE)
+hole2 &lt;- matrix(c(5,5,5,6,6,6,6,5,5,5) + 
+                  c(77,13),ncol=2, byrow=TRUE)
+
+#outer
+
+# Now pile all matrices into a **LIST*
+# 
+*pl1 &lt;- list(outer, hole1, hole2)
+#str(pl1)
+
+pl1_polygon &lt;- st_polygon(pl1) %&gt;% # feature geometry
+  st_sfc() %&gt;% # feature column
+  st_as_sf(crs = crs_india) # spatial data frame
+*str(pl1_polygon)
+```
+]
+
+.pull-right[
+
+
+```
+*Classes 'sf' and 'data.frame':	1 obs. of  1 variable:
 * $ x:sfc_POLYGON of length 1; first list element: List of 3
-  ..$ : num [1:5, 1:2] 77 87 87 77 77 23 23 33 33 23
-  ..$ : num [1:5, 1:2] 78 78 79 79 78 24 25 25 24 24
-  ..$ : num [1:5, 1:2] 82 82 83 83 82 28 29 29 28 28
+*  ..$ : num [1:5, 1:2] 77 87 87 77 77 13 13 23 23 13
+*  ..$ : num [1:5, 1:2] 78 78 79 79 78 14 15 15 14 14
+  ..$ : num [1:5, 1:2] 82 82 83 83 82 18 19 19 18 18
   ..- attr(*, "class")= chr [1:3] "XY" "POLYGON" "sfg"
  - attr(*, "sf_column")= chr "x"
  - attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: 
   ..- attr(*, "names")= chr(0) 
 ```
 
-&lt;img src="06-Spatial-Data-in-R_files/figure-html/first-plot1b-out-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+]
+---
+## The `sf`:Spatial Data Frame: Polygon Geometry
+
+.pull-left[
+
+
+```r
+# Let's create three SQUARES
+# (Using matrices)
+# Center them over Central India 
+# (Lon: 77, Lat: 13)
+# 
+outer &lt;- matrix(c(0,0,10,0,10,10,0,10,0,0) + 
+                  c(77,13), ncol=2, byrow=TRUE)
+hole1 &lt;- matrix(c(1,1,1,2,2,2,2,1,1,1) + 
+                  c(77,13),ncol=2, byrow=TRUE)
+hole2 &lt;- matrix(c(5,5,5,6,6,6,6,5,5,5) + 
+                  c(77,13),ncol=2, byrow=TRUE)
+
+# Now pile all matrices into a **LIST*
+*pl1 &lt;- list(outer, hole1, hole2)
+
+pl1_polygon &lt;- st_polygon(pl1) %&gt;% # feature geometry
+  st_sfc() %&gt;% # feature column
+  st_as_sf(crs = crs_india) # spatial data frame
+
+*ggplot() +
+*   geom_sf(data = india) +
+*   geom_sf(data = pl1_polygon, colour = "red")
+```
+]
+
+.pull-right[
+
+&lt;img src="06-Spatial-Data-in-R_files/figure-html/first-plot2d-out-1.png" width="90%" style="display: block; margin: auto;" /&gt;
 
 ]
 
+
+---
+
+class:center, inverse, middle
+## Let us (sigh) see a handcrafted Multi-Polygon
 
 ---
 ## The `sf`:Spatial Data Frame: Multi-Polygon Geometry
@@ -270,13 +556,13 @@ head(mp1,3)
 Simple feature collection with 1 feature and 0 fields
 *Geometry type: MULTIPOLYGON
 Dimension:     XY
-Bounding box:  xmin: 65 ymin: 11 xmax: 99 ymax: 45
+Bounding box:  xmin: 65 ymin: 1 xmax: 99 ymax: 35
 CRS:           +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0
                                x
-*1 MULTIPOLYGON (((77 23, 87 2...
+*1 MULTIPOLYGON (((77 13, 87 1...
 ```
 
-&lt;img src="06-Spatial-Data-in-R_files/figure-html/first-plot1c-out-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+&lt;img src="06-Spatial-Data-in-R_files/figure-html/first-plot3a-out-1.png" width="90%" style="display: block; margin: auto;" /&gt;
 
 ]
 
@@ -319,7 +605,7 @@ From "The West Wing" Season 2 Episode 16.
 ggplot() + 
   geom_sf(data = world) + 
     geom_sf(data = india) + 
-    geom_sf(data = points, colour = "red", size = 4) +
+    geom_sf(data = points_sf, colour = "red", size = 4) +
 * coord_sf(crs = "+proj=laea +lat_0=23 +lon_0=77 +x_0=4321000 #&lt;&lt; +y_0=3210000 +ellps=GRS80 +units=m  +no_defs")
 ```
 ]
