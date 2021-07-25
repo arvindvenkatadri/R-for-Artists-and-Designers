@@ -36,6 +36,6 @@ links:
 
 2. Nico Hahn, [Making Maps with R](https://bookdown.org/nicohahn/making_maps_with_r5/docs/introduction.html)  
 
-3.Emine Fidan, [Interactive Maps in R](https://bookdown.org/eneminef/DRR_Bookdown/)  
+3. Emine Fidan, [Interactive Maps in R](https://bookdown.org/eneminef/DRR_Bookdown/)  
 
 4. Lovelace et al, [Geocomputation in R](https://geocompr.robinlovelace.net/adv-map.html)
