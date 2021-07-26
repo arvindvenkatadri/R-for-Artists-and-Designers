@@ -105,6 +105,13 @@ bbox
 bbox_l
 bbox_p # identical with bbox_l
 ```
+Within our bbox for BLR, we want to download diverse kinds of FEATURE data. This is done using the `osmplotr::extract_osm_objects()` command. The main parameters for this command are:
+- bbox
+- key / value pairs (**"tags"**) to specify the kind of feature you need
+
+See [OSM Tags](https://taginfo.openstreetmap.org/) for a nice visual description of popular tags that we can use. Useful keys include *building, place, amenity, shop, waterway, natural, boundary, and highway*.
+
+For example see: [tag : highway](https://taginfo.openstreetmap.org/keys/highway#values)
 
 ```{r get_osm_map_data, cache = TRUE, message=FALSE}
 # Get Map data
@@ -114,8 +121,6 @@ dat_H <- extract_osm_objects (key = 'highway', bbox = bbox)
 dat_P <- extract_osm_objects (key = 'park', bbox = bbox)
 dat_G <- extract_osm_objects (key = 'landuse', value = 'grass', bbox = bbox)
 dat_T <- extract_osm_objects (key = 'natural', value = 'tree', bbox = bbox)
-
-# Useful keys include building, place, amenity, shop, waterway, natural, boundary, and highway.
 
 
 ```
@@ -147,7 +152,7 @@ Do this check for all the other spatial data.
 
 We could quickly plot this using the package `osmplotr`. However, in my ( i.e. Arvind's opinion ) it is not as flexible as other packages. Maybe I need to study it in more detail. 
 
-So we will continue with `ggplot`:
+So we will continue with `ggplot` and `geom_sf()` :
 
 ```{r}
 
@@ -186,9 +191,11 @@ my_area
 bbox
 ```
 
-OK, `my area` is smalled and contained inside my `bbox`. So zoom works. Now to convert `my_area` into a spatial dataframe using `sf` and add it to the `blr_map` plot:
+OK, `my area` is small and contained inside my `bbox`. So zoom works. Now to convert `my_area` into a spatial dataframe using `sf` and add it to the `blr_map` plot:
 
 ```{r}
+
+# Make a matrix
 my_area_in_blr <- matrix(
   c(
   my_area["x", "min"],
@@ -201,16 +208,26 @@ my_area_in_blr <- matrix(
   my_area["y", "max"],
   my_area["y", "max"],
   my_area["y", "min"]),
-  ncol = 2) %>% # Make a matrix
+  ncol = 2) 
+my_area_in_blr
+```
+Note the A-B-C-D-A structure of specifying an enclosed area. Last vertex is the same as start vertex.
+
+
+```{r}
+# Convert to list since POLYGON needs a list
+my_area_in_blr %>% 
+  list() %>% 
+
+# Convert to POLYGON
+  st_polygon() %>% 
   
-  list() %>% # Convert to list since POLYGON needs a list
+# Convert POLYGON to an `sfc` column
+# Through the Looking Glass with dat_B
+  st_sfc(., crs = st_crs(dat_B)) %>% 
   
-  st_polygon() %>% # Convert to POLYGON
-  
-  st_sfc(., crs = st_crs(dat_B)) %>% # Convert POLYGON to an `sfc`
-  # Through the Looking Glass with dat_B
-  
-  st_as_sf(.) # Convert sfc to an sf spatial dataframe. Phew!!
+  # Convert sfc to an sf spatial dataframe. Phew!!
+  st_as_sf(.) 
   
 
 
@@ -225,14 +242,24 @@ blr_map
 
 ```
 
-## Adding my favourite "points" to the map
+We could have created an **arbitrary** area on our map in this way, starting with a matrix and making a spatial data frame, and over-plotting it as a layer on the base map.
+
+
+
+## Adding my favourite Restaurants to the map
 Is it time to order on Swiggy...
 
 Let us adding interesting places to our map: say based on your favourite restaurants etc. We need restaurant data: lat/long + name + maybe type of restaurant. This can be manually created ( like all of OSMdata ) or if it is already there we can download using *key-value* pairs in our OSM data query.
 
 ```{r restaurant_data_1}
-dat_R <- extract_osm_objects(bbox = bbox, key = "amenity", value = "restaurant", return_type = "point")
+dat_R <- extract_osm_objects(bbox = bbox, 
+                             key = "amenity", 
+                             value = "restaurant", 
+                             return_type = "point")
 ```
+
+Note the `return_type` parameter: we want the location and **not** the **building** in which the restaurant is!!
+
 
 ```{r restaurant_data_2}
 # How many restaurants have we got?
