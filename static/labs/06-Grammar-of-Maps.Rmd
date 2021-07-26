@@ -72,7 +72,18 @@ library(tmap) # Thematic Maps, static and interactive
 
 # For Spatial Data Frame Processing
 library(sf)
+
+# For Presentation Ease
+library(xaringanExtra)
+
 ```
+
+```{r echo=FALSE, include=FALSE}
+xaringanExtra::use_webcam()
+use_broadcast()
+use_extra_styles(hover_code_line = TRUE, mute_unhighlighted_code = FALSE)
+```
+
 
 # Introduction to Maps in R
 
@@ -105,9 +116,12 @@ bbox
 bbox_l
 bbox_p # identical with bbox_l
 ```
+We will use the smaller `bbox` from the above, to ensure we have smaller data downloads! 
+
 Within our bbox for BLR, we want to download diverse kinds of FEATURE data. This is done using the `osmplotr::extract_osm_objects()` command. The main parameters for this command are:
-- bbox
-- key / value pairs (**"tags"**) to specify the kind of feature you need
+
+- bbox  
+- key / value pairs (**"tags"**) to specify the kind of feature you need  
 
 See [OSM Tags](https://taginfo.openstreetmap.org/) for a nice visual description of popular tags that we can use. Useful keys include *building, place, amenity, shop, waterway, natural, boundary, and highway*.
 
@@ -134,7 +148,8 @@ class(dat_B$geometry)
 ```
 So `dat_B` has `r nrow(dat_B)` buildings and their geometry is naturally a POLYGON type of geometry column. 
 
-Do this check for all the other spatial data.
+Do this check for all the other spatial data.  
+What kind of `geometry` column does each dataset have?
 
 ```{r YOUR_TURN_1}
 
@@ -142,9 +157,20 @@ Do this check for all the other spatial data.
 
 ```
 
-## YOUR_COMMENTS_1
+
+## Your Turn 1
+-  
+-  
 
 
+
+## What else could we get from OSM?
+
+`osm_structures` returns a data.frame of OSM structure types, associated key-value pairs, unique suffices which may be appended to data structures for storage purposes, and suggested colours.
+
+```{r}
+osm_structures()
+```
 
 
 
@@ -172,14 +198,25 @@ Note how `geom_sf` is capable of handling *any* geometry in the `sfc` column !!
 
 > `geom_sf()` is an unusual geom because it will draw different geometric objects depending on what simple features are present in the data: you can get points, lines, or polygons.
 
+So there, we have our first map!
+
+Now we need to add things to it, things that **matter to us** !!
+
+## Your Turn 2
+
+Can you try to download a map area of your home town and plot it as we have above?
+
+
+
 
 ## Adding my favourite "area" to the map
 
 We can create areas of interest around the map. 
-For a start: we are simply going to *zoom in* to an area and say that is our area of interest. 
+For a start: we are simply going to *zoom in* to an area, define a small rectangle,  and say that is our area of interest. 
+
 This area then needs to go **Through the Looking Glass** and become part of the projection of `dat_B`!!
 
-We can then try based on your favourite restaurants etc. 
+We can then try more complex queries and plots based on your favourite restaurants etc. 
 
 ```{r shapes_on_maps}
 
@@ -191,7 +228,9 @@ my_area
 bbox
 ```
 
-OK, `my area` is small and contained inside my `bbox`. So zoom works. Now to convert `my_area` into a spatial dataframe using `sf` and add it to the `blr_map` plot:
+OK, `my area` is small and contained inside my `bbox`. So `zoombbox` works. 
+
+Now to convert `my_area` into a spatial dataframe using `sf` and add it to the `blr_map` plot:
 
 ```{r}
 
@@ -216,7 +255,9 @@ Note the A-B-C-D-A structure of specifying an enclosed area. Last vertex is the 
 
 ```{r}
 # Convert to list since POLYGON needs a list
-my_area_in_blr %>% 
+my_area_in_blr <- 
+  
+  my_area_in_blr %>% 
   list() %>% 
 
 # Convert to POLYGON
@@ -244,6 +285,11 @@ blr_map
 
 We could have created an **arbitrary** area on our map in this way, starting with a matrix and making a spatial data frame, and over-plotting it as a layer on the base map.
 
+We could also add **multiple areas of interest** using ...yes MULTIPOLYGONs !!
+
+## Your Turn 3
+
+Try adding more than one "areas of interest" to your map. 
 
 
 ## Adding my favourite Restaurants to the map
@@ -255,7 +301,7 @@ Let us adding interesting places to our map: say based on your favourite restaur
 dat_R <- extract_osm_objects(bbox = bbox, 
                              key = "amenity", 
                              value = "restaurant", 
-                             return_type = "point")
+                             return_type = "point") #<<
 ```
 
 Note the `return_type` parameter: we want the location and **not** the **building** in which the restaurant is!!
@@ -268,6 +314,11 @@ dat_R %>% nrow()
 
 ```{r restaurant_data_3}
 names(dat_R)
+
+```
+
+
+```{r restaurant_data_4}
 # Let's look at the `cuisine` column! 
 # ( I want pizza...)
 dat_R$cuisine
