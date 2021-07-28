@@ -224,7 +224,7 @@ grey_edges
 ```{r, echo=FALSE}
 grey_nodes %>% 
   download_this(
-    output_name = "grey_nodes",
+    output_name = "grey-nodes",
     output_extension = ".csv",
     button_label = "Download Grey Nodes as csv",
     button_type = "default",
@@ -235,7 +235,7 @@ grey_nodes %>%
 
 grey_edges %>% 
   download_this(
-    output_name = "grey_edges",
+    output_name = "grey-edges",
     output_extension = ".csv",
     button_label = "Download Grey Edges data as csv",
     button_type = "default",
@@ -711,9 +711,6 @@ set_graph_style()
 
 # visualize communities of nodes
 ga %>% 
-  #make_undirected_graph() %>% 
-  #activate(edges) %>% mutate(from = as.numeric(from),
-  #                          to = as.numeric(to)) %>% 
   activate(nodes) %>%
   mutate(community = as.factor(group_louvain())) %>% 
   ggraph(layout = "graphopt") + 
@@ -764,8 +761,10 @@ grey_nodes_vis <- grey_nodes %>%
 grey_nodes_vis
 grey_edges_vis <- grey_edges %>% 
   select(from, to) %>% 
-  left_join(., grey_nodes_vis, by = c("from" = "label")) %>% 
-  left_join(., grey_nodes_vis, by = c("to" = "label")) %>%
+  left_join(., grey_nodes_vis, 
+            by = c("from" = "label")) %>% 
+  left_join(., grey_nodes_vis, 
+            by = c("to" = "label")) %>%
   select("from"= id.x, "to" = id.y)
 grey_edges_vis
 ```
@@ -870,9 +869,9 @@ starwars_edges <- read_csv("./Data/star-wars-network-edges.csv")
 ```{r echo=FALSE}
 starwars_nodes %>% 
   download_this(
-    output_name = "StarWars Nodes dataset",
+    output_name = "star-wars-network-nodes",
     output_extension = ".csv",
-    button_label = "Download data as csv",
+    button_label = "Download Nodes data as csv",
     button_type = "default",
     has_icon = TRUE,
     icon = "fa fa-save",
@@ -880,9 +879,9 @@ starwars_nodes %>%
   )
 starwars_edges %>% 
   download_this(
-    output_name = "StarWars Edges dataset",
+    output_name = "star-wars-network-edges",
     output_extension = ".csv",
-    button_label = "Download data as csv",
+    button_label = "Download Edges data as csv",
     button_type = "default",
     has_icon = TRUE,
     icon = "fa fa-save",
@@ -943,10 +942,13 @@ Step 1. Fire up a *new* RMarkdown. Write your name, file_name and date.
 Step 2. Take **any one** of the "Make1-Datasets" datasets decribed
 below.
 
-Step 3. RMarkdown contents:\
-- Introduce / Inspect in R your data and describe - Introduce your
-Purpose - Create graph objects. - Write comments in the code - Write
-narrative in text with sections, bold ,italic etc.
+Step 3. RMarkdown contents:
+
+-    Introduce / Inspect in R your data and describe
+-   Introduce your Purpose
+-   Create graph objects.
+-   Write comments in the code
+-   Write narrative in text with sections, bold ,italic etc.
 
 Step 4. Knit before you submit. Submit only your knittable `.Rmd` file.
 
@@ -956,21 +958,16 @@ a)  Airline Data:
 
 -   Start with this bit of code in your second chunk, after `set up`
 
-```{r}
-airline_nodes <- read_csv("./Data/AIRLINES-NODES.csv")
-airline_edges <- read_csv("./Data/AIRLINES-EDGES.csv")
-```
-
-```{r }
+```{r, message=FALSE}
 airline_nodes <- read_csv("./Data/AIRLINES-NODES.csv") %>% mutate(Id = Id + 1)
-airline_edges <- read_csv("./Data/AIRLINES-EDGES.csv") %>% 
+airline_edges <- read_csv("./Data/AIRLINES-EDGES.csv") %>%
 mutate(Source = Source + 1, Target = Target + 1)
 ```
 
 ```{r, echo=FALSE}
 airline_nodes %>% 
   download_this(
-    output_name = "Airline Nodes dataset",
+    output_name = "AIRLINES-NODES",
     output_extension = ".csv",
     button_label = "Download data as csv",
     button_type = "default",
@@ -981,7 +978,7 @@ airline_nodes %>%
 
 airline_edges %>% 
   download_this(
-    output_name = "Airline Edges dataset",
+    output_name = "AIRLINES-EDGES",
     output_extension = ".csv",
     button_label = "Download data as csv",
     button_type = "default",
@@ -995,8 +992,9 @@ b)  The Famous Zachary Karate Club dataset
 
 -   Start with pulling this data into your Rmarkdown:
 
+```{=html}
 <!-- -->
-
+```
     data("karate",package= "igraphdata")
     karate
 
@@ -1019,7 +1017,7 @@ GoT <- read_rds("./data/GoT.RDS")
 ```{r, echo=FALSE}
 GoT %>% 
   download_this(
-    output_name = "Game of Thrones Graphs Dataset",
+    output_name = "GoT",
     output_extension = ".rds",
     button_label = "Download data as RDS",
     button_type = "default",
