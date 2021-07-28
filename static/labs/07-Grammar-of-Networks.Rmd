@@ -44,21 +44,36 @@ library(downloadthis)
 
 # Introduction
 
-This RMarkdown document is part of the Generic Skills Component  (GSK) of the Course of the  Foundation Studies Programme at Srishti Manipal Institute of Art, Design, and Technology, Bangalore India. The material is based on *A Layered Grammar of Graphics* by Hadley Wickham. The course is meant for First Year students pursuing a Degree in Art and Design. 
+This RMarkdown document is part of the Generic Skills Component (GSK) of
+the Course of the Foundation Studies Programme at Srishti Manipal
+Institute of Art, Design, and Technology, Bangalore India. The material
+is based on *A Layered Grammar of Graphics* by Hadley Wickham. The
+course is meant for First Year students pursuing a Degree in Art and
+Design.
 
-The intent of this GSK part is to build Skill in coding in R, and also appreciate R as a way to metaphorically visualize information of various kinds, using predominantly geometric figures and structures.
+The intent of this GSK part is to build Skill in coding in R, and also
+appreciate R as a way to metaphorically visualize information of various
+kinds, using predominantly geometric figures and structures.
 
-All RMarkdown files combine code, text, web-images, and figures developed using code. Everything is text; code chunks are enclosed in **fences** (```)
+All RMarkdown files combine code, text, web-images, and figures
+developed using code. Everything is text; code chunks are enclosed in
+**fences** (\`\`\`)
 
 # Goals
 
 At the end of this Lab session, we should:
-- know the types and structures of `network data` and be able to work with them
-- understand the basics of modern network packages in R
-- be able to create network visualizations using `tidygraph`, `ggraph`( static visualizations ) and `visNetwork` (interactive visualizations)
-- see directions for how the network metaphor applies in a variety of domains (e.g. biology/ecology, ideas/influence, technology, transportation, to name a few)
 
+\- know the types and structures of `network data` and be able to work
+with them
 
+\- understand the basics of modern network packages in R
+
+\- be able to create network visualizations using `tidygraph`, `ggraph`(
+static visualizations ) and `visNetwork` (interactive visualizations)
+
+\- see directions for how the network metaphor applies in a variety of
+domains (e.g. biology/ecology, ideas/influence, technology,
+transportation, to name a few)
 
 # Pedagogical Note
 
@@ -68,18 +83,22 @@ The method followed will be based on
 -   **PREDICT** Inspect the code and guess at what the code might do,
     **write predictions**
 -   **RUN** the code provided and check what happens
--   **INFER** what the `parameters` of the code do and **write comments to explain**. What bells and whistles can you see?
+-   **INFER** what the `parameters` of the code do and **write comments
+    to explain**. What bells and whistles can you see?
 -   **MODIFY** the `parameters` code provided to understand the
-    `options` available. **Write comments** to show what you have aimed for and achieved.
+    `options` available. **Write comments** to show what you have aimed
+    for and achieved.
 -   **MAKE** : take an idea/concept of your own, and graph it.
-
 
 # Set Up
 
-The `setup` code **chunk** below brings into our coding session **R packages** that provide specific computational abilities and also **datasets** which we can use. 
+The `setup` code **chunk** below brings into our coding session **R
+packages** that provide specific computational abilities and also
+**datasets** which we can use.
 
-To reiterate: Packages and datasets are **not** the same thing !! Packages are (small) collections of programs. Datasets are just....information.
-
+To reiterate: Packages and datasets are **not** the same thing !!
+Packages are (small) collections of programs. Datasets are
+just....information.
 
 # Graph Metaphors
 
@@ -99,11 +118,12 @@ Network graphs are characterized by two key terms: **nodes** and
     -   Synonyms: `links`, `ties`.
 
 In R, we create network representations using node and edge information.
-*One way* in which these could be organized are: - `Node list`: a data
-frame with a single column listing the node IDs found in the edge list.
-You can also add **attribute columns** to the data frame such as the
-names of the nodes or grouping variables. ( Type? Class? Family?
-Country? Subject? Race? )
+*One way* in which these could be organized are:
+
+\- `Node list`: a data frame with a single column listing the node IDs
+found in the edge list. You can also add **attribute columns** to the
+data frame such as the names of the nodes or grouping variables. ( Type?
+Class? Family? Country? Subject? Race? )
 
 +----+----------------+------------------------------------------------+
 | ID | Node Name      | Attribute? Qualities?Categories? Family?       |
@@ -138,26 +158,40 @@ Country? Subject? Race? )
 
 : Edges Table
 
-- `Layout`: A **geometric** arrangement of `nodes` and `edges`.
-   - Metaphors: Location? Spacing? Distance? Coordinates? Colour? Shape? Size? Provides visual insight due to the `arrangement`.  
-- `Layout Algorithms` : `Method` to arranges `nodes` and `edges` with the aim of optimizing some `metric` .
-   - Metaphors: Nodes are `masses` and edges are `springs`. The Layout algorithm minimizes the stretching and compressing of all
-    springs.(BTW, are the Spring Constants K the same for all
-    springs?...)
+-   `Layout`: A **geometric** arrangement of `nodes` and `edges`.
 
-8.  `Directed and undirected network graph`: If the distinction between source and target is meaningful, the network is **directed.** If the distinction is not meaningful, the network is **undirected**.
-**Directed edges** represent an ordering of nodes, like a relationship extending from one node to another, where switching the direction would change the structure of the network. **Undirected edges** are simply links between nodes where order does not matter.
+    -   Metaphors: Location? Spacing? Distance? Coordinates? Colour?
+        Shape? Size? Provides visual insight due to the `arrangement`.\
+
+-   `Layout Algorithms` : `Method` to arranges `nodes` and `edges` with
+    the aim of optimizing some `metric` .
+
+    -   Metaphors: Nodes are `masses` and edges are `springs`. The
+        Layout algorithm minimizes the stretching and compressing of all
+        springs.(BTW, are the Spring Constants K the same for all
+        springs?...)
+
+8.  `Directed and undirected network graph`: If the distinction between
+    source and target is meaningful, the network is **directed.** If the
+    distinction is not meaningful, the network is **undirected**.
+    **Directed edges** represent an ordering of nodes, like a
+    relationship extending from one node to another, where switching the
+    direction would change the structure of the network. **Undirected
+    edges** are simply links between nodes where order does not matter.
 
 Examples:
 
-- The World Wide Web is an example of a directed network because
-hyperlinks connect one Web page to another, but not necessarily the
-other way around. 
+-   The World Wide Web is an example of a directed network because
+    hyperlinks connect one Web page to another, but not necessarily the
+    other way around.
 
-- Co-authorship networks represent examples of
-un-directed networks, where nodes are authors and they are connected by an edge if they have written a publication together 
+-   Co-authorship networks represent examples of un-directed networks,
+    where nodes are authors and they are connected by an edge if they
+    have written a publication together
 
-- When people send e-mail to each other, the distinction between the sender (source) and the recipient (target) is clearly meaningful, therefore the network is directed.
+-   When people send e-mail to each other, the distinction between the
+    sender (source) and the recipient (target) is clearly meaningful,
+    therefore the network is directed.
 
 9.  `Connected` and `Disconnected` graphs: If there is *some* path from
     *any node* to *any other node*, the Networks is said to be
@@ -168,13 +202,15 @@ un-directed networks, where nodes are authors and they are connected by an edge 
 ## Using `tidygraph` and `ggraph`
 
 `tidygraph` and `ggraph` are modern R packages for network data. Graph
-Data setup and manipulation is done in tidygraph and graph visualization with ggraph.
+Data setup and manipulation is done in tidygraph and graph visualization
+with ggraph.
 
 -   `tidygraph` Data -\> "Network Object" in R.
 -   `ggraph` Network Object -\> Plots using a chosen layout/algo.
 
 Both leverage the power of **`igraph`**, which is the **Big Daddy** of
-all network packages. We will be using the Grey's Anatomy dataset in our first foray into networks.
+all network packages. We will be using the Grey's Anatomy dataset in our
+first foray into networks.
 
 ## Step1. Read the data
 
@@ -188,7 +224,7 @@ grey_edges
 ```{r, echo=FALSE}
 grey_nodes %>% 
   download_this(
-    output_name = "Grey Nodes dataset",
+    output_name = "grey_nodes",
     output_extension = ".csv",
     button_label = "Download Grey Nodes as csv",
     button_type = "default",
@@ -199,7 +235,7 @@ grey_nodes %>%
 
 grey_edges %>% 
   download_this(
-    output_name = "Grey Edges dataset",
+    output_name = "grey_edges",
     output_extension = ".csv",
     button_label = "Download Grey Edges data as csv",
     button_type = "default",
@@ -209,18 +245,19 @@ grey_edges %>%
   )
 ```
 
+::: {.panel .panel-success}
+::: {.panel-heading}
+Questions and Inferences \#1:
+:::
 
-
-<div class="panel panel-success">
-  <div class="panel-heading"> Questions and Inferences #1:</div>
-  <div class="panel-body">
-  
-Look at the console output thumbnail. What does for example `name = col_character` mean? What attributes (i.e. extra information) are seen for Nodes and Edges? Understand the data in both nodes and edges as shown in the second and third thumbnails. Write some comments and inferences here.
-
- 
-  </div>
-</div>
-
+::: {.panel-body}
+Look at the console output thumbnail. What does for example
+`name = col_character` mean? What attributes (i.e. extra information)
+are seen for Nodes and Edges? Understand the data in both nodes and
+edges as shown in the second and third thumbnails. Write some comments
+and inferences here.
+:::
+:::
 
 ## Step 2.Create a network object using tidygraph:
 
@@ -239,35 +276,38 @@ ga <- tbl_graph(nodes = grey_nodes,
 ga
 ```
 
+::: {.panel .panel-success}
+::: {.panel-heading}
+Questions and Inferences \#2:
+:::
 
-<div class="panel panel-success">
-  <div class="panel-heading"> Questions and Inferences #2:</div>
-  <div class="panel-body">
-**Questions and Inferences**: What information does the graph object contain? What attributes do the nodes have? What about the edges?
-
- 
-  </div>
-</div>
-
-
+::: {.panel-body}
+**Questions and Inferences**: What information does the graph object
+contain? What attributes do the nodes have? What about the edges?
+:::
+:::
 
 ## Step 3. Plot using `ggraph`
 
-3a. Quick Plot: `autograph()` This is to check quickly is the data is imported properly and to decide upon going on to a more elaborate plotting.
+3a. Quick Plot: `autograph()` This is to check quickly is the data is
+imported properly and to decide upon going on to a more elaborate
+plotting.
 
 ```{r 3a.Auto-graph-greys-anatomy}
 autograph(ga)
 ```
 
-<div class="panel panel-success">
-  <div class="panel-heading"> Questions and Inferences #3:</div>
-  <div class="panel-body">
-**Questions and Inferences**: Describe this graph, in simple words here. Try to use some of the new domain words we have just acquired: nodes/edges, connected/disconnected, directed/undirected.
- 
-  </div>
-</div>
+::: {.panel .panel-success}
+::: {.panel-heading}
+Questions and Inferences \#3:
+:::
 
-
+::: {.panel-body}
+**Questions and Inferences**: Describe this graph, in simple words here.
+Try to use some of the new domain words we have just acquired:
+nodes/edges, connected/disconnected, directed/undirected.
+:::
+:::
 
 3b. More elaborate plot
 
@@ -278,7 +318,9 @@ Key functions:
 
 Two kinds of `geom`: one set for nodes, and another for edges
 
--   `geom_node_point(aes(.....))`: Draws node as "points".  Alternatives are `circle / arc_bar / tile / voronoi`. Remember the `geom`s that we have seen before in Grammar of Graphics!
+-   `geom_node_point(aes(.....))`: Draws node as "points". Alternatives
+    are `circle / arc_bar / tile / voronoi`. Remember the `geom`s that
+    we have seen before in Grammar of Graphics!
 
 -   `geom_edge_link(aes(.....))`: Draws edges as "links". Alternatives
     are
@@ -318,15 +360,17 @@ ggraph(graph = ga,  layout = "kk") +
 
 ```
 
+::: {.panel .panel-success}
+::: {.panel-heading}
+Questions and Inferences \#3:
+:::
 
-
-<div class="panel panel-success">
-  <div class="panel-heading"> Questions and Inferences #3:</div>
-  <div class="panel-body">
-**Questions and Inferences**: What parameters have been changed here, compared to the earlier graph? Where do you see these changes in the code above?
- 
-  </div>
-</div>
+::: {.panel-body}
+**Questions and Inferences**: What parameters have been changed here,
+compared to the earlier graph? Where do you see these changes in the
+code above?
+:::
+:::
 
 Let us **Play** with this graph and see if we can make some small
 changes. Colour? Fill? Width? Size? Stroke? Labs? Of course!
@@ -347,41 +391,48 @@ ggraph(graph = ga,  layout = "kk") +
        classes...")
 ```
 
+::: {.panel .panel-success}
+::: {.panel-heading}
+Questions and Inferences \#4:
+:::
 
-<div class="panel panel-success">
-  <div class="panel-heading"> Questions and Inferences #4:</div>
-  <div class="panel-body">
-**Questions and Inferences**: What did the `shape` parameter achieve? What are the possibilities with `shape`? How about including `alpha`?
- 
-  </div>
-</div>
-
+::: {.panel-body}
+**Questions and Inferences**: What did the `shape` parameter achieve?
+What are the possibilities with `shape`? How about including `alpha`?
+:::
+:::
 
 3c. Aesthetic Mapping from Node and Edge attribute columns
 
-Up to now, we have **assigned** *specific numbers* to geometric aesthetics such as shape and size. Now we are ready ( maybe ?) change the meaning and significance of the entire graph and each element within it, and use **aesthetics / metaphoric mappings** to achieve new meanings or insights. Let us try using `aes()` inside each `geom` to map a `variable` to a geometric aspect.
+Up to now, we have **assigned** *specific numbers* to geometric
+aesthetics such as shape and size. Now we are ready ( maybe ?) change
+the meaning and significance of the entire graph and each element within
+it, and use **aesthetics / metaphoric mappings** to achieve new meanings
+or insights. Let us try using `aes()` inside each `geom` to map a
+`variable` to a geometric aspect.
 
 Don't try to use more than 2 aesthetic mappings simultaneously!!
 
-The node elements we can tweak are: 
+The node elements we can tweak are:
 
-- Types of Nodes: `geom_node_****()`  
-- Node Parameters: inside `geom_node_****(aes(...............))`  
--`aes(alpha  = node-variable)` : opacity; a value between 0 and 1   
--`aes(shape  = node-variable)` : node shape   
--`aes(colour = node-variable)` : node colour   
--`aes(fill   = node-variable)` : fill colour for node   
--`aes(size   = node-variable)` : size of node  
+-   Types of Nodes: `geom_node_****()`\
+-   Node Parameters: inside `geom_node_****(aes(...............))`\
+    -`aes(alpha  = node-variable)` : opacity; a value between 0 and 1\
+    -`aes(shape  = node-variable)` : node shape\
+    -`aes(colour = node-variable)` : node colour\
+    -`aes(fill   = node-variable)` : fill colour for node\
+    -`aes(size   = node-variable)` : size of node
 
-The edge elements we can tweak are: 
+The edge elements we can tweak are:
 
-- Type of Edges" `geom_edge_****()`  
-- Edge Parameters: inside `geom_edge_****(aes(...............))`   
--`aes(colour = edge-variable)` : colour of the edge   
--`aes(width  = edge-variable)` : width of the edge   
--`aes(label  = some_variable)` : labels for the edge  
+-   Type of Edges" `geom_edge_****()`\
+-   Edge Parameters: inside `geom_edge_****(aes(...............))`\
+    -`aes(colour = edge-variable)` : colour of the edge\
+    -`aes(width  = edge-variable)` : width of the edge\
+    -`aes(label  = some_variable)` : labels for the edge
 
-Type `?geom_node_point` and `?geom-edge_link` in your Console for more information.
+Type `?geom_node_point` and `?geom-edge_link` in your Console for more
+information.
 
 ```{r 3d.aesthetics-using-ggraph-Modify}
 
@@ -398,16 +449,17 @@ ggraph(graph = ga, layout = "fr") +
   labs(title = "Whoo Hoo! Yet another Grey's Anatomy graph in R!")
 ```
 
+::: {.panel .panel-success}
+::: {.panel-heading}
+Questions and Inferences \#5:
+:::
 
-
-<div class="panel panel-success">
-  <div class="panel-heading"> Questions and Inferences #5:</div>
-  <div class="panel-body">
-**Questions and Inferences**: Describe some of the changes here. What types of edges worked? Which variables were you able to use for nodes and edges and how? What did not work with either of the two?
- 
-  </div>
-</div>
-
+::: {.panel-body}
+**Questions and Inferences**: Describe some of the changes here. What
+types of edges worked? Which variables were you able to use for nodes
+and edges and how? What did not work with either of the two?
+:::
+:::
 
 # Predict/Reuse/Infer-2
 
@@ -422,15 +474,17 @@ ggraph(ga, layout = "linear") +
   theme(legend.position = "top")
 ```
 
+::: {.panel .panel-success}
+::: {.panel-heading}
+Questions and Inferences \#6:
+:::
 
-
-<div class="panel panel-success">
-  <div class="panel-heading"> Questions and Inferences #6:</div>
-  <div class="panel-body">
-**Questions and Inferences**: How does this graph look "metaphorically" different? Do you see a difference in the relationships between people here? Why?
- 
-  </div>
-</div>
+::: {.panel-body}
+**Questions and Inferences**: How does this graph look "metaphorically"
+different? Do you see a difference in the relationships between people
+here? Why?
+:::
+:::
 
 ```{r Coord-Diagram-circular}
 # Coord diagram, circular
@@ -446,20 +500,22 @@ ggraph(ga, layout = "linear", circular = TRUE) +
         aspect.ratio = 1)
 ```
 
+::: {.panel .panel-success}
+::: {.panel-heading}
+Questions and Inferences \#7:
+:::
 
-
-
-<div class="panel panel-success">
-  <div class="panel-heading"> Questions and Inferences #7:</div>
-  <div class="panel-body">
-**Questions and Inferences**: How does this graph look "metaphorically" different? Do you see a difference in the relationships between people here? Why?
- 
-  </div>
-</div>
+::: {.panel-body}
+**Questions and Inferences**: How does this graph look "metaphorically"
+different? Do you see a difference in the relationships between people
+here? Why?
+:::
+:::
 
 # Hierarchical layouts
 
-These provide for some alternative metaphorical views of networks. Note that not all layouts are possible for all datasets!!
+These provide for some alternative metaphorical views of networks. Note
+that not all layouts are possible for all datasets!!
 
 ```{r}
 # setting theme_graph 
@@ -508,19 +564,16 @@ ggraph(graph, layout = "partition", circular = TRUE) +
   labs(title = "Circular Icicle")
 ```
 
+::: {.panel .panel-success}
+::: {.panel-heading}
+Questions and Inferences \#8:
+:::
 
-
-
-<div class="panel panel-success">
-  <div class="panel-heading"> Questions and Inferences #8:</div>
-  <div class="panel-body">
-**Questions and Inferences**: How do graphs look "metaphorically" different? Do they reveal different aspects of the group? How?
-
- 
-  </div>
-</div>
-
-
+::: {.panel-body}
+**Questions and Inferences**: How do graphs look "metaphorically"
+different? Do they reveal different aspects of the group? How?
+:::
+:::
 
 # Faceting
 
@@ -552,37 +605,38 @@ ggraph(ga,layout = "linear", circular = TRUE) +
   th_foreground(border = TRUE)
 ```
 
+::: {.panel .panel-success}
+::: {.panel-heading}
+Questions and Inferences \#9:
+:::
 
-
-<div class="panel panel-success">
-  <div class="panel-heading"> Questions and Inferences #9:</div>
-  <div class="panel-body">
-**Questions and Inferences**: Does splitting up the main graph into subnetworks give you more insight? Describe some of these.
-
- 
-  </div>
-</div>
-
-
-
+::: {.panel-body}
+**Questions and Inferences**: Does splitting up the main graph into
+subnetworks give you more insight? Describe some of these.
+:::
+:::
 
 # Network analysis with tidygraph
 
-The data frame graph representation can be easily augmented with **metrics** or **statistics** computed on the graph. Remember how we computed `counts` with the penguin dataset in Grammar of Graphics.   
+The data frame graph representation can be easily augmented with
+**metrics** or **statistics** computed on the graph. Remember how we
+computed `counts` with the penguin dataset in Grammar of Graphics.
 
-Before computing a metric on nodes or edges use the `activate()` function to activate either node or edge data frames. Use `dplyr` **verbs** (`filter, arrange, mutate`) to achieve your computation in the proper way.
-
-
+Before computing a metric on nodes or edges use the `activate()`
+function to activate either node or edge data frames. Use `dplyr`
+**verbs** (`filter, arrange, mutate`) to achieve your computation in the
+proper way.
 
 ## Network Centrality
 
-Centrality is a an "ill-defined" metric of **node and edge importance** in a network. It is therefore calculated in many ways. Type `?centrality` in your Console.
+Centrality is a an "ill-defined" metric of **node and edge importance**
+in a network. It is therefore calculated in many ways. Type
+`?centrality` in your Console.
 
 ![Standards](https://imgs.xkcd.com/comics/standards.png)
 
-
-Let's add a few columns to the nodes and edges based on network centrality measures:
-
+Let's add a few columns to the nodes and edges based on network
+centrality measures:
 
 ```{r network-analysis-1}
 ga %>% 
@@ -598,7 +652,8 @@ ga %>%
 
 ```
 
-Packages `tidygraph` and `ggraph` can be pipelined to perform analysis and visualization tasks in one go.
+Packages `tidygraph` and `ggraph` can be pipelined to perform analysis
+and visualization tasks in one go.
 
 ```{r Using-Centrality}
 # setting theme_graph 
@@ -632,19 +687,18 @@ ga %>%
                        high = "red")
 ```
 
+::: {.panel .panel-success}
+::: {.panel-heading}
+Questions and Inferences \#10:
+:::
 
-<div class="panel panel-success">
-  <div class="panel-heading"> Questions and Inferences #10:</div>
-  <div class="panel-body">
-**Questions and Inferences**: How do the Centrality Measures show up in the graph? Would you "agree" with the way we have done it?
-Try to modify the aesthetics by copy-pasting this chunk below and see how you can make an alternative representation.
-
- 
-  </div>
-</div>
-
-
-
+::: {.panel-body}
+**Questions and Inferences**: How do the Centrality Measures show up in
+the graph? Would you "agree" with the way we have done it? Try to modify
+the aesthetics by copy-pasting this chunk below and see how you can make
+an alternative representation.
+:::
+:::
 
 ## Analyse and visualize network: communities
 
@@ -668,21 +722,29 @@ ga %>%
 
 ```
 
-<div class="panel panel-success">
-  <div class="panel-heading"> Questions and Inferences #11:</div>
-  <div class="panel-body">
-**Questions and Inferences**: Is the Community depiction clear? How would you do it, with which aesthetic? Copy Paste this chunk below and try. 
+::: {.panel .panel-success}
+::: {.panel-heading}
+Questions and Inferences \#11:
+:::
 
- 
-  </div>
-</div>
-
+::: {.panel-body}
+**Questions and Inferences**: Is the Community depiction clear? How
+would you do it, with which aesthetic? Copy Paste this chunk below and
+try.
+:::
+:::
 
 # Interactive Graphs with `visNetwork`
 
-Exploring the `VisNetwork` package. Make graphs wiggle and shake using `tidy` commands! The package implements interactivity using the physical metaphor of weights and springs we discussed earlier. 
+Exploring the `VisNetwork` package. Make graphs wiggle and shake using
+`tidy` commands! The package implements interactivity using the physical
+metaphor of weights and springs we discussed earlier.
 
-The `visNetwork()` function uses a nodes list and edges list to create an interactive graph. The nodes list must include an "id" column, and the edge list must have "from" and "to" columns. The function also plots the labels for the nodes, using the names of the cities from the "label" column in the node list.
+The `visNetwork()` function uses a nodes list and edges list to create
+an interactive graph. The nodes list must include an "id" column, and
+the edge list must have "from" and "to" columns. The function also plots
+the labels for the nodes, using the names of the cities from the "label"
+column in the node list.
 
 ```{r greys-anatomy-data-for-visnetwork}
 library(visNetwork)
@@ -741,7 +803,9 @@ grey_nodes_vis %>%
                  zoomView = TRUE)
 ```
 
-There is another family of icons available in visNetwork, called [`ionicons`](https://unpkg.com/ionicons@5.5.2/dist/cheatsheet.html). Let's see how they look:
+There is another family of icons available in visNetwork, called
+[`ionicons`](https://unpkg.com/ionicons@5.5.2/dist/cheatsheet.html).
+Let's see how they look:
 
 ```{r using-ionicons}
 grey_nodes_vis %>%
@@ -793,7 +857,6 @@ grey_nodes_vis %>%
   )
 ```
 
-
 Some idea of interactivity and controls with `visNetwork`:
 
 ```{r visNetwork-starwars-1}
@@ -803,6 +866,7 @@ starwars_nodes <- read_csv("./Data/star-wars-network-nodes.csv")
 starwars_edges <- read_csv("./Data/star-wars-network-edges.csv")
 
 ```
+
 ```{r echo=FALSE}
 starwars_nodes %>% 
   download_this(
@@ -825,7 +889,6 @@ starwars_edges %>%
     class = "hvr-sweep-to-left"
   )
 ```
-
 
 ```{r visNetwork-starwars-2}
 # We need to rename starwars nodes dataframe and edge dataframe columns for visNetwork
@@ -871,20 +934,19 @@ visNetwork(nodes = starwars_nodes_vis,
   visEdges(color = "red")
 ```
 
-
 # Your Assignments:
 
 ## Make-1 : With a ready made dataset
 
 Step 1. Fire up a *new* RMarkdown. Write your name, file_name and date.
 
-Step 2. Take **any one** of the "Make1-Datasets" datasets decribed below.
+Step 2. Take **any one** of the "Make1-Datasets" datasets decribed
+below.
 
-Step 3. RMarkdown contents:  
-    - Introduce / Inspect in R your data and describe 
-    - Introduce your Purpose - Create graph objects. 
-    - Write comments in the code 
-    - Write narrative in text with sections, bold ,italic etc.
+Step 3. RMarkdown contents:\
+- Introduce / Inspect in R your data and describe - Introduce your
+Purpose - Create graph objects. - Write comments in the code - Write
+narrative in text with sections, bold ,italic etc.
 
 Step 4. Knit before you submit. Submit only your knittable `.Rmd` file.
 
@@ -893,6 +955,7 @@ Step 4. Knit before you submit. Submit only your knittable `.Rmd` file.
 a)  Airline Data:
 
 -   Start with this bit of code in your second chunk, after `set up`
+
 ```{r}
 airline_nodes <- read_csv("./Data/AIRLINES-NODES.csv")
 airline_edges <- read_csv("./Data/AIRLINES-EDGES.csv")
@@ -903,6 +966,7 @@ airline_nodes <- read_csv("./Data/AIRLINES-NODES.csv") %>% mutate(Id = Id + 1)
 airline_edges <- read_csv("./Data/AIRLINES-EDGES.csv") %>% 
 mutate(Source = Source + 1, Target = Target + 1)
 ```
+
 ```{r, echo=FALSE}
 airline_nodes %>% 
   download_this(
@@ -927,18 +991,18 @@ airline_edges %>%
   )
 ```
 
-
 b)  The Famous Zachary Karate Club dataset
 
 -   Start with pulling this data into your Rmarkdown:
 
-```
-data("karate",package= "igraphdata")
-karate
-```
+<!-- -->
+
+    data("karate",package= "igraphdata")
+    karate
 
 -   Try `?karate` in the console
--   Note that this is **not** a set of nodes, nor edges, **but** already a **graph-object**!
+-   Note that this is **not** a set of nodes, nor edges, **but** already
+    a **graph-object**!
 -   So no need to create a graph object using `tbl_graph`.
 -   You will need to just go ahead and plot using `ggraph`.
 
@@ -966,10 +1030,13 @@ GoT %>%
 ```
 
 -   Note that this is a **list** of **7** graphs from Game of Thrones.
--   Select one using `GoT[[index]]` where index = 1...7 and then plot directly.
-- Try to access the nodes and edges and modify them using any attribute data
+-   Select one using `GoT[[index]]` where index = 1...7 and then plot
+    directly.
+-   Try to access the nodes and edges and modify them using any
+    attribute data
 
-3.  Any other graph dataset from `igraphdata` (type `?igraphdata` in console)
+3.  Any other graph dataset from `igraphdata` (type `?igraphdata` in
+    console)
 
 -   Ask me for help if you need any
 
@@ -977,46 +1044,61 @@ GoT %>%
 
 This is in groups. Groups of 4. To be announced
 
-You need to create a Network Graph for your favourite **Book, play, TV serial or Show**. (E.g. Friends, BBT, or LB or HIMYM...or Hamlet, Little Women , Pride and Prejudice, or LoTR)
+You need to create a Network Graph for your favourite **Book, play, TV
+serial or Show**. (E.g. Friends, BBT, or LB or HIMYM...or Hamlet, Little
+Women , Pride and Prejudice, or LoTR)
 
-Step 1. Go to: 
-[Literary Networks](https://www.teachengineering.org/activities/view/uno_graphtheory_lesson01_activity2) for instructions. 
-(Instructions are on also Teams -> Files.)
+Step 1. Go to: [Literary
+Networks](https://www.teachengineering.org/activities/view/uno_graphtheory_lesson01_activity2)
+for instructions. (Instructions are on also Teams -\> Files.)
 
 Step 2. **Make your data** using the instructions.
 
--   In the nodes excel, use `id` and `names` as your columns. Any other details in other columns to the right.
+-   In the nodes excel, use `id` and `names` as your columns. Any other
+    details in other columns to the right.
 
--   In your `edges` excel, use `from` and `to` are your first columns. Entries in these columns can be `names` or `id`s but be consistent and don't mix.
+-   In your `edges` excel, use `from` and `to` are your first columns.
+    Entries in these columns can be `names` or `id`s but be consistent
+    and don't mix.
 
-Step 3. Decide on 3 answers that you to seek and plan to make graphs for.
+Step 3. Decide on 3 answers that you to seek and plan to make graphs
+for.
 
 Step 4. Create graph objects. Say 3 visualizations.
 
-Step 5. Write comments/answers in the code and narrative text. Add pictures from the web using Markdown syntax.
+Step 5. Write comments/answers in the code and narrative text. Add
+pictures from the web using Markdown syntax.
 
-Step 6. Write Reflection ( ok, a short one!) *inside* your RMarkdown. Make sure it knits!!
+Step 6. Write Reflection ( ok, a short one!) *inside* your RMarkdown.
+Make sure it knits!!
 
-Step 7. Group Submission: Submit the knittable *.Rmd file* **AND** the data.
-RMarkdown with joint authorship. Each person submits on their Assignments. All get the same grade on this one.
+Step 7. Group Submission: Submit the knittable *.Rmd file* **AND** the
+data. RMarkdown with joint authorship. Each person submits on their
+Assignments. All get the same grade on this one.
 
-Ask me for clarifications on what to do *after* you have read the Instructions in your group.
+Ask me for clarifications on what to do *after* you have read the
+Instructions in your group.
 
 # Read more
 
-[Thomas Lin Pedersen - 1 giraffe, 2 giraffe,GO!](https://www.data-imaginist.com/2019/1-giraffe-2-giraffe-go/)
+[Thomas Lin Pedersen - 1 giraffe, 2
+giraffe,GO!](https://www.data-imaginist.com/2019/1-giraffe-2-giraffe-go/)
 
 Igraph: Network Analysis and Visualization.
 <https://CRAN.R-project.org/package=igraph>.
 
-Pedersen, Thomas Lin. 2017a. Ggraph: An Implementation of Grammar of Graphics for Graphs and Networks.
+Pedersen, Thomas Lin. 2017a. Ggraph: An Implementation of Grammar of
+Graphics for Graphs and Networks.
 <https://CRAN.R-project.org/package=ggraph>.
 
 ---------. 2017b. Tidygraph: A Tidy Api for Graph Manipulation.
 <https://CRAN.R-project.org/package=tidygraph>.
 
-Tyner, Sam, François Briatte, and Heike Hofmann. 2017. "Network Visualization with ggplot2." The R Journal 9 (1): 27--59.
+Tyner, Sam, François Briatte, and Heike Hofmann. 2017. "Network
+Visualization with ggplot2." The R Journal 9 (1): 27--59.
 <https://journal.r-project.org/archive/2017/RJ-2017-023/index.html>.
 
 Network Datasets <https://icon.colorado.edu/#!/networks>
 
+Yunran Chen, [Introduction to Network Analysis Using
+R](https://yunranchen.github.io/intro-net-r/index.html)
