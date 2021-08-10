@@ -425,18 +425,18 @@ $ department        &lt;chr&gt; &quot;Painting &amp; Sculpture&quot;, &quot;Pain
   select(artist, title, year_acquired) %&gt;% 
   arrange(year_acquired)</code></pre>
 <pre><code># A tibble: 2,253 x 3
-   artist           title                                          year_acquired
-   &lt;chr&gt;            &lt;chr&gt;                                                  &lt;dbl&gt;
- 1 Edward Hopper    House by the Railroad                                   1930
- 2 Bernard Karfiol  Seated Nude                                             1930
- 3 Pierre Roy       Daylight Savings Time                                   1931
- 4 Preston Dickins~ Plums on a Plate                                        1931
- 5 Otto Dix         Dr. Mayer-Hermann                                       1932
- 6 Paul Cézanne     The Bather                                              1934
- 7 Paul Cézanne     Pines and Rocks (Fontainebleau?)                        1934
- 8 Paul Cézanne     Still Life with Ginger Jar, Sugar Bowl, and O~          1934
- 9 Paul Cézanne     Still Life with Apples                                  1934
-10 Arthur B. Davies Italian Landscape                                       1934
+   artist            title                                               year_acquired
+   &lt;chr&gt;             &lt;chr&gt;                                                       &lt;dbl&gt;
+ 1 Edward Hopper     House by the Railroad                                        1930
+ 2 Bernard Karfiol   Seated Nude                                                  1930
+ 3 Pierre Roy        Daylight Savings Time                                        1931
+ 4 Preston Dickinson Plums on a Plate                                             1931
+ 5 Otto Dix          Dr. Mayer-Hermann                                            1932
+ 6 Paul Cézanne      The Bather                                                   1934
+ 7 Paul Cézanne      Pines and Rocks (Fontainebleau?)                             1934
+ 8 Paul Cézanne      Still Life with Ginger Jar, Sugar Bowl, and Oranges          1934
+ 9 Paul Cézanne      Still Life with Apples                                       1934
+10 Arthur B. Davies  Italian Landscape                                            1934
 # ... with 2,243 more rows</code></pre>
 </div>
 <div id="what-is-the-oldest-painting-in-the-moma-collection" class="section level2" number="6.3">
@@ -684,18 +684,18 @@ num_artists</code></pre>
   select(title, artist, year_acquired, year_created) %&gt;% 
   arrange(year_acquired)</code></pre>
 <pre><code># A tibble: 252 x 4
-   title                        artist                year_acquired year_created
-   &lt;chr&gt;                        &lt;chr&gt;                         &lt;dbl&gt;        &lt;dbl&gt;
- 1 Landscape, 47                Natalia Goncharova             1937         1912
- 2 Shack                        Loren MacIver                  1938         1934
- 3 Hopscotch                    Loren MacIver                  1940         1940
- 4 Shadows with Painting        Irene Rice Pereira             1941         1940
- 5 Figure                       Varvara Stepanova              1941         1921
- 6 Still Life in Red            Amelia Peláez Del Ca~          1942         1938
- 7 White Lines                  Irene Rice Pereira             1942         1942
- 8 Musical Squash               Maud Morgan                    1942         1942
- 9 Desolation                   Raquel Forner                  1942         1942
-10 Self-Portrait with Cropped ~ Frida Kahlo                    1943         1940
+   title                           artist                  year_acquired year_created
+   &lt;chr&gt;                           &lt;chr&gt;                           &lt;dbl&gt;        &lt;dbl&gt;
+ 1 Landscape, 47                   Natalia Goncharova               1937         1912
+ 2 Shack                           Loren MacIver                    1938         1934
+ 3 Hopscotch                       Loren MacIver                    1940         1940
+ 4 Shadows with Painting           Irene Rice Pereira               1941         1940
+ 5 Figure                          Varvara Stepanova                1941         1921
+ 6 Still Life in Red               Amelia Peláez Del Casal          1942         1938
+ 7 White Lines                     Irene Rice Pereira               1942         1942
+ 8 Musical Squash                  Maud Morgan                      1942         1942
+ 9 Desolation                      Raquel Forner                    1942         1942
+10 Self-Portrait with Cropped Hair Frida Kahlo                      1943         1940
 # ... with 242 more rows</code></pre>
 <p>What is the oldest painting by a solo female artist, and when was it created?</p>
 <pre class="r"><code>moma %&gt;% 

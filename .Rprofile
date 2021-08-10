@@ -17,7 +17,7 @@ options(
   blogdown.serve_site.startup = FALSE,
   
   # to disable knitting Rmd files on save, set this option to FALSE
-  blogdown.knit.on_save = FALSE,
+  blogdown.knit.on_save = TRUE,
   
   # build .Rmd to .html (via Pandoc); 
   # to build to Markdown, set this option to 'markdown'
@@ -25,10 +25,21 @@ options(
   
   # Use .Rmd file extension for Posts
   blogdown.ext = '.Rmd',
-  
   blogdown.author = 'Arvind Venkatadri',
-  blogdown.subdir = "post" 
-)
+  blogdown.subdir = "post",
+  
+  # See this: https://alison.rbind.io/blog/2019-02-spoonful-bundles/
+  # keeps all post related material in one folder!
+  blogdown.new_bundle = TRUE,
+  
+  # Good advice from Allison Hill
+  blogdown.yaml.empty = TRUE,
+  blogdown.title_case = TRUE
+  )
 
 # fix Hugo version
-options(blogdown.hugo.version = "0.85.0")
+options(blogdown.hugo.version = "0.86.0")
+
+# Add new line at the end
+
+

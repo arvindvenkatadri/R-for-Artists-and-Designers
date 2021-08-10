@@ -643,7 +643,7 @@ ga %>%
   activate(nodes) %>% 
   
   # Most connections?
-  mutate(degree = centrality_degree()) %>% 
+  mutate(degree = centrality_degree(mode = c("in"))) %>% 
   filter(degree > 0) %>% 
   
   activate(edges) %>% 
@@ -944,7 +944,7 @@ below.
 
 Step 3. RMarkdown contents:
 
--    Introduce / Inspect in R your data and describe
+-   Introduce / Inspect in R your data and describe
 -   Introduce your Purpose
 -   Create graph objects.
 -   Write comments in the code
@@ -992,9 +992,8 @@ b)  The Famous Zachary Karate Club dataset
 
 -   Start with pulling this data into your Rmarkdown:
 
-```{=html}
 <!-- -->
-```
+
     data("karate",package= "igraphdata")
     karate
 
