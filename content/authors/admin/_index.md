@@ -44,4 +44,4 @@ user_groups:
 
 This course will give Art and Design students a foundation in the principles and practice of data visualization using R.
 
-The viewpoint of of this course is of using R to **create geometric metaphors**. Diverse domains have their own uniquely structured data. These will be depicted using geometric metaphors to enable better understanding of the underlying circumstances and realities.
+The viewpoint of this course is of using R to **create geometric metaphors**. Diverse domains have their own uniquely structured data. These will be depicted using geometric metaphors to enable better understanding of the underlying circumstances and realities.
