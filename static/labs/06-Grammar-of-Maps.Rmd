@@ -30,7 +30,7 @@ All RMarkdown files combine code, text, web-images, and figures developed using 
 At the end of this Lab session, we should:
 - know the types and structures of `spatial data` and be able to work with them
 - understand the basics of modern spatial packages in R
-- be able to specify and download spatial data from the web, using R
+- be able to specify and download spatial data from the web, using R from sources such as `naturalearth` and `Open Streep Map`
 - plot *static* and *interactive* maps using `ggplot`, `tmap` and `leaflet` packages
 - add symbols and markers for places and regions of our own interest in these maps.
 - see directions for further work (e.g. maps + networks together)
@@ -57,12 +57,26 @@ The `setup` code **chunk** below brings into our coding session **R packages** t
 
 To reiterate: Packages and datasets are **not** the same thing !! Packages are (small) collections of programs. Datasets are just....information.
 
+# Package related Instructions
+
+ - Install all packages that are flagged by RStudio
+ - Run this in your console first:
+
+devtools::install_github("ropensci/rnaturalearthhires")
+
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 # Getting Map Data into R
 library(osmdata) # Import Open Street Data
 library(rnaturalearth)
+library(rnaturalearthdata)
 
+# Run this in your console first
+#devtools::install_github("ropensci/rnaturalearthhires")
+library(rnaturalearthhires)
+
+# 
 library(prettymapr) # to search for map data based on location
 
 # Plotting Maps
@@ -72,16 +86,8 @@ library(tmap) # Thematic Maps, static and interactive
 
 # For Spatial Data Frame Processing
 library(sf)
+library(rgdal)
 
-# For Presentation Ease
-library(xaringanExtra)
-
-```
-
-```{r echo=FALSE, include=FALSE}
-xaringanExtra::use_webcam()
-use_broadcast()
-use_extra_styles(hover_code_line = TRUE, mute_unhighlighted_code = FALSE)
 ```
 
 
@@ -98,14 +104,16 @@ The steps we will use are:
 
 Bas. Onwards and Map-wards!!
 
+All jargon words will be capitalized and in **bold** font. 
 
 # God made me a BengaluR-kaR...I think
 
 Let's get BLR data into R and see if we can plot an area of interest. Then we can order on Swiggy and...never mind. 
 
-Where is my home? Specify a "bounding box" first, using a rough longitude latitude info directly, or using a place name to search for the long/lat info:
 
-```{r I_am_going_home}
+1. Where is my home? Specify a "**BOUNDING BOX**" first, using a rough longitude latitude info directly, or using a place name to search for the long/lat info:
+
+```{r I-am-going-home}
 # BLR Bounding Box
 # get_bbox needs lat and lon ranges
 bbox <- osmplotr::get_bbox(c(77.56,12.93,77.63,12.96))
@@ -116,28 +124,57 @@ bbox
 bbox_l
 bbox_p # identical with bbox_l
 ```
+
+
 We will use the smaller `bbox` from the above, to ensure we have smaller data downloads! 
 
-Within our bbox for BLR, we want to download diverse kinds of FEATURE data. This is done using the `osmplotr::extract_osm_objects()` command. The main parameters for this command are:
+Within our `bbox` for BLR, we want to download diverse kinds of **FEATURE** data. Remember that a **FEATURE** This is done using the `osmplotr::extract_osm_objects()` command. The main parameters for this command are:
 
 - bbox  
-- key / value pairs (**"tags"**) to specify the kind of feature you need  
+- **KEY / VALUE** pairs (**"TAGS"**) to specify the kind of feature you need  
 
-See [OSM Tags](https://taginfo.openstreetmap.org/) for a nice visual description of popular tags that we can use. Useful keys include *building, place, amenity, shop, waterway, natural, boundary, and highway*.
+See [OSM Tags](https://taginfo.openstreetmap.org/) for a nice visual description of popular tags that we can use. Useful keys include:
+
+- building : yes (all), house residential, apartments
+- highway: residential, service, track, unclassified, footway, path
+- amenity: parking, parking_space, bench; place_of_worship;  restaurant, cafe, fast_food; school, waste_basket, fuel, bank, toilets...
+- shop: convenience, supermarket, clothes, hairdresser, car-repair...
+- name: actual name of the place e.g. Main_Street, *McDonald's, Pizza Hut, Subway*
+- waterway
+- natural, 
+- boundary
+- highway.
 
 For example see: [tag : highway](https://taginfo.openstreetmap.org/keys/highway#values)
 
-```{r get_osm_map_data, cache = TRUE, message=FALSE}
+
 # Get Map data
 
+We will get the map data from OSM and then save it avoid repeated downloads. So, please copy/paste and run the following commands in your console.
+Do not run these commands too many times, UNLESS you have changed your bbox extent.
+
+```
 dat_B <- extract_osm_objects (key = "building", bbox = bbox) 
 dat_H <- extract_osm_objects (key = 'highway', bbox = bbox)
 dat_P <- extract_osm_objects (key = 'park', bbox = bbox)
 dat_G <- extract_osm_objects (key = 'landuse', value = 'grass', bbox = bbox)
 dat_T <- extract_osm_objects (key = 'natural', value = 'tree', bbox = bbox)
-
-
 ```
+
+## Let us save this data! 
+
+```{r}
+write_sf(dat_B, dsn = "dat_B.gpkg", append = FALSE, quiet = FALSE)
+write_sf(dat_P, dsn = "dat_P.gpkg", append = FALSE, quiet = FALSE)
+write_sf(dat_G, dsn = "dat_G.gpkg", append = FALSE,quiet = FALSE)
+write_sf(dat_T, dsn = "dat_T.gpkg", append = FALSE,quiet = FALSE)
+##
+## write_sf(dat_H, dsn = "dat_H.gpkg", append = FALSE, quiet = FALSE)
+```
+Yes, the write_sf(dat_H) does not seem to work. This is something we need to research and understand. But atleast all the other files are saved locally. We willcomment it out for now!
+
+
+
 ## Let's look at the data
 
 ```{r}
@@ -146,30 +183,31 @@ nrow(dat_B)
 dat_B$geometry
 class(dat_B$geometry)
 ```
+
 So `dat_B` has `r nrow(dat_B)` buildings and their geometry is naturally a POLYGON type of geometry column. 
 
-Do this check for all the other spatial data.  
+
+## Your Turn 1
+
+Do this check for all the other spatial data, in the code chunk below. 
 What kind of `geometry` column does each dataset have?
 
-```{r YOUR_TURN_1}
+
+```{r YOUR-TURN-1}
 
 
 
 ```
 
 
-## Your Turn 1
--  
--  
 
 
-
-## What else could we get from OSM?
+## What Other Kinds of Data could we get from OSM?
 
 `osm_structures` returns a data.frame of OSM structure types, associated key-value pairs, unique suffices which may be appended to data structures for storage purposes, and suggested colours.
 
 ```{r}
-osm_structures()
+osmplotr::osm_structures()
 ```
 
 
@@ -200,97 +238,218 @@ Note how `geom_sf` is capable of handling *any* geometry in the `sfc` column !!
 
 So there, we have our first map!
 
-Now we need to add things to it, things that **matter to us** !!
+
+# Map using `tmap` package
+
+We can also create a map using a package called `tmap`. Here we also have the option of making the map *interactive*.
+
+`tmap` plots are made with code in "groups": each group starts with a `tm_shape()` command. 
+
+```{r using tmap}
+# Group-1
+tm_shape(dat_B) +
+  tm_fill(col = "mediumblue") +
+
+#Group-2
+tm_shape(dat_H) +
+  tm_lines(col = "gold") +
+
+#Group-3  
+tm_shape(dat_G) +
+  tm_polygons(col = "limegreen") +
+  
+#Group-4  
+tm_shape(dat_P) +
+  tm_polygons(col = "limegreen") +
+
+#Group-5  
+tm_shape(dat_T) +
+  tm_dots(col = "green")
+```
+
+
+How do we make this map interactive? One more line of code !!
+
+```{r tmap-interactive}
+tmap_mode("view")
+
+# Group-1
+tm_shape(dat_B) +
+  tm_fill(col = "mediumblue") +
+
+#Group-2
+tm_shape(dat_H) +
+  tm_lines(col = "gold") +
+
+#Group-3  
+tm_shape(dat_G) +
+  tm_polygons(col = "limegreen") +
+  
+#Group-4  
+tm_shape(dat_P) +
+  tm_polygons(col = "limegreen") +
+
+#Group-5  
+tm_shape(dat_T) +
+  tm_dots(col = "green")
+```
+
+# Using data from `tmap`
+
+Let's plot a first map using datasets built into `tmap`. 
+
+`tmap` has a few built-in spatial datasets: `World` and `metro`, `rivers`, `land` and a few others. Check help on these.
+
+```{r World_Data_tmap}
+data("World")
+head(World, n = 3)
+```
+
+We have several 14 attribute variables in `World`. Attribute variables such as `gdp_cap_est`, `HPI` are numeric. Others such as `income_grp` appear to be factors. 
+`iso_a3` is the standard three letter name for the country. 
+
+
+```{r World_metro_tmap}
+data("metro")
+head(metro, n = 3)
+```
+
+Here too we have attribute variables for the metros, and they seem predominantly numeric. Again `iso_a3` is the three letter name for the city.
+
+
+
+```{r My-Static-World}
+tmap_mode("plot") # Making this a static plot
+
+# Group 1
+tm_shape(World) + # dataset = World. 
+    tm_polygons("HPI") + # Colour polygons by HPI numeric variable
+
+  # Note the "+" sign continuation
+  
+# Group 2
+tm_shape(metro) + # dataset = metro
+  tm_bubbles(size = "pop2030", 
+             col = "red") 
+# Plot cities as bubbles
+# Size proportional to numeric variable `pop2030`
+```
+
+
+
+```{r My Interactive Water Colour World}
+tmap_mode("view") # Change to Interactive
+
+
+# Let's use WaterColor Map this time!!
+tm_tiles("Stamen.Watercolor") +
+tm_shape(World) +
+    tm_polygons("HPI") +
+  
+  
+tm_shape(metro) + 
+  tm_bubbles(size = "pop2030", 
+             col = "red")
+```
+
+## Using data from `rnaturalearth`
+
+```{r spatial_data}
+india <- 
+  ne_states(country =  "india", 
+            geounit = "india", 
+            returnclass = "sf")
+
+india_neighbours <- 
+  ne_states(country = (c("india", "sri lanka", "pakistan",
+                         "afghanistan", "nepal","bangladesh")
+                       ),
+            returnclass = "sf")
+
+```
+
+
+Let's look at the attribute variable columns to colour our graph and to shape our symbols:
+
+```{r}
+names(india)
+names(india_neighbours)
+
+# Look only at attributes
+india %>% st_drop_geometry() %>% head()
+india_neighbours%>% st_drop_geometry() %>% head()
+```
+
+
+## Map 1
+```{r Map_1}
+tmap_mode("view")
+
+# Plot the Neighbours
+tm_shape(World %>% dplyr::filter(iso_a3 %in% c("IND", "AFG", "PAK", "NPL", "BGD", "LKA"))) +
+  tm_borders() +
+  
+# Plot India
+  tm_shape(india) +
+  tm_polygons("name",legend.show = FALSE) +
+  
+# Plot Neighbours
+  tm_shape(india_neighbours) +
+  tm_polygons("name", legend.show = FALSE) +
+  
+# Plot the cities in India alone
+  tm_shape(metro %>% dplyr::filter(iso_a3 == "IND")) +
+  tm_dots(size = "pop2020",legend.size.show = FALSE) +
+  tm_layout(legend.show = FALSE) +
+  tm_credits("Geographical Boundaries are not accurate",
+             size = 0.5,
+             position = "right") +
+  tm_compass(position = c("right", "top")) +
+  tm_scale_bar(position = "left") +
+  tmap_style("watercolor") 
+
+#Try other map styles
+#cobalt #gray #white #col_blind #beaver #classic #watercolor #albatross #bw
+
+```
+
+
+
+
+## Map 2
+
+```{r Map_2}
+tm_shape(india_neighbours) + 
+  tm_polygons("name") + 
+  
+  tm_shape( metro %>% dplyr::filter(iso_a3 %in% c("IND","PAK", "LKA", "BGD","NPL"))) +
+  tm_dots(size = "pop2020") + 
+  tm_layout(legend.show = FALSE) + # no effect
+  tmap_options(max.categories = 10) + 
+  tm_credits("Geographical Boundaries are not accurate",size = 0.5,position = "center")
+
+```
+
+```{r}
+tmap_mode("view")
+tm_basemap("Stamen.Watercolor") +
+  tm_shape(metro, bbox = "India") + 
+  tm_dots(col = "red", 
+          # user-chosen group name for layers
+          group = "Metropolitan Areas") +
+  tm_shape(World) + 
+  tm_borders() + 
+  tm_tiles(server = "Stamen.TonerLabels", group = "Labels") + # ADDS LABELS!!!
+  tm_graticules()
+
+```
+
+
+
 
 ## Your Turn 2
 
 Can you try to download a map area of your home town and plot it as we have above?
-
-
-
-
-## Adding my favourite "area" to the map
-
-We can create areas of interest around the map. 
-For a start: we are simply going to *zoom in* to an area, define a small rectangle,  and say that is our area of interest. 
-
-This area then needs to go **Through the Looking Glass** and become part of the projection of `dat_B`!!
-
-We can then try more complex queries and plots based on your favourite restaurants etc. 
-
-```{r shapes_on_maps}
-
-my_area <- bbox %>% 
-  
-  # zooming in within our bounding box area
-  prettymapr::zoombbox(factor = 8, offset = c(0,0)) 
-my_area
-bbox
-```
-
-OK, `my area` is small and contained inside my `bbox`. So `zoombbox` works. 
-
-Now to convert `my_area` into a spatial dataframe using `sf` and add it to the `blr_map` plot:
-
-```{r}
-
-# Make a matrix
-my_area_in_blr <- matrix(
-  c(
-  my_area["x", "min"],
-  my_area["x", "max"],
-  my_area["x", "max"],
-  my_area["x", "min"],
-  my_area["x", "min"],
-  my_area["y", "min"],
-  my_area["y", "min"],
-  my_area["y", "max"],
-  my_area["y", "max"],
-  my_area["y", "min"]),
-  ncol = 2) 
-my_area_in_blr
-```
-Note the A-B-C-D-A structure of specifying an enclosed area. Last vertex is the same as start vertex.
-
-
-```{r}
-# Convert to list since POLYGON needs a list
-my_area_in_blr <- 
-  
-  my_area_in_blr %>% 
-  list() %>% 
-
-# Convert to POLYGON
-  st_polygon() %>% 
-  
-# Convert POLYGON to an `sfc` column
-# Through the Looking Glass with dat_B
-  st_sfc(., crs = st_crs(dat_B)) %>% 
-  
-  # Convert sfc to an sf spatial dataframe. Phew!!
-  st_as_sf(.) 
-  
-
-
-my_area_in_blr
-```
-
-
-```{r My_Blr_finally}
-blr_map <- 
-  blr_map + geom_sf(data = my_area_in_blr, colour = "red")
-blr_map
-
-```
-
-We could have created an **arbitrary** area on our map in this way, starting with a matrix and making a spatial data frame, and over-plotting it as a layer on the base map.
-
-We could also add **multiple areas of interest** using ...yes MULTIPOLYGONs !!
-
-## Your Turn 3
-
-Try adding more than one "areas of interest" to your map. 
-
 
 ## Adding my favourite Restaurants to the map
 Is it time to order on Swiggy...
@@ -365,159 +524,6 @@ We could have done a (much!) better job, by combining cuisines into simpler and 
 
 By now we know that we can use `geom_sf()` multiple number of times with different datasets to create layered maps in R.
 
-Let us now try to make **interactive** maps using `tmap`.
-
-
-# Using `rnaturalearth` and `tmap`
-
-Let's plot a first map using datasets built into `tmap`. Then we can download other datasets from `rnaturalearth` and plot them next.
-
-`tmap` has a few built-in spatial datasets: `World` and `metro`, `rivers`, `land` and a few others. Check help on these.
-
-```{r World_Data_tmap}
-data("World")
-head(World, n = 3)
-```
-
-We have several 14 attribute variables in `World`. Attribute variables such as `gdp_cap_est`, `HPI` are numeric. Others such as `income_grp` appear to be factors. 
-`iso_a3` is the standard three letter name for the country. 
-
-
-```{r World_metro_tmap}
-data("metro")
-head(metro, n = 3)
-```
-Here too we have attribute variables for the metros, and they seem predominantly numeric. Again `iso_a3` is the three letter name for the city.
-
-
-`tmap` plots are made with code in "groups": each group starts with a `tm_shape()` command. 
-
-```{r My_Static_World}
-tmap_mode("plot") # Making this a static plot
-
-# Group 1
-tm_shape(World) + # dataset = World. 
-    tm_polygons("HPI") + # Colour polygons by HPI numeric variable
-
-  # Note the "+" sign continuation
-  
-# Group 2
-tm_shape(metro) + # dataset = metro
-  tm_bubbles(size = "pop2020", 
-             col = "red") 
-# Plot cities as bubbles
-# Size proportional to numeric variable `pop2020`
-```
-
-
-
-```{r My Interactive Water Colour World}
-tmap_mode("view") # Change to Interactive
-
-tm_shape(World) +
-    tm_polygons("HPI") +
-  
-  
-tm_shape(metro) + 
-  tm_bubbles(size = "pop2020", 
-             col = "red") +
-
-# Let's use WaterColor Map this time!!
-tm_tiles("Stamen.TonerLabels")
-```
-
-## Using data from `rnaturalearth`
-
-```{r spatial_data}
-india <- 
-  ne_states(country =  "india", 
-            geounit = "india", 
-            returnclass = "sf")
-
-india_neighbours <- 
-  ne_states(country = (c("india", "sri lanka", "pakistan",
-                         "afghanistan", "nepal","bangladesh")
-                       ),
-            returnclass = "sf")
-
-```
-
-
-Let's look at the attribute variable columns to colour our graph and to shape our symbols:
-
-```{r}
-names(india)
-names(india_neighbours)
-
-# Look only at attributes
-india %>% st_drop_geometry() %>% head()
-india_neighbours%>% st_drop_geometry() %>% head()
-```
-
-
-## Map 1
-```{r Map_1}
-tmap_mode("view")
-
-# Plot the Neighbours
-tm_shape(World %>% dplyr::filter(iso_a3 %in% c("IND", "AFG", "PAK", "NPL", "BGD", "LKA"))) +
-  tm_borders() +
-  
-# Plot India
-  tm_shape(india) +
-  tm_polygons("name") +
-  
-# Plot Neighbours
-  tm_shape(india_neighbours) +
-  tm_polygons("name") +
-  
-# Plot the cities in India alone
-  tm_shape(metro %>% dplyr::filter(iso_a3 == "IND")) +
-  tm_dots(size = "pop2020") +
-  tm_layout(legend.outside = TRUE,
-            legend.outside.position = "right") +
-  tm_credits("Geographical Boundaries are not accurate",
-             size = 0.5,
-             position = "right") +
-  tm_compass(position = c("right", "top")) +
-  tm_scale_bar(position = "left") +
-  tmap_style("watercolor") 
-
-#Try other map styles
-#cobalt #gray #white #col_blind #beaver #classic #watercolor #albatross #bw
-
-```
-
-
-
-
-## Map 2
-
-```{r Map_2}
-tm_shape(india_neighbours) + 
-  tm_polygons("name") + 
-  
-  tm_shape( metro %>% dplyr::filter(iso_a3 %in% c("IND","PAK", "LKA", "BGD","NPL"))) +
-  tm_dots(size = "pop2020") + 
-  tm_layout(legend.show = FALSE) + # no effect
-  tmap_options(max.categories = 10) + 
-  tm_credits("Geographical Boundaries are not accurate",size = 0.5,position = "center")
-
-```
-
-```{r}
-tmap_mode("view")
-tm_basemap("Stamen.Watercolor") +
-  tm_shape(metro, bbox = "India") + 
-  tm_dots(col = "red", 
-          # user-chosen group name for layers
-          group = "Metropolitan Areas") +
-  tm_shape(World) + 
-  tm_borders() + 
-  tm_tiles(server = "Stamen.TonerLabels", group = "Labels") + # ADDS LABELS!!!
-  tm_graticules()
-
-```
 
 
 # Scope and Packages for Exploration!!
@@ -536,17 +542,9 @@ tm_basemap("Stamen.Watercolor") +
 
 # Assignments
 
-1. What if we have marked our favourite locations on our smartphones, using GPS? Umm...OK have to make our sf:Spatial Data Frame using these coordinates. 
-We will need to do this in the same way:
-- Create a matrix
-- Make POINTs
-- Make an sfc
-- Convert to sf
-- Project in the same way. 
+1. Draw a map of your home-town with your favourite restaurants shown. Pop-ups for each restaurant will win bonus points. 
 
-2. Draw a map of your home-town with your favourite restaurants shown. Pop-ups for each restaurant will win bonus points. 
-
-# Inspiration
+### Inspiration
 
 1. Burkhart, Christian. n.d. “Streetmaps.” [StreetMaps](https://ggplot2tutor.com/tutorials/streetmaps)
 
