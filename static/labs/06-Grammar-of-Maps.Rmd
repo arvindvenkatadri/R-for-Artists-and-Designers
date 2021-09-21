@@ -86,8 +86,6 @@ library(tmap) # Thematic Maps, static and interactive
 
 # For Spatial Data Frame Processing
 library(sf)
-library(rgdal)
-
 ```
 
 
@@ -116,17 +114,16 @@ Let's get BLR data into R and see if we can plot an area of interest. Then we ca
 ```{r I-am-going-home}
 # BLR Bounding Box
 # get_bbox needs lat and lon ranges
-bbox <- osmplotr::get_bbox(c(77.56,12.93,77.63,12.96))
-
-bbox_l <- osmdata::getbb("Bangalore, India") # LARGE
-bbox_p <- prettymapr::searchbbox("Bangalore") # ALSO LARGE
-bbox
-bbox_l
-bbox_p # identical with bbox_l
+bbox_1 <- osmplotr::get_bbox(c(77.46,12.83,77.74,13.14))
+bbox_2 <- osmdata::getbb("Bangalore, India")
+bbox_3 <- getbb("Jayanagar, Bangalore, India")
+bbox_1
+bbox_2
+bbox_3
 ```
 
 
-We will use the smaller `bbox` from the above, to ensure we have smaller data downloads! 
+We will use the smaller `bbox_3` from the above, to ensure we have smaller data downloads! 
 
 Within our `bbox` for BLR, we want to download diverse kinds of **FEATURE** data. Remember that a **FEATURE** This is done using the `osmplotr::extract_osm_objects()` command. The main parameters for this command are:
 
@@ -141,9 +138,8 @@ See [OSM Tags](https://taginfo.openstreetmap.org/) for a nice visual description
 - shop: convenience, supermarket, clothes, hairdresser, car-repair...
 - name: actual name of the place e.g. Main_Street, *McDonald's, Pizza Hut, Subway*
 - waterway
-- natural, 
+- natural
 - boundary
-- highway.
 
 For example see: [tag : highway](https://taginfo.openstreetmap.org/keys/highway#values)
 
@@ -154,11 +150,11 @@ We will get the map data from OSM and then save it avoid repeated downloads. So,
 Do not run these commands too many times, UNLESS you have changed your bbox extent.
 
 ```{r}
-dat_B <- extract_osm_objects (key = "building", bbox = bbox)
-dat_H <- extract_osm_objects (key = 'highway', bbox = bbox)
-dat_P <- extract_osm_objects (key = 'park', bbox = bbox)
-dat_G <- extract_osm_objects (key = 'landuse', value = 'grass', bbox = bbox)
-dat_T <- extract_osm_objects (key = 'natural', value = 'tree', bbox = bbox)
+dat_B <- extract_osm_objects (key = "building", bbox = bbox_3)
+dat_H <- extract_osm_objects (key = 'highway', bbox = bbox_3)
+dat_P <- extract_osm_objects (key = 'park', bbox = bbox_3)
+dat_G <- extract_osm_objects (key = 'landuse', value = 'grass', bbox = bbox_3)
+dat_T <- extract_osm_objects (key = 'natural', value = 'tree', bbox = bbox_3)
 ```
 
 ## Let us save this data! 
@@ -169,11 +165,21 @@ write_sf(dat_P, dsn = "dat_P.gpkg", append = FALSE, quiet = FALSE)
 write_sf(dat_G, dsn = "dat_G.gpkg", append = FALSE,quiet = FALSE)
 write_sf(dat_T, dsn = "dat_T.gpkg", append = FALSE,quiet = FALSE)
 ##
-## write_sf(dat_H, dsn = "dat_H.gpkg", append = FALSE, quiet = FALSE)
+# write_sf(dat_H, dsn = "dat_H.gpkg", append = FALSE, quiet = FALSE)
 ```
 
-Yes, the `write_sf(dat_H)` does not seem to work. This is something we need to research and understand. But atleast all the other files are saved locally. We will comment it out for now!
+Yes, the `write_sf(dat_H)` does not seem to work. This is something we need to research and understand. But at least all the other files are saved locally. We will comment it out for now!
 
+Always work from here to avoid repeated downloads from OSM.
+
+## Reading Back the saved Data
+```{r}
+dat_B <- st_read("./dat_B.gpkg")
+dat_P <- read_sf("./dat_P.gpkg")
+dat_G <- read_sf("./dat_G.gpkg")
+dat_T <- read_sf("./dat_T.gpkg")
+
+```
 
 
 ## Let's look at the data
@@ -318,7 +324,7 @@ tm_shape(metro) + # dataset = metro
 
 
 ```{r My Interactive Water Colour World}
-# tmap_mode("view") # Change to Interactive
+tmap_mode("view") # Change to Interactive
 
 
 # Let's use WaterColor Map this time!!
@@ -394,41 +400,6 @@ tm_shape(World %>% dplyr::filter(iso_a3 %in% c("IND", "AFG", "PAK", "NPL", "BGD"
 ```
 
 
-
-
-## Map 2
-
-```{r Map_2}
-tm_shape(india_neighbours) + 
-  tm_polygons("name") + 
-  
-  tm_shape( metro %>% dplyr::filter(iso_a3 %in% c("IND","PAK", "LKA", "BGD","NPL"))) +
-  tm_dots(size = "pop2020") + 
-  tm_layout(legend.show = FALSE) + # no effect
-  tmap_options(max.categories = 10) + 
-  tm_credits("Geographical Boundaries are not accurate",size = 0.5,position = "center")
-
-```
-
-## Map 3
-
-```{r}
-tmap_mode("view")
-tm_basemap("Stamen.Watercolor") +
-  tm_shape(metro, bbox = "India") + 
-  tm_dots(col = "red", 
-          # user-chosen group name for layers
-          group = "Metropolitan Areas") +
-  tm_shape(World) + 
-  tm_borders() + 
-  tm_tiles(server = "Stamen.TonerLabels", group = "Labels") + # ADDS LABELS!!!
-  tm_graticules()
-
-```
-
-
-
-
 ## Your Turn 2
 
 Can you try to download a map area of your home town and plot it as we have above?
@@ -439,13 +410,23 @@ Is it time to order on Swiggy...
 Let us adding interesting places to our map: say based on your favourite restaurants etc. We need restaurant data: lat/long + name + maybe type of restaurant. This can be manually created ( like all of OSMdata ) or if it is already there we can download using *key-value* pairs in our OSM data query.
 
 ```{r restaurant_data_1}
-dat_R <- extract_osm_objects(bbox = bbox, 
+dat_R <- extract_osm_objects(bbox = bbox_3, 
                              key = "amenity", 
                              value = "restaurant", 
                              return_type = "point") #<<
+# Save the data for future use
+write_sf(dat_R, dsn = "dat_R.gpkg",append = FALSE, quiet = FALSE)
+
 ```
 
 Note the `return_type` parameter: we want the location and **not** the **building** in which the restaurant is!!
+
+## Reading the saved Restaurant Data
+
+```{r}
+dat_R <- st_read("./dat_R.gpkg")
+```
+
 
 
 ```{r restaurant_data_2}
@@ -457,7 +438,7 @@ dat_R %>% nrow()
 names(dat_R)
 
 ```
-
+These are the columns in the Restaurant Data
 
 ```{r restaurant_data_4}
 # Let's look at the `cuisine` column! 
