@@ -153,8 +153,8 @@ For example see: [tag : highway](https://taginfo.openstreetmap.org/keys/highway#
 We will get the map data from OSM and then save it avoid repeated downloads. So, please copy/paste and run the following commands in your console.
 Do not run these commands too many times, UNLESS you have changed your bbox extent.
 
-```
-dat_B <- extract_osm_objects (key = "building", bbox = bbox) 
+```{r}
+dat_B <- extract_osm_objects (key = "building", bbox = bbox)
 dat_H <- extract_osm_objects (key = 'highway', bbox = bbox)
 dat_P <- extract_osm_objects (key = 'park', bbox = bbox)
 dat_G <- extract_osm_objects (key = 'landuse', value = 'grass', bbox = bbox)
@@ -171,7 +171,8 @@ write_sf(dat_T, dsn = "dat_T.gpkg", append = FALSE,quiet = FALSE)
 ##
 ## write_sf(dat_H, dsn = "dat_H.gpkg", append = FALSE, quiet = FALSE)
 ```
-Yes, the write_sf(dat_H) does not seem to work. This is something we need to research and understand. But atleast all the other files are saved locally. We willcomment it out for now!
+
+Yes, the `write_sf(dat_H)` does not seem to work. This is something we need to research and understand. But atleast all the other files are saved locally. We will comment it out for now!
 
 
 
@@ -223,8 +224,8 @@ So we will continue with `ggplot` and `geom_sf()` :
 blr_map <- ggplot() +
   geom_sf(data = dat_B, colour = "orange") +  # POLYGONS
   geom_sf(data = dat_H, col = "gray20") +     # LINES
-  geom_sf(data = dat_G, col = "darkseagreen1") + 
-  geom_sf(data = dat_P, col = "darkseagreen") +
+  geom_sf(data = dat_G, col = "darkseagreen1") + # POLYGONS
+  geom_sf(data = dat_P, col = "darkseagreen") +  # POLYGONS
   geom_sf(data = dat_T, col = "green")        # POINTS
 blr_map
 
@@ -268,31 +269,10 @@ tm_shape(dat_T) +
 ```
 
 
-How do we make this map interactive? One more line of code !!
+How do we make this map interactive? One more line of code !! Add this line in your console and then run the above chunk again
 
-```{r tmap-interactive}
 tmap_mode("view")
 
-# Group-1
-tm_shape(dat_B) +
-  tm_fill(col = "mediumblue") +
-
-#Group-2
-tm_shape(dat_H) +
-  tm_lines(col = "gold") +
-
-#Group-3  
-tm_shape(dat_G) +
-  tm_polygons(col = "limegreen") +
-  
-#Group-4  
-tm_shape(dat_P) +
-  tm_polygons(col = "limegreen") +
-
-#Group-5  
-tm_shape(dat_T) +
-  tm_dots(col = "green")
-```
 
 # Using data from `tmap`
 
@@ -338,11 +318,11 @@ tm_shape(metro) + # dataset = metro
 
 
 ```{r My Interactive Water Colour World}
-tmap_mode("view") # Change to Interactive
+# tmap_mode("view") # Change to Interactive
 
 
 # Let's use WaterColor Map this time!!
-tm_tiles("Stamen.Watercolor") +
+tm_tiles("Stamen.Watercolor") + # Watercolor map only with interactive
 tm_shape(World) +
     tm_polygons("HPI") +
   
@@ -429,6 +409,8 @@ tm_shape(india_neighbours) +
   tm_credits("Geographical Boundaries are not accurate",size = 0.5,position = "center")
 
 ```
+
+## Map 3
 
 ```{r}
 tmap_mode("view")
