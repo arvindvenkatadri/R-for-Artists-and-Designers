@@ -11,6 +11,9 @@ output:
     number_sections: TRUE
     code_folding: hide
     code_download: TRUE
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{r setup, include=FALSE}
@@ -341,7 +344,7 @@ Two kinds of `geom`: one set for nodes, and another for edges
 ggraph(graph = ga,  layout = "kk") +
   #
   
-  geom_edge_link(width = 2, color = "pink") +
+  geom_edge_link0(width = 2, color = "pink") +
   #
   
   geom_node_point(
@@ -380,7 +383,7 @@ changes. Colour? Fill? Width? Size? Stroke? Labs? Of course!
 # Use fixed values for colours or sizes...etc. 
 
 ggraph(graph = ga,  layout = "kk") + 
-  geom_edge_link(width = 2) + 
+  geom_edge_link0(width = 2) + 
   geom_node_point(shape = 21, size = 8, 
                   fill = "blue", 
                   color = "green", 
@@ -493,7 +496,7 @@ ggraph(ga, layout = "linear", circular = TRUE) +
   scale_edge_width(range = c(0.2, 2)) +
   geom_node_point(size = 4,colour = "red") + 
   geom_node_text(aes(label = name),repel = TRUE, size = 3,
-                 max.overlaps = 20) +
+                 max.overlaps = 10) +
   labs(edge_width = "Weight") +
   theme_graph()+
   theme(legend.position = "right", 
@@ -683,8 +686,8 @@ ga %>%
   geom_node_point(aes(colour = centrality_degree(), 
                       size = centrality_degree())) + 
   scale_color_gradient(guide = "legend",
-                       low = "green",
-                       high = "red")
+                       low = "purple",
+                       high = "gold")
 ```
 
 ::: {.panel .panel-success}
@@ -738,10 +741,8 @@ Exploring the `VisNetwork` package. Make graphs wiggle and shake using
 metaphor of weights and springs we discussed earlier.
 
 The `visNetwork()` function uses a nodes list and edges list to create
-an interactive graph. The nodes list must include an "id" column, and
-the edge list must have "from" and "to" columns. The function also plots
-the labels for the nodes, using the names of the cities from the "label"
-column in the node list.
+an interactive graph. The nodes list **must** include an "id" column, and
+the edge list **must** have "from" and "to" columns. The function also plots the labels for the nodes, using the names of the cities from the "label" column in the node list.
 
 ```{r greys-anatomy-data-for-visnetwork}
 library(visNetwork)
@@ -750,7 +751,7 @@ library(visNetwork)
 grey_nodes
 grey_edges
 
-# Relabel greys anatomy nodes and edges for VisNetwork
+# Relabel greys anatomy nodes for VisNetwork
 grey_nodes_vis <- grey_nodes %>% 
   rowid_to_column(var = "id") %>% 
   rename("label" = name) %>% 
@@ -758,7 +759,10 @@ grey_nodes_vis <- grey_nodes %>%
                          sex == "M" ~ "Male")) %>% 
   replace_na(., list(sex = "Transgender?")) %>% 
   rename("group" = sex)
+
 grey_nodes_vis
+
+# Relabel greys anatomy edges for VisNetwork
 grey_edges_vis <- grey_edges %>% 
   select(from, to) %>% 
   left_join(., grey_nodes_vis, 
@@ -766,6 +770,7 @@ grey_edges_vis <- grey_edges %>%
   left_join(., grey_nodes_vis, 
             by = c("to" = "label")) %>%
   select("from"= id.x, "to" = id.y)
+
 grey_edges_vis
 ```
 
@@ -783,7 +788,7 @@ grey_nodes_vis %>%
             shadow = list(enabled = TRUE)) %>% 
   
   visGroups(groupname = "Male", shape = "icon", 
-            icon = list(code = "f183", size = 75, color = "slateblue"), 
+            icon = list(code = "f183", size = 75, color = "dodgerblue"), 
             shadow = list(enabled = TRUE)) %>% 
   
   visGroups(groupname = "Transgender?", shape = "icon", 
