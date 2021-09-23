@@ -24,6 +24,7 @@ library(tidyverse)
 library(sf)
 library(tmap)
 library(spData)
+#install.packages("spDataLarge", repos = "https://nowosad.github.io/drat/", type = "source")
 library(spDataLarge)
 library(rnaturalearth)
 library(rnaturalearthdata)
@@ -530,6 +531,14 @@ knitr::include_graphics(
 )
 ```
 ]
+
+---
+class:center, middle
+
+# Why do we need Map Projections?
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/kIID5FDi2JQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 
 ---
 
