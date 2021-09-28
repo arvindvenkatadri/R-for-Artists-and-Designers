@@ -17,11 +17,11 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-library(extrafont)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
+#library(extrafont)
 # Run this one time
 #extrafont::font_import()
-loadfonts()
+#loadfonts()
 ########################################
 # For General Data Manipulation
 library(tidyverse)
@@ -218,8 +218,8 @@ first foray into networks.
 ## Step1. Read the data
 
 ```{r 1.Read-greys-anatomy-data}
-grey_nodes <- read_csv("./Data/greys-nodes.csv")
-grey_edges <- read_csv("./Data/greys-edges.csv")
+grey_nodes <- read_csv("./Data/grey_nodes.csv")
+grey_edges <- read_csv("./Data/grey_edges.csv")
 grey_nodes
 grey_edges
 ```
@@ -227,7 +227,7 @@ grey_edges
 ```{r, echo=FALSE}
 grey_nodes %>% 
   download_this(
-    output_name = "grey-nodes",
+    output_name = "grey_nodes",
     output_extension = ".csv",
     button_label = "Download Grey Nodes as csv",
     button_type = "default",
@@ -238,7 +238,7 @@ grey_nodes %>%
 
 grey_edges %>% 
   download_this(
-    output_name = "grey-edges",
+    output_name = "grey_edges",
     output_extension = ".csv",
     button_label = "Download Grey Edges data as csv",
     button_type = "default",
@@ -444,10 +444,10 @@ ggraph(graph = ga, layout = "fr") +
   
   geom_node_point() + # add mapping here
 
-  geom_node_label(aes(label = name), # modify this mapping
-                  repel = TRUE, max.overlaps = 20,
-                  alpha = 0.6,
-                  size = 3) +
+  # geom_node_label(aes(label = name), # modify this mapping
+  #                 repel = TRUE, max.overlaps = 20,
+  #                 alpha = 0.6,
+  #                 size = 3) +
   
   labs(title = "Whoo Hoo! Yet another Grey's Anatomy graph in R!")
 ```
@@ -1014,16 +1014,40 @@ c)  Game of Thrones:
 
 ```{r}
 
-GoT <- read_rds("./data/GoT.RDS")
+#GoT <- read_rds("./data/GoT.RDS")
+gnodes <- read_csv("./data/asoiaf-all-nodes.csv")
+gedges <- read_csv("./data/asoiaf-all-edges.csv")
 
 ```
 
 ```{r, echo=FALSE}
-GoT %>% 
+# GoT %>% 
+#   download_this(
+#     output_name = "GoT",
+#     output_extension = ".rds",
+#     button_label = "Download data as RDS",
+#     button_type = "default",
+#     has_icon = TRUE,
+#     icon = "fa fa-save",
+#     class = "hvr-sweep-to-left"
+#   )
+
+gnodes %>% 
   download_this(
-    output_name = "GoT",
-    output_extension = ".rds",
-    button_label = "Download data as RDS",
+    output_name = "gnodes",
+    output_extension = ".csv",
+    button_label = "Download NODE data as CSV",
+    button_type = "default",
+    has_icon = TRUE,
+    icon = "fa fa-save",
+    class = "hvr-sweep-to-left"
+  )
+
+gedges %>% 
+  download_this(
+    output_name = "gedges",
+    output_extension = ".csv",
+    button_label = "Download EDGE data as CSV",
     button_type = "default",
     has_icon = TRUE,
     icon = "fa fa-save",
@@ -1031,11 +1055,8 @@ GoT %>%
   )
 ```
 
--   Note that this is a **list** of **7** graphs from Game of Thrones.
--   Select one using `GoT[[index]]` where index = 1...7 and then plot
-    directly.
--   Try to access the nodes and edges and modify them using any
-    attribute data
+-   Use the `gnodes` and `gedges` data to create your Game of Thrones network graph
+- see if you can filter
 
 3.  Any other graph dataset from `igraphdata` (type `?igraphdata` in
     console)
