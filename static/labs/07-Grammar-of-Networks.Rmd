@@ -961,19 +961,18 @@ Step 4. Knit before you submit. Submit only your knittable `.Rmd` file.
 
 a)  Airline Data:
 
--   Start with this bit of code in your second chunk, after `set up`
-
-```{r, message=FALSE}
+```{r, message=FALSE, include=FALSE}
 airline_nodes <- read_csv("./Data/AIRLINES-NODES.csv") %>% mutate(Id = Id + 1)
 airline_edges <- read_csv("./Data/AIRLINES-EDGES.csv") %>%
 mutate(Source = Source + 1, Target = Target + 1)
 ```
 
 ```{r, echo=FALSE}
-airline_nodes %>% 
+airline_nodes %>%
   download_this(
     output_name = "AIRLINES-NODES",
     output_extension = ".csv",
+    csv2 = TRUE,
     button_label = "Download data as csv",
     button_type = "default",
     has_icon = TRUE,
@@ -981,17 +980,28 @@ airline_nodes %>%
     class = "hvr-sweep-to-left"
   )
 
-airline_edges %>% 
+airline_edges %>%
   download_this(
     output_name = "AIRLINES-EDGES",
     output_extension = ".csv",
+    csv2 = TRUE,
     button_label = "Download data as csv",
     button_type = "default",
     has_icon = TRUE,
     icon = "fa fa-save",
     class = "hvr-sweep-to-left"
   )
+
 ```
+
+Download these two CSV files and save in your R Work folder.
+Import these into your RMarkdown as follows:
+
+airline_nodes <- read_delim("AIRLINES-EDGES.csv", 
+    delim = ";", escape_double = FALSE, trim_ws = TRUE)
+                                                                        airline_edges <- read_delim("AIRLINES-EDGES.csv", 
+    delim = ";", escape_double = FALSE, trim_ws = TRUE)
+
 
 b)  The Famous Zachary Karate Club dataset
 
