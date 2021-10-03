@@ -10,7 +10,8 @@ output:
     toc_float: TRUE
     toc_depth: 2
     number_sections: TRUE
-    code_folding: hide
+    df_print: paged
+    code_folding: show
     code_download: TRUE
 abstract: Part of the `R for Artists and Designers` workshop course at the School of Foundation Studies, Srishti Manipal Institute of Art, Design, and Technology, Bangalore.
 ---
@@ -66,7 +67,7 @@ devtools::install_github("ropensci/rnaturalearthhires")
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE)
 # Getting Map Data into R
 library(osmdata) # Import Open Street Data
 library(rnaturalearth)
@@ -95,41 +96,72 @@ We will take small steps in making maps using just two of the several map making
 
 The steps we will use are:
 
-1. Search for an area of interest ( E.g. using `prettymapr` or similar..)
+1. Search for an area of interest
 2. Learn how to access spatial/map data using `osmdata`
-3. Plot and dress up our map using `osmplot`, `tmap` and also with `leaflet`.
+3. Plot and dress up our map using `ggplot` and `tmap`
 4. Create interactive maps with `leaflet` using a variety of map data providers. Note: `tmap` can also do interactive maps which we will explore also. 
 
 Bas. Onwards and Map-wards!!
 
 All jargon words will be capitalized and in **bold** font. 
 
-# God made me a BengaluR-kaR...I think
+# Step1 - Specifying an area of interest
 
-Let's get BLR data into R and see if we can plot an area of interest. Then we can order on Swiggy and...never mind. 
+In R, we need to specify a "**BOUNDING BOX**" first, to declare our area of interest. God made me a BengaluR-kaR...I think..Let's see if we can declare an area of interest. Then we can order on Swiggy and...never mind. 
 
+We can declare a **BOUNDING BOX** in several ways, using a variety of R packages.
 
-1. Where is my home? Specify a "**BOUNDING BOX**" first, using a rough longitude latitude info directly, or using a place name to search for the long/lat info:
+a) Using a rough longitude latitude info directly, or using a place name to search for the long/lat info. THIS WILL ALWAYS WORK if the NUMBERS ARE OK !!
 
-```{r I-am-going-home}
-# BLR Bounding Box
+```{r I-am-going-home 1}
+# BLR Bounding Box using `osmplotr` package
+# get_bbox is a command from the `osmplotr` package
 # get_bbox needs lat and lon ranges
-bbox_1 <- osmplotr::get_bbox(c(77.46,12.83,77.74,13.14))
-bbox_2 <- osmdata::getbb("Bangalore, India")
-bbox_3 <- getbb("Jayanagar, Bangalore, India")
+# Format is c(min-lon, min-lat, max-lon, max-lat)
+bbox_1 <- osmplotr::get_bbox(latlon = c(77.46,12.83,77.74,13.14))
+bbox_1
+
+```
+
+
+b) Using a place name to look up a BOUNDING BOX. This may not always work if the place name is know well known.
+
+```{r I-am-going-home 2}
+# Using getbb command from the osmdata package
+bbox_2 <- osmdata::getbb("Jayanagar, Bangalore, India")
+bbox_2
+
+```
+
+```{r I-am-going-home 3}
+# Using searchbbox command from the prettymapr package
+bbox_3 <- prettymapr::searchbbox("Jayanagar, Bangalore, India")
+bbox_3
+
+```
+
+Let us examine all the calculated BOUNDING BOXes
+
+```{r}
 bbox_1
 bbox_2
 bbox_3
 ```
+`bbox_1` is quite big: 0.3 degrees range in both lon and lat. 
+`bbox_2` and `bbox_3` are identical and also reasonably sized: 0.04 degrees in longitude range and in latitude range.
 
+We will use the  `bbox_3` from the above, to ensure we have smaller data downloads! 
 
-We will use the smaller `bbox_3` from the above, to ensure we have smaller data downloads! 
+# Step2 - Get Map data
 
-Within our `bbox` for BLR, we want to download diverse kinds of **FEATURE** data. Remember that a **FEATURE** This is done using the `osmplotr::extract_osm_objects()` command. The main parameters for this command are:
+Within our `bbox` for Jayanagar, Bangalore, we want to download diverse kinds of **FEATURE** data. Remember that a **FEATURE** is any object that can be "seen" on a map. This is done using the `osmplotr::extract_osm_objects()` command. The main parameters for this command are:
 
 - bbox  
 - **KEY / VALUE** pairs (**"TAGS"**) to specify the kind of feature you need  
+- **return_type** if you want a specific kind of geometry to be returned. Say you want only **POINT** locations of restaurants, and not their buildings
 
+
+## OSM Tags
 See [OSM Tags](https://taginfo.openstreetmap.org/) for a nice visual description of popular tags that we can use. Useful keys include:
 
 - building : yes (all), house residential, apartments
@@ -143,64 +175,83 @@ See [OSM Tags](https://taginfo.openstreetmap.org/) for a nice visual description
 
 For example see: [tag : highway](https://taginfo.openstreetmap.org/keys/highway#values)
 
+## Downloading Data from Open Street Map
 
-# Get Map data
-
-We will get the map data from OSM and then save it avoid repeated downloads. So, please copy/paste and run the following commands in your console.
-Do not run these commands too many times, UNLESS you have changed your bbox extent.
+We will get the map data from OSM and then save it avoid repeated downloads. So, please copy/paste and run the following commands in your console. **Do not run these commands too many times**. **Re-run this  ONLY if you have changed your BOUNDING BOX.**
 
 ```{r}
-dat_B <- extract_osm_objects (key = "building", bbox = bbox_3)
-dat_H <- extract_osm_objects (key = 'highway', bbox = bbox_3)
-dat_P <- extract_osm_objects (key = 'park', bbox = bbox_3)
-dat_G <- extract_osm_objects (key = 'landuse', value = 'grass', bbox = bbox_3)
-dat_T <- extract_osm_objects (key = 'natural', value = 'tree', bbox = bbox_3)
+dat_buildings <-extract_osm_objects (key = "building", 
+                                     bbox = bbox_3,)
+
+dat_roads <- extract_osm_objects (key = 'highway', 
+                                     value = c("residential"),
+                                     bbox = bbox_3)
+
+dat_parks <- extract_osm_objects (key = 'park', 
+                                  bbox = bbox_3)
+
+dat_greenery <- extract_osm_objects (key = 'landuse', 
+                                  value = 'grass', 
+                                  bbox = bbox_3)
+
+dat_trees <- extract_osm_objects (key = 'natural', 
+                                  value = 'tree', 
+                                  bbox = bbox_3)
 ```
 
-## Let us save this data! 
+### Let us save this data! 
+
+We will store the downloaded data as `.gpkg` files on our local hard drives to use when we run this file again later. 
 
 ```{r}
-write_sf(dat_B, dsn = "dat_B.gpkg", append = FALSE, quiet = FALSE)
-write_sf(dat_P, dsn = "dat_P.gpkg", append = FALSE, quiet = FALSE)
-write_sf(dat_G, dsn = "dat_G.gpkg", append = FALSE,quiet = FALSE)
-write_sf(dat_T, dsn = "dat_T.gpkg", append = FALSE,quiet = FALSE)
-##
-# write_sf(dat_H, dsn = "dat_H.gpkg", append = FALSE, quiet = FALSE)
-```
+st_write(dat_buildings, 
+         dsn = "buildings.gpkg", 
+         append = FALSE, 
+         quiet = FALSE)
 
-Yes, the `write_sf(dat_H)` does not seem to work. This is something we need to research and understand. But at least all the other files are saved locally. We will comment it out for now!
+st_write(dat_parks, dsn = "parks.gpkg", append = FALSE, quiet = FALSE)
+st_write(dat_greenery, dsn = "greenery.gpkg", append = FALSE,quiet = FALSE)
+st_write(dat_trees, dsn = "trees.gpkg", append = FALSE,quiet = FALSE)
+
+st_write(dat_roads, dsn = "roads.gpkg", append = FALSE, quiet = FALSE)
+```
 
 Always work from here to avoid repeated downloads from OSM.
 
-## Reading Back the saved Data
+### Reading Back the saved Data
+
 ```{r}
-dat_B <- st_read("./dat_B.gpkg")
-dat_P <- read_sf("./dat_P.gpkg")
-dat_G <- read_sf("./dat_G.gpkg")
-dat_T <- read_sf("./dat_T.gpkg")
+buildings <- st_read("./buildings.gpkg")
+parks <- st_read("./parks.gpkg")
+greenery <- st_read("./greenery.gpkg")
+trees <- st_read("./trees.gpkg")
+roads <- st_read("./roads.gpkg")
 
 ```
 
 
-## Let's look at the data
+### Let's look at the data
+
+How many rows? ( Rows -> Features )
+What kind of `geom` column?
 
 ```{r}
 # How many buildings?
-nrow(dat_B)
-dat_B$geometry
-class(dat_B$geometry)
+nrow(buildings)
+buildings$geom
+class(buildings$geom)
 ```
 
-So `dat_B` has `r nrow(dat_B)` buildings and their geometry is naturally a POLYGON type of geometry column. 
+So the `buildings` dataset has `r nrow(buildings)` buildings and their geometry is naturally a POLYGON type of geometry column. 
 
 
-## Your Turn 1
+### Your Turn 1
 
 Do this check for all the other spatial data, in the code chunk below. 
-What kind of `geometry` column does each dataset have?
+What kind of `geom` column does each dataset have?
 
 
-```{r YOUR-TURN-1}
+```{r YOUR-TURN-1, include=TRUE}
 
 
 
@@ -209,32 +260,33 @@ What kind of `geometry` column does each dataset have?
 
 
 
-## What Other Kinds of Data could we get from OSM?
+### What Other Kinds of Data could we get from OSM?
 
-`osm_structures` returns a data.frame of OSM structure types, associated key-value pairs, unique suffices which may be appended to data structures for storage purposes, and suggested colours.
+`osm_structures` returns a data.frame of OSM structure types, associated **key-value** pairs and unique suffixes which may be appended to data structures/filenames for storage purposes, and suggested colours.
 
 ```{r}
 osmplotr::osm_structures()
 ```
 
+We can use these **key-value** pairs to download different types of map data.
 
 
-## My first Map in R
+# My first Map in R
 
-We could quickly plot this using the package `osmplotr`. However, in my ( i.e. Arvind's opinion ) it is not as flexible as other packages. Maybe I need to study it in more detail. 
+There are two ways of plotting maps that we will learn:
 
-So we will continue with `ggplot` and `geom_sf()` :
+## ggplot and geom_sf()
+
+First we will plot with `ggplot` and `geom_sf()` : recall that our data is stored in 5 files: `buildings`, `parks`, `roads`, `trees`, and `greenery`. 
 
 ```{r}
 
-blr_map <- ggplot() +
-  geom_sf(data = dat_B, colour = "orange") +  # POLYGONS
-  geom_sf(data = dat_H, col = "gray20") +     # LINES
-  geom_sf(data = dat_G, col = "darkseagreen1") + # POLYGONS
-  geom_sf(data = dat_P, col = "darkseagreen") +  # POLYGONS
-  geom_sf(data = dat_T, col = "green")        # POINTS
-blr_map
-
+ggplot() +
+  geom_sf(data = buildings, colour = "orange") +  # POLYGONS
+  geom_sf(data = roads, col = "gray20") +     # LINES
+  geom_sf(data = parks, col = "darkseagreen1") + # POLYGONS
+  geom_sf(data = greenery, col = "darkseagreen") +  # POLYGONS
+  geom_sf(data = trees, col = "green")        # POINTS
 
 ```
 
@@ -246,7 +298,7 @@ Note how `geom_sf` is capable of handling *any* geometry in the `sfc` column !!
 So there, we have our first map!
 
 
-# Map using `tmap` package
+## Map using `tmap` package
 
 We can also create a map using a package called `tmap`. Here we also have the option of making the map *interactive*.
 
@@ -254,23 +306,23 @@ We can also create a map using a package called `tmap`. Here we also have the op
 
 ```{r using tmap}
 # Group-1
-tm_shape(dat_B) +
+tm_shape(buildings) +
   tm_fill(col = "mediumblue") +
 
 #Group-2
-tm_shape(dat_H) +
+tm_shape(roads) +
   tm_lines(col = "gold") +
 
 #Group-3  
-tm_shape(dat_G) +
+tm_shape(greenery) +
   tm_polygons(col = "limegreen") +
   
 #Group-4  
-tm_shape(dat_P) +
+tm_shape(parks) +
   tm_polygons(col = "limegreen") +
 
 #Group-5  
-tm_shape(dat_T) +
+tm_shape(trees) +
   tm_dots(col = "green")
 ```
 
@@ -282,20 +334,20 @@ tmap_mode("view")
 
 # Using data from `tmap`
 
+Like many other packages ( e.g. ggplot ) `tmap` also has a few built-in spatial datasets: `World` and `metro`, `rivers`, `land` and a few others. Check help on these.
 Let's plot a first map using datasets built into `tmap`. 
 
-`tmap` has a few built-in spatial datasets: `World` and `metro`, `rivers`, `land` and a few others. Check help on these.
-
-```{r World_Data_tmap}
+```{r World-Data-tmap}
 data("World")
 head(World, n = 3)
 ```
 
 We have several 14 attribute variables in `World`. Attribute variables such as `gdp_cap_est`, `HPI` are numeric. Others such as `income_grp` appear to be factors. 
 `iso_a3` is the standard three letter name for the country. 
+`name` is of course, the name for each country!
 
 
-```{r World_metro_tmap}
+```{r World-metro-cities-tmap}
 data("metro")
 head(metro, n = 3)
 ```
@@ -330,25 +382,26 @@ tmap_mode("view") # Change to Interactive
 # Let's use WaterColor Map this time!!
 tm_tiles("Stamen.Watercolor") + # Watercolor map only with interactive
 tm_shape(World) +
-    tm_polygons("HPI") +
+    tm_polygons("HPI") + # Color by Happiness Index
   
   
 tm_shape(metro) + 
-  tm_bubbles(size = "pop2030", 
-             col = "red")
+  tm_bubbles(size = "pop2030", # Size City Markers by Population in 2020
+             col = "red") 
 ```
 
 ## Using data from `rnaturalearth`
 
+The `rnaturalearth` package allows us to download shapes of countries. We can use it to get borders and also internal state/district boundaries. 
+
 ```{r spatial_data}
 india <- 
   ne_states(country =  "india", 
-            geounit = "india", 
-            returnclass = "sf")
+            returnclass = "sf") # gives a ready sf dataframe !
 
 india_neighbours <- 
-  ne_states(country = (c("india", "sri lanka", "pakistan",
-                         "afghanistan", "nepal","bangladesh")
+  ne_states(country = (c("sri lanka", "pakistan",
+                         "afghanistan", "nepal","bangladesh", "bhutan")
                        ),
             returnclass = "sf")
 
@@ -366,36 +419,45 @@ india %>% st_drop_geometry() %>% head()
 india_neighbours%>% st_drop_geometry() %>% head()
 ```
 
+In the `india` data frame: 
+- Column `iso_a2` contains the country name. 
+- Column `name` contains the name of the state
 
-## Map 1
+In the `india_neighbours` data frame: 
+- Column `gu_a3` contains the country abbreviation
+- Column `name` contains the name of the state
+- Column `iso_3166_2` contains the abbreviation of the state within each neighbouring country.
+
+
+### Map 1
 ```{r Map_1}
 tmap_mode("view")
 
-# Plot the Neighbours
-tm_shape(World %>% dplyr::filter(iso_a3 %in% c("IND", "AFG", "PAK", "NPL", "BGD", "LKA"))) +
-  tm_borders() +
-  
 # Plot India
   tm_shape(india) +
-  tm_polygons("name",legend.show = FALSE) +
+  tm_polygons("name", # Colour by States in India
+              legend.show = FALSE) +
   
 # Plot Neighbours
   tm_shape(india_neighbours) +
-  tm_polygons("name", legend.show = FALSE) +
+  tm_fill(col = "gu_a3") +  # Colour by Country Name
   
 # Plot the cities in India alone
   tm_shape(metro %>% dplyr::filter(iso_a3 == "IND")) +
+    
   tm_dots(size = "pop2020",legend.size.show = FALSE) +
+    # size by population in 2020
+    
   tm_layout(legend.show = FALSE) +
   tm_credits("Geographical Boundaries are not accurate",
              size = 0.5,
              position = "right") +
   tm_compass(position = c("right", "top")) +
   tm_scale_bar(position = "left") +
-  tmap_style("watercolor") 
+  tmap_style(style = "classic") 
 
 #Try other map styles
-#cobalt #gray #white #col_blind #beaver #classic #watercolor #albatross #bw
+#cobalt #gray #white #watercolor #beaver #classic #watercolor #albatross #bw #col_blind
 
 ```
 
@@ -404,18 +466,26 @@ tm_shape(World %>% dplyr::filter(iso_a3 %in% c("IND", "AFG", "PAK", "NPL", "BGD"
 
 Can you try to download a map area of your home town and plot it as we have above?
 
+```{r Your-Turn-2, include=TRUE}
+
+```
+
+
 ## Adding my favourite Restaurants to the map
 Is it time to order on Swiggy...
 
 Let us adding interesting places to our map: say based on your favourite restaurants etc. We need restaurant data: lat/long + name + maybe type of restaurant. This can be manually created ( like all of OSMdata ) or if it is already there we can download using *key-value* pairs in our OSM data query.
+Restaurants can be downloaded using `key= "amenity", value = "restaurant"`. Since we want JUST their location, and not the restaurant BUILDINGs, we say `return_type = "points"`.
 
-```{r restaurant_data_1}
+There are also other tags to explore!Searching for McDonalds for instance...( key = "name", value = "McDonalds")
+
+```{r restaurant-data-1}
 dat_R <- extract_osm_objects(bbox = bbox_3, 
                              key = "amenity", 
                              value = "restaurant", 
                              return_type = "point") #<<
 # Save the data for future use
-write_sf(dat_R, dsn = "dat_R.gpkg",append = FALSE, quiet = FALSE)
+write_sf(dat_R, dsn = "restaurants.gpkg",append = FALSE, quiet = FALSE)
 
 ```
 
@@ -424,66 +494,73 @@ Note the `return_type` parameter: we want the location and **not** the **buildin
 ## Reading the saved Restaurant Data
 
 ```{r}
-dat_R <- st_read("./dat_R.gpkg")
+restaurants <- st_read("./restaurants.gpkg")
 ```
 
 
+How many restaurants have we got?
+```{r restaurant-data-2}
 
-```{r restaurant_data_2}
-# How many restaurants have we got?
-dat_R %>% nrow()
+restaurants %>% nrow()
 ```
 
-```{r restaurant_data_3}
-names(dat_R)
+These are the columns in the Restaurant Data:
+```{r restaurant-data-3}
+
+names(restaurants)
 
 ```
-These are the columns in the Restaurant Data
 
-```{r restaurant_data_4}
-# Let's look at the `cuisine` column! 
+So let us plot the restaurants as POINTs using the `restaurants` data we have downloaded. The `cuisine` attribute looks interesting; let us colour the POINT based on the `cuisine` offered at that restaurant. 
+
+So Let's look therefore at the `cuisine` column! 
+
+```{r restaurant-data-4}
 # ( I want pizza...)
-dat_R$cuisine
+restaurants$cuisine
 ```
-
-So let us plot the restaurants as POINTs using the `dat-R` data we have downloaded. The `cuisine` attribute looks interesting; let us colour the POINT based on the `cuisine` offered at that restaurant. 
+Big mess...many NAs, some double entries, separated by commas and semicolons....
 
 <div class="panel panel-success">
   <div class="panel-heading">The `cuisine` attribute:</div>
   <div class="panel-body">
-Note: The `cuisine` variable has more than one entry for a given restaurant.  We use `tidyr::separate()` to make multiple columns out of the cuisine column and retain the first one only. Since the entries are badly entered using both ";" and "," we need to do this twice ;-()
+Note: The `cuisine` variable has more than one entry for a given restaurant.  We use `tidyr::separate()` to make multiple columns out of the cuisine column and retain the first one only. 
+Since the entries are badly entered using both ";" and "," we need to do this twice ;-()
+Bad Data entry!!
   </div>
 </div>
 
+Let's get one cuisine entry per restaurant, and drop off the ones that do not mention a cuisine at all:
+
 ```{r}
-dat_R <- dat_R %>% 
+restaurants <- restaurants %>% 
   drop_na(cuisine) %>% # Knock off nondescript restaurants
   
-  # Some have more than on classification ;-()
+  # Some have more than one classification ;-()
   # Separated by semicolon or comma, so....
   separate(col = cuisine, into = c("cuisine", NA, NA), sep = ";") %>% 
   separate(col = cuisine, into = c("cuisine", NA, NA), sep = ",")
 
 # Finally good food?
-dat_R$cuisine
+restaurants$cuisine
 ```
 
-Now let's plot the Restaurants as POINTs:
+Looks clean! Each entry is only ONE and not multiple any more. Now let's plot the Restaurants as POINTs:
 
 ```{r}
 # http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf
 # 
 ggplot() + 
-  geom_sf(data = dat_B, colour = "burlywood1") + 
-  geom_sf(data = dat_H, colour = "gray80") +
-  geom_sf(data = dat_R %>% drop_na(cuisine), aes(fill = cuisine), colour = "black", shape = 21) + 
+  geom_sf(data = buildings, colour = "burlywood1") + 
+  geom_sf(data = roads, colour = "gray80") +
+  geom_sf(data = restaurants %>% drop_na(cuisine), aes(fill = cuisine), colour = "black", shape = 21, size = 3) + 
   theme(legend.position = "right") +
   labs(title = "Restaurants in South Central Bangalore",
        caption = "Based on osmdata")
 ```
 
 
-We could have done a (much!) better job, by combining cuisines into simpler and fewer categories, but that is for another day!! 
+We could have done a (much!) better job, by combining cuisines into simpler and fewer categories, ( South_India and South_Indian ), but that is for another day!! 
 
 By now we know that we can use `geom_sf()` multiple number of times with different datasets to create layered maps in R.
 
@@ -505,7 +582,7 @@ By now we know that we can use `geom_sf()` multiple number of times with differe
 
 # Assignments
 
-1. Draw a map of your home-town with your favourite restaurants shown. Pop-ups for each restaurant will win bonus points. 
+1. Draw a map of **your home-town** with your favourite restaurants shown. Pop-ups for each restaurant will win bonus points. 
 
 ### Inspiration
 
