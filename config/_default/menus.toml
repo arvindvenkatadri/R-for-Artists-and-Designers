@@ -15,10 +15,10 @@
   weight = 20
 
 
-[[main]]
-  name = "Online Logistics"
-  url = "#online-logistics"
-  weight = 30
+#[[main]]
+#  name = "Online Logistics"
+#  url = "#online-logistics"
+#  weight = 30
   
 
 [[main]]

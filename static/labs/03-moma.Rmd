@@ -9,7 +9,7 @@ output:
     toc_float: TRUE
     toc_depth: 2
     number_sections: TRUE
-    code_folding: hide
+    code_folding: show
     code_download: TRUE
 
 abstract: Part of the `R for Artists and Designers` course at the School of Foundation Studies, Srishti Manipal Institute of Art, Design, and Technology, Bangalore.
@@ -66,23 +66,13 @@ library(downloadthis)
 
 # Read in the data
 
-Note! This is not the original data- a lot of cleaning and pre-processing has been done on it by Alison Hill(@apreshill on Twitter). The below contains only paintings and drawings in the MoMA collection.
-
-[http://bit.ly/cs631-moma](http://bit.ly/cs631-moma):
-
-
-The cleaned data is called `artworks-cleaned.csv`, and stored it in a folder called `data`. You can use this code if you want to read in the local CSV file.
-
-```{r echo=FALSE}
-
-moma <- read_csv("data/artworks-cleaned.csv")
-
-```
+This dataset has been created by Alison Hill(@apreshill on Twitter). Download the dataset, save it into your **data** folder and then import it into R:
 
 ```{r, echo=FALSE}
+moma <- read_csv("data/artworks-cleaned.csv")
 moma %>% 
   download_this(
-    output_name = "Moma dataset",
+    output_name = "artworks-cleaned",
     output_extension = ".csv",
     button_label = "Download data as csv",
     button_type = "default",
@@ -90,6 +80,11 @@ moma %>%
     icon = "fa fa-save",
     class = "hvr-sweep-to-left"
   )
+```
+
+
+```{r}
+moma <- read_csv("data/artworks-cleaned.csv")
 ```
 
 # Getting to Know your data: Make up some Questions

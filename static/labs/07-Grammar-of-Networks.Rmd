@@ -17,8 +17,8 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
-#library(extrafont)
+knitr::opts_chunk$set(echo = TRUE)
+library(extrafont)
 # Run this one time
 #extrafont::font_import()
 #loadfonts()
@@ -218,8 +218,12 @@ first foray into networks.
 ## Step1. Read the data
 
 ```{r 1.Read-greys-anatomy-data}
-grey_nodes <- read_csv("./Data/grey_nodes.csv")
-grey_edges <- read_csv("./Data/grey_edges.csv")
+grey_nodes <- read_csv("./Data/greys-nodes.csv")
+grey_edges <- read_csv("./Data/greys-edges.csv")
+
+# grey_nodes <- read_delim("./Data/greys-nodes.csv", delim = ";")
+# ger_edges <- read_delim("~/Downloads/grey-edges.csv", 
+#     delim = ";", escape_double = FALSE, trim_ws = TRUE)
 grey_nodes
 grey_edges
 ```
@@ -227,7 +231,7 @@ grey_edges
 ```{r, echo=FALSE}
 grey_nodes %>% 
   download_this(
-    output_name = "grey_nodes",
+    output_name = "greys-nodes",
     output_extension = ".csv",
     button_label = "Download Grey Nodes as csv",
     button_type = "default",
@@ -238,7 +242,7 @@ grey_nodes %>%
 
 grey_edges %>% 
   download_this(
-    output_name = "grey_edges",
+    output_name = "greys-edges",
     output_extension = ".csv",
     button_label = "Download Grey Edges data as csv",
     button_type = "default",
@@ -344,7 +348,7 @@ Two kinds of `geom`: one set for nodes, and another for edges
 ggraph(graph = ga,  layout = "kk") +
   #
   
-  geom_edge_link0(width = 2, color = "pink") +
+  geom_edge_link(width = 2, color = "pink") +
   #
   
   geom_node_point(
@@ -383,7 +387,7 @@ changes. Colour? Fill? Width? Size? Stroke? Labs? Of course!
 # Use fixed values for colours or sizes...etc. 
 
 ggraph(graph = ga,  layout = "kk") + 
-  geom_edge_link0(width = 2) + 
+  geom_edge_link(width = 2) + 
   geom_node_point(shape = 21, size = 8, 
                   fill = "blue", 
                   color = "green", 
@@ -440,15 +444,15 @@ information.
 ```{r 3d.aesthetics-using-ggraph-Modify}
 
 ggraph(graph = ga, layout = "fr") +
-  geom_edge_link0() + # add mapping here
+  geom_edge_link0(aes(width = weight)) + # add mapping here
   
-  geom_node_point() + # add mapping here
+  geom_node_point(aes(color = race), size = 6) + # add mapping here
 
   # geom_node_label(aes(label = name), # modify this mapping
   #                 repel = TRUE, max.overlaps = 20,
   #                 alpha = 0.6,
   #                 size = 3) +
-  
+
   labs(title = "Whoo Hoo! Yet another Grey's Anatomy graph in R!")
 ```
 
@@ -496,7 +500,7 @@ ggraph(ga, layout = "linear", circular = TRUE) +
   scale_edge_width(range = c(0.2, 2)) +
   geom_node_point(size = 4,colour = "red") + 
   geom_node_text(aes(label = name),repel = TRUE, size = 3,
-                 max.overlaps = 10) +
+                 max.overlaps = 20) +
   labs(edge_width = "Weight") +
   theme_graph()+
   theme(legend.position = "right", 
@@ -686,8 +690,8 @@ ga %>%
   geom_node_point(aes(colour = centrality_degree(), 
                       size = centrality_degree())) + 
   scale_color_gradient(guide = "legend",
-                       low = "purple",
-                       high = "gold")
+                       low = "green",
+                       high = "red")
 ```
 
 ::: {.panel .panel-success}
@@ -741,8 +745,10 @@ Exploring the `VisNetwork` package. Make graphs wiggle and shake using
 metaphor of weights and springs we discussed earlier.
 
 The `visNetwork()` function uses a nodes list and edges list to create
-an interactive graph. The nodes list **must** include an "id" column, and
-the edge list **must** have "from" and "to" columns. The function also plots the labels for the nodes, using the names of the cities from the "label" column in the node list.
+an interactive graph. The nodes list must include an "id" column, and
+the edge list must have "from" and "to" columns. The function also plots
+the labels for the nodes, using the names of the cities from the "label"
+column in the node list.
 
 ```{r greys-anatomy-data-for-visnetwork}
 library(visNetwork)
@@ -751,7 +757,7 @@ library(visNetwork)
 grey_nodes
 grey_edges
 
-# Relabel greys anatomy nodes for VisNetwork
+# Relabel greys anatomy nodes and edges for VisNetwork
 grey_nodes_vis <- grey_nodes %>% 
   rowid_to_column(var = "id") %>% 
   rename("label" = name) %>% 
@@ -759,10 +765,7 @@ grey_nodes_vis <- grey_nodes %>%
                          sex == "M" ~ "Male")) %>% 
   replace_na(., list(sex = "Transgender?")) %>% 
   rename("group" = sex)
-
 grey_nodes_vis
-
-# Relabel greys anatomy edges for VisNetwork
 grey_edges_vis <- grey_edges %>% 
   select(from, to) %>% 
   left_join(., grey_nodes_vis, 
@@ -770,7 +773,6 @@ grey_edges_vis <- grey_edges %>%
   left_join(., grey_nodes_vis, 
             by = c("to" = "label")) %>%
   select("from"= id.x, "to" = id.y)
-
 grey_edges_vis
 ```
 
@@ -788,7 +790,7 @@ grey_nodes_vis %>%
             shadow = list(enabled = TRUE)) %>% 
   
   visGroups(groupname = "Male", shape = "icon", 
-            icon = list(code = "f183", size = 75, color = "dodgerblue"), 
+            icon = list(code = "f183", size = 75, color = "slateblue"), 
             shadow = list(enabled = TRUE)) %>% 
   
   visGroups(groupname = "Transgender?", shape = "icon", 
@@ -961,18 +963,19 @@ Step 4. Knit before you submit. Submit only your knittable `.Rmd` file.
 
 a)  Airline Data:
 
-```{r, message=FALSE, include=FALSE}
+-   Start with this bit of code in your second chunk, after `set up`
+
+```{r, message=FALSE}
 airline_nodes <- read_csv("./Data/AIRLINES-NODES.csv") %>% mutate(Id = Id + 1)
 airline_edges <- read_csv("./Data/AIRLINES-EDGES.csv") %>%
 mutate(Source = Source + 1, Target = Target + 1)
 ```
 
 ```{r, echo=FALSE}
-airline_nodes %>%
+airline_nodes %>% 
   download_this(
     output_name = "AIRLINES-NODES",
     output_extension = ".csv",
-    csv2 = TRUE,
     button_label = "Download data as csv",
     button_type = "default",
     has_icon = TRUE,
@@ -980,28 +983,17 @@ airline_nodes %>%
     class = "hvr-sweep-to-left"
   )
 
-airline_edges %>%
+airline_edges %>% 
   download_this(
     output_name = "AIRLINES-EDGES",
     output_extension = ".csv",
-    csv2 = TRUE,
     button_label = "Download data as csv",
     button_type = "default",
     has_icon = TRUE,
     icon = "fa fa-save",
     class = "hvr-sweep-to-left"
   )
-
 ```
-
-Download these two CSV files and save in your R Work folder.
-Import these into your RMarkdown as follows:
-
-airline_nodes <- read_delim("AIRLINES-EDGES.csv", 
-    delim = ";", escape_double = FALSE, trim_ws = TRUE)
-                                                                        airline_edges <- read_delim("AIRLINES-EDGES.csv", 
-    delim = ";", escape_double = FALSE, trim_ws = TRUE)
-
 
 b)  The Famous Zachary Karate Club dataset
 
@@ -1024,40 +1016,16 @@ c)  Game of Thrones:
 
 ```{r}
 
-#GoT <- read_rds("./data/GoT.RDS")
-gnodes <- read_csv("./data/asoiaf-all-nodes.csv")
-gedges <- read_csv("./data/asoiaf-all-edges.csv")
+GoT <- read_rds("./data/GoT.RDS")
 
 ```
 
 ```{r, echo=FALSE}
-# GoT %>% 
-#   download_this(
-#     output_name = "GoT",
-#     output_extension = ".rds",
-#     button_label = "Download data as RDS",
-#     button_type = "default",
-#     has_icon = TRUE,
-#     icon = "fa fa-save",
-#     class = "hvr-sweep-to-left"
-#   )
-
-gnodes %>% 
+GoT %>% 
   download_this(
-    output_name = "gnodes",
-    output_extension = ".csv",
-    button_label = "Download NODE data as CSV",
-    button_type = "default",
-    has_icon = TRUE,
-    icon = "fa fa-save",
-    class = "hvr-sweep-to-left"
-  )
-
-gedges %>% 
-  download_this(
-    output_name = "gedges",
-    output_extension = ".csv",
-    button_label = "Download EDGE data as CSV",
+    output_name = "GoT",
+    output_extension = ".rds",
+    button_label = "Download data as RDS",
     button_type = "default",
     has_icon = TRUE,
     icon = "fa fa-save",
@@ -1065,8 +1033,11 @@ gedges %>%
   )
 ```
 
--   Use the `gnodes` and `gedges` data to create your Game of Thrones network graph
-- see if you can filter
+-   Note that this is a **list** of **7** graphs from Game of Thrones.
+-   Select one using `GoT[[index]]` where index = 1...7 and then plot
+    directly.
+-   Try to access the nodes and edges and modify them using any
+    attribute data
 
 3.  Any other graph dataset from `igraphdata` (type `?igraphdata` in
     console)

@@ -1,0 +1,512 @@
+blogdown:::preview_site()
+xaringan:::inf_mr()
+xaringan:::inf_mr()
+knitr::opts_chunk$set(echo = TRUE, message = FALSE)
+# Getting Map Data into R
+library(osmdata) # Import Open Street Data
+library(rnaturalearth)
+library(rnaturalearthdata)
+# Run this in your console first
+#devtools::install_github("ropensci/rnaturalearthhires")
+blogdown::build_site()
+library(blogdown)
+check_config()
+library(blogdown)
+check_site()
+build_site(build_rmd = "timestamp")
+serve_site()
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
+#library(extrafont)
+# Run this one time
+#extrafont::font_import()
+#loadfonts()
+########################################
+# For General Data Manipulation
+library(tidyverse)
+########################################
+# Network Analysis Library (Handle data and Viz)
+library(igraph)
+library(netrankr)
+########################################
+# For Network "Manipulation"
+library(tidygraph)
+# For Network Visualization
+library(ggraph)
+library(graphlayouts)
+# For "Network" Datasets
+library(igraphdata)
+library(downloadthis)
+grey_nodes <- read_csv("./Data/grey_nodes.csv")
+grey_edges <- read_csv("./Data/grey_edges.csv")
+grey_nodes
+grey_edges
+grey_nodes %>%
+download_this(
+output_name = "grey_nodes",
+output_extension = ".csv",
+button_label = "Download Grey Nodes as csv",
+button_type = "default",
+has_icon = TRUE,
+icon = "fa fa-save",
+class = "hvr-sweep-to-left"
+)
+grey_edges %>%
+download_this(
+output_name = "grey_edges",
+output_extension = ".csv",
+button_label = "Download Grey Edges data as csv",
+button_type = "default",
+has_icon = TRUE,
+icon = "fa fa-save",
+class = "hvr-sweep-to-left"
+)
+ga <- tbl_graph(nodes = grey_nodes,
+edges = grey_edges,
+directed = FALSE)
+ga
+autograph(ga)
+# Write Comments next to each line
+# About what that line does for the overall graph
+ggraph(graph = ga,  layout = "kk") +
+#
+geom_edge_link0(width = 2, color = "pink") +
+#
+geom_node_point(
+shape = 21,
+size = 8,
+fill = "blue",
+color = "green",
+stroke = 2
+) +
+#
+labs(title = "Whoo Hoo! My first silly Grey's Anatomy graph in R!",
+subtitle = "Why did Ramesh put me in this course...",
+caption = "Bro, they are doing **cool** things in the other
+classes...")
+# Change the parameters in each of the commands here to new ones
+# Use fixed values for colours or sizes...etc.
+ggraph(graph = ga,  layout = "kk") +
+geom_edge_link0(width = 2) +
+geom_node_point(shape = 21, size = 8,
+fill = "blue",
+color = "green",
+stroke = 2) +
+labs(title = "Whoo Hoo! My next silly Grey's Anatomy graph in R!",
+subtitle = "Why did Ramesh put me in this course...",
+caption = "Bro, they are doing cool things in the other
+classes...")
+ggraph(graph = ga, layout = "fr") +
+geom_edge_link0() + # add mapping here
+geom_node_point() + # add mapping here
+# geom_node_label(aes(label = name), # modify this mapping
+#                 repel = TRUE, max.overlaps = 20,
+#                 alpha = 0.6,
+#                 size = 3) +
+labs(title = "Whoo Hoo! Yet another Grey's Anatomy graph in R!")
+# Arc diagram
+ggraph(ga, layout = "linear") +
+geom_edge_arc(aes(width = weight), alpha = 0.8) +
+scale_edge_width(range = c(0.2, 2)) +
+geom_node_point(size = 2, colour = "red") +
+labs(edge_width = "Weight") +
+theme_graph()+
+theme(legend.position = "top")
+# Coord diagram, circular
+ggraph(ga, layout = "linear", circular = TRUE) +
+geom_edge_arc(aes(width = weight), alpha = 0.8) +
+scale_edge_width(range = c(0.2, 2)) +
+geom_node_point(size = 4,colour = "red") +
+geom_node_text(aes(label = name),repel = TRUE, size = 3,
+max.overlaps = 10) +
+labs(edge_width = "Weight") +
+theme_graph()+
+theme(legend.position = "right",
+aspect.ratio = 1)
+# setting theme_graph
+set_graph_style()
+# This dataset contains the graph that describes the class
+# hierarchy for the Flare visualization library.
+# Type ?flare in your Console
+head(flare$vertices)
+head(flare$edges)
+# flare class hierarchy
+graph = tbl_graph(edges = flare$edges, nodes = flare$vertices)
+# dendrogram
+ggraph(graph, layout = "dendrogram") +
+geom_edge_diagonal() +
+labs(title = "Dendrogram")
+# circular dendrogram
+ggraph(graph, layout = "dendrogram", circular = TRUE) +
+geom_edge_diagonal() +
+geom_node_point(aes(filter = leaf)) +
+coord_fixed()+
+labs(title = "Circular Dendrogram")
+# rectangular tree map
+ggraph(graph, layout = "treemap", weight = size) +
+geom_node_tile(aes(fill = depth), size = 0.25) +
+labs(title = "Rectangular Tree Map")
+# circular tree map
+ggraph(graph, layout = "circlepack", weight = size) +
+geom_node_circle(aes(fill = depth), size = 0.25, n = 50) +
+coord_fixed() +
+labs(title = "Circular Tree Map")
+# icicle
+ggraph(graph, layout = "partition") +
+geom_node_tile(aes(y = -y, fill = depth))
+# sunburst (circular icicle)
+ggraph(graph, layout = "partition", circular = TRUE) +
+geom_node_arc_bar(aes(fill = depth)) +
+coord_fixed() +
+labs(title = "Circular Icicle")
+# setting theme_graph
+set_graph_style()
+# facet edges by type
+ggraph(ga,layout = "linear", circular = TRUE) +
+geom_edge_link(aes(color = type)) +
+geom_node_point() +
+facet_edges(~ type)
+# facet nodes by sex
+ggraph(ga,layout = "linear", circular = TRUE) +
+geom_edge_link() +
+geom_node_point() +
+facet_nodes(~race)
+# facet both nodes and edges
+ggraph(ga,layout = "linear", circular = TRUE) +
+geom_edge_link(aes(color = type)) +
+geom_node_point() +
+facet_graph(type ~ race) +
+th_foreground(border = TRUE)
+ga %>%
+activate(nodes) %>%
+# Most connections?
+mutate(degree = centrality_degree(mode = c("in"))) %>%
+filter(degree > 0) %>%
+activate(edges) %>%
+# "Busiest" edge?
+mutate(betweenness = centrality_edge_betweenness())
+# setting theme_graph
+set_graph_style()
+ga %>%
+activate(nodes) %>%
+# Who has the most connections?
+mutate(degree = centrality_degree()) %>%
+activate(edges) %>%
+# Who is the go-through person?
+mutate(betweenness = centrality_edge_betweenness()) %>%
+# Now to continue with plotting
+ggraph(layout = "nicely") +
+geom_edge_link(aes(alpha = betweenness)) +
+geom_node_point(aes(size = degree, colour = degree)) +
+# discrete colour legend
+scale_color_gradient(guide = "legend")
+# or even less typing
+ggraph(ga,layout = "nicely") +
+geom_edge_link(aes(alpha = centrality_edge_betweenness())) +
+geom_node_point(aes(colour = centrality_degree(),
+size = centrality_degree())) +
+scale_color_gradient(guide = "legend",
+low = "purple",
+high = "gold")
+# setting theme_graph
+set_graph_style()
+# visualize communities of nodes
+ga %>%
+activate(nodes) %>%
+mutate(community = as.factor(group_louvain())) %>%
+ggraph(layout = "graphopt") +
+geom_edge_link() +
+geom_node_point(aes(color = community), size = 5)
+library(visNetwork)
+# Prepare the data for plotting by visNetwork
+grey_nodes
+grey_edges
+# Relabel greys anatomy nodes for VisNetwork
+grey_nodes_vis <- grey_nodes %>%
+rowid_to_column(var = "id") %>%
+rename("label" = name) %>%
+mutate(sex = case_when(sex == "F" ~ "Female",
+sex == "M" ~ "Male")) %>%
+replace_na(., list(sex = "Transgender?")) %>%
+rename("group" = sex)
+grey_nodes_vis
+# Relabel greys anatomy edges for VisNetwork
+grey_edges_vis <- grey_edges %>%
+select(from, to) %>%
+left_join(., grey_nodes_vis,
+by = c("from" = "label")) %>%
+left_join(., grey_nodes_vis,
+by = c("to" = "label")) %>%
+select("from"= id.x, "to" = id.y)
+grey_edges_vis
+grey_nodes_vis %>%
+visNetwork(nodes = ., edges = grey_edges_vis) %>%
+visNodes(font = list(size = 40)) %>%
+# Colour and icons for each of the gender-groups
+visGroups(groupname = "Female", shape = "icon",
+icon = list(code = "f182", size = 75, color = "tomato"),
+shadow = list(enabled = TRUE)) %>%
+visGroups(groupname = "Male", shape = "icon",
+icon = list(code = "f183", size = 75, color = "dodgerblue"),
+shadow = list(enabled = TRUE)) %>%
+visGroups(groupname = "Transgender?", shape = "icon",
+icon = list(code = "f22c", size = 75, color = "fuchsia"),
+shadow = list(enabled = TRUE)) %>%
+#visLegend() %>%
+#Add the fontawesome icons!!
+addFontAwesome() %>%
+# Add Interaction Controls
+visInteraction(navigationButtons = TRUE,
+hover = TRUE,
+selectConnectedEdges = TRUE,
+hoverConnectedEdges = TRUE,
+zoomView = TRUE)
+grey_nodes_vis %>%
+visNetwork(nodes = ., edges = grey_edges_vis,) %>%
+visLayout(randomSeed = 12345) %>%
+visNodes(font = list(size = 50)) %>%
+visEdges(color = "green") %>%
+visGroups(
+groupname = "Female",
+shape = "icon",
+icon = list(
+face = 'Ionicons',
+code = "f25d",
+color = "fuchsia",
+size = 125
+)
+) %>%
+visGroups(
+groupname = "Male",
+shape = "icon",
+icon = list(
+face = 'Ionicons',
+code = "f202",
+color = "green",
+size = 125
+)
+) %>%
+visGroups(
+groupname = "Transgender?",
+shape = "icon",
+icon = list(
+face = 'Ionicons',
+code = "f233",
+color = "dodgerblue",
+size = 125
+)
+) %>%
+visLegend() %>%
+addIonicons() %>%
+visInteraction(
+navigationButtons = TRUE,
+hover = TRUE,
+selectConnectedEdges = TRUE,
+hoverConnectedEdges = TRUE,
+zoomView = TRUE
+)
+library(visNetwork)
+# let's look again at the data
+starwars_nodes <- read_csv("./Data/star-wars-network-nodes.csv")
+starwars_edges <- read_csv("./Data/star-wars-network-edges.csv")
+starwars_nodes %>%
+download_this(
+output_name = "star-wars-network-nodes",
+output_extension = ".csv",
+button_label = "Download Nodes data as csv",
+button_type = "default",
+has_icon = TRUE,
+icon = "fa fa-save",
+class = "hvr-sweep-to-left"
+)
+starwars_edges %>%
+download_this(
+output_name = "star-wars-network-edges",
+output_extension = ".csv",
+button_label = "Download Edges data as csv",
+button_type = "default",
+has_icon = TRUE,
+icon = "fa fa-save",
+class = "hvr-sweep-to-left"
+)
+# We need to rename starwars nodes dataframe and edge dataframe columns for visNetwork
+starwars_nodes_vis <-
+starwars_nodes %>%
+rename("label" = name)
+# Convert from and to columns to **node ids**
+starwars_edges_vis <-
+starwars_edges %>%
+# Matching Source <- Source Node id ("id.x")
+left_join(., starwars_nodes_vis, by = c("source" = "label")) %>%
+# Matching Target <- Target Node id ("id.y")
+left_join(., starwars_nodes_vis, by = c("target" = "label")) %>%
+# Select "id.x" and "id.y" ONLY
+# Rename them as "from" and "to"
+# keep "weight" column for aesthetics of edges
+select("from" = id.x, "to" = id.y, "value" = weight)
+# Check everything once
+starwars_nodes_vis
+starwars_edges_vis
+visNetwork(nodes = starwars_nodes_vis,
+edges = starwars_edges_vis) %>%
+visNodes(font = list(size = 30), shape = "icon",
+icon = list(code = "f1e3", size = 75)) %>%
+addFontAwesome() %>%
+visEdges(color = "red")
+visNetwork(nodes = starwars_nodes_vis,
+edges = starwars_edges_vis) %>%
+visNodes(font = list(size = 30)) %>%
+visEdges(color = "red")
+airline_nodes <- read_csv("./Data/AIRLINES-NODES.csv") %>% mutate(Id = Id + 1)
+airline_edges <- read_csv("./Data/AIRLINES-EDGES.csv") %>%
+mutate(Source = Source + 1, Target = Target + 1)
+airline_nodes %>%
+download_this(
+output_name = "AIRLINES-NODES",
+output_extension = ".csv",
+button_label = "Download data as csv",
+button_type = "default",
+has_icon = TRUE,
+icon = "fa fa-save",
+class = "hvr-sweep-to-left"
+)
+airline_edges %>%
+download_this(
+output_name = "AIRLINES-EDGES",
+output_extension = ".csv",
+button_label = "Download data as csv",
+button_type = "default",
+has_icon = TRUE,
+icon = "fa fa-save",
+class = "hvr-sweep-to-left"
+)
+#GoT <- read_rds("./data/GoT.RDS")
+gnodes <- read_csv("./data/asoiaf-all-nodes.csv")
+gedges <- read_csv("./data/asoiaf-all-edges.csv")
+# GoT %>%
+#   download_this(
+#     output_name = "GoT",
+#     output_extension = ".rds",
+#     button_label = "Download data as RDS",
+#     button_type = "default",
+#     has_icon = TRUE,
+#     icon = "fa fa-save",
+#     class = "hvr-sweep-to-left"
+#   )
+gnodes %>%
+download_this(
+output_name = "gnodes",
+output_extension = ".csv",
+button_label = "Download NODE data as CSV",
+button_type = "default",
+has_icon = TRUE,
+icon = "fa fa-save",
+class = "hvr-sweep-to-left"
+)
+gedges %>%
+download_this(
+output_name = "gedges",
+output_extension = ".csv",
+button_label = "Download EDGE data as CSV",
+button_type = "default",
+has_icon = TRUE,
+icon = "fa fa-save",
+class = "hvr-sweep-to-left"
+)
+tbl_graph(nodes = airline_nodes, edges = airline_edges,directed = FALSE)
+airline_nodes %>%
+download_this(
+output_name = "AIRLINES-NODES",
+output_extension = ".csv",
+button_label = "Download data as csv",
+button_type = "default",
+has_icon = TRUE,
+icon = "fa fa-save",
+class = "hvr-sweep-to-left"
+)
+airline_edges %>%
+download_this(
+output_name = "AIRLINES-EDGES",
+output_extension = ".csv",
+button_label = "Download data as csv",
+button_type = "default",
+has_icon = TRUE,
+icon = "fa fa-save",
+class = "hvr-sweep-to-left"
+)
+?download_this
+?write_csv2
+knitr::opts_chunk$set(collapse = T, comment = "#>")
+options(tibble.print_min = 4L, tibble.print_max = 4L)
+library(tidyverse)
+set.seed(1014)
+knitr::opts_chunk$set(collapse = T, comment = "#>")
+options(tibble.print_min = 4L, tibble.print_max = 4L)
+library(tidyverse)
+set.seed(1014)
+dim(starwars)
+starwars
+dim(starwars)
+starwars
+knitr::opts_chunk$set(collapse = T, comment = "#>")
+options(tibble.print_min = 4L, tibble.print_max = 4L)
+library(tidyverse)
+set.seed(1014)
+knitr::opts_chunk$set(collapse = T, comment = "#>")
+options(tibble.print_min = 4L, tibble.print_max = 4L)
+library(tidyverse)
+set.seed(1014)
+starwars
+data("starwars")
+starwars %>% filter(skin_color == "light", eye_color == "brown")
+starwars_filtered <- starwars %>% filter(skin_color == "light", eye_color == "brown")
+starwars %>% filter(skin_color == "light", eye_color == "brown")
+starwars_filtered <- starwars %>% filter(skin_color == "light", eye_color == "brown")
+starwars_filtered
+starwars %>% filter(name == "Leia Organa")
+starwars %>% arrange(height, mass)
+starwars %>% arrange(desc(height))
+starwars %>% slice(5:10)
+starwars %>% slice_head(n = 3)
+starwars %>% slice_sample(n = 5)
+starwars %>% slice_sample(prop = 0.1)
+starwars %>% is.na(height)
+is.na(starwars$height)
+starwars %>%
+filter(!is.na(height)) %>%
+slice_min(height, n = 3)
+starwars %>%
+filter(!is.na(height)) %>%
+slice_max(height, n = 3)
+# airline_nodes %>%
+#   download_this(
+#     output_name = "AIRLINES-NODES",
+#     output_extension = ".csv",
+#     csv2 = TRUE,
+#     button_label = "Download data as csv",
+#     button_type = "default",
+#     has_icon = TRUE,
+#     icon = "fa fa-save",
+#     class = "hvr-sweep-to-left"
+#   )
+#
+# airline_edges %>%
+#   download_this(
+#     output_name = "AIRLINES-EDGES",
+#     output_extension = ".csv",
+#     csv2 = TRUE,
+#     button_label = "Download data as csv",
+#     button_type = "default",
+#     has_icon = TRUE,
+#     icon = "fa fa-save",
+#     class = "hvr-sweep-to-left"
+#   )
+list(airline_nodes, airline_edges) %>%
+download_this(
+output_name = "airline nodes and edges",
+output_extension = ".xlsx",
+button_label = "Download airline datasets as xlsx",
+button_type = "warning",
+has_icon = TRUE,
+icon = "fa fa-save"
+)
+blogdown:::preview_site()

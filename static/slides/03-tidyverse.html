@@ -4,7 +4,7 @@
     <title>Slides 03</title>
     <meta charset="utf-8" />
     <meta name="author" content="Arvind Venkatadri" />
-    <meta name="date" content="2021-07-13" />
+    <meta name="date" content="2021-10-24" />
     <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/ohsu.css" type="text/css" />
@@ -17,7 +17,7 @@ class: center, middle, inverse, title-slide
 # Slides 03
 ## Working in the Tidyverse
 ### Arvind Venkatadri
-### 2021-07-13
+### 2021-10-24
 
 ---
 
@@ -206,29 +206,29 @@ glimpse(moma)
 ```
 Rows: 2,253
 Columns: 23
-$ title             &lt;chr&gt; "Rope and People, I", "Fire in the Evening", "P~
-$ artist            &lt;chr&gt; "Joan Miró", "Paul Klee", "Paul Klee", "Pablo P~
-$ artist_bio        &lt;chr&gt; "(Spanish, 1893–1983)", "(German, born Switzerl~
-$ artist_birth_year &lt;dbl&gt; 1893, 1879, 1879, 1881, 1880, 1879, 1943, 1880,~
-$ artist_death_year &lt;dbl&gt; 1983, 1940, 1940, 1973, 1946, 1953, 1977, 1950,~
-$ num_artists       &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,~
-$ n_female_artists  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
-$ n_male_artists    &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,~
-$ artist_gender     &lt;chr&gt; "Male", "Male", "Male", "Male", "Male", "Male",~
-$ year_acquired     &lt;dbl&gt; 1936, 1970, 1966, 1955, 1939, 1968, 1997, 1931,~
-$ year_created      &lt;dbl&gt; 1935, 1929, 1927, 1919, 1925, 1919, 1970, 1929,~
-$ circumference_cm  &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
-$ depth_cm          &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
-$ diameter_cm       &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
-$ height_cm         &lt;dbl&gt; 104.8, 33.8, 60.3, 215.9, 50.8, 129.2, 200.0, 5~
-$ length_cm         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
-$ width_cm          &lt;dbl&gt; 74.6, 33.3, 36.8, 78.7, 54.0, 89.9, 200.0, 38.1~
-$ seat_height_cm    &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
-$ purchase          &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE~
-$ gift              &lt;lgl&gt; TRUE, FALSE, FALSE, TRUE, TRUE, FALSE, TRUE, TR~
-$ exchange          &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE,~
-$ classification    &lt;chr&gt; "Painting", "Painting", "Painting", "Painting",~
-$ department        &lt;chr&gt; "Painting &amp; Sculpture", "Painting &amp; Sculpture",~
+$ title             &lt;chr&gt; "Rope and People, I", "Fire in the Evenin…
+$ artist            &lt;chr&gt; "Joan Miró", "Paul Klee", "Paul Klee", "P…
+$ artist_bio        &lt;chr&gt; "(Spanish, 1893–1983)", "(German, born Sw…
+$ artist_birth_year &lt;dbl&gt; 1893, 1879, 1879, 1881, 1880, 1879, 1943,…
+$ artist_death_year &lt;dbl&gt; 1983, 1940, 1940, 1973, 1946, 1953, 1977,…
+$ num_artists       &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
+$ n_female_artists  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+$ n_male_artists    &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
+$ artist_gender     &lt;chr&gt; "Male", "Male", "Male", "Male", "Male", "…
+$ year_acquired     &lt;dbl&gt; 1936, 1970, 1966, 1955, 1939, 1968, 1997,…
+$ year_created      &lt;dbl&gt; 1935, 1929, 1927, 1919, 1925, 1919, 1970,…
+$ circumference_cm  &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+$ depth_cm          &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+$ diameter_cm       &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+$ height_cm         &lt;dbl&gt; 104.8, 33.8, 60.3, 215.9, 50.8, 129.2, 20…
+$ length_cm         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+$ width_cm          &lt;dbl&gt; 74.6, 33.3, 36.8, 78.7, 54.0, 89.9, 200.0…
+$ seat_height_cm    &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+$ purchase          &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,…
+$ gift              &lt;lgl&gt; TRUE, FALSE, FALSE, TRUE, TRUE, FALSE, TR…
+$ exchange          &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, …
+$ classification    &lt;chr&gt; "Painting", "Painting", "Painting", "Pain…
+$ department        &lt;chr&gt; "Painting &amp; Sculpture", "Painting &amp; Sculp…
 ```
 
 ---
@@ -243,7 +243,7 @@ moma %&gt;%
 ```
 
 ```
-# A tibble: 2,253 x 1
+# A tibble: 2,253 × 1
    year_acquired
            &lt;dbl&gt;
  1          1930
@@ -256,7 +256,7 @@ moma %&gt;%
  8          1934
  9          1934
 10          1934
-# ... with 2,243 more rows
+# … with 2,243 more rows
 ```
 
 ```r
@@ -266,20 +266,20 @@ moma %&gt;%
 ```
 
 ```
-# A tibble: 2,253 x 3
-   title                                       artist         year_acquired
-   &lt;chr&gt;                                       &lt;chr&gt;                  &lt;dbl&gt;
- 1 House by the Railroad                       Edward Hopper           1930
- 2 Seated Nude                                 Bernard Karfi~          1930
- 3 Daylight Savings Time                       Pierre Roy              1931
- 4 Plums on a Plate                            Preston Dicki~          1931
- 5 Dr. Mayer-Hermann                           Otto Dix                1932
- 6 The Bather                                  Paul Cézanne            1934
- 7 Pines and Rocks (Fontainebleau?)            Paul Cézanne            1934
- 8 Still Life with Ginger Jar, Sugar Bowl, an~ Paul Cézanne            1934
- 9 Still Life with Apples                      Paul Cézanne            1934
-10 Italian Landscape                           Arthur B. Dav~          1934
-# ... with 2,243 more rows
+# A tibble: 2,253 × 3
+   title                                  artist        year_acquired
+   &lt;chr&gt;                                  &lt;chr&gt;                 &lt;dbl&gt;
+ 1 House by the Railroad                  Edward Hopper          1930
+ 2 Seated Nude                            Bernard Karf…          1930
+ 3 Daylight Savings Time                  Pierre Roy             1931
+ 4 Plums on a Plate                       Preston Dick…          1931
+ 5 Dr. Mayer-Hermann                      Otto Dix               1932
+ 6 The Bather                             Paul Cézanne           1934
+ 7 Pines and Rocks (Fontainebleau?)       Paul Cézanne           1934
+ 8 Still Life with Ginger Jar, Sugar Bow… Paul Cézanne           1934
+ 9 Still Life with Apples                 Paul Cézanne           1934
+10 Italian Landscape                      Arthur B. Da…          1934
+# … with 2,243 more rows
 ```
 
 ---
@@ -294,7 +294,7 @@ moma %&gt;%
 ```
 
 ```
-# A tibble: 2,253 x 3
+# A tibble: 2,253 × 3
    title                                    artist       year_created
    &lt;chr&gt;                                    &lt;chr&gt;               &lt;dbl&gt;
  1 Landscape at Daybreak                    Odilon Redon         1872
@@ -307,7 +307,7 @@ moma %&gt;%
  8 Still Life with Fruit Dish               Paul Cézanne         1879
  9 L'Estaque                                Paul Cézanne         1879
 10 On the Cliff at Pourville, Clear Weather Claude Monet         1882
-# ... with 2,243 more rows
+# … with 2,243 more rows
 ```
 
 ---
@@ -320,7 +320,7 @@ moma %&gt;% distinct(artist) %&gt;% count()
 ```
 
 ```
-# A tibble: 1 x 1
+# A tibble: 1 × 1
       n
   &lt;int&gt;
 1   989
@@ -339,7 +339,7 @@ moma %&gt;%
 ```
 
 ```
-# A tibble: 989 x 2
+# A tibble: 989 × 2
    artist           paintings
    &lt;chr&gt;                &lt;int&gt;
  1 Pablo Picasso           55
@@ -352,7 +352,7 @@ moma %&gt;%
  8 Ben Vautier             24
  9 Frank Stella            23
 10 Philip Guston           23
-# ... with 979 more rows
+# … with 979 more rows
 ```
 
 ---
@@ -367,7 +367,7 @@ moma %&gt;%
 ```
 
 ```
-# A tibble: 3 x 2
+# A tibble: 3 × 2
   artist_gender count
   &lt;chr&gt;         &lt;int&gt;
 1 Female          252
@@ -388,20 +388,20 @@ moma %&gt;%
 ```
 
 ```
-# A tibble: 2,253 x 4
-   title                           artist       year_acquired artist_gender
-   &lt;chr&gt;                           &lt;chr&gt;                &lt;dbl&gt; &lt;chr&gt;        
- 1 House by the Railroad           Edward Hopp~          1930 Male         
- 2 Seated Nude                     Bernard Kar~          1930 Male         
- 3 Daylight Savings Time           Pierre Roy            1931 Male         
- 4 Plums on a Plate                Preston Dic~          1931 Male         
- 5 Dr. Mayer-Hermann               Otto Dix              1932 Male         
- 6 The Bather                      Paul Cézanne          1934 Male         
- 7 Pines and Rocks (Fontainebleau~ Paul Cézanne          1934 Male         
- 8 Still Life with Ginger Jar, Su~ Paul Cézanne          1934 Male         
- 9 Still Life with Apples          Paul Cézanne          1934 Male         
-10 Italian Landscape               Arthur B. D~          1934 Male         
-# ... with 2,243 more rows
+# A tibble: 2,253 × 4
+   title                      artist      year_acquired artist_gender
+   &lt;chr&gt;                      &lt;chr&gt;               &lt;dbl&gt; &lt;chr&gt;        
+ 1 House by the Railroad      Edward Hop…          1930 Male         
+ 2 Seated Nude                Bernard Ka…          1930 Male         
+ 3 Daylight Savings Time      Pierre Roy           1931 Male         
+ 4 Plums on a Plate           Preston Di…          1931 Male         
+ 5 Dr. Mayer-Hermann          Otto Dix             1932 Male         
+ 6 The Bather                 Paul Cézan…          1934 Male         
+ 7 Pines and Rocks (Fontaine… Paul Cézan…          1934 Male         
+ 8 Still Life with Ginger Ja… Paul Cézan…          1934 Male         
+ 9 Still Life with Apples     Paul Cézan…          1934 Male         
+10 Italian Landscape          Arthur B. …          1934 Male         
+# … with 2,243 more rows
 ```
 
 
