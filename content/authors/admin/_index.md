@@ -5,9 +5,9 @@ bio: This course will give Art and Design students a foundation in the principle
 email: ""
 name: Arvind Venkatadri
 organizations:
-- name: Srishti Manipal Institute of Art, Design, and Technology
-  url: http://srishtimanipalinstitute.in/people/arvind-venkatadri
-role: Faculty Member
+- name: Srishti Manipal Institute of Art, Design, and Technology, Manipal Academy of Higher Education
+  url: https://srishtimanipalinstitute.in/people/arvind-venkatadri
+role: Faculty Member, SMI, MAHE
 social:
 # - icon: discord
 #  icon_pack: fab
@@ -35,8 +35,8 @@ social:
 superuser: true
 
 user_groups:
-- Researchers
-- Visitors
+#- Researchers
+#- Visitors
 - Admin
 ---
 
