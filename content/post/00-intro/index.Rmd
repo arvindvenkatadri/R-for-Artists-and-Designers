@@ -44,7 +44,7 @@ Welcome!
 
 Let's start our journey to the Garden of Data Visualization, with this terrific presentation by the great ( and sadly late..) **Hans Rosling**.
 
-The best stats you've ever seen by Hans Rosling 
+The best stats you've ever seen by Hans Rosling: 
 
 `r blogdown::shortcode("youtube", "hVimVzgtD6w")`
 

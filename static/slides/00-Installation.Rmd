@@ -28,8 +28,10 @@ knitr::opts_chunk$set(
   fig.show = TRUE,
   hiline = TRUE
 )
-library(emo)
+#devtools::install_github("hadley/emo")
+#library(emo)
 library(emojifont)
+library(emoji)
 library(here)
 here::set_here()
 ```
@@ -131,9 +133,8 @@ layout: false
 All depends upon your imagination.
 
 ---
-layout: true
+
 # Get to know RStudio
----
 
 .center[Click on this icon in your Applications folder:
 ![this icon](https://d33wubrfki0l68.cloudfront.net/521a038ed009b97bf73eb0a653b1cb7e66645231/8e3fd/assets/img/rstudio-icon.png)
@@ -142,36 +143,109 @@ This will fire up your RStudio.]
 
 ---
 
-This is **RStudio**, a integrated development environment ( IDE ) for **R** ( And Python, JS, SQL, D3 and a few other computer languages. )
-<center><img src="https://bookdown.org/maddocent/exploratory_data_analysis/_book/images/rstudio_interface.png" height="350px"/></center>
-
----
-layout:true
 # Get to know RStudio
-When you first open it, the RStudio interface is divided into four “Panes”:
-<center><img src="https://bookdown.org/maddocent/exploratory_data_analysis/_book/images/rstudio_interface.png" height="350px"/></center>
+
+.pull-left[
+This is **RStudio**, a integrated development environment ( IDE ) for **R** ( And Python, JS, SQL, D3 and a few other computer languages. )
+]
+
+.pull-right[
+
+```{r,echo=FALSE}
+knitr::include_graphics("images/rstudio-panes-1.png")
+```
+]
 
 ---
+
+# Get to know RStudio
+
+.pull-left[
+ When you first open it, the RStudio interface is divided into four “Panes”:
+ ]
+
+.pull-right[
+
+```{r,echo=FALSE}
+knitr::include_graphics("images/rstudio-panes-2.png")
+
+```
+]
+
+---
+# Get to know RStudio
+.pull-left[
 
 1.Top LEFT: the **editor** where you edit scripts and documents
+  ]
+  
+.pull-right[
+
+```{r,echo=FALSE}
+knitr::include_graphics("images/rstudio-panes-2.png")
+
+```
+]
 
 ---
-
+# Get to know RStudio
+.pull-left[
 2.Top RIGHT: your **environment/history** panes. This is where you can see variables you’ve created and a full history of functions / commands you have run,
+]
+
+.pull-right[
+
+```{r,echo=FALSE}
+knitr::include_graphics("images/rstudio-panes-2.png")
+
+```
+]
 
 ---
-
+# Get to know RStudio
+.pull-left[
 3.Bottom RIGHT: The bottom right pane by default contains several panes including: **files/plots/packages/help/viewer**. We will explore these various panes together in class.
+]
+
+.pull-right[
+
+```{r,echo=FALSE}
+knitr::include_graphics("images/rstudio-panes-2.png")
+
+```
+]
 
 ---
-
+# Get to know RStudio
+.pull-left[
 4.Bottom LEFT: the **R console** is where the code is run. You can type code directly into the console OR you can send it to the console by running it from the editor. 
+]
+
+.pull-right[
+
+```{r,echo=FALSE}
+knitr::include_graphics("images/rstudio-panes-2.png")
+
+```
+]
 
 ---
-
+# Get to know RStudio
+.pull-left[
 The placement of these panes and their content can be customized using the RStudio preferences: 
-- (From the RStudio drop down choose: **RStudio -> Preferences -> Pane Layout**). 
-- You can also drag the panes using your mouse to move / resize them.)
+  - (From the RStudio drop down choose: **RStudio -> Preferences -> Pane Layout**). 
+  - You can also drag the panes using your mouse to move / resize them.)
+  
+]
+
+.pull-right[
+
+```{r,echo=FALSE}
+knitr::include_graphics("images/rstudio-panes-2.png")
+
+```
+]
+
 
 ---
 
@@ -180,7 +254,7 @@ layout: true
 
 ---
 .pull-left[
-Create a working folder:`r emo::ji("file_folder")`
+Create a working folder:`r emoji::emoji("file_folder")`
 **` My_Documents/Irritating_R_Stuff`**
 
 In RStudio: Click on: **Tools -> Global Options**
@@ -202,16 +276,16 @@ Apply and close
 
 - On the `Lab-00` page, click on the `Lab` button. 
 - On that new page, click `Download Rmd` at the top right. 
-- Save the `.Rmd` file in your Working Folder: **`/My_Documents/Irritating_R_Stuff/`**`r emo::ji("file_folder")`
+- Save the `.Rmd` file in your Working Folder: **`/My_Documents/Irritating_R_Stuff/`**`r emoji("file_folder")`
 
 In Your Files tab ( Pane 3 Bottom Right):
-- Click on the gear wheel `r emo::ji("gear")`
-- Click on `Go to Working Folder` `r emo::ji("file_folder")`
-- Your downloaded file **`.Rmd`** is now visible `r emo::ji("check")`
+- Click on the gear wheel `r emoji("gear")`
+- Click on `Go to Working Folder` `r emoji("file_folder")`
+- Your downloaded file **`.Rmd`** is now visible `r emoji("check")`
 - Click on the file
 - It should open in your `Source` Pane 1 at top left
 - **ALWAYS** create and save your files here!
-- Do **not** work with a file sitting in your `My_Downloads` folder `r emo::ji("stop_sign")` `r emo::ji("angry")`
+- Do **not** work with a file sitting in your `My_Downloads` folder `r emoji("stop_sign")` `r emoji("angry")`
 
 ---
 
