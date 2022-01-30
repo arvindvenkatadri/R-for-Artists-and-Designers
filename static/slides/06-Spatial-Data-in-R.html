@@ -39,13 +39,17 @@ class: center, middle, inverse, title-slide
 
 
 # Let's get started
-
+.pull-left[
 Look at a piece of Google Map.
 
 What different objects do you see?
 
 What information do you think went into making it?
+]
+.pull-right[
+&lt;img src="images/piece-of-map.png" width="900px" height="450px" style="display: block; margin: auto;" /&gt;
 
+]
 ---
 
 # Let's get started
@@ -69,7 +73,7 @@ The picture shows a familiar looking `data-frame` with the far-right column cont
 ---
 
 # What is a Feature?
-
+.pull-left[
 - A Thing, or an Object in the real world
 
 - Examples of Features: 
@@ -77,13 +81,21 @@ The picture shows a familiar looking `data-frame` with the far-right column cont
  - A Tree or a Lamp-post
  - A forest stand  
  - A city with building, streets, and parks  
- - A satellite image pixel   ( Raster Data? )
- - a complete image can be a feature too. (Raster Data? )
+ - A County or State
+ - A Country 
+ - An Island
 
+]
+
+.pull-right[
+
+&lt;img src="06-Spatial-Data-in-R_files/figure-html/unnamed-chunk-3-1.png" width="900px" height="450px" style="display: block; margin: auto;" /&gt;
+
+]
 ---
 
 # What is a Feature Geometry?
-
+.pull-left[
 Features have a **geometry** describing **where** on Earth the feature is located  
 - Features = Geometries ( Location Data )
  - The geometry of a tree can be the delineation of its crown ( Polygon )
@@ -93,6 +105,33 @@ Features have a **geometry** describing **where** on Earth the feature is locate
 -  A feature geometry is called **simple**  
  - when it consists of points connected by straight line pieces,  
  - and does not intersect itself.
+]
+.pull-right[
+
+![](images/Holmes-Tree.jpg)  
+.pull-left[
+.small[
+'Whose was it?'  
+'His who is gone.'  
+'Who shall have it?'  
+'He who will come.'  
+('What was the month?'  
+'The sixth from the first.')  
+'Where was the sun?'  
+'Over the oak.'  
+'Where was the shadow?'  
+'Under the elm.']
+]
+.pull-right[
+.small[
+'How was it stepped?'  
+'North by ten and by ten, east by five and by five, south by two and by two, west by one and by one, and so under.'  
+'What shall we give for it?'  
+'All that is ours.'  
+'Why should we give it?'  
+'For the sake of the trust.']
+]
+]
 
 ---
 
@@ -158,13 +197,11 @@ nc &lt;- st_read(system.file("shape/nc.shp", package="sf"))
 ```
 
 ```
-Reading layer `nc' from data source 
-  `/Library/Frameworks/R.framework/Versions/4.1/Resources/library/sf/shape/nc.shp' 
-  using driver `ESRI Shapefile'
-*Simple feature collection with 100 features and 14 fields
-*Geometry type: MULTIPOLYGON
-Dimension:     XY
-Bounding box:  xmin: -84.324 ymin: 33.882 xmax: -75.457 ymax: 36.59
+Reading layer `nc' from data source `C:\Users\Arvind\R_library\sf\shape\nc.shp' using driver `ESRI Shapefile'
+Simple feature collection with 100 features and 14 fields
+Geometry type: MULTIPOLYGON
+*Dimension:     XY
+*Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 Geodetic CRS:  NAD27
 ```
 
@@ -182,17 +219,13 @@ print(nc[9:15], n = 3)
 Simple feature collection with 100 features and 6 fields
 Geometry type: MULTIPOLYGON
 Dimension:     XY
-Bounding box:  xmin: -84.324 ymin: 33.882 xmax: -75.457 ymax: 36.59
+Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 Geodetic CRS:  NAD27
 First 3 features:
-  BIR74 SID74 NWBIR74 BIR79 SID79 NWBIR79
-1  1091     1      10  1364     0      19
-2   487     0      10   542     3      12
-3  3188     5     208  3616     6     260
-                        geometry
-1 MULTIPOLYGON (((-81.473 36....
-2 MULTIPOLYGON (((-81.24 36.3...
-3 MULTIPOLYGON (((-80.456 36....
+  BIR74 SID74 NWBIR74 BIR79 SID79 NWBIR79                       geometry
+1  1091     1      10  1364     0      19 MULTIPOLYGON (((-81.47276 3...
+2   487     0      10   542     3      12 MULTIPOLYGON (((-81.23989 3...
+3  3188     5     208  3616     6     260 MULTIPOLYGON (((-80.45634 3...
 ```
 
 ---
@@ -215,10 +248,9 @@ class: inverse, middle, center
 
 ```r
 # Let's get the India Boundary
-india &lt;- 
-  ne_states(country =  "india", 
-            geounit = "india", 
-            returnclass = "sf")
+data("World")
+india &lt;- World %&gt;% filter(iso_a3 == "IND")
+
 crs_india &lt;- st_crs(india)
 
 *points &lt;- # Create 5 random points
@@ -234,8 +266,8 @@ crs_india &lt;- st_crs(india)
 
 ```
 *'data.frame':	5 obs. of  2 variables:
-* $ lon: num  77.6 77.3 75.8 75.2 75
-* $ lat: num  22.5 20.2 22 18.7 21.2
+* $ lon: num  76.8 76.1 75.7 79.2 78.4
+* $ lat: num  26.8 24.3 24.8 17.9 18.7
 ```
 ]
 
@@ -247,10 +279,8 @@ crs_india &lt;- st_crs(india)
 
 ```r
 # Let's get the India Boundary
-india &lt;- 
-  ne_states(country =  "india", 
-            geounit = "india", 
-            returnclass = "sf")
+data("world")
+india &lt;- World %&gt;% filter(iso_a3 == "IND")
 crs_india &lt;- st_crs(india)
 
 points &lt;- # Create 5 random points
@@ -273,13 +303,13 @@ points_sf &lt;- st_as_sf(points,
 
 ```
 'data.frame':	5 obs. of  2 variables:
-* $ lon: num  81.5 75.6 74.9 78.5 79
-* $ lat: num  22.9 21.8 15.8 25.8 17.2
+* $ lon: num  75.4 75.6 77.6 78.6 78.4
+* $ lat: num  23.3 23.4 22.5 21.4 22.3
 ```
 
 ```
 Classes 'sf' and 'data.frame':	5 obs. of  1 variable:
-* $ geometry:sfc_POINT of length 5; first list element:  'XY' num  81.5 22.9
+* $ geometry:sfc_POINT of length 5; first list element:  'XY' num  75.4 23.3
 * - attr(*, "sf_column")= chr "geometry"
  - attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: 
   ..- attr(*, "names")= chr(0) 
@@ -295,10 +325,8 @@ Classes 'sf' and 'data.frame':	5 obs. of  1 variable:
 
 ```r
 # Let's get the India Boundary
-india &lt;- 
-  ne_states(country =  "india", 
-            geounit = "india", 
-            returnclass = "sf")
+data("world")
+india &lt;- World %&gt;% filter(iso_a3 == "IND")
 crs_india &lt;- st_crs(india)
 
 points &lt;- # Create 5 random points
@@ -561,7 +589,7 @@ Simple feature collection with 1 feature and 0 fields
 *Geometry type: MULTIPOLYGON
 Dimension:     XY
 Bounding box:  xmin: 65 ymin: 1 xmax: 99 ymax: 35
-CRS:           +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0
+Geodetic CRS:  WGS 84
                                x
 *1 MULTIPOLYGON (((77 13, 87 1...
 ```

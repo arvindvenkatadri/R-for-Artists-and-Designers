@@ -149,5 +149,8 @@ thead, tfoot, tr:nth-child(even) { background: #eee }
   display: none;
 }
 
-
+/* Added by Arvind Jan 30,2022
+*/
+.large { font-size: 130% }
+.small { font-size: 50% }
 

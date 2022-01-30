@@ -28,6 +28,12 @@ library(spData)
 library(spDataLarge)
 library(rnaturalearth)
 library(rnaturalearthdata)
+#
+library(patchwork)
+library(emoji)
+library(emojifont)
+library(anicon)
+
 ```
 
 
@@ -41,13 +47,19 @@ use_extra_styles(hover_code_line = TRUE,mute_unhighlighted_code = FALSE)
 
 
 # Let's get started
-
+.pull-left[
 Look at a piece of Google Map.
 
 What different objects do you see?
 
 What information do you think went into making it?
+]
+.pull-right[
+```{r, echo=FALSE, out.height="450px", out.width="900px"}
+knitr::include_graphics("images/piece-of-map.png")
+```
 
+]
 ---
 
 # Let's get started
@@ -73,7 +85,7 @@ The picture shows a familiar looking `data-frame` with the far-right column cont
 ---
 
 # What is a Feature?
-
+.pull-left[
 - A Thing, or an Object in the real world
 
 - Examples of Features: 
@@ -81,13 +93,32 @@ The picture shows a familiar looking `data-frame` with the far-right column cont
  - A Tree or a Lamp-post
  - A forest stand  
  - A city with building, streets, and parks  
- - A satellite image pixel   ( Raster Data? )
- - a complete image can be a feature too. (Raster Data? )
+ - A County or State
+ - A Country 
+ - An Island
 
+]
+
+.pull-right[
+
+```{r, echo=FALSE, out.height="450px", out.width="900px"}
+
+p1 <- ggplot() + 
+  geom_fontawesome("fa-tree", color='green', size = 24) + theme_void()
+p2 <- ggplot() + 
+  geom_fontawesome("fa-ambulance", color='red', size = 24) + theme_void()
+p3 <- ggplot() + 
+  geom_fontawesome("fa-institution", color='grey', size = 24) + theme_void()
+p4 <- ggplot() + 
+  geom_fontawesome("fa-mortar-board", color='black', size = 24) + theme_void()
+wrap_plots(list(p1,p2,p3,p4))
+```
+
+]
 ---
 
 # What is a Feature Geometry?
-
+.pull-left[
 Features have a **geometry** describing **where** on Earth the feature is located  
 - Features = Geometries ( Location Data )
  - The geometry of a tree can be the delineation of its crown ( Polygon )
@@ -97,6 +128,33 @@ Features have a **geometry** describing **where** on Earth the feature is locate
 -  A feature geometry is called **simple**  
  - when it consists of points connected by straight line pieces,  
  - and does not intersect itself.
+]
+.pull-right[
+
+![](images/Holmes-Tree.jpg)  
+.pull-left[
+.small[
+'Whose was it?'  
+'His who is gone.'  
+'Who shall have it?'  
+'He who will come.'  
+('What was the month?'  
+'The sixth from the first.')  
+'Where was the sun?'  
+'Over the oak.'  
+'Where was the shadow?'  
+'Under the elm.']
+]
+.pull-right[
+.small[
+'How was it stepped?'  
+'North by ten and by ten, east by five and by five, south by two and by two, west by one and by one, and so under.'  
+'What shall we give for it?'  
+'All that is ours.'  
+'Why should we give it?'  
+'For the sake of the trust.']
+]
+]
 
 ---
 
@@ -191,10 +249,9 @@ class: inverse, middle, center
 
 ```{r plot1a, eval=FALSE, message=FALSE, warning = FALSE}
 # Let's get the India Boundary
-india <- 
-  ne_states(country =  "india", 
-            geounit = "india", 
-            returnclass = "sf")
+data("World")
+india <- World %>% filter(iso_a3 == "IND")
+
 crs_india <- st_crs(india)
 
 points <- # Create 5 random points  #<<
@@ -220,10 +277,8 @@ str(points) #<<
 
 ```{r plot1b, eval=FALSE, message=FALSE, warning = FALSE}
 # Let's get the India Boundary
-india <- 
-  ne_states(country =  "india", 
-            geounit = "india", 
-            returnclass = "sf")
+data("world")
+india <- World %>% filter(iso_a3 == "IND")
 crs_india <- st_crs(india)
 
 points <- # Create 5 random points
@@ -256,10 +311,8 @@ str(points_sf) #<<
 
 ```{r plot1c, eval=FALSE, message=FALSE, warning = FALSE}
 # Let's get the India Boundary
-india <- 
-  ne_states(country =  "india", 
-            geounit = "india", 
-            returnclass = "sf")
+data("world")
+india <- World %>% filter(iso_a3 == "IND")
 crs_india <- st_crs(india)
 
 points <- # Create 5 random points
