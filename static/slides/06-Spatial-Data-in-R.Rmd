@@ -545,10 +545,10 @@ Image credit: [alice-in-wonderland.net](https://www.alice-in-wonderland.net/reso
 ---
 
 ## Map Projections: Through the Looking Glass
-
+A **Projection** is a *shadow* or **Image**...
 
 .pull-left[
-![](images/2book4.jpg){height=300px}
+![](images/2book4.jpg){height=150px}
 ]
 .pull-right[
 ![](images/2book18.jpg)
@@ -556,8 +556,59 @@ We see Maps Through The Looking Glass...
 No Two Map Projections are Alike!
 ]
 ---
+# Why do we Need Projections?
+.pull-left[
+![Earth and Orange](images/orange-peel.jpg)
+]
 
-## The Gall-Peters Projection
+.pull-right[
+- Cannot Flatten the Earth's Surface onto a 2D surface
+- Just as we cannot flatten the Orange Peel
+- So: we need Shadows and Images and Lights
+]
+
+---
+
+# How is a Projection Created?
+
+.pull-left[
+Regular Cylindrical Projection
+```{r, echo=FALSE, out.height="450px", out.width="350px"}
+knitr::include_graphics("images/reg_cyl_proj.png")
+```
+
+]
+
+.pull-right[
+Oblique Cylindrical Projection
+```{r, echo=FALSE, out.height="450px", out.width="450px"}
+knitr::include_graphics("images/oblq_cyl_proj.png")
+```
+]
+
+---
+
+# How is a Projection Created?
+
+.pull-left[
+Polar Azimuthal Projection
+```{r, echo=FALSE, out.height="450px", out.width="350px"}
+knitr::include_graphics("images/polar_azi_proj.png")
+```
+]
+
+.pull-right[
+Oblique Azimuthal Projection
+```{r, echo=FALSE, out.height="450px", out.width="450px"}
+knitr::include_graphics("images/oblq_azim_proj.png")
+```
+]
+
+---
+
+# Why does all this Matter??
+
+##The Gall-Peters Projection
 
 <iframe width="629" height="352" src="https://www.youtube.com/embed/vVX-PrBRtTY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
@@ -565,7 +616,9 @@ From "The West Wing" Season 2 Episode 16.
 
 ---
 
+
 # Projections with `coord_sf()`
+Let's create an *Azimuthal Equal Area* Projection in R. We can use the **Lambert Azimuthal Equal-Area** Projection:
 
 .pull-left[
 ```{r csf, warning=FALSE, fig.show='hide', message=FALSE}
@@ -573,6 +626,7 @@ ggplot() +
   geom_sf(data = world) + 
     geom_sf(data = india) + 
     geom_sf(data = points_sf, colour = "red", size = 4) +
+  
   coord_sf(crs = "+proj=laea +lat_0=23 +lon_0=77 +x_0=4321000 #<< +y_0=3210000 +ellps=GRS80 +units=m  +no_defs") #<<
 
 ```
@@ -590,7 +644,7 @@ class:center, middle
 
 # Why do we need Map Projections?
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/kIID5FDi2JQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="660" height="415" src="https://www.youtube.com/embed/kIID5FDi2JQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 
 ---
@@ -657,9 +711,12 @@ knitr::include_graphics(
 ---
 # `tmap` Layers are in *groups*
 
-Groups start with `tm_shape(data = ...)` 
 
 .pull-left[
+
+Groups start with `tm_shape(data = ...)`   
+Groups are "connected" with a $+$ sign as usual...
+
 ```{r tm1a, warning=FALSE, fig.show='hide', message=FALSE}
 # Group 1 #<<
 tm_shape(lnd) +

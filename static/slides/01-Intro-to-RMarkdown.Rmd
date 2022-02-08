@@ -1,6 +1,6 @@
 ---
 title: "Slides 01 "
-subtitle: "Down the Rabbit Hole <br> Introduction to RMarkdown"
+subtitle: "Drink Me !<br> Introduction to RMarkdown"
 author: "Arvind Venkatadri"
 institute: "Srishti Manipal Institute"
 date: "(`r Sys.Date()`)"
@@ -22,9 +22,9 @@ knitr::opts_chunk$set(fig.align = "center", warning = FALSE, message = FALSE, co
 library(tidyverse)
 library(knitr)
 library(palmerpenguins)
-# install.packages("devtools")
-# devtools::install_github("hadley/emo")
+#remotes::install_git("https://github.com/hadley/emo.git")
 library(emo)
+library(emoji)
 library(emojifont) 
 #https://cran.r-project.org/web/packages/emojifont/vignettes/emojifont.html
 
@@ -55,16 +55,16 @@ In an RMarkdown document:
 - What you type in **text** becomes your *story*
 
 - What you write as `code` makes your own **figures** 
-`r emo::ji("bar_chart")`
+`r emoji("bar_chart")`
     - code is written in ```fences``` with back-ticks
 
 - You can link in:
-    - pictures `r emo::ji("art")`
-    - YT videos `r emo::ji("film_strip")` from the web
+    - pictures `r emoji("art")`
+    - YT videos `r emoji("movie_camera")` from the web
 
 - Data / Code / Figures / Pictures / Document  **together** 
 
-- In a document that "computes"
+- In a document that **"computes"**
 
 ---
 
@@ -127,9 +127,9 @@ knitr::include_graphics("./images/YAML.png")
      
 - "$mathstuff$": becomes $math stuff$ (Nooo...please! No!)
 
-  - "$sin^2(x)+cos^2(x) = 1$": $sin^2(x)+cos^2(x) = 1$ (I think)
+  - "$sin^2(x)+cos^2(x) = 1$":   $sin^2(x)+cos^2(x) = 1$ (I think)
   
-- "emo::ji("laugh")" becomes `r emo::ji("laugh")`
+- "emoji("laughing")" becomes `r emoji("laughing")`
 
 ---
 
@@ -149,7 +149,7 @@ Hitting the knit button `r emo::ji("knit")` does one of many things:
 .pull-left[
 Changes your plain text to:
 
-- html `r emo::ji("web")`, or PDF `r emo::ji("file")` or Word `r emo::ji("document")`
+- html `r emoji("web")`, or PDF `r emoji("file")` or Word `r emoji("document")`
 
 - HTML webpage, or blog, or flexdashboards
 

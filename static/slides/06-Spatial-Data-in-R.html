@@ -197,11 +197,12 @@ nc &lt;- st_read(system.file("shape/nc.shp", package="sf"))
 ```
 
 ```
-Reading layer `nc' from data source `C:\Users\Arvind\R_library\sf\shape\nc.shp' using driver `ESRI Shapefile'
+Reading layer `nc' from data source 
+  `C:\Users\Arvind\R_library\sf\shape\nc.shp' using driver `ESRI Shapefile'
 Simple feature collection with 100 features and 14 fields
-Geometry type: MULTIPOLYGON
+*Geometry type: MULTIPOLYGON
 *Dimension:     XY
-*Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 Geodetic CRS:  NAD27
 ```
 
@@ -222,10 +223,14 @@ Dimension:     XY
 Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 Geodetic CRS:  NAD27
 First 3 features:
-  BIR74 SID74 NWBIR74 BIR79 SID79 NWBIR79                       geometry
-1  1091     1      10  1364     0      19 MULTIPOLYGON (((-81.47276 3...
-2   487     0      10   542     3      12 MULTIPOLYGON (((-81.23989 3...
-3  3188     5     208  3616     6     260 MULTIPOLYGON (((-80.45634 3...
+  BIR74 SID74 NWBIR74 BIR79 SID79 NWBIR79
+1  1091     1      10  1364     0      19
+2   487     0      10   542     3      12
+3  3188     5     208  3616     6     260
+                        geometry
+1 MULTIPOLYGON (((-81.47276 3...
+2 MULTIPOLYGON (((-81.23989 3...
+3 MULTIPOLYGON (((-80.45634 3...
 ```
 
 ---
@@ -266,8 +271,8 @@ crs_india &lt;- st_crs(india)
 
 ```
 *'data.frame':	5 obs. of  2 variables:
-* $ lon: num  76.8 76.1 75.7 79.2 78.4
-* $ lat: num  26.8 24.3 24.8 17.9 18.7
+* $ lon: num  76.5 76.7 75.2 80.1 81.4
+* $ lat: num  23.8 29.6 18.8 21.3 22.7
 ```
 ]
 
@@ -303,13 +308,13 @@ points_sf &lt;- st_as_sf(points,
 
 ```
 'data.frame':	5 obs. of  2 variables:
-* $ lon: num  75.4 75.6 77.6 78.6 78.4
-* $ lat: num  23.3 23.4 22.5 21.4 22.3
+* $ lon: num  76.5 78.5 74.4 72.9 77.5
+* $ lat: num  19.1 28.6 20.9 25.5 26
 ```
 
 ```
 Classes 'sf' and 'data.frame':	5 obs. of  1 variable:
-* $ geometry:sfc_POINT of length 5; first list element:  'XY' num  75.4 23.3
+* $ geometry:sfc_POINT of length 5; first list element:  'XY' num  76.5 19.1
 * - attr(*, "sf_column")= chr "geometry"
  - attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: 
   ..- attr(*, "names")= chr(0) 
@@ -609,10 +614,10 @@ Image credit: [alice-in-wonderland.net](https://www.alice-in-wonderland.net/reso
 ---
 
 ## Map Projections: Through the Looking Glass
-
+A **Projection** is a *shadow* or **Image**...
 
 .pull-left[
-![](images/2book4.jpg){height=300px}
+![](images/2book4.jpg){height=150px}
 ]
 .pull-right[
 ![](images/2book18.jpg)
@@ -620,8 +625,51 @@ We see Maps Through The Looking Glass...
 No Two Map Projections are Alike!
 ]
 ---
+# Why do we Need Projections?
+.pull-left[
+![Earth and Orange](images/orange-peel.jpg)
+]
 
-## The Gall-Peters Projection
+.pull-right[
+- Cannot Flatten the Earth's Surface onto a 2D surface
+- Just as we cannot flatten the Orange Peel
+- So: we need Shadows and Images and Lights
+]
+
+---
+
+# How is a Projection Created?
+
+.pull-left[
+Regular Cylindrical Projection
+&lt;img src="images/reg_cyl_proj.png" width="350px" height="450px" style="display: block; margin: auto;" /&gt;
+
+]
+
+.pull-right[
+Oblique Cylindrical Projection
+&lt;img src="images/oblq_cyl_proj.png" width="450px" height="450px" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+# How is a Projection Created?
+
+.pull-left[
+Polar Azimuthal Projection
+&lt;img src="images/polar_azi_proj.png" width="350px" height="450px" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+Oblique Azimuthal Projection
+&lt;img src="images/oblq_azim_proj.png" width="450px" height="450px" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+# Why does all this Matter??
+
+##The Gall-Peters Projection
 
 &lt;iframe width="629" height="352" src="https://www.youtube.com/embed/vVX-PrBRtTY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen&gt;&lt;/iframe&gt;
 
@@ -629,7 +677,9 @@ From "The West Wing" Season 2 Episode 16.
 
 ---
 
+
 # Projections with `coord_sf()`
+Let's create an *Azimuthal Equal Area* Projection in R. We can use the **Lambert Azimuthal Equal-Area** Projection:
 
 .pull-left[
 
@@ -638,6 +688,7 @@ ggplot() +
   geom_sf(data = world) + 
     geom_sf(data = india) + 
     geom_sf(data = points_sf, colour = "red", size = 4) +
+  
 * coord_sf(crs = "+proj=laea +lat_0=23 +lon_0=77 +x_0=4321000 #&lt;&lt; +y_0=3210000 +ellps=GRS80 +units=m  +no_defs")
 ```
 ]
@@ -650,7 +701,7 @@ class:center, middle
 
 # Why do we need Map Projections?
 
-&lt;iframe width="560" height="315" src="https://www.youtube.com/embed/kIID5FDi2JQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen&gt;&lt;/iframe&gt;
+&lt;iframe width="660" height="415" src="https://www.youtube.com/embed/kIID5FDi2JQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen&gt;&lt;/iframe&gt;
 
 
 ---
@@ -746,9 +797,12 @@ Classes 'sf' and 'data.frame':	540 obs. of  6 variables:
 ---
 # `tmap` Layers are in *groups*
 
-Groups start with `tm_shape(data = ...)` 
 
 .pull-left[
+
+Groups start with `tm_shape(data = ...)`   
+Groups are "connected" with a `\(+\)` sign as usual...
+
 
 ```r
 *# Group 1
