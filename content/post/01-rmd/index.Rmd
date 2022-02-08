@@ -46,13 +46,15 @@ Something that can:
 
 ## References:
 
-1. https://www.markdowntutorial.com
+1. https://rmarkdown.rstudio.com/index.html
 
-2. https://andrewbtran.github.io/NICAR/2018/workflow/docs/02-rmarkdown.html
+2. https://www.markdowntutorial.com
 
-3. https://yihui.name/tinytex/ *(install!)*
+3. https://andrewbtran.github.io/NICAR/2018/workflow/docs/02-rmarkdown.html
 
-4. https://github.com/rstudio/cheatsheets/blob/master/rmarkdown-2.0.pdf
+4. https://yihui.name/tinytex/ *(install!)*
+
+5. https://github.com/rstudio/cheatsheets/blob/master/rmarkdown-2.0.pdf
 
 5. https://rmarkdown.rstudio.com/html_document_format.html
 
@@ -68,4 +70,5 @@ Something that can:
 ## Optional
 
 3. Go to reference 3 and install **tinytex**. Try to `knit` your document into PDF also, using `tinytex`.
+
 
