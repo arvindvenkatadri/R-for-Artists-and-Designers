@@ -338,14 +338,22 @@ ggplot(penguins) +
 
 1. Use the PRIMM process to add comments, questions, inferences to this document, wherever you see YOUR TURN.
 
-2. Create a fresh RMarkdown and similarly analyse one ( or both! ) of the following data sets
+2. Create a fresh RMarkdown and similarly analyse two datasets of the following data sets
+
+- Any dataset in your R installation. Type `data()` in your console to see what is available.
 
 - `diamonds` . This dataset is part of the tidyverse package so just type `diamonds` in your code and there it is. 
 
-- `gapminder` !! Yes!!
+- `gapminder` !! Yes!!You will need to install the `gapminder` package to access this dataset
 
-You will need to install the `gapminder` package to access this dataset.
+- `mosaicData` package datasets. Install `mosaicData`
 
-Ask me for help any time. 
+- `data.world`: Find Datasets of your choice:
+<https://docs.data.world/en/64499-64516-Quickstarts-and-tutorials.html>
+
+- `kaggle`: <https://www.kaggle.com/datasets>
+
+
+Ask me for help any time!
 
 
