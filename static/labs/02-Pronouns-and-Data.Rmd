@@ -56,7 +56,7 @@ To reiterate: Packages and datasets are **not** the same thing !! Packages are (
 # Packages needed
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE,warning = TRUE)
 library(tidyverse)
 library(palmerpenguins)
 library(RColorBrewer)
@@ -220,10 +220,6 @@ ggplot(penguins) + geom_point(aes(x = flipper_length_mm,
 
 
 ```{r Quant vs Quant-2}
-ggplot(penguins) + 
-  geom_point(aes(y = body_mass_g , x = flipper_length_mm)) 
-# Why do we get a warning?
-
 
 ggplot(penguins) + 
   geom_point(aes(x = flipper_length_mm, y = bill_length_mm))
@@ -238,10 +234,10 @@ ggplot(penguins) +
 
 ## Single Qualitative/Categorical Variable
 
-1) Questions: Which? What Kind? How?
+1) Questions: Which? What Kind? How? How many of each Kind?
 
 2) Measures: No of `levels` / Counts for each `level`
-  - `counts` / ` tally` (very similar syntax to ggformula)
+  - `counts` / ` tally`
   
 3) Charts: Bar Chart / Pie Chart / Tree Map 
   - `geom_bar` / `geom_bar + coord_polar()` / Find out!!
