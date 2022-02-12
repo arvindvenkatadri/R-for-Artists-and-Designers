@@ -1,6 +1,6 @@
 ---
 title: "Lab 05: Colors with Penguins"
-subtitle: "Palettes from Famous Paintings, GoT, and Wes Anderson"
+subtitle: "Palettes from Famous Paintings, GoT, Harry Potter, and Wes Anderson"
 author: "Arvind Venkatadri"
 output:
   html_document:
@@ -12,6 +12,7 @@ output:
     code_folding: hide
     code_download: TRUE
 ---
+
 ```{r setup, include = FALSE, cache = FALSE}
 knitr::opts_chunk$set(error = TRUE, comment = NA, warning = FALSE, errors = FALSE, message = FALSE, tidy = FALSE, cache = FALSE, fig.path= "03-figs/")
 
@@ -22,7 +23,7 @@ library(palmerpenguins) # source of our data
 #
 library(RColorBrewer) # Colour Palettes
 library(wesanderson) # Colour Palettes
-library(gameofthrones) # You all know this!
+#library(gameofthrones) # You all know this!
 #
 library(paletteer) # Colour Palettes
 library(colorspace) # Colour Palettes
@@ -69,7 +70,9 @@ We will use the `penguins` dataset built into the `palmerpenguins` package. Your
 Here is a glimpse of the data:
 
 ```{r}
+
 glimpse(penguins)
+
 ```
 
 Note that the unit of observation here is one-row-per-penguin.
@@ -87,30 +90,35 @@ Fill and colour scales in ggplot2 can use the same palettes. Some shapes such as
 
 
 
-```{r echo = FALSE}
+```{r}
+
 ## A look at all 25 symbols
-df <- data.frame(x = 1:5, 
-                  y = rep(rev(seq(0, 24, by = 5)), each = 5), 
-                  z = 1:25)
-s <- ggplot(df, aes(x = x, y = y)) + 
-  scale_shape_identity() + 
-  geom_text(aes(label = z, y = y - 1)) + 
+df <- data.frame(x = 1:5,
+                 y = rep(rev(seq(0, 24, by = 5)), each = 5),
+                 z = 1:25)
+s <- ggplot(df, aes(x = x, y = y)) +
+  geom_text(aes(label = z, y = y - 1)) +
   theme_void()
-s + geom_point(aes(shape = z), size = 4) 
+s + geom_point(aes(shape = z), size = 4) + scale_shape_identity()
+
 ```
 
 
 All symbols have a foreground colour, so if we add `color = "navy"`, they all are affected.
 
 ```{r}
-s + geom_point(aes(shape = z), size = 4, colour = "navy") 
+
+s + geom_point(aes(shape = z), size = 4, colour = "blue")  + scale_shape_identity()
+
 ```
 
 
 While all symbols have a foreground colour, symbols 21-25 also take a background colour (fill). So if we add `fill = "orchid"`, only the last row of symbols are affected.
 
 ```{r}
-s + geom_point(aes(shape = z), size = 4, colour = "navy", fill = "orchid") 
+
+s + geom_point(aes(shape = z), size = 4, colour = "blue", fill = "orchid")  + scale_shape_identity()
+
 ```
 
 
@@ -149,46 +157,178 @@ These palettes can be:
 We will create simple base plots in `ggplot` and see how we may alter the colour scales using palettes.
 
 
-```{r penguin-names }
+```{r penguin_names }
 
 names(penguins)
 
 ```
 
 
-```{r Pengiuns default simple plot}
+```{r Penguins_default_simple_plots}
+
 p1 <- penguins %>% 
   drop_na() %>% 
   # pipe data into ggplot
   # after removing data rows that have missing ( NA ) values
   ggplot(aes(y = body_mass_g, x = flipper_length_mm, 
-           color = species, # COLOUR=DISCRETE VARIABLE
-           shape = species)) +
+           color = species # COLOUR = DISCRETE/QUAL VARIABLE
+           )) +
            geom_point() + 
            labs(title = "Default Colours in ggplot", 
-                subtitle = "P1: DISCRETE Colour Palette")
+                subtitle = "P1: DISCRETE/QUAL Colour Palette")
 
 
 p2 <- 
 penguins %>% 
   drop_na() %>% 
-  # pipe the data into ggformula, 
+  # pipe the data into ggplot, 
   # after removing data rows that have missing ( NA ) values
   ggplot(aes(y = body_mass_g, x = flipper_length_mm, 
-           color = bill_length_mm, # COLOUR=DISCRETE VARIABLE
-           shape = species)) +
+           color = bill_length_mm # COLOUR = CONT/QUANT VARIABLE
+           )) +
            geom_point() + 
            labs(title = "Default Colours in ggplot", 
-                subtitle = "P2: CONTINUOUS Colour Palette")
+                subtitle = "P2: CONTINUOUS/QUANT Colour Palette")
 
 p1
 p2
+
 ```
 
 Note that these use the **default colours** in R. 
 
+# Colours for **Discrete** (**QUAL**) Variables
 
-# Colours for **Continuous** Variables
+The commands below are used to fill colours based on Qualitative Variables:
+
+1) `scale_colour/fill_discrete`
+2) `scale_colour/fill_brewer` # RColorBrewer
+3) ....
+
+
+Now to use these!
+
+# Plotting Colours based on Discrete Variables
+
+## Discrete n-Colour palettes from `RColorBrewer`
+
+```{r brewer_palettes}
+
+RColorBrewer::brewer.pal.info
+RColorBrewer::display.brewer.all()
+
+```
+
+
+```{r Applying_RColorBrewer_Discrete_palettes}
+
+p1 +
+  # default palette = "Blues"
+  scale_colour_brewer() +
+  labs(title = "Brewer Palette = Blues")
+
+p1 +
+  scale_color_brewer(palette = "Spectral") +
+  labs(title = "Brewer Palette = Spectral") 
+
+
+```
+
+
+```{r YOUR_TURN_1}
+
+```
+
+
+## Discrete Colour scales using `wesanderson` palettes
+
+```{r wesander_list}
+
+wesanderson::wes_palettes %>% names()
+
+```
+
+
+```{r wesanderson_discrete}
+
+p1 +
+  scale_colour_discrete(type = wes_palette(name = "GrandBudapest1",
+                                           n = 3)) +
+  labs(title = "Wes Anderson Palette: GrandBudapest")
+
+
+# We can also specify colour codes ourselves with scale_x_discrete.
+# Use argument "values" instead of "type"
+manual_colours <- c("#afc4b8", "#f1a4b2", "#ffb1e1") 
+manual_colours
+
+p1 +
+  scale_colour_manual(values =  manual_colours) +
+  labs(title = "Manual Colours")
+
+```
+
+
+
+```{r YOUR_TURN_2}
+
+```
+
+## Discrete n-Colour palettes from `RColorBrewer`
+
+```{r Brewer-discrete}
+
+# scale_x_brewer() for DISCRETE data
+p1 +
+  scale_colour_brewer(palette = "Spectral") +
+  
+  labs(title = "RColorBrewer Palette = Spectral")
+
+```
+
+
+
+```{r YOUR_TURN_3}
+
+```
+
+
+## Discrete Colour scales using `paletteer` palettes
+
+```{r paletteer discrete}
+
+palettes_d_names
+palettes_dynamic_names
+paletteer_d("dutchmasters::pearl_earring")
+paletteer_dynamic("ggthemes_ptol::qualitative", n = 3)
+
+p1 +
+  scale_colour_paletteer_d("ggthemes_ptol::qualitative", 
+                           dynamic = TRUE) +
+  
+  labs(title = "ggThemes Palette: Qualitative", 
+          subtitle = "")
+
+
+# I like Vermeer's "Girl with the Pearl Earring"!
+p1 +
+  scale_colour_paletteer_d("dutchmasters::pearl_earring",
+                           dynamic = FALSE) +
+  
+  labs(title = "Palettes from `paletteer`", 
+          subtitle = " Palette from Vermeer: Girl with Pearl Earring")
+  
+
+```
+
+
+```{r YOUR_TURN_4}
+
+```
+
+
+
+# Colours for **Continuous** (**QUANT**) Variables
 
 The commands below are used to fill colours based on Quantitative Variables:
 
@@ -198,24 +338,15 @@ The commands below are used to fill colours based on Quantitative Variables:
 4) `scale_colour/fill_distiller` (Palettes from RColorBrewer)
 
 
-# Colours for **Discrete** Variables
-
-The commands below are used to fill colours based on Qualitative Variables:
-
-1) `scale_colour/fill_discrete`
-2) `scale_colour/fill_brewer` # RColorBrewer
-3)
-4) 
-
-Now to use these:
-
 # Plotting Colours based on Continuous Variables
+
 
 ## Continuous Two Colour Gradients
 
 Creates a pallete containing *continuous* shades between two colours:
 
-```{r Continuous Two Colour Gradients}
+```{r Continuous_Two_Colour_Gradients}
+
 p2 +
     scale_color_gradient(
       low = "yellow", # Play with this in the chunk below
@@ -226,7 +357,7 @@ p2 +
 
 ```
 
-```{r YOUR TURN-1}
+```{r YOUR_TURN_5}
 
 ```
 
@@ -235,7 +366,7 @@ p2 +
 
 Sometimes we want a palette this way: a *midpoint* colour, and colours for the two extremes of a continuous variable:
 
-```{r Continuous Three Colour Gradients}
+```{r Continuous_Three_Colour_Gradients}
 
 colour_midpoint <- mean(penguins$bill_length_mm, 
                          na.rm = TRUE) # remove missing values
@@ -257,14 +388,15 @@ p2 +
 
 ```
 
-```{r YOUR TURN-2}
+```{r YOUR_TURN_6}
 
 ```
 
 ## Continuous n-Colour Gradients - grDevices package
 
 
-```{r Continuous n-Colour Gradients - grDevices}
+```{r Continuous_n_Colour_Gradients_grDevices}
+
 # grDevices Palettes
 p2 +
   scale_colour_gradientn(
@@ -275,10 +407,11 @@ p2 +
   labs(title = "N-colour continuous gradients", 
           subtitle = "Palettes from grDevices",
           caption = "Palette: terrain.colors")
+
 ```
 
 
-```{r YOUR TURN-3}
+```{r YOUR_TURN_7}
 
 ```
 
@@ -286,11 +419,14 @@ p2 +
 ## Continuous n-Colour Gradients - `wesanderson` Palettes
 
 ```{r wesanderson}
+
+wes_palettes
 names(wes_palettes)
 
 ```
 
-```{r Using-wesanderson}
+```{r Using_wesanderson}
+
 p2 +
     scale_colour_gradientn(
       colors = wes_palette(name = "GrandBudapest1", 
@@ -312,7 +448,7 @@ p2 +
 
 ```
 
-```{r YOUR-TURN-4}
+```{r YOUR_TURN_8}
 
 ```
 
@@ -326,7 +462,14 @@ Recall Palette **types**
 - `div` continuous data mapped to colour, that has pos and neg extremes from a middle value
 
 
-```{r Using-Color-Brewer-palettes}
+```{r brewer_palette_names}
+
+brewer.pal.info
+
+```
+
+
+```{r Using_Color_Brewer_palettes}
 
 # scale_color_distiller() and scale_fill_distiller() 
 # are used to apply the ColorBrewer colour scales 
@@ -340,141 +483,45 @@ p2 +
 
 ```
 
-```{r YOUR TURN-5}
+```{r YOUR_TURN_9}
 
 ```
 
 ## Continuous Colour scales using `paletteer` palettes
 
-This palette seems to have everything!
+This palette seems to have everything accessible in a simple way!
+NOTE: In order to access some palettes in `paletteer`, you may be asked to install other packages. E.g. `harrypotter` or `scico`. These need not be brought into your session using `library()` but are accessed directly by `paletteer` which is very convenient!!
 
-```{r paletteer-palettes-list}
+```{r paletteer_continupus_palettes_list}
+
 # What continuous palettes are there in paletteer?
 paletteer::palettes_c_names
+
 ```
 
 
-OK, one of the Games of Thrones Palettes! 
+OK, one of the Games of Thrones Palettes, and Harry Potter! 
 
-```{r paletteer-continuous}
+```{r paletteer_continuous_palettes}
+
 p2 +
   scale_colour_paletteer_c("gameofthrones::jon_snow") +
+  labs(title = "Using Paletteer",
+       subtitle = "Continuous Palette-Game of Thrones: Jon Snow",
+       caption = "Oh you awful Srishti people...") +
   
-    labs(
-    subtitle = "Continuous Palette - Game of Thrones",
-    caption = "Oh you awful Srishti people...") +
-  
-# Viridis Plasma Palette. 
-p2 +
-  scale_colour_paletteer_c("viridis::plasma") +
-  
-  labs(subtitle = "Continuous Palette - Viridis:Plasma")
+  # Harry Potter Gryffindor Palette.
+  # Will ask for `harrypotter` package to be installed. Say yes!
+  p2 +
+  scale_colour_paletteer_c("harrypotter::gryffindor") +
+  labs(title = "Using Paletteer",
+       subtitle = "Continuous Palette-Harry Potter:Gryffindor")
 
 ```
 
-```{r YOUR TURN-6}
+```{r YOUR_TURN_10}
 
 ```
  
-
-# Plotting Colours based on Discrete Variables
-
-## Discrete n-Colour palettes from `RColorBrewer`
-
-```{r brewer-palettes}
-RColorBrewer::brewer.pal.info
-RColorBrewer::display.brewer.all()
-
-```
-
-
-```{r Applying RColorBrewer palettes to Base Plot}
-p1 +
-  # default palette = "Blues"
-  scale_colour_brewer() +
-  labs(title = "Brewer Palette = Blues")
-
-p1 +
-  scale_color_brewer(palette = "Spectral") +
-  labs(title = "Brewer Palette = Spectral") 
-
-
-```
-
-
-```{r YOUR-TURN-7}
-
-```
-
-
-## Discrete Colour scales using `wesanderson` palettes
-
-```{r wesander-list}
-wesanderson::wes_palettes %>% names()
-
-```
-
-
-```{r wesanderson discrete}
-p1 +
-  scale_colour_discrete(type = wes_palette(name = "GrandBudapest1", 
-                                           n = 3)) 
-  
-p1 +
-  scale_colour_manual(values = wesanderson::wes_palette(name = "Zissou1", n = 3))
-```
-
-
-
-```{r YOUR-TURN-8}
-
-```
-
-## Discrete n-Colour palettes from `RColorBrewer`
-
-```{r Brewer-discrete}
-# scale_x_brewer() for DISCRETE data
-p1 +
-  scale_colour_brewer(palette = "Spectral") +
-  
-  labs(title = "RColorBrewer Palette")
-```
-
-
-
-```{r YOUR-TURN-9}
-
-```
-
-## Discrete Colour scales using `paletteer` palettes
-
-```{r paletteer discrete}
-palettes_d_names
-palettes_dynamic_names
-paletteer_d("dutchmasters::pearl_earring")
-paletteer_dynamic("ggthemes_ptol::qualitative", n = 3)
-
-p1 +
-  scale_colour_paletteer_d("ggthemes_ptol::qualitative", 
-                           dynamic = TRUE) +
-  
-  labs(title = "Palettes from `paletteer`", 
-          subtitle = "Dynamic Palette")
-
-
-# I like Vermeer's "Girl with the Pearl Earring"!
-p1 +
-  scale_colour_paletteer_d("dutchmasters::pearl_earring",
-                           dynamic = FALSE) +
-  
-  labs(title = "Palettes from `paletteer`", 
-          subtitle = " Palette from Vermeer: Girl with Pearl Earring")
-  
-
-```
-
-```{r YOUR-TURN-10}
-
-```
 
 
