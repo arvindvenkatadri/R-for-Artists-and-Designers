@@ -36,3 +36,4 @@ links:
   url: /slides/04-Metaphors-with-Graphics.html
 ---
 
+![](featured.jpg)

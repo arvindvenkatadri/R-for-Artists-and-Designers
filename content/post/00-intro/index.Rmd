@@ -36,6 +36,8 @@ links:
   url: /slides/00-Installation.html
 ---
 
+![](featured.jpg)
+
 ```{r setup, include=FALSE}
 library(blogdown)
 ```

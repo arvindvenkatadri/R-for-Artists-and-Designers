@@ -30,5 +30,7 @@ links:
   url: 12-slides_xaringan.html
 ---
 
-Let's make a wesbite in RStudio to show off our data viz portfolio, and to share with friends, parents, prospective employers...
+![](featured.jpg)
+
+Let's make a website in RStudio to show off our data viz portfolio, and to share with friends, parents, prospective employers...
 

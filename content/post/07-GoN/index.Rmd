@@ -25,6 +25,9 @@ links:
 #   name: slides
 #   url: /slides/07-Grammar-of-Networks.html
 ---
+
+![](featured.jpg)
+
 Hey, whom did Jon Snow marry?
 
 

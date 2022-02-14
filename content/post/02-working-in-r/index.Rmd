@@ -35,6 +35,8 @@ links:
   url: /slides/02-working-in-R.html
 ---
 
+![](featured.jpg)
+
 ## Readings
 
 

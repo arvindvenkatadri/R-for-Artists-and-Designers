@@ -34,4 +34,7 @@ links:
 #   name: slides
 #   url: /slides/03-slides.html
 ---
+
+![](featured.jpg)
+
 Wes Anderson! Tim Burton! The Economist... and many others!!

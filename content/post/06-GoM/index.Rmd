@@ -30,6 +30,8 @@ links:
   url: /slides/06-Spatial-Data-in-R.html
 ---
 
+![](featured.jpg)
+
 # References
 
 1. [OSM Basic Maps Vignette](https://docs.ropensci.org/osmplotr/articles/basic-maps.html)

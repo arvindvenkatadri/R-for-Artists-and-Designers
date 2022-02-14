@@ -32,6 +32,8 @@ links:
   url: /slides/01-Intro-to-RMarkdown.html
 ---
 
+![](featured.jpg)
+
 We will get acquainted with the RMarkdown format, which allows us to mix text narrative, code, code-developed figures and items from the web in a seamless document.
 
 Then we can try to create something in the lines of what Hans Rosling did. 

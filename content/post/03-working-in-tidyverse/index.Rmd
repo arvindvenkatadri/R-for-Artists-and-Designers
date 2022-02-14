@@ -34,6 +34,7 @@ links:
   name: Intro to dplyr
   url: /labs/03a-Messing-with-Data-using-tidyverse.html
 ---
+![](featured.jpg)
 
 ## Readings
 

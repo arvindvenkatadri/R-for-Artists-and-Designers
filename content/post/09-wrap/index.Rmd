@@ -30,5 +30,6 @@ links:
   url: /slides/12-slides.html
 ---
 
+![](featured.jpg)
 
 

@@ -25,6 +25,10 @@ links:
   name: slides
   url: /slides/08-Grammar-of-Diagrams.html
 ---
+
+![](featured.jpg)
+
+
 # References
 
 1. [The nomnoml package in R](https://nomnoml.com)
