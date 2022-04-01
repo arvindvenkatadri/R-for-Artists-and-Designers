@@ -217,9 +217,9 @@ first foray into networks.
 
 ## Step1. Read the data
 
-```{r 1.Read-greys-anatomy-data}
-grey_nodes <- read_csv("./Data/greys-nodes.csv")
-grey_edges <- read_csv("./Data/greys-edges.csv")
+```{r 1.Read-greys-anatomy-data, message=FALSE}
+grey_nodes <- read_csv("data/grey_nodes.csv")
+grey_edges <- read_csv("data/grey_edges.csv")
 
 # grey_nodes <- read_delim("./Data/greys-nodes.csv", delim = ";")
 # ger_edges <- read_delim("~/Downloads/grey-edges.csv", 
@@ -228,7 +228,7 @@ grey_nodes
 grey_edges
 ```
 
-```{r, echo=FALSE}
+```{r, for_teaching_only, echo=FALSE}
 grey_nodes %>% 
   download_this(
     output_name = "greys-nodes",
