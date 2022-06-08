@@ -28,14 +28,14 @@ All RMarkdown files combine code, text, web-images, and figures developed using 
 
 # Goals
 
-At the end of this Lab session, we should:
-- know the types and structures of `spatial data` and be able to work with them
-- understand the basics of modern spatial packages in R
-- be able to specify and download spatial data from the web, using R from sources such as `naturalearth` and `Open Streep Map`
-- plot *static* and *interactive* maps using `ggplot`, `tmap` and `leaflet` packages
-- add symbols and markers for places and regions of our own interest in these maps.
-- plot maps on a globe using the `threejs` package
-- see directions for further work (e.g. maps + networks together) using the `sfnetwork` package
+At the end of this Lab session, we should:  
+- know the types and structures of `spatial data` and be able to work with them  
+- understand the basics of modern spatial packages in R  
+- be able to specify and download spatial data from the web, using R from sources such as `naturalearth` and `Open Streep Map`  
+- plot *static* and *interactive* maps using `ggplot`, `tmap` and `leaflet` packages  
+- add symbols and markers for places and regions of our own interest in these maps.  
+- plot maps on a globe using the `threejs` package  
+
 
 
 
@@ -85,6 +85,7 @@ library(rnaturalearthhires)
 library(tidyverse) # Maps using ggplot + geom_sf
 library(tmap) # Thematic Maps, static and interactive
 library(osmplotr) # "Bespoke" maps in R
+library(leaflet) # interactive Maps
 library(threejs) # Globe maps in R. Part of the htmlwidgets family of packages
 
 # For Spatial Data Frame Processing
@@ -196,7 +197,7 @@ We will get our map data from OSM and then save it avoid repeated downloads. So,
 
 **Do not run these commands too many times**. **Re-run this  ONLY if you have changed your BOUNDING BOX.**
 
-```{r}
+```{r, eval=FALSE}
 # Run these commands in your Console
 
 # Get all buildings within my bbox
@@ -226,7 +227,11 @@ dat_trees <- extract_osm_objects (key = 'natural',
 
 We will store the downloaded data as `.gpkg` files on our local hard drives to use when we run this file again later. 
 
-```{r}
+We will name our stored files as `buildings`, `parks`, `roads`, and `trees`, each with the `.gpkg` file extension, e.g. `trees.gpkg`. 
+
+Check your local project folder for these files after executing these commands. 
+
+```{r,eval=FALSE}
 st_write(dat_buildings, 
          dsn = "buildings.gpkg", 
          append = FALSE, 
@@ -240,7 +245,8 @@ st_write(dat_roads, dsn = "roads.gpkg", append = FALSE, quiet = FALSE)
 
 ```
 
-**Always work from here to avoid repeated downloads from OSM.Start from the top ONLY if you intend to map new locations and need to modify your Bounding Box.**
+**Always work from here to avoid repeated downloads from OSM.**
+**Start from the top ONLY if you intend to map new locations and need to modify your Bounding Box.**
 
 ### Reading Back the saved Data
 
@@ -445,14 +451,15 @@ india %>% st_drop_geometry() %>% head()
 india_neighbours%>% st_drop_geometry() %>% head()
 ```
 
-In the `india` data frame: 
-- Column `iso_a2` contains the country name. 
-- Column `name` contains the name of the state
+In the `india` data frame:   
+- Column `iso_a2` contains the country name.   
+- Column `name` contains the name of the state  
 
-In the `india_neighbours` data frame: 
-- Column `gu_a3` contains the country abbreviation
-- Column `name` contains the name of the state
-- Column `iso_3166_2` contains the abbreviation of the state within each neighbouring country.
+In the `india_neighbours` data frame:   
+- Column `gu_a3` contains the country abbreviation  
+- Column `name` contains the name of the state  
+- Column `iso_3166_2` contains the abbreviation of the state within each neighbouring country.  
+
 
 
 ### Map 1
@@ -506,11 +513,14 @@ Restaurants can be downloaded using `key= "amenity", value = "restaurant"`. Sinc
 
 There are also other tags to explore!Searching for McDonalds for instance...( key = "name", value = "McDonalds")
 
-```{r restaurant-data-1}
+```{r restaurant-data-1, eval=FALSE}
+
+# Again, run these commands in your Console
 dat_R <- extract_osm_objects(bbox = bbox_2, 
                              key = "amenity", 
                              value = "restaurant", 
                              return_type = "point") #<<
+
 # Save the data for future use
 write_sf(dat_R, dsn = "restaurants.gpkg",append = FALSE, quiet = FALSE)
 
@@ -531,8 +541,11 @@ How many restaurants have we got?
 restaurants %>% nrow()
 
 ```
+So the `restaurants`` dataset has `r nrow(restaurants)` restaurants and their geometry is naturally a POINT type of geometry column. 
+
 
 These are the names of columns in the Restaurant Data: Note the `cuisine` column.
+
 ```{r restaurant-data-3}
 
 names(restaurants)
@@ -600,7 +613,7 @@ We could have done a (much!) better job, by combining cuisines into simpler and 
 
 By now we know that we can use `geom_sf()` multiple number of times with different datasets to create layered maps in R.
 
-
+# Using `leaflet` directly to make interactive maps
 
 # Some fancy stuff
 Let us try making glob based maps with the package `threejs`. This package is one of the family of packages in the `htmlwidgets` group of packages. It allows the use of some ( famous!) JavaScript graphing libraries directly and natively in R. 
