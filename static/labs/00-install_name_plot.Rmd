@@ -24,21 +24,10 @@ At the end of this Lab, we will:
 - run code within RStudio and interpret the results
 - have learnt to look for help within R and RStudio
 
-```{r setup, include = FALSE, cache = FALSE}
-knitr::opts_chunk$set(error = TRUE, comment = NA, warnings = FALSE, errors = FALSE, messages = FALSE, tidy = FALSE)
-```
-
-```{r load-packages, include = FALSE}
-library(tidyverse)
-library(babynames)
-```
-
 # Instructions
 
-1. Keep this tab open in your browser as you work through it.  
-2. Read all the way through step 8.
-3. Download this file using the `Code->Download Rmd` button at the top right corner.   
-4. Change the author name to your own!
+1. Keep this tab open in your browser as you work through it. Read all the way to the end.
+
 
 # Overview
 
@@ -60,11 +49,6 @@ Our end goal is to get you looking at a screen like this:
 # Install R
 
 Install R from [CRAN, the Comprehensive R Archive Network](https://cran.rstudio.com). Please choose a **precompiled binary distribution** for your operating system.
-
-* If you need more help, check out one of the following videos (courtesy of Roger Peng at Johns Hopkins Biostatistics):
-    - [Installing R on a mac](https://www.youtube.com/watch?v=Icawuhf0Yqo&feature=youtu.be)
-    - [Installing R on windows](https://www.youtube.com/watch?v=mfGFv-iB724&feature=youtu.be)
-* If you need even more help, read this [step-by-step guide](https://beckmw.files.wordpress.com/2014/09/r_install_guide.pdf), including screenshots.
 
 ## Check in
 
@@ -92,39 +76,36 @@ Launch RStudio. You should get a window similar to the screenshot you see [here]
 
 The version of R that you just downloaded is considered base R, which provides you with good but basic statistical computing and graphics powers. For analytical and graphical super-powers, you'll need to install add-on packages, which are user-written, to extend/expand your R capabilities. Packages can live in one of two places:
 
-* They may be carefully curated by CRAN (which involves a thorough submission and review process), and thus are easy install using `install.packages("name_of_package", dependencies = TRUE)`. 
-* Alternatively, they may be available via GitHub ( a code repository maintained by the coding community. Owned by Microsoft). To download these packages, you first need to install the `devtools` package.
+* They may be carefully curated by CRAN (which involves a thorough submission and review process), and thus are easy install using `install.packages("name_of_package", dependencies = TRUE)` in your CONSOLE. 
 
-```{r devtools, eval = FALSE}
-install.packages("devtools")
-library(devtools)
-install_github("name_of_package")
-```
+Place your cursor in the CONSOLE again (where you last typed `x` and `[4]` printed on the screen). You can use the first method to install the following packages directly from CRAN, all of which we will use:
 
-Place your cursor in the console again (where you last typed `x` and `[4]` printed on the screen). You can use the first method to install the following packages directly from CRAN, all of which we will use:
-
+  * [`knitr`,](https://yihui.org/knitr/)
   * [`dplyr`,](http://dplyr.tidyverse.org)
   * [`ggplot2`,](http://ggplot2.tidyverse.org)
   * [`babynames`](https://github.com/hadley/babynames)
 
+* To *install* a package, you put the name of the package **in quotes** as in `install.packages("name_of_package")`. 
+Mind your use of quotes carefully with packages.
+
+* To *use* an already installed package, you must load it first, as in `library(name_of_package)`, leaving the name of the package bare. You only need to do this **once** per RStudio session.
   
 You can download all of these at once, too:
+
 ```{r c_install, eval = FALSE}
-install.packages(c("dplyr", "ggplot2", "babynames"), 
-                 dependencies = TRUE)
+install.packages(c("knitr", "dplyr", "ggplot2", "babynames"), dependencies = TRUE)
 ```
 
-<p class="text-info"> __Heads up:__ We should formally introduce the combine command, [`c()`](http://stat.ethz.ch/R-manual/R-patched/library/base/html/c.html), used above. You will use this often- any time you want to combine things into a vector.</p>
+A brief aside: 
+`c()` is a command in R that allows us to combine things into a `vector` ( one of the ways data is represented in R)
 
 ```{r c_demo}
 c("hello", "my", "name", "is", "arvind")
 c(1:3, 20, 50)
+
 ```
 
-Mind your use of quotes carefully with packages.
 
-* To *install* a package, you put the name of the package in quotes as in `install.packages("name_of_package")`. 
-* To *use* an already installed package, you must load it first, as in `library(name_of_package)`, leaving the name of the package bare. You only need to do this **once** per RStudio session.
 * If you want *help*, no quotes are needed: `help(name_of_package)` or `?name_of_package`.
 * If you want the *citation* for a package (and you should give credit where credit is due), ask R as in `citation("name_of_package")`.
 
@@ -138,23 +119,27 @@ help("dplyr")
 citation("ggplot2")
 ```
 
-
-<p class="text-info"> __Heads up:__ R is **case-sensitive**, so `?dplyr` works but `?Dplyr` will not. Likewise, a variable called `A` is different from `a`.</p>
-
 # Make a name plot
 
-Open a new R script in RStudio by going to `File --> New File --> R Script`. For this first foray into R, I'll give you the code ( right here ), so sit back and relax and feel free to copy and paste my code with some small tweaks.
+The webpage you are looking at is derived from a `R Markdown` doc that you can download, edit and compute with. We will meet `R Markdown` in the next class. 
 
-First load the packages:
+Download this .Rmd file using the `Code->Download Rmd` button at the top right corner.
 
-```{r show_name_packages, eval = F}
-library(babynames) # contains the actual data
+Change the author name to your own!
+
+Hit the green "play" button to run this "load_packages" *chunk* to include in your R session all the installed packages you need: 
+
+```{r load_packages, include = FALSE, cache = FALSE}
+
+knitr::opts_chunk$set(error = TRUE, comment = NA, warnings = FALSE, errors = FALSE, messages = FALSE, tidy = FALSE)
+library(knitr) # to use this....document! More later!!
 library(dplyr) # for manipulating data
 library(ggplot2) # for plotting data
+library(babynames) # A package containing, yes, Baby Names
+
 ```
 
-
-Next, we'll follow [best practices for inspecting a freshly read dataset](https://cran.r-project.org/doc/contrib/de_Jonge+van_der_Loo-Introduction_to_data_cleaning_with_R.pdf). Also, see ["What I do when I get a new data set as told through tweets"](http://simplystatistics.org/2014/06/13/what-i-do-when-i-get-a-new-data-set-as-told-through-tweets/) for more ideas about exploring a new dataset. Here are some critical commands to obtain a high-level overview (HLO) of your freshly read dataset in R. We'll call it saying hello to your dataset:
+Let us greet our data first !!
 
 ```{r hlo_dataset}
 glimpse(babynames) # dplyr
@@ -167,12 +152,12 @@ names(babynames) # same
 If you have done the above and produced sane-looking output, you are ready for the next bit. Use the code below to create a new data frame called `arvind`. 
 
 ```{r manipulate_name_data}
-arvind <- babynames %>%
+my_name_data <- babynames %>%
   filter(name == "Arvind" | name == "Aravind") %>% 
   filter(sex == "M") 
 ```
 
-* The first bit makes a new dataset called `arvind` that is a copy of the `babynames` dataset- the `%>%` tells you we are doing some other stuff to it later.
+* The first bit makes a new dataset called `my_name_data` that is a copy of the `babynames` dataset- the `%>%` tells you we are doing some other stuff to it later.
 
 * The second bit `filters` our `babynames` to only keep rows where the `name` is either Arvind or Aravind (read `|` as _"or"_.) 
 
@@ -181,24 +166,30 @@ arvind <- babynames %>%
 Let's check out the data.
 
 ```{r}
-arvind
-glimpse(arvind)
+my_name_data
+glimpse(my_name_data)
 ```
 
 Again, if you have sane-looking output here, move along to plotting the data!
 
 ```{r plot_name_data}
-plot <- ggplot(arvind, aes(x = year, 
+
+plot <- ggplot(my_name_data, aes(x = year, 
                            y = prop,  
                            group = name, 
                            color = name)) + 
-  geom_line()  
+  geom_line()
+
 ```
 
-Now if you did this right, you will not see your plot! Because we saved the `ggplot` with a name (`plot`), R just saved the object for you. But check out the top right pane in RStudio again: under `Values` you should see `plot`, so it is there, you just have to ask for it. Here's how:
+Now if you did this right, you will **not see** your plot!
+
+Because we saved the `ggplot` with a name (`plot`), R just saved the object for you. But check out the top right pane in RStudio again: under the `Environment` pane you should see `plot`, so it is there, you just have to ask for it. Here's how:
 
 ```{r}
+
 plot 
+
 ```
 
 # Make a new name plot
@@ -211,39 +202,18 @@ Edit my code above to create a new dataset. Pick 2 names to compare how popular 
 Save your work so you can share your favorite plot with us. You will not like the looks of your plot if you mouse over to `Export` and save it. Instead, use `ggplot2`'s command for saving a plot with sensible defaults:
 
 ```{r eval = FALSE}
+
 help(ggsave)
+
 ```
 
 ```{r eval = F}
-ggsave("arvind_v.pdf", plot) # please make the filename unique!
+
+ggsave("file_name_here.pdf", plot) # please make the filename unique!
+
 ```
 
 Upload this exported plot to Teams -> Assignments. 
 
-**Before you do that**, check that you can submit stuff/assignments on Teams by uploading a cat picture first, especially if you are an ailurophile like me. (Acceptable Breeds: Scottish Folds or Maine Coons)
-
-# Other cool `babynames` projects
-
-
-- Julia Silge *'My Baby Boomer Name Might Have Been "Debbie"'*: https://juliasilge.com/blog/my-baby-boomer-name/
-    - Use Julia's Shiny app: https://juliasilge.shinyapps.io/PredictNamesApp/
-![](https://juliasilge.com/figs/2016-02-29-My-Baby-Boomer-Name/unnamed-chunk-8-1.png)
-
-- Hilary Parker: Hilary: The Most Poisoned Baby Name in US History: https://hilaryparker.com/2013/01/30/hilary-the-most-poisoned-baby-name-in-us-history/
-
-![](https://hilaryparker.files.wordpress.com/2013/01/more_names_trimmed2.png)
-
-
-
-# Resources
-
-- https://alison.rbind.io/html/jamboree_heart_ggplot.html
-
-- http://moderndive.com/2-getting-started.html
-
-- http://r4ds.had.co.nz
-
-- https://www.rstudio.com/resources/cheatsheets/
-
-- https://rweekly.org
+**Before you do that**, check that you can submit stuff/assignments on Teams by uploading a cat picture first, especially if you are an **ailurophile** like me. (Acceptable Breeds: Scottish Folds or Maine Coons)
 
