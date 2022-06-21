@@ -1,7 +1,7 @@
 ---
 title: "Lab-02: Pronouns and Data"
 author: "Arvind Venkatadri"
-date: 09/Feb/2022
+date: "`r Sys.Date()`"
 output:
   html_document:
     theme: flatly
@@ -11,27 +11,38 @@ output:
     number_sections: TRUE
     code_folding: hide
     code_download: TRUE
-
+    df_print: paged
 abstract: Part of the `R for Artists and Designers` workshop course at the School of Foundation Studies, Srishti Manipal Institute of Art, Design, and Technology, Bangalore.
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
-
 
 # Introduction
 
-This RMarkdown document is part of the Generic Skills Component  (GSK) of the Course of the  Foundation Studies Programme at Srishti Manipal Institute of Art, Design, and Technology, Bangalore India. The material is based on *A Layered Grammar of Graphics* by Hadley Wickham. The course is meant for First Year students pursuing a Degree in Art and Design. 
+This RMarkdown document is part of the Generic Skills Component (GSK) of
+the Course of the Foundation Studies Programme at Srishti Manipal
+Institute of Art, Design, and Technology, Bangalore India. The material
+is based on *A Layered Grammar of Graphics* by Hadley Wickham. The
+course is meant for First Year students pursuing a Degree in Art and
+Design.
 
-The intent of this GSK part is to build Skill in coding in R, and also appreciate R as a way to metaphorically visualize information of various kinds, using predominantly geometric figures and structures.
+The intent of this GSK part is to build Skill in coding in R, and also
+appreciate R as a way to metaphorically visualize information of various
+kinds, using predominantly geometric figures and structures.
 
-All RMarkdown files combine code, text, web-images, and figures developed using code. Everything is text; code chunks are enclosed in **fences** (```)
-
+All RMarkdown files combine code, text, web-images, and figures
+developed using code. Everything is text; code chunks are enclosed in
+**fences** (\`\`\`)
 
 # Goals
 
-- Understand different kinds of data variables
-- Appreciate how they can be identified based on the *Interrogative Pronouns* they answer to
-- Understand how each kind of variable lends itself to a specific geometric aspect in the data visualization.
-- Understand how ask Questions of Data to develop Visualizations
-
+-   Understand different kinds of data variables
+-   Appreciate how they can be identified based on the *Interrogative
+    Pronouns* they answer to
+-   Understand how each kind of variable lends itself to a specific
+    geometric aspect in the data visualization.
+-   Understand how ask Questions of Data to develop Visualizations
 
 # Pedagogical Note
 
@@ -41,21 +52,27 @@ The method followed will be based on
 -   **PREDICT** Inspect the code and guess at what the code might do,
     **write predictions**
 -   **RUN** the code provided and check what happens
--   **INFER** what the `parameters` of the code do and **write comments to explain**. What bells and whistles can you see?
+-   **INFER** what the `parameters` of the code do and **write comments
+    to explain**. What bells and whistles can you see?
 -   **MODIFY** the `parameters` code provided to understand the
-    `options` available. **Write comments** to show what you have aimed for and achieved.
+    `options` available. **Write comments** to show what you have aimed
+    for and achieved.
 -   **MAKE** : take an idea/concept of your own, and graph it.
-
 
 ## Set Up
 
-The `setup` code **chunk** below brings into our coding session **R packages** that provide specific computational abilities and also **datasets** which we can use. 
+The `setup` code **chunk** below brings into our coding session **R
+packages** that provide specific computational abilities and also
+**datasets** which we can use.
 
-To reiterate: Packages and datasets are **not** the same thing !! Packages are (small) collections of programs. Datasets are just....information.
+To reiterate: Packages and datasets are **not** the same thing !!
+Packages are (small) collections of programs. Datasets are
+just....information.
 
 # Packages needed
 
 ```{r setup, include=FALSE}
+
 knitr::opts_chunk$set(echo = TRUE,warning = TRUE)
 library(tidyverse)
 library(palmerpenguins)
@@ -64,29 +81,41 @@ library(palmerpenguins)
 
 # Introduction
 
-In this RMarkdown document, we try to connect story-making **questions** with two ideas:
+In this RMarkdown document, we try to connect story-making **questions**
+with two ideas:
 
-a) a *Variable* in a dataset
-b) A computed *Quantity* or a *Visual*, based on one or more Variables
+a)  a *Variable* in a dataset
+b)  A computed *Quantity / Descriptive Statistic* or a *Visual*, based
+    on one or more Variables
 
-So: a question identifies a variable and a question also leads to a data visualization. The idea is to get the intuition behind data, and develop the right questions and hypotheses, that lead to the appropriate direction in exploratory data analysis (EDA) using graphs and charts in R.
+So: a question identifies a variable and a question also leads to a
+*Computation* or a *Data Visualization*. The idea is to get the
+intuition behind data, and iteratively ask the questions and form
+hypotheses and perform *Exploratory Data Analysis* (EDA) using graphs
+and charts in R.
 
-<div class="panel panel-success">
-  <div class="panel-heading">When it is YOUR TURN:</div>
-  <div class="panel-body">
-In the following, wherever you see **YOUR TURN**, please respond with explanations, more questions and if you are already confident, code chunks to create new graphs. This will be one of your submissions for this module, on Teams!
-  </div>
-</div>
- 
+At some point we may find that the data is not adequate to
+prove/disprove a particular hypothesis and need to get into further
+research / experimental design. It is possible to design the research
+experiments also in R, but we may cover that much later.
+
+In the following:
+
+> When it is YOUR TURN: wherever you see YOUR TURN, please respond with
+> explanations, more questions and if you are already confident, code
+> chunks to create new calculations and graphs. This will be one of your
+> submissions for this module, on Teams!
 
 # Interrogative Pronouns for Data Variables
 
-So how do we ask questions? These are usually with *interrogative pronouns* in English: What? Who? Where? Which? What Kind? How? How Much? How Many? and and so on.
+So how do we ask questions? These are usually with *interrogative
+pronouns* in English: What? Who? Where? Which? What Kind? How? and so
+on.
 
 ## The `penguins` dataset
 
+```{r Look_at_Penguins}
 
-```{r Look at Penguins}
 names(penguins) # Column, i.e. Variable names
 head(penguins) # first six rows
 tail(penguins) # Last six rows
@@ -94,22 +123,109 @@ dim(penguins) # Size of dataset
 
 # Check for missing data
 any(is.na(penguins) == TRUE)
+
 ```
 
-1. What are the variable `names()`?
-2. What would be the Question you might have asked to obtain that variable?
-3. How would you process that variable? 
-4. What meta questions could you ask of each variable?
-5. Where might the answers take your story?
+1.  What are the variable `names()`?
+2.  What would be the Question you might have asked to obtain each of
+    the variables?
+3.  What further questions/meta questions would you ask to "process"
+    that variable? ( Hint: Add another word after any of the
+    Interrogative Pronouns, e.g. How...MANY?)
+4.  Where might the answers take your story?
 
 ### YOUR TURN-1
 
+State a few questions after discussion with your friend and state
+possible variables, or what you could DO with the variables, as an
+answer.\
+E.g. Q. How many penguins? A. We need to count...rows?
 
+## Pronouns and Variables
 
+In the Table below, we have a rough mapping of interrogative pronouns to
+the kinds of variables in the data:
+
++----------+-----------------+-----------------+----------------------+
+| Pronoun  | Answer          | R Variable      | Example              |
+|          |                 | Character       |                      |
++==========+=================+=================+======================+
+| What,    | Name, Place,    | Qualitative /   | Name                 |
+| Who,     | Animal, Thing   | **Nominal**     |                      |
+| Where,   |                 |                 |                      |
+| Whom,    |                 |                 |                      |
+| Which    |                 |                 |                      |
++----------+-----------------+-----------------+----------------------+
+| How,     | A Manner /      | Qualitative /   | -   Socio-economic   |
+| What     | Method, Type or | **Ordinal**     |     status ("low     |
+| Kind,    | Attribute from  |                 |     income","middle  |
+| What     | a list, with    |                 |     income","high    |
+| Sort     | list items in   |                 |     income")         |
+|          | some            |                 |                      |
+|          | "**order**" (   |                 | -   education level  |
+|          | e.g. good,      |                 |     ("high           |
+|          | better,         |                 |     scho             |
+|          | improved,       |                 | ol","BS","MS","PhD") |
+|          | best..)         |                 |                      |
+|          |                 |                 | -   income level     |
+|          |                 |                 |     ("less than      |
+|          |                 |                 |     50K",            |
+|          |                 |                 |     "50K-100K",      |
+|          |                 |                 |     "over 100K")     |
+|          |                 |                 |                      |
+|          |                 |                 | -   satisfaction     |
+|          |                 |                 |     rating           |
+|          |                 |                 |     ("extremely      |
+|          |                 |                 |     dislike",        |
+|          |                 |                 |     "dislike",       |
+|          |                 |                 |     "neutral",       |
+|          |                 |                 |     "like",          |
+|          |                 |                 |     "extremely       |
+|          |                 |                 |     like").          |
++----------+-----------------+-----------------+----------------------+
+| How Many | Quantities with | Quantitative /  | -   pH               |
+| / Much / | Scale.          | **Interval**    |                      |
+| Heavy?   |                 |                 | -   SAT score        |
+| Few?     | **Differences** |                 |     (200-800),       |
+| Seldom?  | are meaningful, |                 |                      |
+| Often?   | but not         |                 | -   Credit score     |
+| When?    | products or     |                 |     (300-850).       |
+|          | ratios          |                 |                      |
+|          |                 |                 | -   Year of Starting |
+|          |                 |                 |     in College       |
++----------+-----------------+-----------------+----------------------+
+| How Many | Quantities,     | Quantitative /  | -   Weight, length,  |
+| / Much / | with Scale and  | **Ratio**       |     Height           |
+| Heavy?   | a Zero Value.   |                 |                      |
+| Few?     |                 |                 | -   Temperature in   |
+| Seldom?  | Differences and |                 |     Kelvin           |
+| Often?   | Ratios/Products |                 |                      |
+| When?    | are meaningful. |                 | -   Enzyme activity, |
+|          | ( e.g Weight )  |                 |     dose amount,     |
+|          |                 |                 |     reaction rate,   |
+|          |                 |                 |     flow rate,       |
+|          |                 |                 |     concentration,   |
+|          |                 |                 |                      |
+|          |                 |                 | -   Pulse            |
+|          |                 |                 |                      |
+|          |                 |                 | -   Survival time    |
++----------+-----------------+-----------------+----------------------+
+
+As you go from Qualitative to Quantitative data types in the table, I
+hope you can detect a movement from fuzzy groups/categories to more and
+more crystallized numbers.
+
+[![Types of
+Variables](images/Ratio%20Interval%20Ordinal%20Nominal.PNG)](https://psychology.okstate.edu/faculty/jgrice/psyc3214/Stevens_FourScales_1946.pdf)
+
+Do take a look at these references:
+
+1.  <https://stats.idre.ucla.edu/other/mult-pkg/whatstat/what-is-the-difference-between-categorical-ordinal-and-interval-variables/>
+2.  <https://www.freecodecamp.org/news/types-of-data-in-statistics-nominal-ordinal-interval-and-ratio-data-types-explained-with-examples/>
 
 ## The `mpg` dataset
 
-```{r Look at mpg}
+```{r Look_at_mpg}
 names(mpg) # Column, i.e. Variable names
 head(mpg) # first six rows
 tail(mpg) # Last six rows
@@ -117,189 +233,183 @@ dim(mpg) # Size of dataset
 
 # Check for missing data
 any(is.na(mpg) == TRUE)
-```
 
-Look carefully at the variables here. How would you interpret say the `cyl` variable? Is it a number and therefore Quantitative, or could it be something else?
+```
 
 ### YOUR TURN-2
 
-
-
-
-## Pronouns and Variables
-
-In the Table below, we have a rough mapping of interrogative pronouns to the kinds of variables in the data:
-
-Pronoun | Answer| English Character | Kind of Data Variable | R Character
---------| ------|------------------ |-----------------------|------------
-What  | A Thing | Subject | Nominal| Categorical
-Who   | A Person| Subject | Nominal | Categorical
-Where | A Place | Subject/Object    | Nominal | Categorical
-Whom  | To A Person   | Object| Nominal | Categorical
-Which | A Selection or a Type   | Adjective| Qualitative| Qualitative
-How   | A Manner/Method| Adverb           | Qualitative | Qualitative
-What Kind (1)| Type or Attribute, from a list     | Number (noun/adj) | Qualitative| Factor
-What Kind(2) | Type or Attribute, from a list, with order | Affirmative - Comparative - Superlative...| Qualitative with Scale | Factor with Scale
-What Kind(3) | Qualitative with Scale, from a list, with order and an absolute value | - | Ordinal | Factor with Scale with "absolute zero"
-How Many| A number| Number (noun/adj) | Quantitative| Quantitative
-How Often | A number| Number (noun/adj) | Quantitative| Quantitative
-
-Think of :
- - How long? / Since When? : Time
- - How often? / How seldom? : Frequency
- - ..? 
-
-Do take a look at this reference:
-
-[WHAT IS THE DIFFERENCE BETWEEN CATEGORICAL, ORDINAL AND INTERVAL VARIABLES?](https://stats.idre.ucla.edu/other/mult-pkg/whatstat/what-is-the-difference-between-categorical-ordinal-and-interval-variables/)
-
+Look carefully at the variables here. How would you interpret say the
+`cyl` variable? Is it a number and therefore Quantitative, or could it
+be something else?
 
 # Interrogations and Graphs
 
-We can also respond to ( more complex ) Questions, with not just a *variable* but a *data visualization*. This visualization can even involve more than one variable, as we will see
+We can also respond to ( more complex ) Questions, with not just a
+*variable* but one of two things:
 
-What sort of measures, and visuals charts can we create with different kinds of variables, taken singly or together? Let us write some simple English descriptions of measures and visuals and see what commands they use in R.
+-   A calculation, shown in a *table*
+-   a *data visualization*. This visualization can even involve more
+    than one variable, as we will see.
 
-Here we will use the Grammar of a package called `ggplot`, which we will encounter in Lab:04. Let us go with our intuition with the code in the following sections. 
+What sort of calculations, and visuals charts can we create with
+different kinds of variables, taken singly or together? Let us write
+some simple English descriptions of measures and visuals and see what
+commands they use in R.
 
-Note: since we saw a couple of missing entries in the `penguins` dataset, let us remove them for now. 
+Here we will use the Grammar of a package called `ggplot`, which we will
+encounter in Lab:04. Let us go with our intuition with the code in the
+following sections.
+
+Note: since we saw a couple of missing entries in the `penguins`
+dataset, let us remove them for now.
 
 ```{r}
-penguins <- penguins %>% drop_na()
-```
 
+penguins <- penguins %>% drop_na()
+
+```
 
 ## Single Quantitative Variable
 
-1) Questions: How many? How few? How often? How much?
+1)  Questions: How many? How few? How often? How much?
 
-2) Measures: max / min / mean / mode / (units)
-  - `max()`, `min()`, `range()`, `mean()`, `mode()`
-  
-3) Charts: Bar Chart / Histogram / Density  
-    - `geom_histogram()` / `geom_density()` 
+2)  Calculations: max / min / mean / mode / (units)
 
-```{r Single Quant-1}
+-   `max()`, `min()`, `range()`, `mean()`, `mode(), summary()`
+
+3)  Charts: Bar Chart / Histogram / Density
+    -   `geom_histogram()` / `geom_density()`
+
+```{r Single_Quant_calculations}
+
 max(penguins$bill_length_mm)
 
 range(penguins$bill_length_mm, na.rm =TRUE) 
-# Note this. Try deleting this option!
 
-ggplot(penguins) + geom_histogram(aes(x = bill_length_mm))
+summary(penguins$flipper_length_mm)
+
 ```
 
-```{r Single Quant-2}
+```{r Single_Quant_graphs}
 
 ggplot(penguins) + geom_density(aes(bill_length_mm))
 
-```
+ggplot(penguins) + geom_histogram(aes(x = bill_length_mm))
 
+```
 
 ### YOUR TURN-3
 
-
-
-
-
-
 ## Two Variables: Quantitative vs Quantitative
-We can easily extend our intuition about one quantitative variable, to a pair of them. What Questions can we ask?
 
-1) Questions: How many of this vs How many of that? Does this depend upon that? How are they related? (Remember $y = mx + c$ and friends?)
+We can easily extend our intuition about one quantitative variable, to a
+pair of them. What Questions can we ask?
 
-2) Measures: Correlation / Covariance / T-test / Chi-Square Test for Two Means etc. We won't go into this here!
+1)  Questions: How many of this vs How many of that? Does this depend
+    upon that? How are they related? (Remember $y = mx + c$ and
+    friends?)
 
-3) Charts: Scatter Plot / Line Plot / Regression i.e. best fit lines 
+2)  Calculations: Correlation / Covariance / T-test / Chi-Square Test
+    for Two Means etc. We won't go into this here !
 
-```{r Quant vs Quant-1}
+3)  Charts: Scatter Plot / Line Plot / Regression i.e. best fit lines
 
-ggplot(penguins) + geom_point(aes(x = flipper_length_mm, 
-                                  y = body_mass_g))
+```{r Quant_vs_Quant_Calculations}
+
+cor(penguins$bill_length_mm, penguins$bill_depth_mm)
+
 
 ```
 
+```{r Quant_vs_Quant-Graphs}
 
-```{r Quant vs Quant-2}
+ggplot(penguins) +
+  geom_point(aes(x = flipper_length_mm,
+                 y = body_mass_g))
 
-ggplot(penguins) + 
-  geom_point(aes(x = flipper_length_mm, y = bill_length_mm))
+ggplot(penguins) +
+  geom_point(aes(x = flipper_length_mm, 
+                 y = bill_length_mm))
+
 ```
 
 ### YOUR TURN-4
 
-
-
-
-
-
 ## Single Qualitative/Categorical Variable
 
-1) Questions: Which? What Kind? How? How many of each Kind?
+1)  Questions: Which? What Kind? How? How many of each Kind?
 
-2) Measures: No of `levels` / Counts for each `level`
-  - `counts` / ` tally`
-  
-3) Charts: Bar Chart / Pie Chart / Tree Map 
-  - `geom_bar` / `geom_bar + coord_polar()` / Find out!!
+2)  Calculations: No of `levels` / Counts for each `level`
 
-```{r Single Cat Var-1}
-ggplot(penguins) + geom_bar(aes(x = island))
-ggplot(penguins) + geom_bar(aes(x = sex))
+-   `counts` / `tally`
+
+3)  Charts: Bar Chart / Pie Chart / Tree Map
+
+-   `geom_bar` / `geom_bar + coord_polar()` / Find out!!
+
+```{r Single_Cat_Var_Calculations}
+
+penguins %>% count(species)
+
 ```
 
+```{r Single_Cat_Var_Graphs}
+
+ggplot(penguins) + geom_bar(aes(x = island))
+ggplot(penguins) + geom_bar(aes(x = sex))
+
+```
 
 ### YOUR TURN-5
 
-
-
-
-
-
-
 ## Two Variables: Categorical vs Categorical
 
-What sort of question could we ask that involves *two* categorical variables?
+What sort of question could we ask that involves *two* categorical
+variables?
 
-1) Questions: How Many of this Kind(x) are How Many of that Kind(y) ? 
+1)  Questions: How Many of this Kind( \~x) are How Many of that Kind(
+    \~y ) ?
 
-2) Measures: Counts and Tallies sliced by Category
-    - `counts` , `tally`
-    
-3) Charts: Stacked Bar Charts / Grouped Bar Charts / Segmented Bar Chart / Mosaic Chart
-    - `geom_bar()` 
-    - Use the second Categorical variables to modify `fill`, `color`. 
-    - Also try to vary the parameter `position` of the bars. 
+2)  Calculations: Counts and Tallies sliced by Category
 
-```{r Cat vs Cat-1}
+    -   `counts` , `tally`
+
+3)  Charts: Stacked Bar Charts / Grouped Bar Charts / Segmented Bar
+    Chart / Mosaic Chart
+
+    -   `geom_bar()`
+    -   Use the second Categorical variables to modify `fill`, `color`.
+    -   Also try to vary the parameter `position` of the bars.
+
+```{r Two_Cat_Var_Calculations}
+
+
+```
+
+```{r Two_Cat_Var_Graphs}
+
 ggplot(penguins) + geom_bar(aes(x = island, 
                                 fill = species),
                             position = "stack")
 ```
 
-Storyline: तीन पेनगीन। और तुम भी  तीन
-
-(Oh never mind!)
-
+Storyline: तीन पेनगीन। और तुम भी तीन(Oh never mind!)
 
 ### YOUR TURN-6
 
-
-
-
-
-
 ## Two Variables: Quantitative vs Qualitative
 
-Finally, what if we want to look at Quant variables and Qual variables together? What questions could we ask?
+Finally, what if we want to look at Quant variables and Qual variables
+together? What questions could we ask?
 
-1) Questions: How much of this is Which Kind of that? How many vs Which? How many vs How?
+1)  Questions: How much of this is Which Kind of that? How many vs
+    Which? How many vs How?
 
-2) Measures: Counts, Means, Ranges etc., grouped by Categorical variable. 
+2)  Calculations: Counts, Means, Ranges etc., **grouped by** Categorical
+    variable.
 
-3) Charts: Bar Chart using group / density plots by group / violin plots by group / box plots by group
- - `geom_bar` / `geom_density` / `geom_violin` / `geom_boxplot` using Categorical Variable for grouping
+```{r Quant_vs_Qual_Calculations}
 
-```{r Quant vs Qual-1}
 ggplot(penguins) + 
     geom_density(aes(x = body_mass_g, 
                  color = island, 
@@ -307,54 +417,72 @@ ggplot(penguins) +
                  alpha = 0.3)
 ```
 
+3)  Charts: Bar Chart using group / density plots by group / violin
+    plots by group / box plots by group
 
-```{r Quant vs Qual-2}
+-   `geom_bar` / `geom_density` / `geom_violin` / `geom_boxplot` using
+    Categorical Variable for grouping
+
+```{r Quant_vs_Qual_Graphs}
+
+ggplot(penguins) + 
+    geom_density(aes(x = body_mass_g, 
+                 color = island, 
+                 fill = island), 
+                 alpha = 0.3)
+
 ggplot(penguins) + 
   geom_histogram(aes(x = flipper_length_mm,
                  fill = sex))
 
 ```
 
-
-
 ### YOUR TURN-7
 
+### Time to Play
 
-
-
+Get hold of a new dataset that is available within any of the R packages
+within:
 
 # References
 
-1. Data Visualization with R, [Robert Kabacoff](https://rkabacoff.github.io/datavis/)
-- Good crisp descriptions of many kinds of graphs, no nonsense book. Available free on the web. 
+1.  Data Visualization with R, [Robert
+    Kabacoff](https://rkabacoff.github.io/datavis/)
 
-2. Wickham and Grolemund, [R for Data Science](https://r4ds.had.co.nz/)
- - R Bible. Available free on the web.
- 
-3. [The best stats you've ever seen | Hans Rosling](https://www.youtube.com/watch?v=hVimVzgtD6w)
+-   Good crisp descriptions of many kinds of graphs, no nonsense book.
+    Available free on the web.
 
- 
+2.  Wickham and Grolemund, [R for Data Science](https://r4ds.had.co.nz/)
+
+-   R Bible. Available free on the web.
+
+3.  [The best stats you've ever seen \| Hans
+    Rosling](https://www.youtube.com/watch?v=hVimVzgtD6w)
+
 # Assignments
 
-1. Use the PRIMM process to add comments, questions, inferences to this document, wherever you see YOUR TURN.
+1.  Use the PRIMM process to add comments, questions, inferences to this
+    document, wherever you see YOUR TURN.
 
-2. Create a fresh RMarkdown and similarly analyse two datasets of the following data sets
+2.  Create a fresh RMarkdown and similarly analyse two datasets of the
+    following data sets
 
-- Any dataset in your R installation. Type `data()` in your console to see what is available.
+-   Any dataset in your R installation. Type `data()` in your console to
+    see what is available.
 
-- `diamonds` . This dataset is part of the tidyverse package so just type `diamonds` in your code and there it is. 
+-   `diamonds` . This dataset is part of the tidyverse package so just
+    type `diamonds` in your code and there it is.
 
-- `gapminder` !! Yes!!You will need to install the `gapminder` package to access this dataset
+-   `gapminder` !! Yes!!You will need to install the `gapminder` package
+    to access this dataset
 
-- `mosaicData` package datasets. Install `mosaicData`
+-   `mosaicData` package datasets. Install `mosaicData`
 
-- `data.world`: Find Datasets of your choice:
-<https://docs.data.world/en/64499-64516-Quickstarts-and-tutorials.html>
+-   `data.world`: Find Datasets of your choice:
+    <https://docs.data.world/en/64499-64516-Quickstarts-and-tutorials.html>
 
-- `kaggle`: <https://www.kaggle.com/datasets>
+-   `kaggle`: <https://www.kaggle.com/datasets>
 
-- India Data Portal  <https://data.gov.in/>
+-   India Data Portal <https://data.gov.in/>
 
 Ask me for help any time!
-
-
