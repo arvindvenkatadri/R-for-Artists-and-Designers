@@ -8,21 +8,26 @@ output:
     toc: TRUE
     toc_float: TRUE
     toc_depth: 2
+    df_print: paged
     number_sections: TRUE
     code_folding: hide
     code_download: TRUE
-description: > 
-  Start here if this is your first time using dplyr. You'll learn the basic philosophy, the most important data manipulation verbs, and the pipe, `%>%`, which allows you to combine multiple verbs together to solve real problems.
 
 ---
+## Instructions:
 
-AV: Read the text and execute each chunk as you go along. If you make any discoveries or have questions, put them into the text immediately after the chunk/text where your doubt is created. I have put in small intructions here and there for you to prompt your thinking and connection-making. 
+Start here if this is your first time using dplyr. You'll learn the basic philosophy, the most important data manipulation **verbs**, and the pipe, `%>%`, which allows you to combine multiple verbs together to solve real problems.
+
+Read the text and execute each chunk as you go along. If you make any discoveries or have questions, put them into the text immediately after the chunk/text where your doubt is created. I have put in small instructions here and there for you to prompt your thinking and connection-making.
 
 ```{r, echo = FALSE, message = FALSE}
 knitr::opts_chunk$set(collapse = T, comment = "#>")
 options(tibble.print_min = 4L, tibble.print_max = 4L)
 library(tidyverse)
 set.seed(1014)
+
+#devtools::install_github("gadenbuie/tidy-animated-verbs")
+
 ```
 
 When working with data you must:
@@ -42,7 +47,7 @@ The `dplyr` package makes these steps fast and easy:
 * It uses efficient backends, so you spend less time waiting for the computer. 
 
             
-AV : ne'er you mind about backends ;-) See Shakespeare's *[Hamlet.](https://www.goodreads.com/quotes/392818-there-s-a-divinity-that-shapes-our-ends-rough-hew-them-how)*
+> Ne'er you mind about backends ;-) See Shakespeare's *[Hamlet.](https://www.goodreads.com/quotes/392818-there-s-a-divinity-that-shapes-our-ends-rough-hew-them-how)*
 
 This document introduces you to dplyr's basic set of tools, and shows you how to apply them to data frames. `dplyr` also supports databases via the `dbplyr` package, once you've installed, read `vignette("dbplyr")` to learn more.
 
@@ -50,7 +55,7 @@ This document introduces you to dplyr's basic set of tools, and shows you how to
 
 To explore the basic data manipulation verbs of `dplyr`, we'll use the dataset `starwars`. This dataset contains `r nrow(starwars)` characters and comes from the [Star Wars API](https://swapi.dev), and is documented in `?starwars` 
 
-AV: This means: type `?starwars` in the Console. Try.
+> This means: type `?starwars` in the Console. Try.
 
 ```{r}
 dim(starwars)
@@ -59,7 +64,7 @@ starwars
 
 Note that `starwars` is a `tibble`, a modern reimagining of the data frame. It's particularly useful for large datasets because it only prints the first few rows. You can learn more about tibbles at <https://tibble.tidyverse.org>; in particular you can convert data frames to tibbles with `as_tibble()`.
 
-    AV: Check your Environment Tab to inspect `starwars` in a separate tab.
+> Check your Environment Tab to inspect `starwars` in a separate tab.
 
 ## Single table verbs
 
@@ -79,7 +84,8 @@ Note that `starwars` is a `tibble`, a modern reimagining of the data frame. It's
 * Groups of rows:
   * `summarise()` collapses a group into a single row.
 
-AV: Think of the parallels from Microsoft Excel. 
+> Think of the parallels from Microsoft Excel. 
+
 
 ### The pipe
 
@@ -91,7 +97,7 @@ All of the `dplyr` functions take a data frame (or `tibble`) as the first argume
 
 For example, we can select all character with light skin color and brown eyes with:
 
-    AV: Note the double equal to sign (==) below! Equivalent to MS Excel Data -> Filter
+> Note the double equal to sign (==) below! Equivalent to MS Excel Data -> Filter
 
 ```{r}
 starwars %>% filter(skin_color == "light", eye_color == "brown")
@@ -116,7 +122,7 @@ starwars %>% arrange(desc(height))
 
 `slice()` lets you index rows by their (integer) locations. It allows you to select, remove, and duplicate rows. 
 
-    AV: this is an important step in Prediction, Modelling and Machine Learning. 
+>This is an important step in Prediction, Modelling and Machine Learning. 
 
 We can get characters from row numbers 5 through 10.
 ```{r}
@@ -140,7 +146,7 @@ starwars %>% slice_sample(prop = 0.1)
 
 Use `replace = TRUE` to perform a bootstrap sample. If needed, you can weight the sample with the `weight` argument.
 
-        AV: ` Bootstrap samples` are a special statistical sampling method. Counterintuitive perhaps, since you sample with replacement. Should remind you of your high school Permutation and Combination class, with all those urn models and so on. If you remember. 
+> `Bootstrap samples` are a special statistical sampling method. Counterintuitive perhaps, since you sample with replacement. Should remind you of your high school Permutation and Combination class, with all those urn models and so on. If you remember. 
 
 * `slice_min()` and `slice_max()` select rows with highest or lowest values of a variable. Note that we first must choose  only the values which are not NA.
 
@@ -294,17 +300,9 @@ The dplyr verbs can be classified by the type of operations they accomplish (we 
 
 ### Selecting operations
 
-One of the appealing features of dplyr is that you can refer to
-columns from the tibble as if they were regular variables. However,
-the syntactic uniformity of referring to bare column names hides
-semantical differences across the verbs. A column symbol supplied to
-`select()` does not have the same meaning as the same symbol supplied
-to `mutate()`.
+One of the appealing features of dplyr is that you can refer to columns from the tibble as if they were regular variables. However, the syntactic uniformity of referring to bare column names hides semantical differences across the verbs. A column symbol supplied to `select()` does not have the same meaning as the same symbol supplied to `mutate()`.
 
-Selecting operations expect column names and positions. Hence, when
-you call `select()` with bare variable names, they actually represent
-their own positions in the tibble. The following calls are completely
-equivalent from dplyr's point of view:
+Selecting operations expect column names and positions. Hence, when you call `select()` with bare variable names, they actually represent their own positions in the tibble. The following calls are completely equivalent from dplyr's point of view:
 
 ```{r}
 # `name` represents the integer 1
@@ -319,10 +317,7 @@ height <- 5
 select(starwars, height)
 ```
 
-One useful subtlety is that this only applies to bare names and to
-selecting calls like `c(height, mass)` or `height:mass`. In all other
-cases, the columns of the data frame are not put in scope. This allows
-you to refer to contextual variables in selection helpers:
+One useful subtlety is that this only applies to bare names and to selecting calls like `c(height, mass)` or `height:mass`. In all other cases, the columns of the data frame are not put in scope. This allows you to refer to contextual variables in selection helpers:
 
 ```{r}
 name <- "color"
@@ -336,64 +331,38 @@ name <- 5
 select(starwars, name, identity(name))
 ```
 
-In the first argument, `name` represents its own position `1`. In the
-second argument, `name` is evaluated in the surrounding context and
-represents the fifth column.
-
-For a long time, `select()` used to only understand column positions.
-Counting from dplyr 0.6, it now understands column names as well. This
-makes it a bit easier to program with `select()`:
-
-```{r}
-vars <- c("name", "height")
-select(starwars, all_of(vars), "mass")
-```
+In the first argument, `name` represents its own position `1`. In the second argument, `name` is evaluated in the surrounding context and represents the fifth column.
 
 
 ### Mutating operations
 
-Mutate semantics are quite different from selection semantics. Whereas
-`select()` expects column names or positions, `mutate()` expects
-*column vectors*. 
-We will set up a smaller tibble to use for our examples.
+Mutate semantics are quite different from selection semantics. Whereas `select()` expects column names or positions, `mutate()` expects *column vectors*.  We will set up a smaller tibble to use for our examples.
 
 ```{r}
 df <- starwars %>% select(name, height, mass)
 ```
 
-When we use `select()`, the bare column names stand for their own
-positions in the tibble. For `mutate()` on the other hand, column
-symbols represent the actual column vectors stored in the tibble.
-Consider what happens if we give a string or a number to `mutate()`:
+When we use `select()`, the bare column names stand for their own positions in the tibble. For `mutate()` on the other hand, column symbols represent the actual column vectors stored in the tibble. Consider what happens if we give a string or a number to `mutate()`:
 
 ```{r}
 mutate(df, "height", 2)
 ```
 
-`mutate()` gets length-1 vectors that it interprets as new columns in
-the data frame. These vectors are recycled so they match the number of
-rows. That's why it doesn't make sense to supply expressions like
-`"height" + 10` to `mutate()`. This amounts to adding 10 to a string!
+`mutate()` gets length-1 vectors that it interprets as new columns in the data frame. These vectors are recycled so they match the number of rows. That's why it doesn't make sense to supply expressions like `"height" + 10` to `mutate()`. This amounts to adding 10 to a string!
 The correct expression is:
 
 ```{r}
 mutate(df, height + 10)
 ```
 
-In the same way, you can unquote values from the context if these
-values represent a valid column. They must be either length 1 (they
-then get recycled) or have the same length as the number of rows. In
-the following example we create a new vector that we add to the data
-frame:
+In the same way, you can unquote values from the context if these values represent a valid column. They must be either length 1 (they then get recycled) or have the same length as the number of rows. In the following example we create a new vector that we add to the data frame:
 
 ```{r}
 var <- seq(1, nrow(df))
 mutate(df, new = var)
 ```
 
-A case in point is `group_by()`. While you might think it has select
-semantics, it actually has mutate semantics. This is quite handy as it
-allows to group by a modified column:
+A case in point is `group_by()`. While you might think it has `select` semantics, it actually has `mutate` semantics. This is quite handy as it allows to group by a modified column:
 
 ```{r}
 group_by(starwars, sex)
@@ -401,10 +370,95 @@ group_by(starwars, sex = as.factor(sex))
 group_by(starwars, height_binned = cut(height, 3))
 ```
 
-This is why you can't supply a column name to `group_by()`. This
-amounts to creating a new column containing the string recycled to the
-number of rows:
+This is why you can't supply a column name to `group_by()`. This amounts to creating a new column containing the string recycled to the number of rows:
 
 ```{r}
 group_by(df, "month")
 ```
+
+
+## Two table verbs
+
+Sometimes our data is spread across more than one table. Often these tables are *linked* by some common, or common-looking, variable columns. `dplyr` allows us to work with such data that is spread over more than one table. 
+More information is available here: [Two Table Verbs in dplyr](https://cran.r-project.org/web/packages/dplyr/vignettes/two-table.html)
+
+The operations/verbs used to manipulate two-table verbs are:
+
+* Mutating joins, which add new variables to one table from matching rows in another.
+  - `inner_join()`
+  
+```{r,echo=FALSE}
+knitr::include_graphics("images/inner-join.gif")
+```
+
+  - `left_join()`
+  
+```{r,echo=FALSE}
+knitr::include_graphics("images/left-join.gif")
+```
+
+  - `right_join()`
+  
+```{r,echo=FALSE}
+knitr::include_graphics("images/right-join.gif")
+```
+
+
+  - `full_join()`
+    
+```{r,echo=FALSE}
+knitr::include_graphics("images/full-join.gif")
+```
+
+  
+* Filtering joins, which filter observations from one table based on whether or not they match an observation in the other table.
+  - `semi_join(x, y)` keeps all observations in x that have a match in y.
+  
+```{r,echo=FALSE}
+knitr::include_graphics("images/semi-join.gif")
+```
+
+
+  - `anti_join(x, y)` drops all observations in x that have a match in y.
+  
+```{r,echo=FALSE}
+knitr::include_graphics("images/anti-join.gif")
+```
+
+
+
+
+* Set operations, which combine the observations in the data sets as if they were set elements.
+
+  - union()
+  
+```{r,echo=FALSE}
+knitr::include_graphics("images/union.gif.")
+```
+
+  - union_all(), 
+  
+```{r,echo=FALSE}
+knitr::include_graphics("images/union-all.gif.")
+```
+
+  - intersect(), 
+  
+```{r,echo=FALSE}
+knitr::include_graphics("images/intersect.gif")
+```
+  
+  - setdiff()
+  
+```{r,echo=FALSE}
+knitr::include_graphics("images/setdiff-rev.gif")
+```
+
+* Tidyr Operations: 
+- pivot_longer()
+- pivot_wider()
+  
+```{r,echo=FALSE}
+knitr::include_graphics("images/tidyr-pivoting.gif")
+```
+

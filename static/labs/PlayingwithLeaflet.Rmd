@@ -4,8 +4,10 @@ author: "Arvind Venkatadri"
 date: "May 13, 2017"
 output:
   html_document:
-    theme: flatly
+    theme: united
+    df_print: paged
     toc: TRUE
+    toc_title: Contents
     toc_float: TRUE
     toc_depth: 3
     number_sections: TRUE
@@ -108,7 +110,7 @@ Popups are usually added to `icons`, `Markers` and other shapes can show up when
 
 Labels are messages attached to all shapes, using the argument `label` wherever it is available. 
 
-Labels are static, and Popups are usually visible on mouse click. Hence a `Marker` can have both a `label` and a `popup`. For example, the function `addPopup()` offers only a `popup` argument, whereas the function `addMarkers()` offers *both* a `popup` and a `label` argument. 
+**Labels are static, and Popups are usually visible on mouse click.** Hence a `Marker` can have both a `label` and a `popup`. For example, the function `addPopup()` offers only a `popup` argument, whereas the function `addMarkers()` offers *both* a `popup` and a `label` argument. 
 
 It is also possible to create labels standalone using `addLabelOnlyMarkers()` where we can show only text and no Markers. 
 
@@ -277,7 +279,10 @@ india_airports <-
     longitude_deg = as.numeric(longitude_deg),
     elevation_ft = as.integer(elevation_ft)
   ) %>% 
-  rename("lon" = longitude_deg, "lat" = latitude_deg)
+  rename("lon" = longitude_deg, "lat" = latitude_deg) %>% 
+  # Remove four locations which seem to be in the African Atlantic
+  filter(!id %in% c(330834, 330867, 325010, 331083))
+
 india_airports %>% head()
 
 ```

@@ -1,0 +1,769 @@
+---
+title: "Playing With Mapview"
+author: "Arvind Venkatadri"
+date: "`r Sys.Date()`"
+format: 
+  html:
+    toc: true
+    toc-depth: 2
+    toc-location: left
+    theme: united
+    code-fold: true
+    code-copy: true
+    code-overflow: wrap
+    df-print: paged
+    abstract: "Making Interactive maps in R, using the mapview package"
+    keywords: maps, mapview, interactive
+    number-sections: true
+    number-depth: 2
+    smooth-scroll: true
+    self-contained: true
+    self-contained-math: true
+    standalone: true
+    toc-title: Contents
+editor: visual
+---
+
+# Introduction
+
+In this tutorial, we will learn to create interactive maps in R, using a package called `mapview`, which is a simpler way to access `leaflet`, which is a wellknown package to create interactive maps.
+
+> Leaflet is a JavaScript library for creating dynamic maps that support panning and zooming along with various annotations like markers, polygons, and popups.
+
+Whereas `leaflet`s code becomes lengthy fairly quickly, `mapview` allows full functionality of leaflet using sensible defaults. Type `?mapview` in the console for more help.
+
+# More Information
+
+More information on `mapview` is available at <https://r-spatial.github.io/mapview/>.
+
+There are also two wonderful talks by Tim Appelhans, the creator of `mapview` that are available here:
+
+1.  [Mapview package tutorial (Part 1) - TIB AV-Portal](https://av.tib.eu/en/media/49557)
+2.  [Mapview package tutorial (Part 2) - TIB AV-Portal](https://av.tib.eu/en/media/49554)
+
+```{r}
+#| label: setup
+#| include: true
+#| 
+library(tidyverse)
+library(sf)
+# Mapview and allied packages
+library(mapview)
+
+library(leafem) # Provides extensions for packages 'leaflet' & 'mapdeck', many of which are used by package 'mapview'.
+
+library(leafgl) #High-Performance 'WebGl' Rendering for Package 'leaflet' 
+
+library(leafsync) # Create small multiples of several leaflet web maps with (optional) synchronised panning and zooming control. 
+
+library(slideview) # Create a side-by-side view of raster(image)s with an interactive slider to switch between regions of the images.
+
+library(cubeview) # View 3D Raster Cubes Interactively
+library(plainview) # Provides methods for plotting potentially large (raster) images interactively on a plain HTML canvas.
+
+# Data
+library(osmdata) # Import OSM Vector Data into R
+library(osmplotr) # Creating maps with OSM data in R
+
+```
+
+# Basic Maps using mapview
+
+`franconia` , `trails`, and `breweries` are geospatial datasets of class `sf` from the `mapview` package. `franconia` contains MULTIPOLYGON, `trails` contains MULTILINESTRING, and `breweries` contains POINT geometries.
+
+```{r}
+class(franconia)
+head(franconia,1)
+```
+
+```{r}
+class(trails)
+head(trails,1)
+```
+
+```{r}
+class(breweries)
+head(breweries,1)
+```
+
+Plotting these is a simple one-liner:
+
+```{r}
+mapview(franconia) 
+mapview(breweries)
+mapview(trails)
+
+```
+
+`mapview` has automagically added shapes to the map by detecting the geometry column in each `sf` dataframe. (rather like `geom_sf` in `ggplot`). The map is interactive and clicking on any of the shapes provides a popup containing all the remaining attribute information ( from the non-geometry columns)
+
+Note that there are multiple *basemaps* available by default in `mapview`. The layers icon on the left allows the user to interactively choose the base map style. There are other basemaps that can be specified programmatically.
+
+We can also plot these maps as overlays ( since they all pertain to the same geographical area.) Each of the maps can also be given a `layer` name:
+
+```{r}
+# Single overlay plot with layer names
+mapview(franconia, layer.name = "1-Franconia")  + 
+  mapview(trails, layer.name = "2-Brewery Trails") + 
+  mapview(breweries,layer.name = "3-Breweries")
+
+```
+
+## Add Colours to Shapes
+
+`mapview` offers a simple way of adding colours to shapes, based on any of the other *columns* in the respective dataframe, by passing that column name(in quotes!) to the parameter `zcol` in `mapview()`:
+
+```{r}
+mapview(franconia, zcol = "district",
+        col.regions = grDevices::hcl.colors) + # set colour palette
+  mapview(breweries, col.regions = "red")
+```
+
+Note that legends are created by default. They can be turned off with `,legend = FALSE` inside the `mapview()` function. Note also the *home button* at the bottom right: that re-centres and resets the map.
+
+One can get a **stack of maps** where the shapes are coloured by *all* variables simultaneously by using `, burst = TRUE` instead of `zcol`:
+
+```{r}
+mapview(franconia, burst = TRUE)
+```
+
+# Using mapview with external geospatial data
+
+On to something more complex. We want to plot a known set of locations on a mapview map. `mapview` takes in geographical data in many ways and we will explore most of them.
+
+## Data Sources for mapview
+
+> Objects of the following spatial classes are supported in `mapview`:
+>
+> -   [sf](https://cran.r-project.org/package=sf)
+> -   [raster](https://cran.r-project.org/package=raster) (Layer, Stack, Brick and SpatialPixels\* / SpatialGridDataFrame)
+> -   [stars](https://cran.r-project.org/package=stars)
+> -   [sp](https://cran.r-project.org/package=sp) (Points, Polygons, Lines and their DataFrame version)
+> -   [satellite](https://cran.r-project.org/package=satellite)
+
+Which means we cannot give `mapview` simple vectors / matrices/ dataframes containing *lon / lat* information: they need to be converted into `sf` format first. (Leaflet could natively do this! Hmm...)
+
+Let us read in the data set from `data.world` that gives us POINT locations of all airports in India in a `data frame` / `tibble`. The dataset is available at [India Airports Locations](https://query.data.world/s/ahtyvnm2ybylf65syp4rsb5tulxe6a "From data.world").
+
+You can either download it, save a copy, and read it in as usual, or use the URL itself to read it in directly from `data.world`. In the latter case, you will need the package `data.world` and also need to register your credentials for that page with RStudio. The (very simple!) instructions are available here at [data.world](https://data.world/integrations/r-and-r-studio "Take me there!!")
+
+```{r data.world_leaflet_example}
+#| message: false
+
+#library(devtools)
+#devtools::install_github("datadotworld/data.world-r", build_vignettes = TRUE)
+
+library(data.world)
+
+india_airports <-
+  read_csv(file = "https://query.data.world/s/ahtyvnm2ybylf65syp4rsb5tulxe6a") %>%
+  slice(-1) %>%  # Drop the first row which contains labels
+
+  dplyr::mutate(
+    id = as.integer(id),
+    latitude_deg = as.numeric(latitude_deg),
+    longitude_deg = as.numeric(longitude_deg),
+    elevation_ft = as.integer(elevation_ft)
+  ) %>%
+  
+  rename("lon" = longitude_deg, "lat" = latitude_deg) %>%
+  
+  # Remove four locations which seem to be in the African Atlantic
+  filter(!id %in% c(330834, 330867, 325010, 331083)) %>% 
+  
+  # Convert to `sf` dataframe
+  st_as_sf(
+    coords = c("lon", "lat"),
+    remove = FALSE,# retain the original lon and lat columns
+    sf_column_name = "geometry",
+    crs = 4326 # specify Projection,else no basemap will be plotted
+  )
+
+india_airports %>% head()
+
+```
+
+Let us plot this in \`mapview\`, using an ESRI National Geographic style map instead of the OSM Base Map. We will also place small circle markers for each airport.
+
+```{r}
+# Change the order of basemaps in mapview
+# Male OpenTopoMap the default
+mapviewOptions(basemaps = c("OpenTopoMap", "CartoDB.Positron", "CartoDB.DarkMatter", "OpenStreetMap", "Esri.WorldImagery" ))
+
+mapview(india_airports,
+        zcol = "type")
+```
+
+## Using popups and labels
+
+By default, `mapview` provides a mouseover label information (`feature ID`, or a `zcol` attribute if `zcol` has been set), and a popup table containing *all* attribute fields. This can be customized to show the user wants. There are various options for popups in `mapview`:
+
+-   `popup = popupTable()` Text/table based popup
+
+-   `popup = popupImage()` Images in popups
+
+-   `popup = popupGraph()` a data visualization in the popup
+
+-   `popup = popupIframe()` URL, Image, Video in a popup using *iframe*
+
+    We will download a small dataset of restaurants in say Malleswaram, Bangalore and plot them with `mapview`, adding popups and labels:
+
+```{r}
+library(osmdata)
+library(osmplotr)
+bbox<- osmdata::getbb("Malleswaram, Bengaluru")
+bbox
+
+restaurants <- osmplotr::extract_osm_objects(
+  bbox = bbox,
+  key = "amenity",
+  value = "restaurant",
+  return_type = "point") 
+
+restaurants <- restaurants %>% 
+  dplyr::filter(cuisine == "indian")
+locations %>% names()
+```
+
+Let us add popups containing the restaurant `name` and `cuisine`; we need to add the R package `leafpop` to add popups
+
+```{r}
+library(leafpop)
+mapviewOptions(basemaps = "OpenStreetMap") # set basemap to OSM
+mapview(
+  restaurants,
+  col.regions = "green",# Point Fill colour
+  cex = 10, # Point Size
+  color = "red", # Points Border
+  popup = popupTable(restaurants, zcol = c("name", "cuisine")))
+
+```
+
+## Using icons for markers
+
+We can also change the icon for each airport. Let us try one of the several icon families that we can use with `leaflet` : glyphicons, ionicons, and fontawesome icons.
+
+```{r airports_with_popups}
+
+# Define popup message for each airport
+
+# Based on data in india_airports
+
+popup <- paste(
+
+"<strong>",
+
+india_airports$name,
+
+"</strong><br>",
+
+india_airports$iata_code,
+
+"<br>",
+
+india_airports$municipality,
+
+"<br>",
+
+"Elevation(feet)",
+
+india_airports$elevation_ft,
+
+"<br>",
+
+india_airports$wikipedia_link,
+
+"<br>"
+
+)
+
+iata_icon <- leaflet::makeIcon(
+
+"iata-logo-transp.png", # Downloaded from www.iata.org
+
+iconWidth = 24,
+
+iconHeight = 24,
+
+iconAnchorX = 0,
+
+iconAnchorY = 0
+
+)
+
+# Create the mapview map
+
+mapview(data = india_airports,
+        popup = popupImage(img = iata_icon,popup = popup))
+
+```
+
+There are other icons we can use to mark the POINTs. `leaflet` allows the use of \[ionicons\](<http://ionicons.com/),> \[glyphicons\](<https://icons.getbootstrap.com/#icons),> and \[FontAwesomeIcons\](<http://fontawesome.io/icons/)>
+
+It is possible to create a `list` of icons, so that different Markers can have different icons. Let us try to map the MNCs in the ITPL area of Bangalore: we use the ideas in \[Using Leaflet Markers \@JLA-Data.net\](<https://www.jla-data.net/eng/leaflet-markers-in-r/)>
+
+```{r itpl}
+
+# Make a dataframe of addresses of Companies we wan to plot in ITPL
+
+companies_itpl <-
+
+data.frame(
+
+ticker = c(
+
+"MBRDI",
+
+"DTICI",
+
+"IBM",
+
+"Exxon",
+
+"Mindtree",
+
+"FIS Global",
+
+"Sasken",
+
+"LTI"),
+
+lat = c(
+
+12.986178620989264,
+
+12.984160906190121,
+
+12.983659088566357,
+
+12.985112265986636,
+
+12.983794997606187,
+
+12.980658616215155,
+
+12.982080447350246,
+
+12.981338168875348),
+
+lon = c(
+
+77.7270652183105,
+
+77.72808445774321,
+
+77.73103488768001,
+
+77.72935046040699,
+
+77.7227844126931,
+
+77.72685064158782,
+
+77.72545589289041,
+
+77.72287024338216)
+
+) %>% sf::st_as_sf(coords = c("lon", "lat"), crs = 4326)
+
+# Vanilla leaflet map
+
+leaflet(companies_itpl) %>%
+
+addTiles() %>%
+
+addMarkers()
+
+```
+
+Let us make a list of logos of the Companies and use them as markers!
+
+```{r}
+
+# a named list of rescaled icons with links to images
+
+favicons <- iconList(
+
+"MBRDI" = makeIcon(
+
+iconUrl = "<https://www.mercedes-benz.com/etc/designs/brandhub/frontend/static-assets/header/logo.svg%22,>
+
+iconWidth = 25,
+
+iconHeight = 25
+
+),
+
+"DTICI" = makeIcon(
+
+iconUrl = "<https://media-exp1.licdn.com/dms/image/C4D0BAQGzOep26lC03w/company-logo_200_200/0/1638298367374?e=2147483647&v=beta&t=mPyF4gvNhNFvd-tedbqNzJofq4q9qcw6A9z9jQeLAwc%22,>
+
+iconWidth = 45,
+
+iconHeight = 45
+
+),
+
+"IBM" = makeIcon(
+
+iconUrl = "<https://www.ibm.com/favicon.ico%22,>
+
+iconWidth = 25,
+
+iconHeight = 25
+
+),
+
+"Exxon" = makeIcon(
+
+iconUrl = "<https://corporate.exxonmobil.com/-/media/Global/Icons/logos/ExxonMobilLogoColor2x.png%22,>
+
+iconWidth = 45,
+
+iconHeight = 25
+
+),
+
+"Mindtree" = makeIcon(
+
+iconUrl = "<https://www.mindtree.com/themes/custom/mindtree_theme/mindtree-lnt-logo-png.png%22,>
+
+iconWidth = 75,
+
+iconHeight = 25
+
+),
+
+"FIS Global" = makeIcon(
+
+iconUrl = "<https://1000logos.net/wp-content/uploads/2021/09/FIS-Logo-768x432.png%22,>
+
+iconWidth = 25,
+
+iconHeight = 25
+
+),
+
+"Sasken" = makeIcon(
+
+iconUrl = "<https://www.sasken.com/sites/all/themes/sasken_website/logo.png%22,>
+
+iconWidth = 35,
+
+iconHeight = 35,
+
+),
+
+"LTI" = makeIcon(
+
+iconUrl = "<https://www.lntinfotech.com/wp-content/uploads/2021/09/LTI-logo.svg%22,>
+
+iconWidth = 25,
+
+iconHeight = 25
+
+)
+
+)
+
+# Create the Leaflet map
+
+leaflet(companies_itpl) %>%
+
+addMarkers(icon = ~ favicons[ticker], # lookup based on ticker
+
+label = ~ companies_itpl$ticker,
+
+labelOptions = labelOptions(noHide = F,offset = c(15,-25))) %>%
+
+addProviderTiles("CartoDB.Positron")
+
+```
+
+### Points using `sf` objects
+
+We will use data from an `sf` data object. This differs from the earlier situation where we had a simple data frame with `lon` and `lat` columns. In `sf`, the `lon` and `lat` info is embedded in the `geometry` column of the `sf data frame`.
+
+The `tmap` package has a data set of all World metro cities, titled `metro`. We will plot these on the map and also scale the markers in proportion to one of the **feature attributes**, `pop2030`. The `popup` will be the name of the metro city. We will also use the `CartoDB.Positron` base map.
+
+Note that the `metro` data set has a POINT geometry, as needed!
+
+```{r,message=FALSE}
+
+data(metro, package = "tmap")
+
+metro
+
+leaflet(data = metro) %>%
+
+setView(lat = 18, lng = 77, zoom = 4) %>%
+
+# Add CartoDB.Positron
+
+addProviderTiles(providers$CartoDB.Positron) %>% # CartoDB Basemap
+
+# Add Markers for each airport
+
+addCircleMarkers(radius = ~ sqrt(pop2030)/350,
+
+color = "red",
+
+popup = paste("Name: ", metro$name, "<br>",
+
+"Population 2030: ", metro$pop2030))
+
+```
+
+We can also try downloading an `sf` data frame with POINT geometry from say OSM data<https://osm.> Let us get hold of restaurants data in Malleswaram, Bangalore from OSM data:
+
+```{r}
+
+bbox<- osmdata::getbb("Malleswaram, Bengaluru")
+
+bbox
+
+locations <- osmplotr::extract_osm_objects(
+
+bbox = bbox,
+
+key = "amenity",
+
+value = "restaurant",
+
+return_type = "point")
+
+locations <- locations %>%
+
+dplyr::filter(cuisine == "indian")
+
+locations %>% head()
+
+# Fontawesome icons seem to work in `leaflet` only up to FontAwesome V4.7.0.
+
+# The Fontawesome V4.7.0 Cheatsheet is here: <https://fontawesome.com/v4/cheatsheet/>
+
+leaflet(data = locations, options = leafletOptions(minZoom = 12)) %>%
+
+addProviderTiles(providers$CartoDB.Voyager) %>%
+
+# Regular `leaflet` code
+
+addAwesomeMarkers(icon = awesomeIcons(icon = "fa-coffee",
+
+library = "fa",
+
+markerColor = "blue",
+
+iconColor = "black",
+
+iconRotate = TRUE),
+
+popup = paste("Name: ", locations$name,"<br>",
+
+"Food: ", locations$cuisine))
+
+```
+
+**Fontawesome Workaround**
+
+For more later versions of Fontawesome, here below is a workaround from <https://github.com/rstudio/leaflet/issues/691>. Despite this some fontawesome icons simply do not seem to show up. ;-()
+
+```{r fontawesome_workaround}
+
+library(fontawesome)
+
+coffee <- makeAwesomeIcon(
+
+text = fa("mug-hot"), # mug-hot was introduced in fa version 5
+
+iconColor = "black",
+
+markerColor = "blue",
+
+library = "fa"
+
+)
+
+leaflet(data = locations) %>%
+
+addProviderTiles(providers$CartoDB.Voyager) %>%
+
+# Workaround code
+
+addAwesomeMarkers(icon = coffee,
+
+popup = paste("Name: ", locations$name,"<br>",
+
+"Food: ", locations$cuisine, "<br>"))
+
+```
+
+Note that `leaflet` automatically detects the lon/lat columns from within the POINT `geometry` column of the `sf` data frame.
+
+### Points using Two-Column Matrices
+
+We can now quickly try providing `lon` and `lat` info in a two column matrix.This can be useful to plot a bunch of points recorded on a mobile phone app.
+
+```{r matrix_point_data}
+
+mysore5 <- matrix(c(runif(5, 76.652985-0.01, 76.652985+0.01),
+
+runif(5, 12.311827-0.01, 12.311827+0.01)),
+
+nrow = 5)
+
+mysore5
+
+leaflet(data = mysore5) %>%
+
+addProviderTiles(providers$OpenStreetMap) %>%
+
+# Pick an icon from <https://www.w3schools.com/bootstrap/bootstrap_ref_comp_glyphs.asp>
+
+addAwesomeMarkers(icon = awesomeIcons(
+
+icon = 'music',
+
+iconColor = 'black',
+
+library = 'glyphicon'),
+
+popup = "Carnatic Music !!")
+
+```
+
+## Polygons, Lines, and Polylines Data Sources for `leaflet`
+
+We have seen how to get POINT data into `leaflet`.
+
+Line and polygon data can come from a variety of sources:
+
+-   `SpatialPolygons`, `SpatialPolygonsDataFrame`, `Polygons`, and `Polygon objects` (from the `sp` package)
+
+-   `SpatialLines`, `SpatialLinesDataFrame`, `Lines`, and `Line objects` (from the `sp` package)
+
+-   `MULTIPOLYGON`, `POLYGON`, `MULTILINESTRING`, and `LINESTRING` objects (from the `sf` package)
+
+-   `map` objects (from the `maps` package's `map()` function); use `map(fill = TRUE)` for polygons, `FALSE` for polylines
+
+-   Two-column numeric `matrix`; the first column is longitude and the second is latitude. Polygons are separated by rows of (NA, NA). It is not possible to represent multi-polygons nor polygons with holes using this method; use `SpatialPolygons` instead.
+
+We will concentrate on using `sf` data into `leaflet`. We may explore `maps()` objects at a later date.
+
+### Polygons/MultiPolygons and LineString/MultiLineString using `sf` data frames
+
+Let us download College buildings, parks, and the cycling lanes in Amsterdam, Netherlands, and plot these in `leaflet`.
+
+```{r}
+
+bbox <- osmdata::getbb("Amsterdam, Netherlands")
+
+bbox
+
+colleges <- osmplotr::extract_osm_objects(bbox = bbox,
+
+key = "amenity",
+
+value = "college",
+
+return_type = "polygon" )
+
+parks <- osmplotr::extract_osm_objects(bbox = bbox,
+
+key = "park",
+
+return_type = "polygon" )
+
+roads <- osmplotr::extract_osm_objects(bbox = bbox,
+
+key = "highway",
+
+value = "primary",
+
+return_type = "line")
+
+cyclelanes <-
+
+osmplotr::extract_osm_objects(bbox,
+
+key = "cycleway",
+
+value = "lane",
+
+return_type = "line")
+
+```
+
+We have `r nrow(colleges)` colleges in our data and `r nrow(parks)` parks in our data.
+
+```{r}
+
+leaflet() %>%
+
+addTiles() %>%
+
+addPolygons(data = colleges, popup = ~colleges$name) %>%
+
+addPolygons(data = parks, color = "green", popup = parks$name) %>%
+
+addPolylines(data = roads, color = "red") %>%
+
+addPolylines(data = cyclelanes, color = "purple")
+
+```
+
+## Chapter 3: Using Raster Data in `leaflet`
+
+So far all the geospatial data we have plotted in `leaflet` has been **vector** data. We will now explore how to plot **raster** data using `leaflet`. Raster data are used to depict continuous variables across space, such as vegitation, salinity, forest cover etc. Satellite imagery is frequently available as raster data.
+
+### Importing Raster Data \[Work in Progress!\]
+
+Raster data can be imported into R in many ways:
+
+-   using the `maptiles` package
+
+-   using the `OpenStreetMap` package
+
+```{r raster_data_in_leaflet}
+
+library(terra)
+
+library(maptiles)
+
+#library(OpenStreetMap) # causes RStudio to crash...
+
+```
+
+# Bells and Whistles in `leaflet`: layers, groups, legends, and graticules
+
+## Adding Legends\[Work in Progress!\]
+
+```{r}
+
+## Generate some random lat lon data around Bangalore
+
+df <- data.frame(lat = runif(20, min = 11.97, max = 13.07),
+
+lng = runif(20, min = 77.48, max = 77.68),
+
+col = sample(c("red", "blue", "green"), 20,
+
+replace = TRUE),
+
+stringsAsFactors = FALSE)
+
+df %>%
+
+leaflet() %>%
+
+addTiles() %>%
+
+addCircleMarkers(color = df$col) %>%
+
+addLegend(values = df$col, labels = LETTERS[1:3], colors = c("blue", "red", "green"))
+
+```
+
+# Using Web Map Services (WMS) \[Work in Progress!\]
+
+To be included.

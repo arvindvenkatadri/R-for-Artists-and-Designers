@@ -690,3 +690,10 @@ And as we will learn, function arguments in R use specific ordering, so we can o
 ggplot(penguins, aes(bill_length_mm, body_mass_g)) +
   geom_point()
 ```
+
+
+```{r echo=FALSE}
+knitr::include_graphics("https://isabella-b.com/blog/ggplot2-theme-elements-reference/ggplot2-theme-elements-reference-v2_hu8994090e1960a0a71878a3756da20076_580819_2000x2000_fit_lanczos_2.png")
+
+```
+
