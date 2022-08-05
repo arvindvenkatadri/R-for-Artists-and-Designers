@@ -1,7 +1,7 @@
 ---
 title: 'Lab-05: The Lobster Quadrille'
-subtitle: 'Using Colour Palettes in R'
-summary: 'Using Colour Palettes in R'
+subtitle: 'Fonts and other Wizardy in gplot'
+summary: 'Fonts and other Wizardy in gplot'
 date: "2021-07-06"
 featured: false
 draft: false
@@ -28,7 +28,7 @@ links:
 - icon: flask
   icon_pack: fas
   name: lab
-  url: /labs/05-colors.html
+  url: /labs/06a-wizardy.html
 # - icon: magic
 #   icon_pack: fas
 #   name: slides
