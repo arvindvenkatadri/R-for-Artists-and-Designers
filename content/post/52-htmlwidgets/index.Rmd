@@ -1,0 +1,93 @@
+---
+title: 'Lab-5a: Did you ever see such a thing as a drawing of a muchness?'
+subtitle: 'Working with htmlwidgets !!'
+summary: "Using Javascript libraries in R"
+date: "`r Sys.Date()`"
+featured: false
+draft: false
+weight: 52
+
+# Featured image
+# To use, add an image named `featured.jpg/png` to your page's folder.
+# Placement options: 1 = Full column width, 2 = Out-set, 3 = Screen-width
+# Focal point options: Smart, Center, TopLeft, Top, TopRight, Left, Right, BottomLeft, Bottom, BottomRight
+image:
+  placement: 2
+  caption: 'Image credit: [**Alice In Wonderland dot Net**](https://www.alice-in-wonderland.net/)'
+  focal_point: ""
+  preview_only: true
+
+# Projects (optional).
+#   Associate this post with one or more of your projects.
+#   Simply enter your project's folder or file name without extension.
+#   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
+#   Otherwise, set `projects = []`.
+projects: []
+
+links:
+- icon: flask
+  icon_pack: fas
+  name: lab
+  url: /labs/052-htmlwidgets.html
+  
+# - icon: magic
+#   icon_pack: fas
+#   name: Slides
+#   url: /slides/04-Metaphors-with-Graphics.html
+#   
+# - icon: paintbrush
+#   icon_pack: fas
+#   name: Colours in ggplot
+#   url: /labs/05-colors.html
+---
+
+![](featured.jpg)
+
+
+## Introduction
+
+There are very many great JavaScript libraries for creating eye-popping and even interactive charts! And these are now available in R, and can be invoked using R code! So we can "use JavaScript" in R, as it were, without knowing JavaScript! And create something like this:
+
+![](globe.png)
+
+<br>
+
+```{r, echo=FALSE,eval=FALSE,warning=FALSE,message=FALSE}
+library(tidyverse)
+library(echarts4r)
+library(echarts4r.assets)
+url <- "https://echarts.apache.org/examples/data-gl/asset/data/population.json"
+data <- jsonlite::fromJSON(url)
+data <- as.data.frame(data)
+names(data) <- c("lon", "lat", "value")
+
+data |> 
+  e_charts(lon) |> 
+  e_globe(
+    environment = ea_asset("starfield"),
+    base_texture = ea_asset("world topo"), 
+    height_texture = ea_asset("world topo"),
+    displacementScale = 0.04
+  ) |> 
+  e_bar_3d(lat, value, coord_system = "globe") |> 
+  e_visual_map(show = FALSE)
+```
+
+
+Unlike the Dormouse, no complaints!
+
+We will explore a few them, as an alternative to `ggplot` !!
+
+This may be too much of a good thing, or `a much of muchness` but then, we can always use  more then one way of telling our stories!!
+
+
+
+
+
+## References
+
+1. Bring the best of JavaScript data visualization to R, <https://www.htmlwidgets.org/>
+
+
+2. https://patchwork.data-imaginist.com/
+

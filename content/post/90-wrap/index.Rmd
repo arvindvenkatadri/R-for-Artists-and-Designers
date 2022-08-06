@@ -1,11 +1,11 @@
 ---
-title: 'Lab-00: Down the R-abbit Hole...'
-subtitle: 'Welcome ! Introduce Yourself to R, RStudio, and to all of Us!'
-summary: Welcome ! Introduce Yourself to R, RStudio!
+title: 'Lab-09: Old Tortoise Taught Us'
+subtitle: "Wrapping it all Up"
+summary: "Wrapping it all Up"
 date: "`r Sys.Date()`"
+weight: 90
 featured: false
 draft: false
-weight: 1
 
 # Featured image
 # To use, add an image named `featured.jpg/png` to your page's folder.
@@ -25,39 +25,20 @@ image:
 projects: []
 
 links:
-- icon: flask
-  icon_pack: fas
-  name: lab
-  url: /labs/00-install_name_plot.html
-  
 - icon: magic
   icon_pack: fas
-  name: Installation Slides
-  url: /slides/00-Installation.html
+  name: slides
+  url: /slides/12-slides.html
 ---
 
 ![](featured.jpg)
 
-```{r setup, include=FALSE}
-library(blogdown)
-```
-
 ## Introduction
 
-Welcome! 
+We will spend a little time wrapping up everything that we have learnt so far, in R.
 
-Let's start our journey to the Garden of Data Visualization, with this terrific presentation by the great ( and sadly late..) **Hans Rosling**.
+We will take one large dataset that has numerical, spatial and network type data, and see how we can make multiple visual depictions of it. We will use most of the packages that we have encountered so far and try to make a polished info visualization with all the graphs, text, and descriptions put together!
 
-The best stats you've ever seen by Hans Rosling: 
-
-`r blogdown::shortcode("youtube", "hVimVzgtD6w")`
-
-
-<br>
-
-We will run some boiler-plate R code today! Nothing ( almost! ) to code! We will get used to the tools and words of the trade: R, RStudio, installation, packages, libraries....
-
-
-
+## References
 
 

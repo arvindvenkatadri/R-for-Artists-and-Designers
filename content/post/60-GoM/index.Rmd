@@ -1,0 +1,64 @@
+---
+title: "Lab-06: If you please sir...which way to the Secret Garden?"
+subtitle: "The Grammar of Maps"
+summary: "The Grammar of Maps"
+author: "Arvind Venkatadri"
+date: "`r Sys.Date()`"
+weight : 60
+featured: no
+image:
+  placement: 2
+  caption: 'Image credit: [**Alice In Wonderland dot Net**](https://www.alice-in-wonderland.net/)'
+  focal_point: ""
+  preview_only: true
+projects: []
+output:
+  html_document:
+    toc_float: true
+    theme: flatly
+    toc: true
+    code_folding: true
+links:
+- icon: flask
+  icon_pack: fas
+  name: lab
+  url: /labs/06-Grammar-of-Maps.html
+  
+- icon: magic
+  icon_pack: fas
+  name: Introduction Slides
+  url: /slides/06-Spatial-Data-in-R.html
+  
+- icon: flask
+  icon_pack: fas
+  name: Interactive Maps with leaflet and mapview
+  url: /labs/PlayingwithLeaflet.html
+---
+
+![](featured.jpg)
+
+
+## Introduction
+
+What is there to not like about maps!!!
+
+We will learn to make static and interactive maps and to show off different kinds of data on them, data that have an inherently "spatial" spread or significance!
+
+Trade Routes? Populations? Street Crime hotspots? Theatre and Food districts and popular Restaurants? Literary Paris, London and Barcelona?
+
+All possible !!
+
+
+# References
+
+1. [OSM Basic Maps Vignette](https://docs.ropensci.org/osmplotr/articles/basic-maps.html)
+
+1. Nikita Voevodin, [R, Not the Best Practices](https://bookdown.org/voevodin_nv/R_Not_the_Best_Practices/maps.html)  
+
+1. Nico Hahn, [Making Maps with R](https://bookdown.org/nicohahn/making_maps_with_r5/docs/introduction.html)  
+
+1. Emine Fidan, [Interactive Maps in R](https://bookdown.org/eneminef/DRR_Bookdown/)  
+
+1. Lovelace et al, [Geocomputation in R](https://geocompr.robinlovelace.net/adv-map.html)
+
+

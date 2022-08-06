@@ -1,11 +1,12 @@
 ---
-title: 'Lab-00: Down the R-abbit Hole...'
-subtitle: 'Welcome ! Introduce Yourself to R, RStudio, and to all of Us!'
-summary: Welcome ! Introduce Yourself to R, RStudio!
+title: 'Lab-10: Your are Nothing but a Pack of Cards!!'
+subtitle: "Making a website to show it all"
+summary: "Making a website to show it all"
+author: "Arvind Venkatadri"
 date: "`r Sys.Date()`"
+weight: 100
 featured: false
 draft: false
-weight: 1
 
 # Featured image
 # To use, add an image named `featured.jpg/png` to your page's folder.
@@ -25,39 +26,29 @@ image:
 projects: []
 
 links:
-- icon: flask
-  icon_pack: fas
-  name: lab
-  url: /labs/00-install_name_plot.html
-  
 - icon: magic
   icon_pack: fas
-  name: Installation Slides
-  url: /slides/00-Installation.html
+  name: slides
+  url: 12-slides_xaringan.html
 ---
 
 ![](featured.jpg)
 
-```{r setup, include=FALSE}
-library(blogdown)
-```
-
 ## Introduction
 
-Welcome! 
+Let's make a website in RStudio to show off our data viz portfolio, and to share with friends, parents, prospective employers...
 
-Let's start our journey to the Garden of Data Visualization, with this terrific presentation by the great ( and sadly late..) **Hans Rosling**.
-
-The best stats you've ever seen by Hans Rosling: 
-
-`r blogdown::shortcode("youtube", "hVimVzgtD6w")`
+We will encounter a new package called `blogdown` and use workflows with [github](https://github.com) and a free web hosting service called [Netlify](https://www.netlify.app) to create a website where all our RMarkdowns become individual blog posts, complete with Titles, Sections, Text, Diagrams and Links!
 
 
-<br>
+## References
 
-We will run some boiler-plate R code today! Nothing ( almost! ) to code! We will get used to the tools and words of the trade: R, RStudio, installation, packages, libraries....
+1. Allison Hill  
 
+
+2. Sharon Macliss
 
 
 
+3. Yihui Xie  
 

@@ -1,0 +1,369 @@
+---
+author: "Arvind Venkatadri"
+date: '`r format(Sys.Date())`'
+title: Using htmlwidgets, crosstalk, and echarts4r
+output:
+  html_document:
+    toc_float: true
+    theme: flatly
+    toc: true
+    code_folding: show
+    code_download: true
+    highlight: tango
+keywords: echarts4r
+subject: htmlwidgets
+abstract: Using htmlwidgets package and check out its capabilities, especially maps. Also want to use crosstalk to link different visualizations together
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# Data manipulation and data sources
+library(tidyverse)
+library(tidygraph)
+library(igraph)
+library(palmerpenguins)
+library(igraphdata)
+
+# htmlwidget related libraries
+library(htmlwidgets)
+library(crosstalk)
+
+# Widget Libraries
+library(leaflet)
+library(plotly)
+library(DT)
+library(echarts4r)
+library(rgl)
+library(networkD3)
+library(threejs)
+library(slickR)
+# Linkable widgets in crosstalk - github repo only
+#devtools::install_github("kent37/summarywidget")
+library(summarywidget)
+
+```
+
+## References
+
+1. <https://www.htmlwidgets.org/index.html>
+2. The threejs package: three.js widgets for R <https://bwlewis.github.io/rthreejs/>
+
+
+## `htmlwidgets` usage
+
+`htmlwidgets` creates, well, widgets, that can visualize data in many ways. HTML widgets work just like R plots except they produce interactive web visualizations. These can be used in `RMarkdown`, in `flexdashboards`, and in `shiny` apps. 
+
+All the possible widgets ( 127 of them on CRAN ) are listed here: <https://gallery.htmlwidgets.org/>
+
+Some packages that offer widgets for use in `htmlwidgets`:  
+
+1. `networkD3`: 
+  - Force directed networks with `simpleNetwork` and `forceNetwork`
+  - Sankey diagrams with `sankeyNetwork`
+  - Radial networks with `radialNetwork`
+  - Dendro networks with `dendroNetwork`
+
+### Using `networkD3`
+
+```{r networkD3}
+library(networkD3)
+data("karate")
+
+# Make separate data frames for edges and nodes
+# networkD3 needs indices starting from 1
+karate_edges <- karate %>% 
+  as_tbl_graph() %>% 
+  tidygraph::activate(edges) %>% 
+  as.data.frame() %>% 
+  dplyr::mutate(source = from - 1, target = to - 1) %>% 
+  rename(value = weight) %>% 
+  select(source, target, value)
+karate_edges %>% head() %>% knitr::kable()
+
+karate_nodes <- karate %>% 
+  as_tbl_graph() %>% 
+  tidygraph::activate(nodes) %>% 
+  as.data.frame() %>% 
+  dplyr::mutate(group = as.character(Faction)) %>% 
+  select(name, label, group, color)
+karate_nodes %>% head() %>% knitr::kable()
+
+simpleNetwork(karate_edges, charge = -50, 
+              fontSize = 12, zoom = FALSE, fontFamily = "serif")
+
+```
+
+```{r forceNetwork}
+forceNetwork(Links = karate_edges, 
+             Nodes = karate_nodes, 
+             Value = "value", # width of edges, dbl
+             NodeID = "name", # chr
+             Group = "group", # Node group, chr
+             # Nodesize = "label" # chr !!!
+             # linkColour = "value"
+             )
+
+
+
+```
+
+
+### Creating a Sankey Diagram. 
+
+
+```{r sankeyNetwork}
+UCB_graph <-
+  UCBAdmissions %>% 
+  as.data.frame() %>% 
+  select(Gender, Admit, Dept, Freq) %>% 
+  as_tbl_graph()
+UCB_graph
+
+UCB_nodes <- UCB_graph %>% activate(nodes) %>% as_tibble()
+UCB_nodes
+
+UCB_links <- UCB_graph %>% 
+  activate(edges) %>% 
+  as_tibble() %>%
+  dplyr::mutate(from = from - 1, to = to - 1)
+UCB_links
+
+sankeyNetwork(
+  Links = UCB_links,
+  Nodes = UCB_nodes,
+  Source = "from",
+  Target = "to",
+  Value = "Freq",
+  LinkGroup = "Dept",
+  fontSize = 20,
+  fontFamily = "Arial"
+)
+```
+
+`simpleNetwork`, `forceNetwork` and `sankeyNetwork` use a similar `node` and `link` data structure, organized as two **data frames** (not tibbles)
+
+` chordNetwork` uses an *association matrix* type of matrix or a data frame organized in the same way, where entry (n,m) represents the strength of the link from group n to group m. Matrix needs to be **square** !! "Column names" and "Row names" need to be the same if the data is a `data.frame`.
+
+```{r chordNetwork}
+data <- matrix(rpois(n = 16, lambda = 50), nrow = 4, ncol = 4)
+chordNetwork(data,
+             labels = c("A", "B", "C", "D"))
+
+```
+
+
+
+
+## Using threejs
+
+1. <https://bwlewis.github.io/rthreejs/>
+2. <https://bwlewis.github.io/rthreejs/crosstalk.html>
+
+### `graphjs` usage
+
+```{r}
+data("LeMis") # igraph object
+LeMis
+V(LeMis)$label
+V(LeMis)$color
+graphjs(LeMis,
+    layout=list( # animates between a list of layouts
+      # layouts need to be 3D layouts
+      # Or each can be a 3 column matrix with n(rows) = n(vertices)
+    #layout_randomly(LeMis, dim=3),
+    #layout_on_sphere(LeMis),
+    layout_with_drl(LeMis, dim=3)  # note! somewhat slow...
+    #layout_with_fr(LeMis, dim=3, niter=30)
+    ),
+  main=list("random layout", "sphere layout", "drl layout", "fr layout"),
+  fpl=300)
+
+```
+
+
+## `globejs` usage
+Plot points, arcs and images on a globe in 3D using Three.js. The globe can be rotated and and zoomed. Great Circles and historical routes are a good idea for this perhaps.
+
+Refer to this page for more ideas <http://bwlewis.github.io/rthreejs/globejs.html>
+
+```{r}
+# Random Lats and Longs
+lat <- rpois(10, 60) + rnorm(10, 80)
+long <- rpois(10, 60) + rnorm(10, 10)
+
+# Random "Spike" heights for each location. Population? Tourists? GDP?
+value <- rpois(10, lambda = 80)
+ 
+globejs(lat = lat, long = long)
+
+globejs(
+  lat = lat,
+  long = long,
+  
+  # random heights of the Spikes (!!) at lat-long combo
+  value = value,
+  color = "red",
+  # Zoom factor, default is 35
+  fov = 50
+)
+
+globejs(
+  lat = lat,
+  long = long,
+  value = value,
+  color = "red",
+  pointsize = 4, # width of the columns
+  # Zoom position
+  fov = 35,
+  # initial position of the globe
+  rotationlat = 0.6, #  in RADIANS !!! Good Heavens!!
+  rotationlong = 0.2 #  in RADIANS !!! Good Heavens!!
+)
+
+globejs(
+  lat = lat,
+  long = long,
+  value = value,
+  color = "red",
+  pointsize = 4,
+  fov = 35,
+  rotationlat = 0.6,
+  rotationlong = 0.2,
+  lightcolor = "#aaeeff",
+  emissive = "#0000ee",
+  bodycolor = "#ffffff",
+  bg = "grey"
+)
+
+```
+
+
+```{r}
+# Plotting arcs on the globe
+# Requires 4 column data frame for start and end lat and long
+
+arcs <- data.frame(start_lat = runif(10, min = -20, max = 20), 
+                   start_lon = runif(10, min = -20, max = 20), 
+                   end_lat = runif(10, min = -20, max = 20),
+                   end_lon = runif(10, min = -20, max = 20) + 60)
+arcs
+
+globejs(arcs = arcs,
+        arcsColor = "gold",
+        arcsLwd = 4,
+        arcsHeight = 0.6,
+        rotationlat = 0,
+        rotationlong = -2.2)
+```
+
+`threejs` contains a dataset called `flights` obtained from Callum Prentice's FlightStream page:
+< http://callumprentice.github.io/apps/flight_stream/index.html> 
+
+```{r}
+data("flights",package = "threejs")
+flights %>% head()
+
+# Example Code
+# dest   <- factor(sprintf("%.2f:%.2f",flights[,3], flights[,4]))
+# dest
+# freq <- sort(table(dest), decreasing=TRUE)
+# freq
+frequent_destinations <-
+  flights %>% group_by(dest_lat, dest_long) %>% 
+  count(sort = TRUE) %>% 
+  ungroup() %>% 
+  slice_max(n = 10, order_by = n)
+frequent_destinations
+
+# idx <- dest %in% frequent_destinations
+# frequent_flights <- flights[idx, ]
+# ll <- unique(frequent_flights[,3:4])
+frequent_flights <- flights %>% 
+  semi_join(frequent_destinations,by = c("dest_lat" = "dest_lat", "dest_long" = "dest_long")) %>% unique() 
+frequent_flights
+
+
+# globejs(lat=ll[, 1], long=ll[, 2], arcs=frequent_flights,
+#         bodycolor="#aaaaff", arcsHeight=0.3, arcsLwd=2,
+#         arcsColor="#ffff00", arcsOpacity=0.15,
+#         atmosphere=TRUE, color="#00aaff", pointsize=0.5)
+
+# Get a nice image of the globe from NASA
+earth <- "http://eoimages.gsfc.nasa.gov/images/imagerecords/73000/73909/world.topo.bathy.200412.3x5400x2700.jpg"
+
+globejs(
+  lat = frequent_flights$dest_lat,
+  long = frequent_flights$dest_long,
+  arcs = frequent_flights,
+  #value = frequent_destinations$n,
+  color = "red",
+  #bodycolor = "#aaaaff",
+  arcsHeight = 0.3,
+  arcsLwd = 2,
+  arcsColor = "#ffff00",
+  arcsOpacity = 0.15,
+  atmosphere = FALSE,
+  #color="#00aaff",
+  pointsize = 2,
+  rotationlat = 0.6,
+  rotationlong = 0.2,
+  # lightcolor = "#aaeeff",
+  # emissive = "#0000ee",
+  # bodycolor = "#ffffff",
+  bg = "grey"
+        )
+```
+
+## Using `scatterplot3js` and friends
+
+3D scatter plots with points and lines can be achieved using `scatterplot3js`, `points3D`, and `lines3D`. 
+
+```{r}
+library(palmerpenguins)
+penguins <- penguins %>% drop_na()
+scatterplot3js(x = penguins$bill_length_mm, 
+               y = penguins$flipper_length_mm, 
+               z = penguins$body_mass_g)
+
+```
+
+
+
+```{r}
+library(palmerpenguins)
+penguins <- penguins %>% drop_na()
+scatterplot3js(x = penguins$bill_length_mm, 
+               y = penguins$flipper_length_mm, 
+               z = penguins$body_mass_g,
+               cex.symbols = 0.2) # Smaller Points
+
+```
+
+
+
+```{r}
+library(palmerpenguins)
+penguins <- penguins %>% drop_na()
+
+scatterplot3js(x = penguins$bill_length_mm, 
+               y = penguins$flipper_length_mm, 
+               z = penguins$body_mass_g,
+               cex.symbols = 0.2) %>%  # Smaller Points
+lines3d(from = penguins$bill_length_mm, 
+        to = penguins$flipper_length_mm, 
+        color = "blue")
+
+```
+
+
+
+# Using `leaflet`
+
+`leaflet` allows one to create interactive maps with very simple and intuitive code. `leaflet` also includes access to many "base maps" that can change the look and feel of the map itself, which can be very useful ( e.g. night mode maps). Information on how to use `leaflet` is available at <http://rstudio.github.io/leaflet/>
+
+```{r}
+leaflet() %>% 
+  addTiles() %>% 
+  setView(lng = 77, lat = 18, zoom = 4)
+```
+
