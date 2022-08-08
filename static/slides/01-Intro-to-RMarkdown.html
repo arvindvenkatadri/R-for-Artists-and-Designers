@@ -13,11 +13,21 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
+.title[
 # Slides 01
+]
+.subtitle[
 ## Drink Me !<br> Introduction to RMarkdown
+]
+.author[
 ### Arvind Venkatadri
+]
+.institute[
 ### Srishti Manipal Institute
-### (2022-02-08)
+]
+.date[
+### (2022-08-08)
+]
 
 ---
 
@@ -36,7 +46,7 @@ class: middle
 
 # What is RMarkdown?
 
-&lt;img src="https://github.com/allisonhorst/stats-illustrations/raw/master/rstats-artwork/rmarkdown_wizards.png" width="1000px" height="550px" style="display: block; margin: auto;" /&gt;
+&lt;img src="https://raw.githubusercontent.com/allisonhorst/stats-illustrations/main/rstats-artwork/rmarkdown_wizards.png" width="1000px" height="550px" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -203,6 +213,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable

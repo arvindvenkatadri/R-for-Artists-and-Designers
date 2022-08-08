@@ -44,7 +44,8 @@ class: middle
 # What is RMarkdown?
 
 ```{r echo=FALSE, out.width= "1000px", out.height="550px", fig.align='center'}
-knitr::include_graphics("https://github.com/allisonhorst/stats-illustrations/raw/master/rstats-artwork/rmarkdown_wizards.png")
+knitr::include_graphics("https://raw.githubusercontent.com/allisonhorst/stats-illustrations/main/rstats-artwork/rmarkdown_wizards.png")
+
 ```
 
 ---
