@@ -5,6 +5,12 @@ summary: "The Grammar of Maps"
 author: "Arvind Venkatadri"
 date: "`r Sys.Date()`"
 weight : 60
+output:
+  html_document:
+    toc_float: true
+    theme: united
+    toc: true
+    code_folding: true
 featured: no
 image:
   placement: 2
@@ -12,12 +18,6 @@ image:
   focal_point: ""
   preview_only: true
 projects: []
-output:
-  html_document:
-    toc_float: true
-    theme: flatly
-    toc: true
-    code_folding: true
 links:
 - icon: flask
   icon_pack: fas

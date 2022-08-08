@@ -15,6 +15,10 @@ projects: []
 output: 
   html_document:
     code_download: TRUE
+    toc_float: true
+    theme: united
+    toc: true
+    code_folding: true
 links:
 - icon: flask
   icon_pack: fas

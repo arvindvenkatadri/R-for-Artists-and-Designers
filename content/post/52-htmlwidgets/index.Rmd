@@ -1,77 +1,102 @@
 ---
-title: 'Lab-5a: Did you ever see such a thing as a drawing of a muchness?'
-subtitle: 'Working with htmlwidgets !!'
-summary: "Using Javascript libraries in R"
+title: "Lab-5a: Did you ever see such a thing as a drawing of a muchness?"
+subtitle: "Working with htmlwidgets !!"
+author: "Arvind Venkatadri"
 date: "`r Sys.Date()`"
-featured: false
-draft: false
+summary: "Using Javascript libraries in R"
+featured: no
+draft: no
 weight: 52
-
-# Featured image
-# To use, add an image named `featured.jpg/png` to your page's folder.
-# Placement options: 1 = Full column width, 2 = Out-set, 3 = Screen-width
-# Focal point options: Smart, Center, TopLeft, Top, TopRight, Left, Right, BottomLeft, Bottom, BottomRight
+output:
+  html_document:
+    toc_float: true
+    theme: united
+    toc: true
+    code_folding: true
 image:
   placement: 2
-  caption: 'Image credit: [**Alice In Wonderland dot Net**](https://www.alice-in-wonderland.net/)'
-  focal_point: ""
-  preview_only: true
-
-# Projects (optional).
-#   Associate this post with one or more of your projects.
-#   Simply enter your project's folder or file name without extension.
-#   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
-#   Otherwise, set `projects = []`.
+  caption: "Image credit: [**Alice In Wonderland dot Net**](https://www.alice-in-wonderland.net/)"
+  focal_point: ''
+  preview_only: yes
 projects: []
-
 links:
 - icon: flask
   icon_pack: fas
   name: lab
-  url: /labs/052-htmlwidgets.html
-  
-# - icon: magic
-#   icon_pack: fas
-#   name: Slides
-#   url: /slides/04-Metaphors-with-Graphics.html
-#   
-# - icon: paintbrush
-#   icon_pack: fas
-#   name: Colours in ggplot
-#   url: /labs/05-colors.html
+  url: "/labs/052-htmlwidgets.html"
 ---
 
 ![](featured.jpg)
+
+```{r, setup, include=FALSE}
+options(htmltools.preserve.raw = FALSE)
+library(tidyverse)
+library(htmlwidgets)
+library(echarts4r)
+library(echarts4r.assets)
+library(canvasXpress)
+
+# To render htmlwidgets as iframe widgets
+# https://communicate-data-with-r.netlify.app/docs/communicate/htmlwidgets-in-documents/
+library(widgetframe)
+
+```
 
 
 ## Introduction
 
 There are very many great JavaScript libraries for creating eye-popping and even interactive charts! And these are now available in R, and can be invoked using R code! So we can "use JavaScript" in R, as it were, without knowing JavaScript! And create something like this:
 
-![](globe.png)
-
 <br>
 
-```{r, echo=FALSE,eval=FALSE,warning=FALSE,message=FALSE}
-library(tidyverse)
-library(echarts4r)
-library(echarts4r.assets)
+```{r, echo=FALSE,warning=FALSE,message=FALSE, fig.show='hold'}
 url <- "https://echarts.apache.org/examples/data-gl/asset/data/population.json"
 data <- jsonlite::fromJSON(url)
 data <- as.data.frame(data)
 names(data) <- c("lon", "lat", "value")
 
-data |> 
-  e_charts(lon) |> 
+data %>% 
+  e_charts(lon) %>% 
   e_globe(
     environment = ea_asset("starfield"),
     base_texture = ea_asset("world topo"), 
     height_texture = ea_asset("world topo"),
     displacementScale = 0.04
-  ) |> 
-  e_bar_3d(lat, value, coord_system = "globe") |> 
-  e_visual_map(show = FALSE)
+  ) %>% 
+  e_bar_3d(lat, value, coord_system = "globe") %>% 
+  e_visual_map(show = FALSE) ->myplot
+
+widgetframe::frameWidget(myplot)
+
+######
+
+
+y=read.table("https://www.canvasxpress.org/data/cX-chord-dat.txt", header=TRUE, sep="\t", quote="", row.names=1, fill=TRUE, check.names=FALSE, stringsAsFactors=FALSE)
+canvasXpress(
+  data=y,
+  circularArc=360,
+  circularRotate=0,
+  circularType="chord",
+  colors=list("#000000", "#FFDD89", "#957244", "#F26223"),
+  graphType="Circular",
+  higlightGreyOut=TRUE,
+  legendKeyBackgroundBorderColor="rgba(0,0,0,0)",
+  legendKeyBackgroundColor="rgba(0,0,0,0)",
+  objectBorderColor="rgb(0,0,0)",
+  rAxisTickFormat=list("%sK", " / 1000"),
+  showTransition=FALSE,
+  title="Simple Chord Graph",
+  transitionStep=50,
+  transitionTime=1500
+) -> mynetwork
+
+
+widgetframe::frameWidget(mynetwork)
+
+
 ```
+
+<br>
 
 
 Unlike the Dormouse, no complaints!
@@ -86,7 +111,11 @@ This may be too much of a good thing, or `a much of muchness` but then, we can a
 
 ## References
 
-1. Bring the best of JavaScript data visualization to R, <https://www.htmlwidgets.org/>
+1. Bring the best of JavaScript data visualization to R, <https://www.htmlwidgets.org/>  
+
+1. *Using htmlwidgets in Rmarkdown*, https://communicate-data-with-r.netlify.app/docs/communicate/htmlwidgets-in-documents/>  
+
+1. Karambelkar et al, *htmlwidgets and knitr *, <https://cran.r-project.org/web/packages/widgetframe/vignettes/widgetframe_and_knitr.html>  
 
 
 2. https://patchwork.data-imaginist.com/

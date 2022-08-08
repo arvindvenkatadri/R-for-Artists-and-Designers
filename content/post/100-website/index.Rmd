@@ -7,6 +7,12 @@ date: "`r Sys.Date()`"
 weight: 100
 featured: false
 draft: false
+output:
+  html_document:
+    toc_float: true
+    theme: united
+    toc: true
+    code_folding: true
 
 # Featured image
 # To use, add an image named `featured.jpg/png` to your page's folder.

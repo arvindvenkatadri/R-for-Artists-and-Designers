@@ -1,53 +1,38 @@
 ---
-title: 'Lab-5a: Did you ever see such a thing as a drawing of a muchness?'
-subtitle: 'Working with htmlwidgets !!'
+title: "Lab-5a: Did you ever see such a thing as a drawing of a muchness?"
+subtitle: "Working with htmlwidgets !!"
+author: "Arvind Venkatadri"
+date: "2022-08-08"
 summary: "Using Javascript libraries in R"
-date: "2022-08-06"
-featured: false
-draft: false
+featured: no
+draft: no
 weight: 52
-
-# Featured image
-# To use, add an image named `featured.jpg/png` to your page's folder.
-# Placement options: 1 = Full column width, 2 = Out-set, 3 = Screen-width
-# Focal point options: Smart, Center, TopLeft, Top, TopRight, Left, Right, BottomLeft, Bottom, BottomRight
 image:
   placement: 2
-  caption: 'Image credit: [**Alice In Wonderland dot Net**](https://www.alice-in-wonderland.net/)'
-  focal_point: ""
-  preview_only: true
-
-# Projects (optional).
-#   Associate this post with one or more of your projects.
-#   Simply enter your project's folder or file name without extension.
-#   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
-#   Otherwise, set `projects = []`.
+  caption: "Image credit: [**Alice In Wonderland dot Net**](https://www.alice-in-wonderland.net/)"
+  focal_point: ''
+  preview_only: yes
 projects: []
-
 links:
 - icon: flask
   icon_pack: fas
   name: lab
-  url: /labs/052-htmlwidgets.html
-  
-# - icon: magic
-#   icon_pack: fas
-#   name: Slides
-#   url: /slides/04-Metaphors-with-Graphics.html
-#   
-# - icon: paintbrush
-#   icon_pack: fas
-#   name: Colours in ggplot
-#   url: /labs/05-colors.html
+  url: "/labs/052-htmlwidgets.html"
 ---
 
+<script src="{{< blogdown/postref >}}index_files/htmlwidgets/htmlwidgets.js"></script>
+<script src="{{< blogdown/postref >}}index_files/pymjs/pym.v1.js"></script>
+<script src="{{< blogdown/postref >}}index_files/widgetframe-binding/widgetframe.js"></script>
 
 
 <p><img src="featured.jpg" /></p>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
 <p>There are very many great JavaScript libraries for creating eye-popping and even interactive charts! And these are now available in R, and can be invoked using R code! So we can “use JavaScript” in R, as it were, without knowing JavaScript! And create something like this:</p>
-<p><img src="globe.png" /></p>
+<p><br></p>
+<p><div id="htmlwidget-1" style="width:100%;height:480px;" class="widgetframe html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1">{"x":{"url":"index_files/figure-html//widgets/widget_unnamed-chunk-1.html","options":{"xdomain":"*","allowfullscreen":false,"lazyload":false}},"evals":[],"jsHooks":[]}</script><div id="htmlwidget-2" style="width:100%;height:400px;" class="widgetframe html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2">{"x":{"url":"index_files/figure-html//widgets/widget_unnamed-chunk-1.html","options":{"xdomain":"*","allowfullscreen":false,"lazyload":false}},"evals":[],"jsHooks":[]}</script></p>
 <p><br></p>
 <p>Unlike the Dormouse, no complaints!</p>
 <p>We will explore a few them, as an alternative to <code>ggplot</code> !!</p>
@@ -57,6 +42,7 @@ links:
 <h2>References</h2>
 <ol style="list-style-type: decimal">
 <li><p>Bring the best of JavaScript data visualization to R, <a href="https://www.htmlwidgets.org/" class="uri">https://www.htmlwidgets.org/</a></p></li>
+<li><p><em>Using htmlwidgets in Rmarkdown</em>, <a href="https://communicate-data-with-r.netlify.app/docs/communicate/htmlwidgets-in-documents/" class="uri">https://communicate-data-with-r.netlify.app/docs/communicate/htmlwidgets-in-documents/</a>&gt;</p></li>
 <li><p><a href="https://patchwork.data-imaginist.com/" class="uri">https://patchwork.data-imaginist.com/</a></p></li>
 </ol>
 </div>
