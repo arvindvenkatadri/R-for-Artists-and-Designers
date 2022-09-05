@@ -1,0 +1,183 @@
+---
+title: "Slides 01 "
+subtitle: "Drink Me !<br> Introduction to RMarkdown"
+author: "Arvind Venkatadri"
+institute: "Srishti Manipal Institute"
+date: "(`r Sys.Date()`)"
+output:
+  xaringan::moon_reader:
+    css: 
+      - default
+      - css/lexis.css
+      - css/lexis-fonts.css
+    lib_dir: libs
+    nature:
+      highlightStyle: atelier-lakeside-light
+      highlightLines: true
+      slideNumberFormat: "%current%"
+      ratio: 16:9
+      countIncrementalSlides: true
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(fig.align = "center", warning = FALSE, message = FALSE, comment = NA, dpi = 300, cache = FALSE)
+library(tidyverse)
+library(knitr)
+library(palmerpenguins)
+#remotes::install_git("https://github.com/hadley/emo.git")
+library(emo)
+library(emoji)
+library(emojifont) 
+#https://cran.r-project.org/web/packages/emojifont/vignettes/emojifont.html
+library(here)
+
+```
+
+name: title_slide
+class: middle
+
+# To ~~err~~ R is human
+
+### Let's talk about what RMarkdown is all about !!
+
+
+---
+
+# What is RMarkdown?
+
+```{r echo=FALSE, out.width= "1000px", out.height="550px", fig.align='center'}
+knitr::include_graphics("https://raw.githubusercontent.com/allisonhorst/stats-illustrations/main/rstats-artwork/rmarkdown_wizards.png")
+
+```
+
+---
+
+# What is RMarkdown?
+In an RMarkdown document:
+
+- What you type in **text** becomes your *story*
+
+- What you write as `code` makes your own **figures** 
+`r emoji("bar_chart")`
+    - code is written in ```fences``` with back-ticks
+
+- You can link in:
+    - pictures `r emoji("art")`
+    - YT videos `r emoji("movie_camera")` from the web
+
+- Data / Code / Figures / Pictures / Document  **together** 
+
+- In a document that **"computes"**
+
+---
+
+# What is RMarkdown?
+
+Click on the File -> RMarkdown
+
+```{r out.height = "400px", out.width= "850px", echo=FALSE}
+
+knitr::include_graphics(here("static", "img", "New-Rmd.png"))
+
+```
+
+---
+
+# Editing your Markdown
+
+.pull-left[Edit the **YAML** header now. ( The stuff at the top between the three dashes)
+
+- Name your file
+
+- Write your name as author
+
+- Change Date if you wish
+
+SAVE.
+]
+
+.pull-right[
+
+```{r echo=FALSE, out.width= "500px", out.height="450px", fig.align='center'}
+
+knitr::include_graphics(here("static", "img", "YAML.png"))
+
+```
+
+]
+
+---
+
+# Editing your Markdown
+
+- Everything is text
+- Wrap Words in stars:
+    - ```*italics*```: Single stars give you *italics*
+    
+    - ```**bold**```: Two stars give you **bold** text
+    
+    - ```***bold italic***```: Three stars ***bold italics***
+    
+    - ```~~deleted~~```: Tildes give you ~~deleted~~ text
+
+---
+
+# Editing your Markdown
+
+
+- Hashes(`##`) become new Section Titles in text
+
+- **Ctrl+Alt+I / CMD+Alt+I** give fenced code "chunks" which will "run". (Green "Play" button)
+     - Hashes(`#`) inside code chunks give you new `#comments` in code
+     
+- "$mathstuff$": becomes $math stuff$ (Nooo...please! No!)
+
+  - "$sin^2(x)+cos^2(x) = 1$":   $sin^2(x)+cos^2(x) = 1$ (I think)
+  
+- "emoji("laughing")" becomes `r emoji("laughing")`
+
+---
+
+# Editing your Markdown
+
+- All this done with `plain text`. 
+
+- Just your keyboard and you. 
+
+- Mouses and Touchpads are for....**(your favourite word of ridicule here)**.
+
+---
+
+# Knitting your Markdown `r emo::ji("knit")`
+
+Hitting the knit button `r emo::ji("knit")` does one of many things:
+.pull-left[
+Changes your plain text to:
+
+- html `r emoji("web")`, or PDF `r emoji("file")` or Word `r emoji("document")`
+
+- HTML webpage, or blog, or flexdashboards
+
+- An interactive presentation like this one
+
+- over 30 different output formats. 
+]
+
+.pull-right[
+
+```{r echo=FALSE, out.width= "450px", out.height="450px", fig.align='center'}
+
+knitr::include_graphics(here("static", "img", "17.jpg"))
+                        
+```
+
+]
+
+---
+
+class: center, middle
+# OK, Where are we?
+
+Are there any silent tears ? 
+

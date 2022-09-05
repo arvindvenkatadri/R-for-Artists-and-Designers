@@ -35,10 +35,12 @@ links:
 - icon: magic
   icon_pack: fas
   name: Markdown slides
-  url: /slides/01-Intro-to-RMarkdown.html
+  url: /slides/01-RMarkdown/01-Intro-to-RMarkdown.html
 ---
 
 ![](featured.jpg)
+
+## Introduction
 
 We will get acquainted with the RMarkdown format, which allows us to mix text narrative, code, code-developed figures and items from the web in a seamless document.
 
@@ -54,19 +56,21 @@ Something that can:
 
 ## References:
 
-1. https://rmarkdown.rstudio.com/index.html
+1. <https://ysc-rmarkdown.netlify.app/slides/01-basics.html> Nice RMarkdown presentation and *"code movies"* !
 
-2. https://www.markdowntutorial.com
+1. <https://rmarkdown.rstudio.com/index.html>
 
-3. https://andrewbtran.github.io/NICAR/2018/workflow/docs/02-rmarkdown.html
+1. <https://www.markdowntutorial.com>
 
-4. https://yihui.name/tinytex/ *(install!)*
+1. https://andrewbtran.github.io/NICAR/2018/workflow/docs/02-rmarkdown.html
 
-5. https://github.com/rstudio/cheatsheets/blob/master/rmarkdown-2.0.pdf
+1. https://yihui.name/tinytex/ *(install!)*
 
-5. https://rmarkdown.rstudio.com/html_document_format.html
+1. https://github.com/rstudio/cheatsheets/blob/master/rmarkdown-2.0.pdf
 
-6. https://rmarkdown.rstudio.com/pdf_document_format.html
+1. https://rmarkdown.rstudio.com/html_document_format.html
+
+1. https://rmarkdown.rstudio.com/pdf_document_format.html
 
 
 ## Assignment(s)

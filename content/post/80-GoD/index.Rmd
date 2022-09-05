@@ -23,11 +23,11 @@ links:
 - icon: flask
   icon_pack: fas
   name: lab
-  url: /labs/08-Grammar-of-Diagrams.html
+  url: /labs/08-diagrams/08-Grammar-of-Diagrams.html
 - icon: magic
   icon_pack: fas
   name: slides
-  url: /slides/08-Grammar-of-Diagrams.html
+  url: /slides/08-diagrams/08-Grammar-of-Diagrams.html
 ---
 
 ![](featured.jpg)

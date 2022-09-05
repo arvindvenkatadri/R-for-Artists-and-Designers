@@ -1,0 +1,357 @@
+---
+title: "06-Making-Maps-with-tmap"
+subtitle: "Using the tmap package" 
+author: "Arvind Venkatadri"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: 
+      - default
+      - css/lexis.css
+      - css/lexis-fonts.css
+    lib_dir: libs
+    nature:
+      highlightStyle: atelier-lakeside-light
+      highlightLines: true
+      slideNumberFormat: "%current%"
+      ratio: 16:9
+      countIncrementalSlides: true
+---
+
+```{r setup, include=FALSE,warning=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, comment = NA, dpi = 300,fig.align = "center", cache = FALSE)
+library(xaringanthemer)
+library(xaringanExtra)
+library(tidyverse)
+library(sf)
+library(tmap)
+library(spData)
+#install.packages("spDataLarge", repos = "https://nowosad.github.io/drat/", type = "source")
+library(spDataLarge)
+library(rnaturalearth)
+library(rnaturalearthdata)
+#
+library(patchwork)
+library(emoji)
+library(emojifont)
+library(anicon)
+library(here)
+tmap_mode("plot")
+```
+
+
+```{r xaringanExtra, include=FALSE}
+use_webcam()
+use_fit_screen()
+use_panelset()
+use_broadcast()
+use_extra_styles(hover_code_line = TRUE,mute_unhighlighted_code = FALSE)
+```
+
+
+class: center, middle
+
+# Map Making with `tmap`
+### Adapted from SIGR2021 Conference (*Sciences de l'information géographique reproductibles*)
+#### Saint-Pierre-d'Oléron (France)
+#### 27/June/2021 to 3/July/2021
+#### "GIS and mapping": "A workshop on GIS and mapping with R: part 2"
+#### Jakub Nowosad & Robin Lovelace
+
+---
+
+# Mapping
+
+- We have seen a bit of `ggplot + geom_sf + coord_sf()`
+- This is good for static plots
+- `tmap` can give us both static and interactive plots
+- And some fancy map templates too!!
+
+---
+
+
+# Mapping
+
+Let's look at London Boroughs and places where we can hire bicycles.
+
+- The `lnd` dataset in the package `spData` will give us a London Map.
+
+- The `cycle_hire_osm` dataset, also in the package `spData` will give us Cycle Hire Locations in London.
+- What `GEOMETRY` column types to you expect in both of these datasets?
+
+--
+  - MULTIPOLYGON?
+  
+--
+  - ~~POLYGON?~~
+  
+--
+  - ~~MULTILINE?~~
+  
+--
+  - ~~LINE~~
+  
+--
+  - ~~MULTIPOINT?~~
+  
+--
+  - POINT?
+  
+
+---
+
+# London
+
+```{r}
+
+data("lnd", package = "spData") # Boroughs of London
+str(lnd)
+
+```
+
+---
+
+# Cycle Hire Locations in London
+
+```{r}
+
+data("cycle_hire_osm", package = "spData") # Cycle Hire locations
+str(cycle_hire_osm)
+
+```
+
+---
+# Step-by-Step `tmap` Code
+
+.pull-left[
+```{r tm10, warning=FALSE, fig.show='hide', message=FALSE}
+
+tm_shape(lnd) + #<<
+  tm_borders(col = "black", lwd = 1) + #<<
+  tm_fill("NAME", legend.show = FALSE) #<<
+
+```
+
+]
+
+.pull-right[
+```{r, echo=FALSE}
+
+knitr::include_graphics(
+  knitr::fig_chunk("tm10", "png")
+)
+
+```
+]
+
+---
+# Step-by-Step `tmap` Code
+
+.pull-left[
+```{r tm20, warning=FALSE, fig.show='hide', message=FALSE}
+
+tm_shape(lnd) + 
+  tm_borders(col = "black", lwd = 1) +
+  tm_fill("NAME", legend.show = FALSE,
+          palette = "Accent") #<<
+
+```
+
+- The default color can be changed using the `palette` argument 
+- run the `tmaptools::palette_explorer()` function in your `CONSOLE`to see possible palette names.
+- Refer to <https://geocompr.github.io/post/2019/tmap-color-scales/>
+]
+
+.pull-right[
+```{r, echo=FALSE}
+
+knitr::include_graphics(
+  knitr::fig_chunk("tm20", "png")
+)
+
+```
+]
+
+---
+
+# `tmap` Layers are in *groups*
+
+
+.pull-left[
+
+Groups start with `tm_shape(data = ...)`   
+Groups are "connected" with a $+$ sign as usual...
+
+```{r tm30, warning=FALSE, fig.show='hide', message=FALSE}
+
+# Group 1 #<<
+tm_shape(lnd) +
+  tm_borders(col = "black",lwd = 1) + 
+  tm_fill("NAME", legend.show = FALSE) +
+
+# Group 2 = Layer 2 #<<
+  tm_shape(cycle_hire_osm) + #<<
+  tm_symbols(size = 0.2, col = "red") #<<
+
+```
+]
+
+.pull-right[
+```{r, echo=FALSE}
+
+knitr::include_graphics(
+  knitr::fig_chunk("tm30", "png")
+)
+
+```
+]
+
+---
+# Add graticules and legends
+
+.pull-left[
+```{r tm40, warning=FALSE, fig.show='hide', message=FALSE}
+
+# Group 1 #<<
+tm_shape(lnd) +
+  tm_borders(col = "black",lwd = 1) + 
+  tm_fill("NAME", legend.show = FALSE) +
+# Group 2 = Layer 2 #<<
+  tm_shape(cycle_hire_osm) + 
+  tm_symbols(size = 0.2, col = "red") +
+  
+  tm_graticules() + #<<
+  tm_add_legend(type = "symbol", #<<
+                col = "red", #<<
+                title = "Hire Cycles Here") #<<
+
+```
+
+- Still 2 groups only !!
+]
+
+.pull-right[
+```{r, echo=FALSE}
+
+knitr::include_graphics(
+  knitr::fig_chunk("tm40", "png")
+)
+
+```
+]
+
+---
+# Add Scale and Compass to the Map
+
+.pull-left[
+
+```{r tm50, warning=FALSE, fig.show='hide', message=FALSE}
+
+# Group 1
+tm_shape(lnd) +
+  tm_borders(col = "black",lwd = 1) + 
+  tm_fill("NAME", legend.show = FALSE) +
+# Group 2 = Layer 2
+  tm_shape(cycle_hire_osm) + 
+  tm_symbols(size = 0.2, col = "red") +
+  
+  tm_graticules() +
+  tm_add_legend(type = "symbol", 
+                col = "red",
+                title = "Hire Cycles Here") +
+
+  tm_scale_bar(position=c("left", "bottom"),#<<
+               text.size = 1) + #<<
+  tm_compass(position = c("right", "top"), #<<
+             type = "rose", #<<
+             size = 2)  #<<
+
+```
+]
+
+.pull-right[
+```{r, echo=FALSE}
+
+knitr::include_graphics(
+  knitr::fig_chunk("tm50", "png")
+)
+
+```
+]
+
+---
+# Add Credits and Layout Options
+
+.pull-left[
+
+```{r tm60, warning=FALSE, fig.show='hide', message=FALSE}
+
+# Group 1
+tm_shape(lnd) +
+  tm_borders(col = "black", lwd = 1) + 
+  tm_fill("NAME", legend.show = FALSE) +
+# Group 2 = Layer 2
+  tm_shape(cycle_hire_osm) + 
+  tm_symbols(size = 0.2, col = "red") +
+  tm_graticules() +
+  tm_add_legend(type = "symbol", col = "red", title = "Hire Cycles Here") +
+  tm_scale_bar(position=c("left", "bottom"),text.size = 1) + 
+  tm_compass(position = c("right", "top"), type = "rose", size = 2) +
+  tm_credits(text = "Arvind V, 2021", #<<
+             position = c("left", "bottom")) + tm_layout(main.title = "London Bike Share", #<<
+bg.color = "lightblue", #<<
+inner.margins = c(0, 0, 0, 0)) -> mymap #<<
+
+```
+]
+
+.pull-right[
+```{r, echo=FALSE}
+
+knitr::include_graphics(
+  knitr::fig_chunk("tm60", "png")
+)
+
+```
+]
+
+
+
+---
+
+# Saving
+
+```{r tm80, eval=FALSE}
+
+tmap_save(my_map, filename = "my_map.png", width = 300, height = 800, dpi = 300)
+
+```
+
+---
+
+# And..Interactive?
+.leftcol30[
+- Use `tmap_mode("plot")` for static plots (default)
+- Use `tmap_mode("view")` for interactive plots!
+- Click on the layer button to choose other background base maps!!
+]
+
+.rightcol70[
+
+```{r tm70, warning=FALSE, message=FALSE, out.height="400px", out.width="750px"}
+tmap_mode("view")
+mymap
+
+```
+]
+
+
+---
+
+# Thanks!
+
+Slides created by Arvind Venkatadri via the R packages:
+
+[**xaringan**](https://github.com/yihui/xaringan)<br>
+

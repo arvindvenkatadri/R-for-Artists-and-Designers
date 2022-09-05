@@ -1,0 +1,792 @@
+---
+title: "Slides 04 - Metaphors with Graphics"
+subtitle: "From Code to Geometry"
+author: "Arvind Venkatadri"
+institute: "Srishti Manipal Institute"
+date: "(`r Sys.Date()`)"
+output:
+  xaringan::moon_reader:
+    css: 
+      - default
+      - css/lexis.css
+      - css/lexis-fonts.css
+    lib_dir: libs
+    nature:
+      highlightStyle: atelier-lakeside-light
+      highlightLines: true
+      slideNumberFormat: "%current%"
+      ratio: 16:9
+      countIncrementalSlides: true
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(fig.retina = 3,eval = TRUE)
+library(tidyverse)
+library(palmerpenguins)
+# install.packages("devtools")
+# devtools::install_github("hadley/emo")
+library(emo)
+library(emojifont) 
+#https://cran.r-project.org/web/packages/emojifont/vignettes/emojifont.html
+my_theme <- ggplot2::theme(text = element_text(size = 20))
+ggplot2::theme_set(my_theme)
+```
+
+class: middle, center
+## How does one read Shakespeare? 
+
+![shakespeare](https://media.giphy.com/media/oveqQA2LxpwYg/giphy.gif)
+
+~~To code or not to code, that is the question...~~
+
+---
+
+# What is a Grammar of Graphics?  
+
+## Code looks and reads like **English**.   
+## Has **verbs**, **nouns**, some **adjectives**....
+
+--
+
+- Describes Information/ideas/concepts from *any* **source domain**.
+
+--
+
+- **GEOMETRY** as the *target domain* : What comes out of R is predominantly "geometry"
+
+---
+
+
+layout: false
+# How do we express visuals in words?
+
+.font120[
+- **Data** to be visualized
+]
+
+--
+.font120[
+- **.hlb[Geom]etric objects** that appear on the plot
+]
+
+--
+.font120[
+- **.hlb[Aes]thetic mappings** from data to visual component
+]
+
+--
+.font120[
+- **.hlb[Stat]istics** transform data on the way to visualization
+]
+
+--
+.font120[
+- **.hlb[Coord]inates** organize location of geometric objects
+]
+
+--
+.font120[
+- **.hlb[Scale]s** define the range of values for aesthetics
+]
+
+--
+.font120[
+- **.hlb[Facet]s** group into subplots
+]
+
+---
+
+
+
+# The Essence of ggplot
+
+all `ggplot2`
+
+- `aes(x = , y = )` (aesthetics)
+- `aes(x = , y = , color = )` (add color)
+- `aes(x = , y = , size = )` (add size)
+- `+ facet_wrap(~ )` (facetting)
+- `+ scale_` ( add a scale)
+
+---
+# gg is for Grammar of Graphics
+
+.left-column[
+### Data
+### Aesthetics
+### Geoms
+
+```r
++ geom_*()
+```
+]
+
+.right-column[
+
+```{r geom_demo, echo=FALSE, out.width = "850px", out.height="350px"}
+
+set.seed(4242)
+df_geom <- tibble(y = rnorm(25), x = 1:25, cat = sample(c("a", "b", "c", "d", "e"),size = 25, replace = TRUE))
+
+g_geom <- list()
+g_geom$point <- ggplot(df_geom, aes(x, y)) + geom_point() + ggtitle("geom_point()")
+g_geom$line <- ggplot(df_geom, aes(x, y)) + geom_line() + ggtitle("geom_line()")
+g_geom$bar <- ggplot(df_geom, aes(cat)) + geom_bar() + ggtitle("geom_bar()")
+g_geom$boxplot <- ggplot(df_geom, aes(y = y)) + geom_boxplot() + ggtitle("geom_boxplot()")
+g_geom$histogram <- ggplot(df_geom, aes(y)) + geom_histogram(binwidth = 1) + ggtitle("geom_histogram()")
+g_geom$density <- ggplot(df_geom, aes(y)) + geom_density(fill = "grey40", alpha = 0.25) + ggtitle("geom_density()") + xlim(-4, 4)
+
+g_geom <- map(g_geom, ~ . + theme_minimal())
+
+cowplot::plot_grid(plotlist = g_geom)
+
+```
+]
+
+
+
+---
+
+
+# [The Five-Named Graphs](http://moderndive.com/3-viz.html#FiveNG)
+
+
+- Scatterplot: `geom_point()`
+- Line graph: `geom_line()`
+- Histogram: `geom_histogram()`
+- Boxplot: `geom_boxplot()`
+- Bar graph: `geom_bar()` or `geom_col` (see [Lab 02](../02-Pronouns-and-Data.html))
+
+---
+
+
+## Chunk : penguins
+
+
+```{r penguins-1, highlight.output=c(4:6)}
+
+head(penguins)
+
+```
+We see the first few rows of the dataset `penguins`. We see that there are a few **NA** data observations too. Let us remove them for now.
+
+```{r}
+penguins <- penguins %>% drop_na()
+```
+
+
+---
+
+## Chunk: Mapping
+
+
+.pull-left[
+```{r plot1a, eval= FALSE, message=FALSE, warning=FALSE}
+ggplot(penguins) #<<
+
+```
+]
+
+.pull-right[
+```{r first-plot1a-out, ref.label='plot1a', echo=FALSE,message=FALSE,warning=FALSE}
+```
+]
+
+---
+
+## Chunk: Mapping
+
+
+.pull-left[
+```{r plot1b, eval= FALSE, message=FALSE, warning=FALSE}
+ggplot(data = penguins, 
+       mapping = aes(x = bill_length_mm,#<<
+           y = body_mass_g))  #<<
+```
+]
+
+.pull-right[
+```{r first-plot1b-out, ref.label='plot1b', echo=FALSE, message=FALSE,warning=FALSE}
+```
+]
+
+
+---
+
+## Chunk: Mapping
+
+.pull-left[
+```{r plot1c, eval= FALSE, message=FALSE,warning=FALSE}
+ggplot(data = penguins, 
+       mapping = aes(x = bill_length_mm, 
+           y = body_mass_g)) +
+  geom_point() #<<
+```
+]
+
+.pull-right[
+```{r first-plot1c-out, ref.label='plot1c', echo=FALSE,message=FALSE,warning=FALSE}
+```
+]
+
+---
+## Chunk: Mapping
+
+.pull-left[
+```{r plot1d, eval= FALSE, message=FALSE,warning=FALSE}
+ggplot(data = penguins, 
+       mapping = aes(x = bill_length_mm, 
+           y = body_mass_g)) +
+  geom_point() +
+  geom_smooth(method = "lm") #<<
+```
+]
+
+.pull-right[
+```{r first-plot1d-out, ref.label='plot1d', echo=FALSE,message=FALSE,warning=FALSE}
+```
+]
+
+---
+
+### Chunk: Geom_Point_Position_Colour
+
+.pull-left[
+```{r 2a, eval=FALSE, message=FALSE, warning=FALSE}
+ggplot(data = penguins) #<<
+```
+]
+.pull-right[
+```{r, ref.label='2a', echo=FALSE,message=FALSE,warning=FALSE}
+```
+]
+
+---
+
+### Chunk: Geom_Point_Position_Colour
+
+
+.pull-left[
+```{r 2b, eval=FALSE, message=FALSE, warning=FALSE}
+ggplot(data = penguins,
+       aes(x = bill_length_mm, #<<
+           y = body_mass_g, #<<
+           color = island)) #<<
+```
+We can leave out the "mapping" word and just use **aes** .
+
+Why is there no plot?
+
+
+`r emo::ji("thinking")` `r emo::ji("thought_balloon")`
+
+Right !! We have not used a `geom` command yet!!
+]
+.pull-right[
+```{r, ref.label='2b', echo=FALSE, message=FALSE, warning=FALSE}
+```
+]
+
+---
+
+### Chunk: Geom_Point_Position_Colour
+
+
+.pull-left[
+```{r 2c, eval=FALSE, message=FALSE, warning=FALSE}
+ggplot(data = penguins,
+  aes(x = bill_length_mm,
+      y = body_mass_g,
+      color = island)) +  
+ geom_point() + #<<
+  ggtitle("A point geom with position, color aesthetics") #<<
+```
+Note that the points are located by **position** coordinates on both x and y axis, and **coloured** by the island variable.
+
+
+]
+.pull-right[
+```{r, ref.label='2c', echo=FALSE,message=FALSE,warning=FALSE}
+```
+]
+
+---
+
+### Chunk: Geom_Point_Position_Colour
+
+
+.pull-left[
+```{r 2d, eval=FALSE, message=FALSE, warning=FALSE}
+ggplot(data = penguins,
+  aes(x = bill_length_mm,
+      y = body_mass_g,
+      color = island)) +  
+ geom_point(size = 4) + #<<
+  ggtitle("A point geom with position color and size aesthetics")#<<
+
+```
+Note that the points are located by **position** coordinates on both x and y axis, and **coloured** by the island variable.
+
+And we've fixed size = 4!
+
+
+]
+.pull-right[
+```{r, ref.label='2d', echo=FALSE,message=FALSE,warning=FALSE}
+```
+]
+
+---
+
+## Alpha
+
+.pull-left[
+```{r 7a, eval=FALSE, message=FALSE, warning=FALSE}
+diamonds %>% 
+  # Sample some 20% of the data
+  slice_sample(prop = 0.2) %>% 
+  ggplot(.) +
+  geom_point(aes(x = carat,  #<<
+                 y = price)) #<<
+```
+
+Are the points all overlapping?
+Can we see them better?
+]
+
+
+
+.pull-right[
+  
+```{r, ref.label='7a', echo=FALSE,message=FALSE,warning=FALSE}
+```
+]
+
+---
+
+## Alpha
+
+.pull-left[
+```{r 7b, eval=FALSE, message=FALSE, warning=FALSE}
+diamonds %>% 
+  # Sample some 20% of the data
+  slice_sample(prop = 0.2) %>% 
+  ggplot(.) +
+  geom_point(aes(x = carat, y = price), #<<
+             # alpha outside the aes() !!! #<<
+             alpha = 0.2) + #<< 
+  labs(title = "Points plotted with Alpha")
+```
+
+Are the points all overlapping?
+Can we see them better?
+
+]
+
+
+.pull-right[
+```{r, ref.label='7b', echo=FALSE,message=FALSE,warning=FALSE, out.width="90%"}
+```
+]
+
+---
+
+## Chunk: Box Plot
+.pull-left[
+```{r bp1, eval=FALSE, message=FALSE, warning=FALSE}
+ggplot(diamonds) + 
+  geom_boxplot(aes(x = cut, y = price)) + #<<
+  labs(title = "Box Plot")
+```
+
+]
+
+
+.pull-right[
+```{r, ref.label='bp1', echo=FALSE,message=FALSE,warning=FALSE, out.width="90%"}
+```
+]
+
+
+---
+
+## Chunk: Box Plot
+.pull-left[
+```{r bp2, eval=FALSE, message=FALSE, warning=FALSE}
+ggplot(diamonds) + 
+  geom_boxplot(aes(x = cut,       #<<
+                   y = price,     #<<
+                   fill = cut)) + #<<
+  labs(title = "Box Plot")
+```
+
+]
+
+
+.pull-right[
+```{r, ref.label='bp2', echo=FALSE,message=FALSE,warning=FALSE, out.width="90%"}
+```
+]
+---
+
+## Chunk: Geom_Bar_1
+
+.pull-left[
+```{r 3a, eval=FALSE, message=FALSE, warning=FALSE}
+ggplot(data = penguins) #<<
+```
+]
+.pull-right[
+```{r, ref.label='3a', echo=FALSE,message=FALSE,warning=FALSE, out.width="90%"}
+```
+]
+
+---
+
+## Chunk: Geom_Bar_1
+
+.pull-left[
+```{r 3b, eval=FALSE, message=FALSE, warning=FALSE}
+ggplot(data = penguins) +  
+       aes(x = species) #<<
+```
+]
+.pull-right[
+```{r, ref.label='3b', echo=FALSE, message=FALSE, warning=FALSE, out.width="90%"}
+```
+]
+
+---
+
+## Chunk: Geom_Bar_1
+
+.pull-left[
+```{r 3c, eval=FALSE, message=FALSE, warning=FALSE}
+ggplot(data = penguins) +  
+       aes(x = species) +
+  geom_bar() + #<<
+  ggtitle("A bar geom with position and height aesthetics") #<<
+```
+
+The bars are plotted with **positions** on the x-axis, defined by the `species` variable,  and **heights** mapped to the y-axis. 
+
+How did the graph "know" the heights of the bars?
+
+`geom_bar` has an internal `count` statistic computation. 
+Many `geom_s` have internal computation that are accessible to programmers. 
+
+]
+.pull-right[
+```{r, ref.label='3c', echo=FALSE,message=FALSE,warning=FALSE, out.width="90%"}
+```
+]
+
+---
+
+## Geom_Bar_Position_Stack_and_Dodge
+
+
+.pull-left[
+When using more than a pair of variables with a bar chart, we have a few more **position** options:
+```{r 4b, eval=FALSE, message=FALSE, warning=FALSE}
+  ggplot(penguins,
+           aes(x = species, #<<
+               fill = island)) #<<
+```
+]
+.pull-right[
+```{r, ref.label='4b', echo=FALSE, message=FALSE, warning=FALSE, out.width="90%"}
+```
+]
+
+---
+
+## Geom_Bar_Position_Stack_and_Dodge
+
+.pull-left[
+When using more than a pair of variables with a bar chart, we have a few more **position** options:
+```{r 4c, eval=FALSE, message=FALSE, warning=FALSE}
+ggplot(penguins,
+           aes(x = species,
+               fill = island)) + 
+  geom_bar() + #<<
+  ggtitle(label = "A stacked bar chart") #<<
+```
+
+The bars are coloured by the `island` variable and are **stacked** in **position**.
+]
+.pull-right[
+```{r, ref.label='4c', echo=FALSE,message=FALSE,warning=FALSE, out.width="90%"}
+```
+]
+---
+
+## Geom_Bar_Position_Stack_and_Dodge
+
+.pull-left[
+And here we use the `dodge` option:
+```{r 5c, eval=FALSE, message=FALSE, warning=FALSE}
+
+ggplot(penguins,
+           aes(x = species,
+               fill = island)) + 
+  geom_bar(position ="dodge") + #<<
+  ggtitle(label =   #<<
+            "A dodged bar chart") #<<
+```
+]
+
+.pull-right[
+```{r, ref.label='5c', echo=FALSE,message=FALSE,warning=FALSE, out.width="90%"}
+```
+]
+
+---
+
+## Facetting
+
+
+.pull-left[
+```{r 6a, eval=FALSE, message=FALSE, warning=FALSE}
+ggplot(penguins) #<<
+```
+]
+.pull-right[
+```{r, ref.label='6a', echo=FALSE,message=FALSE,warning=FALSE, out.width="90%"}
+```
+]
+
+---
+
+## Facetting
+
+.pull-left[
+```{r 6b, eval=FALSE, message=FALSE, warning=FALSE}
+ggplot(penguins) +
+  aes(x = flipper_length_mm, #<<
+      y = body_mass_g) #<<
+
+```
+]
+
+.pull-right[
+```{r, ref.label='6b', echo=FALSE, message=FALSE, warning=FALSE, out.width="90%"}
+```
+]
+
+---
+
+## Facetting
+
+.pull-left[
+```{r 6c, eval=FALSE, message=FALSE, warning=FALSE}
+ggplot(penguins) +
+  aes(x = flipper_length_mm,
+      y = body_mass_g) +
+  geom_point() #<<
+```
+]
+
+.pull-right[
+```{r, ref.label='6c', echo=FALSE,message=FALSE,warning=FALSE, out.width="90%"}
+```
+]
+
+---
+
+## Facetting
+
+.pull-left[
+```{r 6d, eval=FALSE, message=FALSE, warning=FALSE}
+ggplot(penguins) +
+  aes(x = flipper_length_mm,
+      y = body_mass_g) +
+  geom_point() +
+  facet_wrap(~island) + #<<
+  ggtitle("A point geom graph with facets") #<<
+```
+
+
+The graph has **split** into multiples, based on the **number** of islands. 
+]
+
+
+.pull-right[
+```{r, ref.label='6d', echo=FALSE,message=FALSE,warning=FALSE, out.width="90%"}
+```
+]
+---
+
+## Still more Facetting
+
+.pull-left[
+```{r 6e, eval=FALSE, message=FALSE, warning=FALSE}
+ggplot(penguins) +
+  aes(x = flipper_length_mm,
+      y = body_mass_g) +
+  geom_point() #<<
+```
+
+What if we have even more "factor" variables?
+We have `island` and `species`...can we split further?
+
+]
+
+
+.pull-right[
+```{r, ref.label='6e', echo=FALSE,message=FALSE,warning=FALSE, out.width="90%"}
+```
+]
+
+---
+
+## Still more Facetting
+
+.pull-left[
+```{r 6f, eval=FALSE, message=FALSE, warning=FALSE}
+ggplot(penguins) +
+  aes(x = flipper_length_mm,
+      y = body_mass_g) +
+  geom_point() +
+  facet_grid(species~island) + #<<
+  ggtitle("A point geom graph with grid facets") #<<
+```
+
+The graph has **split** into multiples, based on the **number** of islands **and** the number of species. 
+
+]
+.pull-right[
+```{r, ref.label='6f', echo=FALSE,message=FALSE,warning=FALSE, out.width="90%"}
+```
+]
+
+
+---
+
+class:middle, center, inverse
+## And shall we look briefly at colour?
+
+---
+
+## Finally...Colour !! ( Just a bit )
+
+.pull-left[
+```{r 8a, eval=FALSE, message=FALSE, warning=FALSE}
+diamonds %>% 
+  slice_sample(prop = 0.2) %>% 
+  ggplot(.) +
+  geom_point(aes(x = carat, y = price)) #<<
+```
+]
+.pull-right[
+```{r, ref.label='8a', echo=FALSE,message=FALSE,warning=FALSE, out.width="90%"}
+```
+]
+---
+
+## Finally...Colour !! ( Just a bit )
+
+.pull-left[
+```{r 8b, eval=FALSE, message=FALSE, warning=FALSE}
+diamonds %>% 
+  slice_sample(prop = 0.2) %>% 
+  ggplot(.) +
+  geom_point(aes(x = carat, y = price, colour = cut), size = 3) +
+  scale_colour_brewer(palette = "Set3") +  #<<
+  labs(title = "Brewer Colour Pallette (Set3)")
+```
+We are using the `RColorBrewer` package here. 
+Type `RColorBrewer::display.brewer.all()` in your Console and see what palettes are available.
+
+]
+.pull-right[
+```{r, ref.label='8b', echo=FALSE,message=FALSE,warning=FALSE, out.width="90%"}
+```
+]
+
+
+---
+
+## Chunk: Colour !! ( Just a bit )
+
+.pull-left[
+```{r 8c, eval=FALSE, message=FALSE, warning=FALSE}
+diamonds %>% 
+  slice_sample(prop = 0.2) %>% 
+  ggplot(.) +
+  geom_point(aes(x = carat, y = price, colour = cut), size = 3) +
+               scale_colour_viridis_d() + #<<
+  labs(title = "Viridis Palette",
+       subtitle = "The Default in ggplot")
+```
+]
+.pull-right[
+```{r, ref.label='8c', echo=FALSE,message=FALSE,warning=FALSE}
+```
+]
+
+---
+
+
+## Chunk: Colour !! ( Just a bit )
+
+.pull-left[
+```{r 8d, eval=FALSE, message=FALSE, warning=FALSE}
+diamonds %>% 
+  slice_sample(prop = 0.2) %>% 
+  ggplot(.) +
+  geom_point(aes(x = carat, y = price, colour = cut), size = 3) +
+               scale_colour_viridis_d(option = "magma") + #<<
+  labs(title = "Viridis Palette, Option Magma")#<<
+
+```
+]
+.pull-right[
+```{r, ref.label='8d', echo=FALSE,message=FALSE,warning=FALSE}
+```
+]
+
+---
+
+
+
+## Chunk: Colour !! ( Just a bit )
+
+.pull-left[
+```{r 8e, eval=FALSE, message=FALSE, warning=FALSE}
+diamonds %>% 
+  slice_sample(prop = 0.2) %>% 
+  ggplot(.) +
+  geom_point(aes(x = carat, y = price, colour = cut), size = 3) +
+               scale_colour_viridis_d(option = "inferno") + #<<
+  labs(title = "Viridis Palette, Option Inferno")
+```
+]
+.pull-right[
+```{r, ref.label='8e', echo=FALSE,message=FALSE,warning=FALSE}
+```
+]
+
+---
+
+
+## Conclusion
+- `ggplot` takes a dataframe/tibble as the data argument
+- The `aes`-thetic arguments can be `x`, `y`, `colour`, `shape`, `alpha` for example...
+- The `geom_*()` commands specify the kind of plot
+- Together, the `ggplot` package offers a **Grammar** of near-English commands which allow us to plot data in various ways. 
+
+---
+
+# References
+
+
+1. [Wickham, Hadley. (2010) "A Layered Grammar of Graphics". *Journal of Computational and Graphical Statistics*, 19(1).](http://www.jstor.org.proxy.uchicago.edu/stable/25651297)
+
+2. [Wilkinson, Leland. (2005). *The Grammar of Graphics*. (UChicago authentication required)](http://link.springer.com.proxy.uchicago.edu/book/10.1007%2F0-387-28695-0)
+
+
+
+

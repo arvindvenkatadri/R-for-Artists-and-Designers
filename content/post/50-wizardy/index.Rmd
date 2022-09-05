@@ -34,7 +34,7 @@ links:
 - icon: flask
   icon_pack: fas
   name: lab
-  url: /labs/06a-wizardy.html
+  url: /labs/05-wizardy/05-wizardy.html
 # - icon: magic
 #   icon_pack: fas
 #   name: slides

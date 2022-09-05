@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Slides 03</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Arvind Venkatadri" />
+    <meta name="date" content="2022-08-09" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/lexis.css" type="text/css" />
+    <link rel="stylesheet" href="css/lexis-fonts.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Slides 03
+]
+.subtitle[
+## Working in the Tidyverse
+]
+.author[
+### Arvind Venkatadri
+]
+.date[
+### 2022-08-09
+]
+
+---
+
+
+
+
+
+
+class: center, middle, inverse
+
+# 📇
+
+## Let's review
+
+---
+
+## Some Basic Operations/Things in R
+
+- `&lt;-` (variable assignment) ( Alt and - keys together)
+- `%&gt;%` (then...) ( aur phir...) (Shift + Ctrl + M / Cmd + Ctrl + M)
+
+- `dplyr`, `ggplot2` (packages)
+  - `install.packages("dplyr")` (1x per machine)
+  - `library(dplyr)` (1x per work session)
+
+
+---
+
+layout: true
+# What is the Tidyverse?
+
+---
+
+The tidyverse is 
+
+- an opinionated collection of R `packages` designed for data science
+- All packages share an underlying design philosophy, grammar, and data structures.
+
+---
+
+- Packages are:
+    - `readr`: to parse and read in data in various formats
+    - `tidyr`: to clean up data, rows and columns
+    - `dplyr`: to manipulate data, add new columns, create summaries
+    - `ggplot`: Data Visualization
+
+- And a few others...
+    - `stringr`: to process character/string data
+    - `forcats`: Not about cats 🐱, but to deal with factors. We will touch factors, but won't work with forcats. 
+    - `purrr`: also not about cats, but about loops and iterations
+
+- No the Cheshire Cat was not involved, but there were others who were found guilty
+
+---
+
+layout: false
+# What does "tidy data" mean?
+
+![](https://www.openscapes.org/img/blog/tidydata/tidydata_1.jpg)
+
+---
+
+# Data for today
+
+We'll use data from the Museum of Modern Art (MoMA)
+
+- Publicly available on [GitHub](https://github.com/MuseumofModernArt/collection)
+- As analyzed by [fivethirtyeight.com](https://fivethirtyeight.com/features/a-nerds-guide-to-the-2229-paintings-at-moma/)
+- And by [others](https://medium.com/@foe/here-s-a-roundup-of-how-people-have-used-our-data-so-far-80862e4ce220)
+
+---
+
+# Get the data
+
+Use this code chunk to import the cleaned CSV file:
+
+
+```r
+library(readr)
+moma &lt;- read_csv(here::here("static","slides", "03-tidy", "artworks-cleaned.csv"))
+```
+
+
+---
+
+layout: true
+
+# Data wrangling
+
+---
+
+
+When working with data you must:
+
+* Figure out what you want to do. Be able to state that in English.
+
+* Describe those tasks in the form of a computer program.
+
+* Execute the program.
+
+The `dplyr` package makes these steps fast and easy:
+
+* By constraining your options, it helps you think about your data manipulation challenges.
+
+* It provides simple English **"verbs"**, functions that correspond to the most common data manipulation tasks, to help you translate your thoughts into code.
+
+---
+
+`dplyr` aims to provide a function for each basic verb of data manipulation. These verbs can be organised into three categories based on the component of the dataset that they work with:
+
+.pull-left[
+
+* Rows:
+  * `filter()` chooses rows based on *column* values.
+  * `slice()` chooses rows based on location.
+  * `arrange()` changes the order of the rows.
+  
+]
+
+--
+
+.pull-right[
+
+* Columns:
+  * `select()` changes whether or not a column is included.
+  * `rename()` changes the name of columns.
+  * `mutate()` changes the values of columns and creates new columns.
+  * `relocate()` changes the order of the columns.
+  * `distinct()` unique values in each column
+  * `count` number of occurrences of each unique value in a column
+]
+
+Some of you may be able to relate this to MS Excel...
+
+
+---
+
+* Groups of rows:
+  * `summarise()` collapses a group into a single row.
+
+* Whole data.frame/tibble
+  * `glimpse()` see what variables are there
+
+
+---
+
+layout:false
+class: middle, center, inverse
+
+![](../images/rladylego-pipe.jpg)
+
+## Plus: `%&gt;%`
+
+*image courtesy [@LegoRLady](https://twitter.com/LEGO_RLady/status/986661916855754752)*
+
+
+---
+
+layout: true
+## Some Sample Questions!
+
+---
+
+1. How many paintings (rows) are in `moma`? How many variables (columns) are in `moma`?
+1. What is the first painting acquired by MoMA? Which year? Which artist? What title?
+    - *Hint: you may want to look into `select` + `arrange`*
+1. What is the oldest painting in the collection? Which year? Which artist? What title? *(see above hint)*
+1. How many distinct artists are there?
+1. Which artist has the most paintings in the collection? How many paintings are by this artist?
+1. How many paintings are by male vs female artists?
+
+If you want more:
+1. How many artists of each gender are there?
+1. In what year were the most paintings acquired? Created?
+1. In what year was the first painting by a (solo) female artist acquired? When was that painting created? Which artist? What title? 
+
+---
+
+1. How many paintings (rows) are in `moma`? How many variables (columns) are in `moma`?
+
+
+```r
+glimpse(moma)
+```
+
+```
+Rows: 2,253
+Columns: 23
+$ title             &lt;chr&gt; "Rope and People, I", "Fire in the Evening", "Portrait of an Equilibrist", "Guitar", "Grandmother", "\…
+$ artist            &lt;chr&gt; "Joan Miró", "Paul Klee", "Paul Klee", "Pablo Picasso", "Arthur Dove", "Francis Picabia", "Blinky Pale…
+$ artist_bio        &lt;chr&gt; "(Spanish, 1893–1983)", "(German, born Switzerland. 1879–1940)", "(German, born Switzerland. 1879–1940…
+$ artist_birth_year &lt;dbl&gt; 1893, 1879, 1879, 1881, 1880, 1879, 1943, 1880, 1839, 1894, 1895, 1904, 1916, 1924, 1905, 1889, 1872, …
+$ artist_death_year &lt;dbl&gt; 1983, 1940, 1940, 1973, 1946, 1953, 1977, 1950, 1906, 1956, 1949, 2001, 1991, 2001, 1970, 1930, 1944, …
+$ num_artists       &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+$ n_female_artists  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+$ n_male_artists    &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+$ artist_gender     &lt;chr&gt; "Male", "Male", "Male", "Male", "Male", "Male", "Male", "Male", "Male", "Male", "Male", "Male", "Male"…
+$ year_acquired     &lt;dbl&gt; 1936, 1970, 1966, 1955, 1939, 1968, 1997, 1931, 1934, 1941, 1949, 1957, 1960, 1963, 1968, 1931, 1937, …
+$ year_created      &lt;dbl&gt; 1935, 1929, 1927, 1919, 1925, 1919, 1970, 1929, 1885, 1930, 1942, 1953, 1959, 1962, 1950, 1926, 1936, …
+$ circumference_cm  &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
+$ depth_cm          &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
+$ diameter_cm       &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
+$ height_cm         &lt;dbl&gt; 104.8, 33.8, 60.3, 215.9, 50.8, 129.2, 200.0, 54.6, 127.0, 100.0, 86.0, 194.9, 209.8, 101.6, 244.1, 35…
+$ length_cm         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
+$ width_cm          &lt;dbl&gt; 74.6000, 33.3000, 36.8000, 78.7000, 54.0000, 89.9000, 200.0000, 38.1000, 96.8000, 100.3000, 112.1000, …
+$ seat_height_cm    &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
+$ purchase          &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALS…
+$ gift              &lt;lgl&gt; TRUE, FALSE, FALSE, TRUE, TRUE, FALSE, TRUE, TRUE, FALSE, TRUE, TRUE, FALSE, FALSE, TRUE, FALSE, TRUE,…
+$ exchange          &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE…
+$ classification    &lt;chr&gt; "Painting", "Painting", "Painting", "Painting", "Painting", "Painting", "Painting", "Painting", "Paint…
+$ department        &lt;chr&gt; "Painting &amp; Sculpture", "Painting &amp; Sculpture", "Painting &amp; Sculpture", "Painting &amp; Sculpture", "Paint…
+```
+
+---
+
+2. What is the first painting acquired by MoMA? Which year? Which artist? What title?
+    - *Hint: you may want to look into `select` + `arrange`*
+
+```r
+moma %&gt;% 
+  select(year_acquired) %&gt;% 
+  arrange(year_acquired)
+```
+
+```
+# A tibble: 2,253 × 1
+   year_acquired
+           &lt;dbl&gt;
+ 1          1930
+ 2          1930
+ 3          1931
+ 4          1931
+ 5          1932
+ 6          1934
+ 7          1934
+ 8          1934
+ 9          1934
+10          1934
+# … with 2,243 more rows
+# ℹ Use `print(n = ...)` to see more rows
+```
+
+```r
+moma %&gt;% 
+  select(title,artist,year_acquired) %&gt;% 
+  arrange(year_acquired)
+```
+
+```
+# A tibble: 2,253 × 3
+   title                                               artist            year_acquired
+   &lt;chr&gt;                                               &lt;chr&gt;                     &lt;dbl&gt;
+ 1 House by the Railroad                               Edward Hopper              1930
+ 2 Seated Nude                                         Bernard Karfiol            1930
+ 3 Daylight Savings Time                               Pierre Roy                 1931
+ 4 Plums on a Plate                                    Preston Dickinson          1931
+ 5 Dr. Mayer-Hermann                                   Otto Dix                   1932
+ 6 The Bather                                          Paul Cézanne               1934
+ 7 Pines and Rocks (Fontainebleau?)                    Paul Cézanne               1934
+ 8 Still Life with Ginger Jar, Sugar Bowl, and Oranges Paul Cézanne               1934
+ 9 Still Life with Apples                              Paul Cézanne               1934
+10 Italian Landscape                                   Arthur B. Davies           1934
+# … with 2,243 more rows
+# ℹ Use `print(n = ...)` to see more rows
+```
+
+---
+
+1. What is the oldest painting in the collection? Which year? Which artist? What title? *(see above hint)*
+
+
+```r
+moma %&gt;% 
+  select(title,artist,year_created) %&gt;% 
+  arrange(year_created)
+```
+
+```
+# A tibble: 2,253 × 3
+   title                                    artist       year_created
+   &lt;chr&gt;                                    &lt;chr&gt;               &lt;dbl&gt;
+ 1 Landscape at Daybreak                    Odilon Redon         1872
+ 2 Apache (Man on Horseback)                Odilon Redon         1875
+ 3 Apache (Man on Horseback II)             Odilon Redon         1875
+ 4 Fishing Boat                             Odilon Redon         1875
+ 5 Rocky Peak                               Odilon Redon         1875
+ 6 The Rocky Slope                          Odilon Redon         1875
+ 7 Landscape with Rocks, near Royan         Odilon Redon         1875
+ 8 Still Life with Fruit Dish               Paul Cézanne         1879
+ 9 L'Estaque                                Paul Cézanne         1879
+10 On the Cliff at Pourville, Clear Weather Claude Monet         1882
+# … with 2,243 more rows
+# ℹ Use `print(n = ...)` to see more rows
+```
+
+---
+
+1. How many distinct artists are there?
+
+
+```r
+moma %&gt;% distinct(artist) %&gt;% count()
+```
+
+```
+# A tibble: 1 × 1
+      n
+  &lt;int&gt;
+1   989
+```
+
+---
+
+1. Which artist has the most paintings in the collection? How many paintings are by this artist?
+
+
+```r
+moma %&gt;% 
+  group_by(artist) %&gt;% 
+  summarise(paintings = n()) %&gt;% 
+  arrange(desc(paintings))
+```
+
+```
+# A tibble: 989 × 2
+   artist           paintings
+   &lt;chr&gt;                &lt;int&gt;
+ 1 Pablo Picasso           55
+ 2 Henri Matisse           32
+ 3 On Kawara               32
+ 4 Jacob Lawrence          30
+ 5 Batiste Madalena        25
+ 6 Jean Dubuffet           25
+ 7 Odilon Redon            25
+ 8 Ben Vautier             24
+ 9 Frank Stella            23
+10 Philip Guston           23
+# … with 979 more rows
+# ℹ Use `print(n = ...)` to see more rows
+```
+
+---
+
+1. How many paintings are by male vs female artists?
+
+
+```r
+moma %&gt;% 
+  group_by(artist_gender) %&gt;% 
+  summarise(count = n())
+```
+
+```
+# A tibble: 3 × 2
+  artist_gender count
+  &lt;chr&gt;         &lt;int&gt;
+1 Female          252
+2 Male           1991
+3 &lt;NA&gt;             10
+```
+
+
+---
+
+1. In what year was the first painting by a (solo) female artist acquired? When was that painting created? Which artist? What title?
+
+
+
+```r
+moma %&gt;% 
+  select(title, artist, year_acquired, artist_gender) %&gt;%  arrange(year_acquired, artist_gender)
+```
+
+```
+# A tibble: 2,253 × 4
+   title                                               artist            year_acquired artist_gender
+   &lt;chr&gt;                                               &lt;chr&gt;                     &lt;dbl&gt; &lt;chr&gt;        
+ 1 House by the Railroad                               Edward Hopper              1930 Male         
+ 2 Seated Nude                                         Bernard Karfiol            1930 Male         
+ 3 Daylight Savings Time                               Pierre Roy                 1931 Male         
+ 4 Plums on a Plate                                    Preston Dickinson          1931 Male         
+ 5 Dr. Mayer-Hermann                                   Otto Dix                   1932 Male         
+ 6 The Bather                                          Paul Cézanne               1934 Male         
+ 7 Pines and Rocks (Fontainebleau?)                    Paul Cézanne               1934 Male         
+ 8 Still Life with Ginger Jar, Sugar Bowl, and Oranges Paul Cézanne               1934 Male         
+ 9 Still Life with Apples                              Paul Cézanne               1934 Male         
+10 Italian Landscape                                   Arthur B. Davies           1934 Male         
+# … with 2,243 more rows
+# ℹ Use `print(n = ...)` to see more rows
+```
+
+
+
+
+
+
+
+
+
+---
+
+buffer
+
+
+
+---
+
+
+
+class: inverse, middle, center
+
+
+# 📊
+
+## Basics of `ggplot2` and `dplyr`:
+
+[R4DS `ggplot2` chapter](http://r4ds.had.co.nz/data-visualisation.html)
+
+[ModernDive `ggplot2` chapter](http://moderndive.com/3-viz.html)
+
+[RStudio `ggplot2` Cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf)
+
+[R4DS `dplyr` chapter](http://r4ds.had.co.nz/transform.html)
+
+[ModernDive `dplyr` chapter](http://moderndive.com/5-wrangling.html)
+
+[RStudio `dplyr` Cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf)
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "atelier-lakeside-light",
+"highlightLines": true,
+"slideNumberFormat": "%current%",
+"ratio": "16:9",
+"countIncrementalSlides": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

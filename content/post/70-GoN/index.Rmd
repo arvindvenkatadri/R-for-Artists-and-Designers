@@ -23,11 +23,11 @@ links:
 - icon: flask
   icon_pack: fas
   name: lab
-  url: /labs/07-Grammar-of-Networks.html
-# - icon: magic
-#   icon_pack: fas
-#   name: slides
-#   url: /slides/07-Grammar-of-Networks.html
+  url: /labs/07-networks/07-Grammar-of-Networks.html
+- icon: magic
+  icon_pack: fas
+  name: slides
+  url: /slides/07-networks/07-Networks-in-R.html
 ---
 
 ![](featured.jpg)

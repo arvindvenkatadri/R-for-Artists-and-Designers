@@ -34,11 +34,11 @@ links:
 - icon: flask
   icon_pack: fas
   name: lab
-  url: /labs/03-moma.html
+  url: /labs/03-tidy/03-moma.html
 - icon: magic
   icon_pack: fas
   name: Intro to dplyr
-  url: /labs/03a-Messing-with-Data-using-tidyverse.html
+  url: /labs/03-tidy/03a-Messing-with-Data-using-tidyverse.html
 ---
 ![](featured.jpg)
 

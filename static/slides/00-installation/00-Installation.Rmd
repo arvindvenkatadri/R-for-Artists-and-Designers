@@ -1,0 +1,307 @@
+---
+title: "Installing R and RStudio"
+subtitle:  
+author: "Arvind Venkatadri"
+date: '`r Sys.Date()`'
+output:
+  xaringan::moon_reader:
+    css: 
+      - default
+      - css/lexis.css
+      - css/lexis-fonts.css
+    lib_dir: libs
+    nature:
+      highlightStyle: atelier-lakeside-light
+      highlightLines: true
+      slideNumberFormat: "%current%"
+      ratio: 16:9
+      countIncrementalSlides: true
+---
+
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(
+  fig.width=9, fig.height=3.5, fig.retina=3,
+  out.width = "100%",
+  cache = FALSE,
+  echo = TRUE,
+  message = FALSE, 
+  warning = FALSE,
+  fig.show = TRUE,
+  hiline = TRUE
+)
+#devtools::install_github("hadley/emo")
+#library(emo)
+library(emojifont)
+library(emoji)
+library(here)
+```
+
+
+name: title_slide
+class: middle
+layout: true
+# Let's get started
+
+---
+
+## Windows
+
+1. Download R for Windows [here](http://cran.r-project.org/bin/windows/base/release.htm)
+
+2. Run the `.exe` file that was downloaded in the step above.
+
+3. Go to the RStudio Download [page](http://www.rstudio.com/ide/download/desktop)
+
+4. Under **`All Installers`** select RStudio current version ## - Windows XP/Vista/7/8/10.
+
+5. Double click the file to install it.
+
+6. Once R and RStudio are installed, open RStudio to make sure that you don’t get any error messages.
+
+---
+
+
+## Mac OS X
+
+1. Go to [CRAN](https://cran.r-project.org/) and click on Download R for (Mac) OS X.
+
+2. Select the `**.pkg`** file for the version of OS X that you have and the file will download. Double click on the file that was downloaded and R will install.
+
+4. Go to the [RStudio Download page](http://www.rstudio.com/ide/download/desktop).
+
+5. Under `All Installers` select RStudio current version ## - Mac OS X 10.6+ (64-bit) to download it.
+
+6. Once it’s downloaded, double click the file to install it.
+
+7. Once R and RStudio are installed, open RStudio to make sure it works and you don’t get any error messages.
+
+
+---
+layout:false
+# OK, what the Heck are R and RStudio?
+
+.pull-left[
+1.  [R](https://cran.r-project.org/) is a free and open source language
+
+![R](https://www.r-project.org/Rlogo.png)
+]
+
+.pull-right[
+2. RStudio is a programming environment ( aka "IDE") that makes R coding easy.
+
+![RStudio](https://d33wubrfki0l68.cloudfront.net/62bcc8535a06077094ca3c29c383e37ad7334311/a263f/assets/img/logo.svg)
+]
+---
+
+background-image: url("https://64.media.tumblr.com/5b597a2ad23f997216ee85a0b4420ffe/tumblr_offcw8Xas61v85w7qo1_400.gifv")
+background-position: bottom
+background-size: contain
+
+# R ! Whatever is it good for?
+
+???
+Image Credit(https://mesyman.tumblr.com/post/152219845477)
+
+---
+layout: false
+
+# Absolutely Anything !!
+
+
+.pull-left[
+-   Showing [Off!](https://www.data-to-viz.com/)
+
+-   More [**Showing Off!**](https://r-for-artists.netlify.app/)
+
+-   Generative [**Art**](https://www.data-imaginist.com/art)
+
+-   [**Making Maps!!**](https://bhaskarvk.github.io/user2017.geodataviz/notebooks/03-Interactive-Maps.nb.html) and [**Water-Color Maps**](http://maps.stamen.com/#watercolor/12/1.3164/103.8338)
+
+]
+.pull-right[
+-   [**Interactive web pages, blogs**](https://blog.rstudio.com/2017/09/11/announcing-blogdown/)
+
+-   [**Analysing Books**](https://juliasilge.com/blog/tidy-text-classification/)
+
+-   [**Writing Books**](https://bookdown.org/yihui/bookdown/)
+
+-   **Statistical computing and ML and AI and...**
+]
+
+All depends upon your imagination.
+
+---
+
+# Get to know RStudio
+
+.center[Click on this icon in your Applications folder:
+![this icon](https://d33wubrfki0l68.cloudfront.net/521a038ed009b97bf73eb0a653b1cb7e66645231/8e3fd/assets/img/rstudio-icon.png)
+
+This will fire up your RStudio.]
+
+---
+
+# Get to know RStudio
+
+.leftcol30[
+This is **RStudio**, a integrated development environment ( IDE ) for **R** ( And Python, JS, SQL, D3 and a few other computer languages. )
+]
+
+.rightcol70[
+
+
+```{r,echo=FALSE,out.height="450px", out.width="750px"}
+
+knitr::include_graphics(here("static", "img", "rstudio-panes-1.png"))
+
+```
+]
+
+---
+
+# Get to know RStudio
+
+.leftcol30[
+ When you first open it, the RStudio interface is divided into four “Panes”:
+ ]
+
+.rightcol70[
+
+```{r,echo=FALSE,out.height="450px", out.width="750px"}
+knitr::include_graphics(here("static", "img", "rstudio-panes-2.png"))
+
+```
+]
+
+---
+# Get to know RStudio
+.leftcol30[
+
+1.Top LEFT: the **editor** where you edit scripts and documents
+  ]
+  
+.rightcol70[
+
+```{r,echo=FALSE,out.height="450px", out.width="750px"}
+knitr::include_graphics(here("static", "img", "rstudio-panes-2.png"))
+
+```
+]
+
+---
+# Get to know RStudio
+.leftcol30[
+2.Top RIGHT: your **environment/history** panes. This is where you can see variables you’ve created and a full history of functions / commands you have run,
+]
+
+.rightcol70[
+
+
+```{r,echo=FALSE,out.height="450px", out.width="750px"}
+knitr::include_graphics(here("static", "img", "rstudio-panes-2.png"))
+
+```
+]
+
+---
+# Get to know RStudio
+.leftcol30[
+3.Bottom RIGHT: The bottom right pane by default contains several panes including: **files/plots/packages/help/viewer**. We will explore these various panes together in class.
+]
+
+.rightcol70[
+
+
+```{r,echo=FALSE,out.height="450px", out.width="750px"}
+knitr::include_graphics(here("static", "img", "rstudio-panes-2.png"))
+
+```
+]
+
+---
+# Get to know RStudio
+.leftcol30[
+4.Bottom LEFT: the **R console** is where the code is run. You can type code directly into the console OR you can send it to the console by running it from the editor. 
+]
+
+.rightcol70[
+
+```{r,echo=FALSE,out.height="450px", out.width="750px"}
+knitr::include_graphics(here("static", "img", "rstudio-panes-2.png"))
+
+```
+]
+
+---
+# Get to know RStudio
+.leftcol30[
+The placement of these panes and their content can be customized using the RStudio preferences: 
+  - (From the RStudio drop down choose: **RStudio -> Preferences -> Pane Layout**). 
+  - You can also drag the panes using your mouse to move / resize them.)
+  
+]
+
+.rightcol70[
+
+
+```{r,echo=FALSE,out.height="450px", out.width="750px"}
+knitr::include_graphics(here("static", "img", "rstudio-panes-2.png"))
+
+```
+]
+
+
+---
+
+layout: true
+# Where is your Work?
+
+---
+.pull-left[
+Create a working folder:`r emoji::emoji("file_folder")`
+**` My_Documents/Irritating_R_Stuff`**
+
+In RStudio: Click on: **Tools -> Global Options**
+
+Click on `Browse`
+
+Navigate to the default working folder:
+**`/My_Documents/Irritating_R_Stuff/`**  
+
+Apply and close.
+
+]
+
+.pull-right[
+<center><img src="https://d33wubrfki0l68.cloudfront.net/c41935ca0c88dd9ef2ee02b65222837b86d813d4/00505/2020/02/18/rstudio-1-3-preview-configuration/global-options.png" height="450px"/></center>
+]
+
+---
+
+- On the `Lab-00` page, click on the `Lab` button. 
+- On that new page, click `Download Rmd` at the top right. 
+- Save the `.Rmd` file in your Working Folder: **`/My_Documents/Irritating_R_Stuff/`**`r emoji("file_folder")`
+
+In Your Files tab ( Pane 3 Bottom Right):
+- Click on the gear wheel `r emoji("gear")`
+- Click on `Go to Working Folder` `r emoji("file_folder")`
+- Your downloaded file **`.Rmd`** is now visible `r emoji("check")`
+- Click on the file
+- It should open in your `Source` Pane 1 at top left
+- **ALWAYS** create and save your files here!
+- Do **not** work with a file sitting in your `My_Downloads` folder `r emoji("stop_sign")` `r emoji("angry")`
+
+---
+
+- This is an **RMarkdown** file ( file.ext = `.Rmd`)
+
+- It will enable you to run code and write text in the same document. 
+
+- More in class!!
+
+---
+layout:false
+class: inverse center middle
+# You R good to go!!

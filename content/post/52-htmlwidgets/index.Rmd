@@ -23,7 +23,7 @@ links:
 - icon: flask
   icon_pack: fas
   name: lab
-  url: "/labs/052-htmlwidgets.html"
+  url: "/labs/052-htmlwidgets/052-htmlwidgets.html"
 ---
 
 ![](featured.jpg)

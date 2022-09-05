@@ -34,12 +34,12 @@ links:
 - icon: flask
   icon_pack: fas
   name: lab
-  url: /labs/00-install_name_plot.html
+  url: /labs/00-installation/00-install_name_plot.html
   
 - icon: magic
   icon_pack: fas
   name: Installation Slides
-  url: /slides/00-Installation.html
+  url: /slides/00-installation/00-Installation.html
 ---
 
 ![](featured.jpg)

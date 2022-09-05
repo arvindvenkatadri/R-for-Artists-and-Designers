@@ -34,17 +34,17 @@ links:
 - icon: flask
   icon_pack: fas
   name: lab
-  url: /labs/04-Grammar-of-Graphics.html
+  url: /labs/04-graphics/04-Grammar-of-Graphics.html
   
 - icon: magic
   icon_pack: fas
   name: Slides
-  url: /slides/04-Metaphors-with-Graphics.html
+  url: /slides/04-metaphors/04-Metaphors-with-Graphics.html
   
 - icon: paintbrush
   icon_pack: fas
   name: Colours in ggplot
-  url: /labs/05-colors.html
+  url: /labs/04-graphics/04-colors.html
 ---
 
 ![](featured.jpg)

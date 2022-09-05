@@ -22,17 +22,17 @@ links:
 - icon: flask
   icon_pack: fas
   name: lab
-  url: /labs/06-Grammar-of-Maps.html
+  url: /labs/06-spatial/06-Grammar-of-Maps.html
   
 - icon: magic
   icon_pack: fas
   name: Introduction Slides
-  url: /slides/06-Spatial-Data-in-R.html
+  url: /slides/06-spatial/06-Spatial-Data-in-R.html
   
 - icon: flask
   icon_pack: fas
   name: Interactive Maps with leaflet and mapview
-  url: /labs/PlayingwithLeaflet.html
+  url: /labs/06-spatial/PlayingwithLeaflet.html
 ---
 
 ![](featured.jpg)

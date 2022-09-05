@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Slides 04 - Metaphors with Graphics</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Arvind Venkatadri" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/lexis.css" type="text/css" />
+    <link rel="stylesheet" href="css/lexis-fonts.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Slides 04 - Metaphors with Graphics
+]
+.subtitle[
+## From Code to Geometry
+]
+.author[
+### Arvind Venkatadri
+]
+.institute[
+### Srishti Manipal Institute
+]
+.date[
+### (2022-08-09)
+]
+
+---
+
+
+
+
+class: middle, center
+## How does one read Shakespeare? 
+
+![shakespeare](https://media.giphy.com/media/oveqQA2LxpwYg/giphy.gif)
+
+~~To code or not to code, that is the question...~~
+
+---
+
+# What is a Grammar of Graphics?  
+
+## Code looks and reads like **English**.   
+## Has **verbs**, **nouns**, some **adjectives**....
+
+--
+
+- Describes Information/ideas/concepts from *any* **source domain**.
+
+--
+
+- **GEOMETRY** as the *target domain* : What comes out of R is predominantly "geometry"
+
+---
+
+
+layout: false
+# How do we express visuals in words?
+
+.font120[
+- **Data** to be visualized
+]
+
+--
+.font120[
+- **.hlb[Geom]etric objects** that appear on the plot
+]
+
+--
+.font120[
+- **.hlb[Aes]thetic mappings** from data to visual component
+]
+
+--
+.font120[
+- **.hlb[Stat]istics** transform data on the way to visualization
+]
+
+--
+.font120[
+- **.hlb[Coord]inates** organize location of geometric objects
+]
+
+--
+.font120[
+- **.hlb[Scale]s** define the range of values for aesthetics
+]
+
+--
+.font120[
+- **.hlb[Facet]s** group into subplots
+]
+
+---
+
+
+
+# The Essence of ggplot
+
+all `ggplot2`
+
+- `aes(x = , y = )` (aesthetics)
+- `aes(x = , y = , color = )` (add color)
+- `aes(x = , y = , size = )` (add size)
+- `+ facet_wrap(~ )` (facetting)
+- `+ scale_` ( add a scale)
+
+---
+# gg is for Grammar of Graphics
+
+.left-column[
+### Data
+### Aesthetics
+### Geoms
+
+```r
++ geom_*()
+```
+]
+
+.right-column[
+
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/geom_demo-1.png" width="850px" height="350px" /&gt;
+]
+
+
+
+---
+
+
+# [The Five-Named Graphs](http://moderndive.com/3-viz.html#FiveNG)
+
+
+- Scatterplot: `geom_point()`
+- Line graph: `geom_line()`
+- Histogram: `geom_histogram()`
+- Boxplot: `geom_boxplot()`
+- Bar graph: `geom_bar()` or `geom_col` (see [Lab 02](../02-Pronouns-and-Data.html))
+
+---
+
+
+## Chunk : penguins
+
+
+
+```r
+head(penguins)
+```
+
+```
+## # A tibble: 6 × 8
+##   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g sex     year
+##   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt; &lt;fct&gt;  &lt;int&gt;
+*## 1 Adelie  Torgersen           39.1          18.7               181        3750 male    2007
+*## 2 Adelie  Torgersen           39.5          17.4               186        3800 female  2007
+*## 3 Adelie  Torgersen           40.3          18                 195        3250 female  2007
+## 4 Adelie  Torgersen           NA            NA                  NA          NA &lt;NA&gt;    2007
+## 5 Adelie  Torgersen           36.7          19.3               193        3450 female  2007
+## 6 Adelie  Torgersen           39.3          20.6               190        3650 male    2007
+```
+We see the first few rows of the dataset `penguins`. We see that there are a few **NA** data observations too. Let us remove them for now.
+
+
+```r
+penguins &lt;- penguins %&gt;% drop_na()
+```
+
+
+---
+
+## Chunk: Mapping
+
+
+.pull-left[
+
+```r
+*ggplot(penguins)
+```
+]
+
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/first-plot1a-out-1.png" width="504" /&gt;
+]
+
+---
+
+## Chunk: Mapping
+
+
+.pull-left[
+
+```r
+ggplot(data = penguins, 
+*      mapping = aes(x = bill_length_mm,
+*          y = body_mass_g))
+```
+]
+
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/first-plot1b-out-1.png" width="504" /&gt;
+]
+
+
+---
+
+## Chunk: Mapping
+
+.pull-left[
+
+```r
+ggplot(data = penguins, 
+       mapping = aes(x = bill_length_mm, 
+           y = body_mass_g)) +
+* geom_point()
+```
+]
+
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/first-plot1c-out-1.png" width="504" /&gt;
+]
+
+---
+## Chunk: Mapping
+
+.pull-left[
+
+```r
+ggplot(data = penguins, 
+       mapping = aes(x = bill_length_mm, 
+           y = body_mass_g)) +
+  geom_point() +
+* geom_smooth(method = "lm")
+```
+]
+
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/first-plot1d-out-1.png" width="504" /&gt;
+]
+
+---
+
+### Chunk: Geom_Point_Position_Colour
+
+.pull-left[
+
+```r
+*ggplot(data = penguins)
+```
+]
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-2-1.png" width="504" /&gt;
+]
+
+---
+
+### Chunk: Geom_Point_Position_Colour
+
+
+.pull-left[
+
+```r
+ggplot(data = penguins,
+*      aes(x = bill_length_mm,
+*          y = body_mass_g,
+*          color = island))
+```
+We can leave out the "mapping" word and just use **aes** .
+
+Why is there no plot?
+
+
+🤔 💭
+
+Right !! We have not used a `geom` command yet!!
+]
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-3-1.png" width="504" /&gt;
+]
+
+---
+
+### Chunk: Geom_Point_Position_Colour
+
+
+.pull-left[
+
+```r
+ggplot(data = penguins,
+  aes(x = bill_length_mm,
+      y = body_mass_g,
+      color = island)) +  
+*geom_point() +
+* ggtitle("A point geom with position, color aesthetics")
+```
+Note that the points are located by **position** coordinates on both x and y axis, and **coloured** by the island variable.
+
+
+]
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-4-1.png" width="504" /&gt;
+]
+
+---
+
+### Chunk: Geom_Point_Position_Colour
+
+
+.pull-left[
+
+```r
+ggplot(data = penguins,
+  aes(x = bill_length_mm,
+      y = body_mass_g,
+      color = island)) +  
+*geom_point(size = 4) +
+* ggtitle("A point geom with position color and size aesthetics")
+```
+Note that the points are located by **position** coordinates on both x and y axis, and **coloured** by the island variable.
+
+And we've fixed size = 4!
+
+
+]
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-5-1.png" width="504" /&gt;
+]
+
+---
+
+## Alpha
+
+.pull-left[
+
+```r
+diamonds %&gt;% 
+  # Sample some 20% of the data
+  slice_sample(prop = 0.2) %&gt;% 
+  ggplot(.) +
+* geom_point(aes(x = carat,
+*                y = price))
+```
+
+Are the points all overlapping?
+Can we see them better?
+]
+
+
+
+.pull-right[
+  
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-6-1.png" width="504" /&gt;
+]
+
+---
+
+## Alpha
+
+.pull-left[
+
+```r
+diamonds %&gt;% 
+  # Sample some 20% of the data
+  slice_sample(prop = 0.2) %&gt;% 
+  ggplot(.) +
+* geom_point(aes(x = carat, y = price),
+*            # alpha outside the aes() !!!
+*            alpha = 0.2) +
+  labs(title = "Points plotted with Alpha")
+```
+
+Are the points all overlapping?
+Can we see them better?
+
+]
+
+
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-7-1.png" width="90%" /&gt;
+]
+
+---
+
+## Chunk: Box Plot
+.pull-left[
+
+```r
+ggplot(diamonds) + 
+* geom_boxplot(aes(x = cut, y = price)) +
+  labs(title = "Box Plot")
+```
+
+]
+
+
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-8-1.png" width="90%" /&gt;
+]
+
+
+---
+
+## Chunk: Box Plot
+.pull-left[
+
+```r
+ggplot(diamonds) + 
+* geom_boxplot(aes(x = cut,
+*                  y = price,
+*                  fill = cut)) +
+  labs(title = "Box Plot")
+```
+
+]
+
+
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-9-1.png" width="90%" /&gt;
+]
+---
+
+## Chunk: Geom_Bar_1
+
+.pull-left[
+
+```r
+*ggplot(data = penguins)
+```
+]
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-10-1.png" width="90%" /&gt;
+]
+
+---
+
+## Chunk: Geom_Bar_1
+
+.pull-left[
+
+```r
+ggplot(data = penguins) +  
+*      aes(x = species)
+```
+]
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-11-1.png" width="90%" /&gt;
+]
+
+---
+
+## Chunk: Geom_Bar_1
+
+.pull-left[
+
+```r
+ggplot(data = penguins) +  
+       aes(x = species) +
+* geom_bar() +
+* ggtitle("A bar geom with position and height aesthetics")
+```
+
+The bars are plotted with **positions** on the x-axis, defined by the `species` variable,  and **heights** mapped to the y-axis. 
+
+How did the graph "know" the heights of the bars?
+
+`geom_bar` has an internal `count` statistic computation. 
+Many `geom_s` have internal computation that are accessible to programmers. 
+
+]
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-12-1.png" width="90%" /&gt;
+]
+
+---
+
+## Geom_Bar_Position_Stack_and_Dodge
+
+
+.pull-left[
+When using more than a pair of variables with a bar chart, we have a few more **position** options:
+
+```r
+  ggplot(penguins,
+*          aes(x = species,
+*              fill = island))
+```
+]
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-13-1.png" width="90%" /&gt;
+]
+
+---
+
+## Geom_Bar_Position_Stack_and_Dodge
+
+.pull-left[
+When using more than a pair of variables with a bar chart, we have a few more **position** options:
+
+```r
+ggplot(penguins,
+           aes(x = species,
+               fill = island)) + 
+* geom_bar() +
+* ggtitle(label = "A stacked bar chart")
+```
+
+The bars are coloured by the `island` variable and are **stacked** in **position**.
+]
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-14-1.png" width="90%" /&gt;
+]
+---
+
+## Geom_Bar_Position_Stack_and_Dodge
+
+.pull-left[
+And here we use the `dodge` option:
+
+```r
+ggplot(penguins,
+           aes(x = species,
+               fill = island)) + 
+* geom_bar(position ="dodge") +
+* ggtitle(label =
+*           "A dodged bar chart")
+```
+]
+
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-15-1.png" width="90%" /&gt;
+]
+
+---
+
+## Facetting
+
+
+.pull-left[
+
+```r
+*ggplot(penguins)
+```
+]
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-16-1.png" width="90%" /&gt;
+]
+
+---
+
+## Facetting
+
+.pull-left[
+
+```r
+ggplot(penguins) +
+* aes(x = flipper_length_mm,
+*     y = body_mass_g)
+```
+]
+
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-17-1.png" width="90%" /&gt;
+]
+
+---
+
+## Facetting
+
+.pull-left[
+
+```r
+ggplot(penguins) +
+  aes(x = flipper_length_mm,
+      y = body_mass_g) +
+* geom_point()
+```
+]
+
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-18-1.png" width="90%" /&gt;
+]
+
+---
+
+## Facetting
+
+.pull-left[
+
+```r
+ggplot(penguins) +
+  aes(x = flipper_length_mm,
+      y = body_mass_g) +
+  geom_point() +
+* facet_wrap(~island) +
+* ggtitle("A point geom graph with facets")
+```
+
+
+The graph has **split** into multiples, based on the **number** of islands. 
+]
+
+
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-19-1.png" width="90%" /&gt;
+]
+---
+
+## Still more Facetting
+
+.pull-left[
+
+```r
+ggplot(penguins) +
+  aes(x = flipper_length_mm,
+      y = body_mass_g) +
+* geom_point()
+```
+
+What if we have even more "factor" variables?
+We have `island` and `species`...can we split further?
+
+]
+
+
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-20-1.png" width="90%" /&gt;
+]
+
+---
+
+## Still more Facetting
+
+.pull-left[
+
+```r
+ggplot(penguins) +
+  aes(x = flipper_length_mm,
+      y = body_mass_g) +
+  geom_point() +
+* facet_grid(species~island) +
+* ggtitle("A point geom graph with grid facets")
+```
+
+The graph has **split** into multiples, based on the **number** of islands **and** the number of species. 
+
+]
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-21-1.png" width="90%" /&gt;
+]
+
+
+---
+
+class:middle, center, inverse
+## And shall we look briefly at colour?
+
+---
+
+## Finally...Colour !! ( Just a bit )
+
+.pull-left[
+
+```r
+diamonds %&gt;% 
+  slice_sample(prop = 0.2) %&gt;% 
+  ggplot(.) +
+* geom_point(aes(x = carat, y = price))
+```
+]
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-22-1.png" width="90%" /&gt;
+]
+---
+
+## Finally...Colour !! ( Just a bit )
+
+.pull-left[
+
+```r
+diamonds %&gt;% 
+  slice_sample(prop = 0.2) %&gt;% 
+  ggplot(.) +
+  geom_point(aes(x = carat, y = price, colour = cut), size = 3) +
+* scale_colour_brewer(palette = "Set3") +
+  labs(title = "Brewer Colour Pallette (Set3)")
+```
+We are using the `RColorBrewer` package here. 
+Type `RColorBrewer::display.brewer.all()` in your Console and see what palettes are available.
+
+]
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-23-1.png" width="90%" /&gt;
+]
+
+
+---
+
+## Chunk: Colour !! ( Just a bit )
+
+.pull-left[
+
+```r
+diamonds %&gt;% 
+  slice_sample(prop = 0.2) %&gt;% 
+  ggplot(.) +
+  geom_point(aes(x = carat, y = price, colour = cut), size = 3) +
+*              scale_colour_viridis_d() +
+  labs(title = "Viridis Palette",
+       subtitle = "The Default in ggplot")
+```
+]
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-24-1.png" width="504" /&gt;
+]
+
+---
+
+
+## Chunk: Colour !! ( Just a bit )
+
+.pull-left[
+
+```r
+diamonds %&gt;% 
+  slice_sample(prop = 0.2) %&gt;% 
+  ggplot(.) +
+  geom_point(aes(x = carat, y = price, colour = cut), size = 3) +
+*              scale_colour_viridis_d(option = "magma") +
+* labs(title = "Viridis Palette, Option Magma")
+```
+]
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-25-1.png" width="504" /&gt;
+]
+
+---
+
+
+
+## Chunk: Colour !! ( Just a bit )
+
+.pull-left[
+
+```r
+diamonds %&gt;% 
+  slice_sample(prop = 0.2) %&gt;% 
+  ggplot(.) +
+  geom_point(aes(x = carat, y = price, colour = cut), size = 3) +
+*              scale_colour_viridis_d(option = "inferno") +
+  labs(title = "Viridis Palette, Option Inferno")
+```
+]
+.pull-right[
+&lt;img src="04-Metaphors-with-Graphics_files/figure-html/unnamed-chunk-26-1.png" width="504" /&gt;
+]
+
+---
+
+
+## Conclusion
+- `ggplot` takes a dataframe/tibble as the data argument
+- The `aes`-thetic arguments can be `x`, `y`, `colour`, `shape`, `alpha` for example...
+- The `geom_*()` commands specify the kind of plot
+- Together, the `ggplot` package offers a **Grammar** of near-English commands which allow us to plot data in various ways. 
+
+---
+
+# References
+
+
+1. [Wickham, Hadley. (2010) "A Layered Grammar of Graphics". *Journal of Computational and Graphical Statistics*, 19(1).](http://www.jstor.org.proxy.uchicago.edu/stable/25651297)
+
+2. [Wilkinson, Leland. (2005). *The Grammar of Graphics*. (UChicago authentication required)](http://link.springer.com.proxy.uchicago.edu/book/10.1007%2F0-387-28695-0)
+
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "atelier-lakeside-light",
+"highlightLines": true,
+"slideNumberFormat": "%current%",
+"ratio": "16:9",
+"countIncrementalSlides": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
