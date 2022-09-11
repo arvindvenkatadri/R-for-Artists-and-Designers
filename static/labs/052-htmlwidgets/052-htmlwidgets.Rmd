@@ -280,7 +280,12 @@ frequent_destinations
 # ll <- unique(frequent_flights[,3:4])
 frequent_flights <- flights %>% 
   semi_join(frequent_destinations,by = c("dest_lat" = "dest_lat", "dest_long" = "dest_long")) %>% unique() 
-frequent_flights
+
+frequent_flights %>% 
+  kableExtra::kbl() %>%
+  kableExtra::kable_paper(full_width = TRUE) %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped", "condensed", "responsive")) %>%
+  kableExtra::scroll_box(width = "700px", height = "500px")
 
 
 # globejs(lat=ll[, 1], long=ll[, 2], arcs=frequent_flights,

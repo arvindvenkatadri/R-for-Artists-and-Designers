@@ -1,0 +1,84 @@
+---
+title: 'Lab-05: These Roses have been Painted !!'
+subtitle: 'Why is a Raven like a Writing Desk?'
+summary: "The Grammar of Graphics"
+date: "`r Sys.Date()`"
+featured: false
+draft: false
+weight: 50
+output:
+  html_document:
+    toc_float: true
+    theme: united
+    toc: true
+    code_folding: true
+
+# Featured image
+# To use, add an image named `featured.jpg/png` to your page's folder.
+# Placement options: 1 = Full column width, 2 = Out-set, 3 = Screen-width
+# Focal point options: Smart, Center, TopLeft, Top, TopRight, Left, Right, BottomLeft, Bottom, BottomRight
+image:
+  placement: 2
+  caption: 'Image credit: [**Alice In Wonderland dot Net**](https://www.alice-in-wonderland.net/)'
+  focal_point: ""
+  preview_only: true
+
+# Projects (optional).
+#   Associate this post with one or more of your projects.
+#   Simply enter your project's folder or file name without extension.
+#   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
+#   Otherwise, set `projects = []`.
+projects: []
+
+links:
+- icon: flask
+  icon_pack: fas
+  name: lab
+  url: /labs/04-graphics/04-Grammar-of-Graphics.html
+  
+- icon: magic
+  icon_pack: fas
+  name: Slides
+  url: /slides/04-metaphors/04-Metaphors-with-Graphics.html
+  
+- icon: paintbrush
+  icon_pack: fas
+  name: Colours in ggplot
+  url: /labs/04-graphics/04-colors.html
+---
+
+![](featured.jpg)
+
+
+## Introduction
+
+Ah...`ggplot` ! All those wonderful pictures and graphs, that Alice might have relished!
+
+Metaphors, aesthetics, geometries...and pictures !! `ggplot` seems to equate ravens to writing desks in its syntax...and out come graphs!!
+
+And colours: Wes Anderson! Tim Burton! The Economist... and many others!!
+
+
+## References
+
+1. George Lakoff and Mark Johnson, *Metaphors We Live By*, <https://www.youtube.com/watch?v=lYcQcwUfo8c>  
+
+1. Wickham and Grolemund, R for Data Science, `ggplot` chapter: <https://r4ds.had.co.nz/data-visualisation.html>  
+
+
+1. CMDLineTips, *10 Tips to Customize Text Color, Font, Size in `ggplot2` with `element_text()`*, <https://cmdlinetips.com/2021/05/tips-to-customize-text-color-font-size-in-ggplot2-with-element_text/>  
+
+
+1. CMDLineTips, *How to write a simple custom ggplot theme from scratch*, <https://cmdlinetips.com/2022/05/how-to-write-a-simple-custom-ggplot-theme-from-scratch/>   
+
+1. Asha Hill @ mode.com, *12 Extensions to ggplot2 for More Powerful R Visualizations*, <https://mode.com/blog/r-ggplot-extension-packages/>  
+
+1. Emil Hvitfeldt, *ggplot Trial and Error*, <https://www.emilhvitfeldt.com/post/2018-06-12-ggplot2-trial-and-error-us-trade-data/>  
+
+## Fun Stuff
+
+1. Yihan Wu, *Mapping ggplot geoms and aesthetic parameters*, ( An interactive view of which aesthetic parameters work with which ggplot geom!! )   <https://www.yihanwu.ca/post/geoms-and-aesthetic-parameters/> 
+
+1. <https://www.theartstory.org/artist/kandinsky-wassily/>
+
+
