@@ -62,7 +62,7 @@ The method followed will be based on
 
 In the following, there is some boiler plate code demonstrating the use of colour palettes in R. There are places where **YOUR TURN** is mention; copy and play with the boiler plate code to see what happens !
 
-Let's load up a few packages that we need to start
+Let's load up a few packages that we need to start:
 
 ```{r, prep, message=FALSE}
 #| label: prep
@@ -82,7 +82,7 @@ library(showtext)   ## add google fonts to plots
 ```
 
 
-We will want to add a few fonts to our graphs. The best way (currently) is to use the `showtext` package ( which we loaded above) to bring into our work fonts from Google. To view and select the fonts you might want to work with, spend some time looking over:
+We will want to add a few new fonts to our graphs. The best way (currently) is to use the `showtext` package ( which we loaded above) to bring into our work fonts from Google. To view and select the fonts you might want to work with, spend some time looking over:
 
 1. [Google Webfonts Helper App](https://google-webfonts-helper.herokuapp.com/fonts)
 
@@ -141,7 +141,14 @@ ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm)) +
 
 ## Customized Plot
 
-Let us set some ggplot theme aspects now!! Type `?theme` in your console.
+Let us set some ggplot theme aspects now!! Here is a handy picture showing ( most of ) the theme-able aspects of a ggplot plot. 
+
+For more info, type `?theme` in your console.
+
+```{r,echo=FALSE, fig.alt = "Rosana Ferrero (@RosanaFerrero) on Twitter Sept 11, 2022", fig.cap= "Rosana Ferrero (@RosanaFerrero) on Twitter Sept 11, 2022"}
+knitr::include_graphics("images/ggplot_theme_elements.jfif")
+
+```
 
 
 ```{r}
