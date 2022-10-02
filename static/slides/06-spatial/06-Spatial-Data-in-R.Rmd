@@ -809,7 +809,7 @@ knitr::include_graphics(
 ]
 
 ---
-# `tmap` Layers are in *groups*
+## `tmap` Layers are in *groups*
 
 
 .pull-left[
@@ -842,7 +842,7 @@ knitr::include_graphics(
 ]
 
 ---
-# Add graticules and legends
+## Add graticules and legends
 
 .pull-left[
 ```{r tm2, warning=FALSE, fig.show='hide', message=FALSE}
@@ -872,12 +872,9 @@ knitr::include_graphics(
 ]
 
 ---
-# Add Scale and Compass to the Map
+## Add Scale and Compass to the Map
 
 .pull-left[
-
-https://geocompr.github.io/post/2019/tmap-color-scales/
-
 ```{r tm1b, warning=FALSE, fig.show='hide', message=FALSE}
 
 # Group 1
@@ -909,21 +906,21 @@ knitr::include_graphics(
 
 ```
 ]
+https://geocompr.github.io/post/2019/tmap-color-scales/
+
 
 ---
-# Add Credits and Layout Options
+
+## Add Credits and Layout Options
 
 .pull-left[
 
 ```{r tm1c, warning=FALSE, fig.show='hide', message=FALSE}
-
 mymap <- 
-# Group 1
 tm_shape(lnd) +
   tm_borders(col = "black", lwd = 1) + 
   tm_fill("NAME", legend.show = FALSE) +
-# Group 2 = Layer 2
-  tm_shape(cycle_hire_osm) + 
+tm_shape(cycle_hire_osm) + 
   tm_symbols(size = 0.2, col = "red") +
   tm_graticules() +
   tm_add_legend(type = "symbol", col = "red",
@@ -931,7 +928,6 @@ tm_shape(lnd) +
   tm_scale_bar(position=c("left", "bottom"),text.size = 1) + 
   tm_compass(position = c("right", "top"), type = "rose",
              size = 2) +
-  
   tm_credits(text = "Arvind V, 2021", #<<
              position = c("left", "bottom")) + #<<
   tm_layout(main.title = "London Bike Share", #<<

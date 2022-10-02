@@ -275,8 +275,8 @@ crs_india &lt;- st_crs(india)
 
 ```
 *'data.frame':	5 obs. of  2 variables:
-* $ lon: num  75.5 75.9 76.7 80.4 75.4
-* $ lat: num  17.3 28.7 26.6 23.8 17.1
+* $ lon: num  75.4 78.6 76 79.8 74.8
+* $ lat: num  25.8 20.7 26.7 21 16.6
 ```
 ]
 
@@ -312,13 +312,13 @@ points_sf &lt;- st_as_sf(points,
 
 ```
 'data.frame':	5 obs. of  2 variables:
-* $ lon: num  76.8 79.8 75.8 78.4 74.5
-* $ lat: num  19.4 22.7 27.6 13.7 30.9
+* $ lon: num  77.5 74.2 74.7 77.6 76.6
+* $ lat: num  27.2 19.1 19.1 17.8 22.3
 ```
 
 ```
 Classes 'sf' and 'data.frame':	5 obs. of  1 variable:
-* $ geometry:sfc_POINT of length 5; first list element:  'XY' num  76.8 19.4
+* $ geometry:sfc_POINT of length 5; first list element:  'XY' num  77.5 27.2
 * - attr(*, "sf_column")= chr "geometry"
  - attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: 
   ..- attr(*, "names")= chr(0) 
@@ -831,7 +831,7 @@ Classes 'sf' and 'data.frame':	540 obs. of  6 variables:
 ]
 
 ---
-# `tmap` Layers are in *groups*
+## `tmap` Layers are in *groups*
 
 
 .pull-left[
@@ -857,7 +857,7 @@ tm_shape(lnd) +
 ]
 
 ---
-# Add graticules and legends
+## Add graticules and legends
 
 .pull-left[
 
@@ -880,12 +880,9 @@ tm_shape(lnd) +
 ]
 
 ---
-# Add Scale and Compass to the Map
+## Add Scale and Compass to the Map
 
 .pull-left[
-
-https://geocompr.github.io/post/2019/tmap-color-scales/
-
 
 ```r
 # Group 1
@@ -910,21 +907,22 @@ tm_shape(lnd) +
 .pull-right[
 &lt;img src="06-Spatial-Data-in-R_files/figure-html/tm1b-1.png" width="672" style="display: block; margin: auto;" /&gt;
 ]
+https://geocompr.github.io/post/2019/tmap-color-scales/
+
 
 ---
-# Add Credits and Layout Options
+
+## Add Credits and Layout Options
 
 .pull-left[
 
 
 ```r
 mymap &lt;- 
-# Group 1
 tm_shape(lnd) +
   tm_borders(col = "black", lwd = 1) + 
   tm_fill("NAME", legend.show = FALSE) +
-# Group 2 = Layer 2
-  tm_shape(cycle_hire_osm) + 
+tm_shape(cycle_hire_osm) + 
   tm_symbols(size = 0.2, col = "red") +
   tm_graticules() +
   tm_add_legend(type = "symbol", col = "red",
@@ -932,7 +930,6 @@ tm_shape(lnd) +
   tm_scale_bar(position=c("left", "bottom"),text.size = 1) + 
   tm_compass(position = c("right", "top"), type = "rose",
              size = 2) +
-  
 * tm_credits(text = "Arvind V, 2021",
 *            position = c("left", "bottom")) +
 * tm_layout(main.title = "London Bike Share",
