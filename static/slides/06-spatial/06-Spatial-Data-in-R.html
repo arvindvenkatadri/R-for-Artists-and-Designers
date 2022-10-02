@@ -74,9 +74,9 @@ class: inverse, center, middle
 ## Data Structure in `sf`
 
 ---
-&lt;img src="https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/sf.png" width="900px" height="550px" style="display: block; margin: auto;" /&gt;
+&lt;img src="https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/sf.png" width="750px" height="450px" style="display: block; margin: auto;" /&gt;
 
-The picture shows a familiar looking `data-frame` with the far-right column containing geometries....hmmm.
+The picture shows a familiar looking `data-frame` with the far-right column containing geometries, or shapes....hmmm.
 
 ---
 
@@ -104,12 +104,11 @@ The picture shows a familiar looking `data-frame` with the far-right column cont
 
 # What is a Feature Geometry?
 .pull-left[
-Features have a **geometry** describing **where** on Earth the feature is located  
-- Features = Geometries ( Location Data )
- - The geometry of a tree can be the delineation of its crown ( Polygon )
- - Of its stem,  (Polygon )
- - or the point indicating its centre.  (Point )
- 
+Features have a **geometry** describing **where** on Earth the feature is located
+- Features = Shapes  + Location Data 
+- The geometry of a tree can be the delineation of its crown ( Polygon )
+- Of its stem,  (Polygon )
+- or the point indicating its centre.  (Point )
 -  A feature geometry is called **simple**  
  - when it consists of points connected by straight line pieces,  
  - and does not intersect itself.
@@ -144,20 +143,18 @@ Features have a **geometry** describing **where** on Earth the feature is locate
 
 ---
 
-# So Finally, What is Spatial Data?
+# So Finally, What is a Spatial Data Frame in R?
 .pull-left[
 - Features Geometries + **Attribute** data in a single Data Frame
-    - Geometries give **where** the feature is located **and** its shape
+- Geometries give **where** the feature is located **and** its shape
 - **Attributes** describe other properties:  
     - Tree height
     - Flower or foliage colour
     - Trunk diameter at breast height at a particular date, 
     - Tree species and so on.
-- As is the case with Objects, they often consist of other objects.  
-- This is the case with features too: a set of features can form a single feature
 ]
 .pull-right[
-&lt;img src="https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/sf.png" width="900px" height="550px" style="display: block; margin: auto;" /&gt;
+&lt;img src="https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/sf.png" width="900px" height="450px" style="display: block; margin: auto;" /&gt;
 ]
 ---
 
@@ -194,7 +191,7 @@ Features have a **geometry** describing **where** on Earth the feature is locate
 
 ]
 
-These formulaic descriptions are called **WKT: Well Known Text**
+These formulaic descriptions are called **WKT: Well Known Text**  
 Note: Polygons can have **"holes"** in them!!
 
 ---
@@ -205,7 +202,7 @@ Let's read a spatial file available with `sf`:
 
 
 ```r
-nc &lt;- st_read(system.file("shape/nc.shp", package="sf"))
+nc &lt;- sf::st_read(system.file("shape/nc.shp", package="sf"))
 ```
 
 ```
@@ -278,8 +275,8 @@ crs_india &lt;- st_crs(india)
 
 ```
 *'data.frame':	5 obs. of  2 variables:
-* $ lon: num  75.4 76.6 77.1 76.5 77.8
-* $ lat: num  28 23.8 23.7 21.3 12.6
+* $ lon: num  75.5 75.9 76.7 80.4 75.4
+* $ lat: num  17.3 28.7 26.6 23.8 17.1
 ```
 ]
 
@@ -315,13 +312,13 @@ points_sf &lt;- st_as_sf(points,
 
 ```
 'data.frame':	5 obs. of  2 variables:
-* $ lon: num  78 75.5 74.8 77.3 77.1
-* $ lat: num  21.8 26.5 16 21.5 25.7
+* $ lon: num  76.8 79.8 75.8 78.4 74.5
+* $ lat: num  19.4 22.7 27.6 13.7 30.9
 ```
 
 ```
 Classes 'sf' and 'data.frame':	5 obs. of  1 variable:
-* $ geometry:sfc_POINT of length 5; first list element:  'XY' num  78 21.8
+* $ geometry:sfc_POINT of length 5; first list element:  'XY' num  76.8 19.4
 * - attr(*, "sf_column")= chr "geometry"
  - attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: 
   ..- attr(*, "names")= chr(0) 
@@ -728,6 +725,18 @@ class:center, middle
 # Why do we need Map Projections?
 
 &lt;iframe width="660" height="415" src="https://www.youtube.com/embed/kIID5FDi2JQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen&gt;&lt;/iframe&gt;
+
+
+---
+# To Summarize
+- We obtain Spatial Data Frames from many sources, which we will see
+  - We very rarely create **small** Spatial Data by hand-coding WKT
+- We can process with the Spatial Data with `dplyr` like verbs, which we have not yet covered here
+
+Now we will: 
+- Plot a variety of static and interactive maps
+- Use Projections to show of the map in the right way
+  - We may need to *re-project* the data if it is not already in the projection we want
 
 
 ---

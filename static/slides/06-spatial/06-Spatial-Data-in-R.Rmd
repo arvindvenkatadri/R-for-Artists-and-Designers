@@ -81,13 +81,13 @@ class: inverse, center, middle
 ## Data Structure in `sf`
 
 ---
-```{r, echo = FALSE, out.height="550px", out.width="900px"}
+```{r, echo = FALSE, out.height="450px", out.width="750px"}
 
 knitr::include_graphics("https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/sf.png")
 
 ```
 
-The picture shows a familiar looking `data-frame` with the far-right column containing geometries....hmmm.
+The picture shows a familiar looking `data-frame` with the far-right column containing geometries, or shapes....hmmm.
 
 ---
 
@@ -127,12 +127,11 @@ wrap_plots(list(p1,p2,p3,p4))
 
 # What is a Feature Geometry?
 .pull-left[
-Features have a **geometry** describing **where** on Earth the feature is located  
-- Features = Geometries ( Location Data )
- - The geometry of a tree can be the delineation of its crown ( Polygon )
- - Of its stem,  (Polygon )
- - or the point indicating its centre.  (Point )
- 
+Features have a **geometry** describing **where** on Earth the feature is located
+- Features = Shapes  + Location Data 
+- The geometry of a tree can be the delineation of its crown ( Polygon )
+- Of its stem,  (Polygon )
+- or the point indicating its centre.  (Point )
 -  A feature geometry is called **simple**  
  - when it consists of points connected by straight line pieces,  
  - and does not intersect itself.
@@ -171,20 +170,18 @@ knitr::include_graphics(here("static", "img", "Holmes-Tree.jpg"))
 
 ---
 
-# So Finally, What is Spatial Data?
+# So Finally, What is a Spatial Data Frame in R?
 .pull-left[
 - Features Geometries + **Attribute** data in a single Data Frame
-    - Geometries give **where** the feature is located **and** its shape
+- Geometries give **where** the feature is located **and** its shape
 - **Attributes** describe other properties:  
     - Tree height
     - Flower or foliage colour
     - Trunk diameter at breast height at a particular date, 
     - Tree species and so on.
-- As is the case with Objects, they often consist of other objects.  
-- This is the case with features too: a set of features can form a single feature
 ]
 .pull-right[
-```{r, echo = FALSE,out.height="550px", out.width="900px"}
+```{r, echo = FALSE,out.height="450px", out.width="900px"}
 
 knitr::include_graphics("https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/sf.png")
 
@@ -229,7 +226,7 @@ knitr::include_graphics(here("static", "img", "sf-classes.png"))
 
 ]
 
-These formulaic descriptions are called **WKT: Well Known Text**
+These formulaic descriptions are called **WKT: Well Known Text**  
 Note: Polygons can have **"holes"** in them!!
 
 ---
@@ -240,7 +237,7 @@ Let's read a spatial file available with `sf`:
 
 ```{r highlight.output = c(4:5)}
 
-nc <- st_read(system.file("shape/nc.shp", package="sf"))
+nc <- sf::st_read(system.file("shape/nc.shp", package="sf"))
 
 ```
 
@@ -729,6 +726,18 @@ class:center, middle
 # Why do we need Map Projections?
 
 <iframe width="660" height="415" src="https://www.youtube.com/embed/kIID5FDi2JQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
+---
+# To Summarize
+- We obtain Spatial Data Frames from many sources, which we will see
+  - We very rarely create **small** Spatial Data by hand-coding WKT
+- We can process with the Spatial Data with `dplyr` like verbs, which we have not yet covered here
+
+Now we will: 
+- Plot a variety of static and interactive maps
+- Use Projections to show of the map in the right way
+  - We may need to *re-project* the data if it is not already in the projection we want
 
 
 ---
