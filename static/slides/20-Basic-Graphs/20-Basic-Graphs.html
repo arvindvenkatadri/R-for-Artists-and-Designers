@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>01-The-Nature-of-Data</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Arvind Venkatadri" />
+    <meta name="date" content="2022-07-14" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <script src="libs/xaringanExtra_fit-screen/fit-screen.js"></script>
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+    <script src="libs/fabric/fabric.min.js"></script>
+    <link href="libs/xaringanExtra-scribble/scribble.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-scribble/scribble.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', function() { window.xeScribble = new Scribble({"pen_color":["#FF0000"],"pen_size":3,"eraser_size":30,"palette":[]}) })</script>
+    <script src="libs/mark.js/mark.min.js"></script>
+    <link href="libs/xaringanExtra-search/search.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-search/search.js"></script>
+    <script>window.addEventListener('load', function() { window.xeSearch = new RemarkSearch({"position":"bottom-left","caseSensitive":false,"showIcon":false,"autoSearch":true}) })</script>
+    <script src="libs/freezeframe/freezeframe.min.js"></script>
+    <script src="libs/xaringanExtra-freezeframe/freezeframe-init.js"></script>
+    <script id="xaringanExtra-freezeframe-options" type="application/json">{"selector":"img[src$=\"gif\"]","trigger":"click","overlay":false,"responsive":true,"warnings":true}</script>
+    <link href="libs/tachyons/tachyons.min.css" rel="stylesheet" />
+    <link href="libs/animate.css/animate.xaringan.css" rel="stylesheet" />
+    <link href="libs/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <script src="libs/htmlwidgets/htmlwidgets.js"></script>
+    <link href="libs/canvasXpress/canvasXpress.css" rel="stylesheet" />
+    <script src="libs/canvasXpress/canvasXpress.min.js"></script>
+    <script src="libs/canvasXpress-binding/canvasXpress.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# 01-The-Nature-of-Data
+]
+.subtitle[
+## Understanding Human Experience, Experiments, and Where Data comes from
+]
+.author[
+### Arvind Venkatadri
+]
+.date[
+### 2022-07-14
+]
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+## What makes Human Experience?
+&lt;img src="images/Anecdote-spotting-a-business-story.png" width="100%" height="120%" /&gt;
+### How would we describe this experience?
+- Where / When?
+- Who?
+- How?
+- How Big? How small? How frequent? How sudden?
+- And....How Surprising ! How Shocking! How sad...How Wonderful !!!
+
+
+.footnote[ https://www.anecdote.com/2014/09/story-framework/]
+---
+## What makes for Surprise?
+.pull-left[
+&lt;blockquote class="twitter-tweet"&gt;&lt;p lang="en" dir="ltr"&gt;Needs to be celebrated. Spotted in a men&amp;#39;s washroom at &lt;a href="https://twitter.com/BLRAirport?ref_src=twsrc%5Etfw"&gt;@BLRAirport&lt;/a&gt; - a diaper change station. &lt;br&gt;&lt;br&gt;Childcare is not just a woman&amp;#39;s responsibility. &lt;br&gt;&lt;br&gt;👏🏻✨ &lt;a href="https://t.co/Za4CG9jZfR"&gt;pic.twitter.com/Za4CG9jZfR&lt;/a&gt;&lt;/p&gt;&amp;mdash; Sukhada (@appadappajappa) &lt;a href="https://twitter.com/appadappajappa/status/1541366922545369088?ref_src=twsrc%5Etfw"&gt;June 27, 2022&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
+]
+
+.pull-right[
+&lt;img src="images/toilet.jpg" width="100%" height="100%" /&gt;
+]
+---
+
+.pull-left[
+
+&lt;img src="images/P&amp;P.jpg" width="100%" height="100%" /&gt;
+]
+
+.pull-right[
+## The Element of Surprise?
+Jane Austen knew a lot about human information processing as these snippets from **Pride and Prejudice** *(published in 1813 -- over 200 years ago)* show:
+- She was a woman of mean understanding, little *information*, and uncertain temper.  
+- Catherine and Lydia had *information* for them of a different sort.  
+- When this *information* was given, and they had all taken their seats, Mr. Collins was at leisure to look around him and admire,...  
+- You could not have met with a person more capable of giving you certain *information* on that head than myself, for I have been connected with his family in a particular manner from my infancy.  
+- This *information* made Elizabeth smile, as she thought of poor Miss Bingley.  
+- This *information*, however, startled Mrs. Bennet ... 
+
+
+.footnote[.small[https://www.cs.bham.ac.uk/research/projects/cogaff/misc/austen-info.html]]
+]
+
+
+
+---
+## Claude Shannon and Information
+
+&lt;img src="images/InfoSurprise.png" width="100%" height="100%" style="display: block; margin: auto;" /&gt;
+
+
+.footnote[https://plus.maths.org/content/information-surprise]
+
+---
+
+## Human Experience is....Data??
+
+&lt;iframe width="860" height="450" src="https://www.youtube.com/embed/sFIDCtRX_-o" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen&gt;&lt;/iframe&gt;
+
+---
+
+## Experiments and Hypotheses
+.right-column[
+![](images/DoE.png)
+]
+.left-column[
+### A Kitchen Experiment
+- Inputs are: Ingredients, Recipes, Processes  
+- Outputs are: Taste, Texture, Colour, Quantity!!
+
+]
+.footnote[Used *without permission* from https://safetyculture.com/topics/design-of-experiments/]
+---
+## What is the Result of an Experiment?
+.pull-left[
+- All experiments give us data about phenomena
+- We obtain data about the things that happen: **Outputs**
+- What makes things happen?: **Inputs**
+- How?: **Process**
+- When? **Factors**
+- How much "output" is caused by how much "input"? **Effect Size**
+]
+
+.pull-right[
+<div id="htmlwidget-618d85df12ded0528923" style="width:600px;height:400px;" class="canvasXpress html-widget"></div>
+<script type="application/json" data-for="htmlwidget-618d85df12ded0528923">{"x":{"data":{"y":{"vars":["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48"],"smps":["country","continent","year","lifeExp","pop","gdpPercap"],"data":[["China","Asia","1952","44.00000"," 556263527"," 400.4486"],["China","Asia","1957","50.54896"," 637408000"," 575.9870"],["China","Asia","1962","44.50136"," 665770000"," 487.6740"],["China","Asia","1967","58.38112"," 754550000"," 612.7057"],["China","Asia","1972","63.11888"," 862030000"," 676.9001"],["China","Asia","1977","63.96736"," 943455000"," 741.2375"],["China","Asia","1982","65.52500","1000281000"," 962.4214"],["China","Asia","1987","67.27400","1084035000","1378.9040"],["China","Asia","1992","68.69000","1164970000","1655.7842"],["China","Asia","1997","70.42600","1230075000","2289.2341"],["China","Asia","2002","72.02800","1280400000","3119.2809"],["China","Asia","2007","72.96100","1318683096","4959.1149"],["India","Asia","1952","37.37300"," 372000000"," 546.5657"],["India","Asia","1957","40.24900"," 409000000"," 590.0620"],["India","Asia","1962","43.60500"," 454000000"," 658.3472"],["India","Asia","1967","47.19300"," 506000000"," 700.7706"],["India","Asia","1972","50.65100"," 567000000"," 724.0325"],["India","Asia","1977","54.20800"," 634000000"," 813.3373"],["India","Asia","1982","56.59600"," 708000000"," 855.7235"],["India","Asia","1987","58.55300"," 788000000"," 976.5127"],["India","Asia","1992","60.22300"," 872000000","1164.4068"],["India","Asia","1997","61.76500"," 959000000","1458.8174"],["India","Asia","2002","62.87900","1034172547","1746.7695"],["India","Asia","2007","64.69800","1110396331","2452.2104"],["Pakistan","Asia","1952","43.43600","  41346560"," 684.5971"],["Pakistan","Asia","1957","45.55700","  46679944"," 747.0835"],["Pakistan","Asia","1962","47.67000","  53100671"," 803.3427"],["Pakistan","Asia","1967","49.80000","  60641899"," 942.4083"],["Pakistan","Asia","1972","51.92900","  69325921","1049.9390"],["Pakistan","Asia","1977","54.04300","  78152686","1175.9212"],["Pakistan","Asia","1982","56.15800","  91462088","1443.4298"],["Pakistan","Asia","1987","58.24500"," 105186881","1704.6866"],["Pakistan","Asia","1992","60.83800"," 120065004","1971.8295"],["Pakistan","Asia","1997","61.81800"," 135564834","2049.3505"],["Pakistan","Asia","2002","63.61000"," 153403524","2092.7124"],["Pakistan","Asia","2007","65.48300"," 169270617","2605.9476"],["Sri Lanka","Asia","1952","57.59300","   7982342","1083.5320"],["Sri Lanka","Asia","1957","61.45600","   9128546","1072.5466"],["Sri Lanka","Asia","1962","62.19200","  10421936","1074.4720"],["Sri Lanka","Asia","1967","64.26600","  11737396","1135.5143"],["Sri Lanka","Asia","1972","65.04200","  13016733","1213.3955"],["Sri Lanka","Asia","1977","65.94900","  14116836","1348.7757"],["Sri Lanka","Asia","1982","68.75700","  15410151","1648.0798"],["Sri Lanka","Asia","1987","69.01100","  16495304","1876.7668"],["Sri Lanka","Asia","1992","70.37900","  17587060","2153.7392"],["Sri Lanka","Asia","1997","70.45700","  18698655","2664.4773"],["Sri Lanka","Asia","2002","70.81500","  19576783","3015.3788"],["Sri Lanka","Asia","2007","72.39600","  20378239","3970.0954"]]},"x":null,"z":{"country":["China","China","China","China","China","China","China","China","China","China","China","China","India","India","India","India","India","India","India","India","India","India","India","India","Pakistan","Pakistan","Pakistan","Pakistan","Pakistan","Pakistan","Pakistan","Pakistan","Pakistan","Pakistan","Pakistan","Pakistan","Sri Lanka","Sri Lanka","Sri Lanka","Sri Lanka","Sri Lanka","Sri Lanka","Sri Lanka","Sri Lanka","Sri Lanka","Sri Lanka","Sri Lanka","Sri Lanka"],"continent":["Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia","Asia"],"year":["1952","1957","1962","1967","1972","1977","1982","1987","1992","1997","2002","2007","1952","1957","1962","1967","1972","1977","1982","1987","1992","1997","2002","2007","1952","1957","1962","1967","1972","1977","1982","1987","1992","1997","2002","2007","1952","1957","1962","1967","1972","1977","1982","1987","1992","1997","2002","2007"],"lifeExp":["44.00000","50.54896","44.50136","58.38112","63.11888","63.96736","65.52500","67.27400","68.69000","70.42600","72.02800","72.96100","37.37300","40.24900","43.60500","47.19300","50.65100","54.20800","56.59600","58.55300","60.22300","61.76500","62.87900","64.69800","43.43600","45.55700","47.67000","49.80000","51.92900","54.04300","56.15800","58.24500","60.83800","61.81800","63.61000","65.48300","57.59300","61.45600","62.19200","64.26600","65.04200","65.94900","68.75700","69.01100","70.37900","70.45700","70.81500","72.39600"],"pop":[" 556263527"," 637408000"," 665770000"," 754550000"," 862030000"," 943455000","1000281000","1084035000","1164970000","1230075000","1280400000","1318683096"," 372000000"," 409000000"," 454000000"," 506000000"," 567000000"," 634000000"," 708000000"," 788000000"," 872000000"," 959000000","1034172547","1110396331","  41346560","  46679944","  53100671","  60641899","  69325921","  78152686","  91462088"," 105186881"," 120065004"," 135564834"," 153403524"," 169270617","   7982342","   9128546","  10421936","  11737396","  13016733","  14116836","  15410151","  16495304","  17587060","  18698655","  19576783","  20378239"],"gdpPercap":[" 400.4486"," 575.9870"," 487.6740"," 612.7057"," 676.9001"," 741.2375"," 962.4214","1378.9040","1655.7842","2289.2341","3119.2809","4959.1149"," 546.5657"," 590.0620"," 658.3472"," 700.7706"," 724.0325"," 813.3373"," 855.7235"," 976.5127","1164.4068","1458.8174","1746.7695","2452.2104"," 684.5971"," 747.0835"," 803.3427"," 942.4083","1049.9390","1175.9212","1443.4298","1704.6866","1971.8295","2049.3505","2092.7124","2605.9476","1083.5320","1072.5466","1074.4720","1135.5143","1213.3955","1348.7757","1648.0798","1876.7668","2153.7392","2664.4773","3015.3788","3970.0954"]}},"config":{"graphType":"Scatter3D","isR":true,"colorBy":"country","ellipseBy":"country","yAxis":["gdpPercap"],"xAxis":["lifeExp"],"zAxis":["pop"],"theme":"CanvasXpress","title":"Gapminder Data: Some Asian Countries over the years","axisTickScaleFontFactor":0.5,"axisTitleScaleFontFactor":0.5},"events":null,"afterRender":null},"evals":[],"jsHooks":[]}</script>
+
+]
+
+---
+## How Does Data look Like, then?
+
+.center[![](images/Ratio Interval Ordinal Nominal.PNG)]
+
+---
+
+## Distributions
+
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; species &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; island &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; bill_length_mm &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; bill_depth_mm &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; flipper_length_mm &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; body_mass_g &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; sex &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; year &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Adelie &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Torgersen &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 39.1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 18.7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 181 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3750 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; male &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Adelie &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Torgersen &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 39.5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 17.4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 186 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3800 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; female &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Adelie &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Torgersen &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 40.3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 18.0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 195 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3250 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; female &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Adelie &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Torgersen &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Adelie &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Torgersen &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 36.7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 19.3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 193 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3450 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; female &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Adelie &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Torgersen &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 39.3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 20.6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 190 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3650 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; male &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+## Distributions
+.pull-left[
+
+
+
+
+&lt;img src="20-Basic-Graphs_files/figure-html/density-out-1.png" width="100%" height="100%" /&gt;
+
+
+
+]
+.pull-right[
+&lt;img src="20-Basic-Graphs_files/figure-html/histogram-out-1.png" width="100%" height="100%" /&gt;
+]
+---
+
+## Nothing here yet
+.pull-left[
+
+
+```r
+# code chunk here
+ggplot(iris) + 
+  aes(Sepal.Length, 
+      Sepal.Width, 
+      color = Species) + 
+  geom_point()
+```
+
+From `?knitr::fig_chunk`
+
+&gt; You can generate plots in a code chunk but not show them inside the code chunk by using the chunk option `fig.show = 'hide'`. Then you can use this function if you want to show them elsewhere.
+
+]
+
+.pull-right[
+![](20-Basic-Graphs_files/figure-html/plot-label-fc-1.png)
+]
+
+
+---
+
+## Proper knitr?
+.pull-left[
+
+
+```r
+# code chunk here
+ggplot(iris) + 
+  aes(Sepal.Length, 
+      Sepal.Width, 
+      color = Species) + 
+  geom_point()
+```
+
+From `?knitr::fig_chunk`
+
+&gt; You can generate plots in a code chunk but not show them inside the code chunk by using the chunk option `fig.show = 'hide'`. Then you can use this function if you want to show them elsewhere.
+
+]
+
+.pull-right[
+&lt;img src="20-Basic-Graphs_files/figure-html/plot-label-fc2-1.png" width="100%" height="100%" /&gt;
+]
+
+
+---
+# Thanks!
+
+Slides created by Arvind Venkatadri via the R packages:
+
+[**xaringan**](https://github.com/yihui/xaringan)&lt;br&gt;
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"slideNumberFormat": "%current%",
+"highlightStyle": "github",
+"highlightLines": true,
+"ratio": "16:9",
+"countIncrementalSlides": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

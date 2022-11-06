@@ -55,6 +55,5 @@ We will encounter a new package called `blogdown` and use workflows with [github
 2. Sharon Macliss
 
 
-
 3. Yihui Xie  
 

@@ -13,6 +13,7 @@ output:
     theme: united
     toc: true
     code_folding: true
+    self_contained: false
 image:
   placement: 2
   caption: "Image credit: [**Alice In Wonderland dot Net**](https://www.alice-in-wonderland.net/)"
@@ -23,7 +24,7 @@ links:
 - icon: flask
   icon_pack: fas
   name: lab
-  url: "/labs/052-htmlwidgets/052-htmlwidgets.html"
+  url: "/labs/R-for-Artists/052-htmlwidgets/052-htmlwidgets.html"
 ---
 
 ![](featured.jpg)
@@ -50,8 +51,10 @@ There are very many great JavaScript libraries for creating eye-popping and even
 <br>
 
 ```{r, echo=FALSE,warning=FALSE,message=FALSE, fig.show='hold'}
-url <- "https://echarts.apache.org/examples/data-gl/asset/data/population.json"
-data <- jsonlite::fromJSON(url)
+
+# url <- "https://echarts.apache.org/examples/data-gl/asset/data/population.json"
+
+data <- jsonlite::fromJSON(txt = "./data/population.json")
 data <- as.data.frame(data)
 names(data) <- c("lon", "lat", "value")
 
@@ -68,10 +71,14 @@ data %>%
 
 widgetframe::frameWidget(myplot)
 
-######
+```
 
 
-y=read.table("https://www.canvasxpress.org/data/cX-chord-dat.txt", header=TRUE, sep="\t", quote="", row.names=1, fill=TRUE, check.names=FALSE, stringsAsFactors=FALSE)
+```{r, echo=FALSE,warning=FALSE,message=FALSE, fig.show='hold'}
+y=read.table("./data/cX-chord-dat.txt", 
+             header=TRUE, sep="\t", quote="", 
+             row.names=1, fill=TRUE, 
+             check.names=FALSE, stringsAsFactors=FALSE)
 canvasXpress(
   data=y,
   circularArc=360,
@@ -87,8 +94,7 @@ canvasXpress(
   showTransition=FALSE,
   title="Simple Chord Graph",
   transitionStep=50,
-  transitionTime=1500
-) -> mynetwork
+  transitionTime=1500) -> mynetwork
 
 
 widgetframe::frameWidget(mynetwork)

@@ -1,0 +1,233 @@
+---
+title: "Lab-00: Science, Human Experience, Experiments, and Data"
+subtitle: ""
+author: "Arvind Venkatadri"
+date: "2022-10-04"
+weight: 10
+summary: "What is Data? Why do we visualize it?"
+output:
+  html_document:
+    toc_float: true
+    theme: united
+    toc: true
+    code_folding: true
+tags:
+- Scientific Inquiry
+- Experiments
+- Observations
+- Nature of Data
+- Experience
+- Measurement
+image:
+  caption: Photo by rawpixel on Unsplash
+  focal_point: Smart
+external_link: ""
+links:
+- icon: book
+  icon_pack: fa
+  name: notes
+  url: "https://schoolofdata.org/handbook/courses/what-is-data/"
+- icon: file-powerpoint
+  icon_pack: fa
+  name: slides
+  url: "slides/10-Nature-of-Data/10-Nature-of-Data.html"
+slides: ""
+url_code: ""
+url_pdf: ""
+url_slides: ""
+url_video: ""
+---
+
+
+
+<div id="where-does-data-come-from" class="section level2">
+<h2>Where does Data come from?</h2>
+<iframe src="slides/10-Nature-of-Data/10-Nature-of-Data.html" width="672" height="400px" data-external="1">
+</iframe>
+</div>
+<div id="why-visualize" class="section level2">
+<h2>Why Visualize?</h2>
+<ul>
+<li>We can digest information more easily when it is pictorial</li>
+<li>Our <a href="https://www.understood.org/en/articles/working-memory-what-it-is-and-how-it-works">Working Memories</a> are both <em>short-term</em> and <em>limited</em> in capacity. So a picture abstracts the details and presents us with an overall summary, an insight, or a story that is both easy to recall and easy on retention.<br />
+</li>
+<li>Data Viz includes <em>shapes</em> that carry strong cultural memories and impressions for us. These cultural memories help us to use data viz in a <em>universal way</em> to appeal to a wide variety of audiences. (Do humans have a gene for geometry?)</li>
+<li>It helps sift facts and mere statements: for example:</li>
+</ul>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-2"></span>
+<img src="rape-capital.png" alt="Source https://www.deccanherald.com/national/india-is-known-as-the-rape-capital-of-the-world-rahul-783495.html" width="962" />
+<p class="caption">
+Figure 1: Source <a href="https://www.deccanherald.com/national/india-is-known-as-the-rape-capital-of-the-world-rahul-783495.html" class="uri">https://www.deccanherald.com/national/india-is-known-as-the-rape-capital-of-the-world-rahul-783495.html</a>
+</p>
+</div>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-3"></span>
+<img src="data-reveals-crime.png" alt="Source https://datareveals.org/crime-data/" width="962" />
+<p class="caption">
+Figure 2: Source <a href="https://datareveals.org/crime-data/" class="uri">https://datareveals.org/crime-data/</a>
+</p>
+</div>
+</div>
+<div id="what-are-data-types" class="section level2">
+<h2>What are Data Types??</h2>
+<p><a href="https://www.youtube.com/watch?v=dwFsRZv4oHA" class="uri">https://www.youtube.com/watch?v=dwFsRZv4oHA</a></p>
+<p>{{% youtube "dwFsRZv4oHA" %}}</p>
+<p>In more detail:</p>
+<p>{{% youtube "hZxnzfnt5v8" %}}</p>
+</div>
+<div id="how-do-we-spot-data-variable-types" class="section level2">
+<h2>How do we Spot Data Variable Types?</h2>
+<p>By asking questions!</p>
+<table>
+<colgroup>
+<col width="15%" />
+<col width="38%" />
+<col width="8%" />
+<col width="29%" />
+<col width="7%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Pronoun</th>
+<th>Answer</th>
+<th>Variable / Scale</th>
+<th align="left">Example</th>
+<th>What Operations?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>What, Who, Where, Whom, Which</td>
+<td>Name, Place, Animal, Thing</td>
+<td>Qualitative / <strong>Nominal</strong></td>
+<td align="left">Name</td>
+<td><ul>
+<li>Count no. of cases</li>
+<li>Mode</li>
+</ul></td>
+</tr>
+<tr class="even">
+<td>How, What Kind, What Sort</td>
+<td>A Manner / Method, Type or Attribute from a list, with list items in some ” order**” ( e.g. good, better, improved, best..)</td>
+<td>Qualitative / <strong>Ordinal</strong></td>
+<td align="left"><ul>
+<li><p>Socio -economic status (“low income, middle income, high income)</p></li>
+<li><p>education level</p>
+<p>(“high school”, “B S”,” M S”,“PhD”)</p></li>
+<li><p>income level</p>
+<p>(“less than 50K”, “50K-100K”, “over 100K”)</p></li>
+<li><p>Satisfaction rating ( “extremely dislike”, “dislike”, “neutral”, “like”, “extremely like”).</p></li>
+</ul></td>
+<td><ul>
+<li>Median</li>
+<li>Percentiles</li>
+</ul></td>
+</tr>
+<tr class="odd">
+<td>How Many / Much / Heavy? Few? Seldom? Often? When?</td>
+<td><p>Quantities with Scale.</p>
+<p><strong>Differences</strong> are meaningful, but not products or ratios</p></td>
+<td>Quantitative / <strong>Interval</strong></td>
+<td align="left"><ul>
+<li>pH</li>
+<li>SAT score (200-800),</li>
+<li>Credit score (300-850).</li>
+<li>Year of Starting in College</li>
+</ul></td>
+<td><ul>
+<li><p>Mean</p></li>
+<li><p>Standard Deviation</p></li>
+</ul></td>
+</tr>
+<tr class="even">
+<td>How Many / Much / Heavy? Few? Seldom? Often? When?</td>
+<td><p>Quantities, with Scale and a Zero Value.</p>
+<p>Differences and Ratios /Products are meaningful. (e.g Weight )</p></td>
+<td>Quantitative / Ratio**</td>
+<td align="left"><ul>
+<li><p>Weight,length,Height</p></li>
+<li><p>Temperature in Kelvin</p></li>
+<li><p>Enzyme activity, dose amount, reaction rate, flow rate,concentration</p></li>
+<li><p>Pulse</p></li>
+<li><p>Survival time</p></li>
+</ul></td>
+<td><ul>
+<li>Correlation</li>
+<li>Coeff of Variation</li>
+</ul></td>
+</tr>
+</tbody>
+</table>
+<p>As you go from <code>Qualitative</code> to <code>Quantitative</code> data types in the table, I hope you can detect a movement from fuzzy groups/categories to more and more crystallized numbers. Each variable/scale can be subjected to the operations of the previous group. In the words of <a href="https://stats.idre.ucla.edu/other/mult-pkg/whatstat/what-is-the-difference-between-categorical-ordinal-and-interval-variables/">S.S. Stevens</a> ,</p>
+<blockquote>
+<p>the basic operations needed to create each type of scale is cumulative: to an operation listed opposite a particular scale must be added all those operations preceding it.</p>
+</blockquote>
+</div>
+<div id="what-are-the-parts-of-a-data-viz" class="section level2">
+<h2>What Are the Parts of a Data Viz?</h2>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+</div>
+<div id="how-to-pick-a-data-viz" class="section level2">
+<h2>How to pick a Data Viz?</h2>
+<p>Most Data Visualizations use one or more of the following geometric attributes or aesthetics. These geometric aesthetics are used to <em>represent</em> qualitative or quantitative variables from your data.</p>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-5"></span>
+<img src="common-aesthetics-1.png" alt="From Claus Wilke, Fundamentals of Data Visualization" width="576" />
+<p class="caption">
+Figure 3: From Claus Wilke, Fundamentals of Data Visualization
+</p>
+</div>
+<p>What does that mean? We can think of simple visualizations as <strong>combinations</strong> of these aesthetics. Some examples:</p>
+<table>
+<colgroup>
+<col width="10%" />
+<col width="12%" />
+<col width="36%" />
+<col width="41%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Aesthetic #1</th>
+<th>Aesthetic #2</th>
+<th align="center">Shape</th>
+<th>Chart Picture</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Position X = Quant Variable</td>
+<td>Position Y = Quant Variable</td>
+<td align="center">Points/Circles with Fixed Size</td>
+<td><img src="https://img.icons8.com/ios-filled/100/000000/scatter-plot.png"/></td>
+</tr>
+<tr class="even">
+<td>Position X = Qual Variable</td>
+<td>Position Y = Count of Qual var)</td>
+<td align="center">Columns</td>
+<td><img src="https://img.icons8.com/material/100/000000/futures--v1.png"/></td>
+</tr>
+<tr class="odd">
+<td>Position X = Qual Variable</td>
+<td>Position Y = Qual Variable</td>
+<td align="center">Rectangles, with <em>area</em> proportional to joint(X,Y) <em>count</em></td>
+<td><img src="https://img.icons8.com/windows/100/000000/modern-art.png"/></td>
+</tr>
+<tr class="even">
+<td>Position X = Qualitative Variable</td>
+<td>Position Y = Rank Ordered Quant Variable</td>
+<td align="center">Box + Whisker, Box length proportional to <em>Inter-Quartile Range</em>, whisker-length proportional to upper and lower quartile resp.</td>
+<td><img src="https://img.icons8.com/external-icongeek26-glyph-icongeek26/100/000000/external-plot-data-analytics-icongeek26-glyph-icongeek26-1.png"/></td>
+</tr>
+<tr class="odd">
+<td>Position X = Quant Variable</td>
+<td>Postion Y = Quant Variable + Qual Var</td>
+<td align="center"></td>
+<td><img src="https://img.icons8.com/ios-filled/100/000000/area-chart.png"/></td>
+</tr>
+<tr class="even">
+<td>Quant Variable</td>
+<td>Shape = Line with Quant Variable</td>
+<td align="center"></td>
+<td><img src="https://img.icons8.com/material/24/000000/combo-chart--v1.png" width="100" /></td>
+</tr>
+</tbody>
+</table>
+</div>
