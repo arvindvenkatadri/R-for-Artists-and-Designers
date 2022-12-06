@@ -6,6 +6,7 @@ date: "`r Sys.Date()`"
 featured: false
 draft: false
 weight: 40
+view: 2
 output:
   html_document:
     toc_float: true

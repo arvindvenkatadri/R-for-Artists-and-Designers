@@ -4,6 +4,7 @@ subtitle: ""
 author: "Arvind Venkatadri"
 date: "`r Sys.Date()`"
 weight: 10
+view: 2
 summary: "What is Data? Why do we visualize it?"
 output:
   html_document:

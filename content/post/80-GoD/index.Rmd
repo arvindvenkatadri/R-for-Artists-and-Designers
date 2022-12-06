@@ -5,6 +5,7 @@ summary: "The Grammar of Diagrams"
 author: "Arvind Venkatadri"
 date: "`r Sys.Date()`"
 weight: 80
+view: 2
 featured: no
 image:
   placement: 2

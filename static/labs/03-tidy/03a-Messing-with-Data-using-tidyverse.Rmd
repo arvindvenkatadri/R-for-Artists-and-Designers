@@ -12,35 +12,31 @@ output:
     code_folding: hide
     code_download: TRUE
 abstract: Part of the `R for Artists and Designers` course at the School of Foundation Studies, Srishti Manipal Institute of Art, Design, and Technology, Bangalore.
-
 ---
+
 # Introduction
 
-This RMarkdown document is part of the Generic Skills Component  (GSK) of the Course of the  Foundation Studies Programme at Srishti Manipal Institute of Art, Design, and Technology, Bangalore India. The material is based on *A Layered Grammar of Graphics* by Hadley Wickham. The course is meant for First Year students pursuing a Degree in Art and Design. 
+This RMarkdown document is part of the Generic Skills Component (GSK) of the Course of the Foundation Studies Programme at Srishti Manipal Institute of Art, Design, and Technology, Bangalore India. The material is based on *A Layered Grammar of Graphics* by Hadley Wickham. The course is meant for First Year students pursuing a Degree in Art and Design.
 
 The intent of this GSK part is to build Skill in coding in R, and also appreciate R as a way to metaphorically visualize information of various kinds, using predominantly geometric figures and structures.
 
-All RMarkdown files combine code, text, web-images, and figures developed using code. Everything is text; code chunks are enclosed in **fences** (```)
+All RMarkdown files combine code, text, web-images, and figures developed using code. Everything is text; code chunks are enclosed in **fences** (\`\`\`)
 
 # Goals for Lab 03a
 
-- Understand the idea of "tidy" data
-- Using "tidy data" and the "tidyverse" way of programming in R allows to translate our thoughts readily into code. 
-- Understand `dplyr` VERB functions to get to know and manipulate a dataset
+-   Understand the idea of "tidy" data
+-   Using "tidy data" and the "tidyverse" way of programming in R allows to translate our thoughts readily into code.
+-   Understand `dplyr` VERB functions to get to know and manipulate a dataset
 
 # Pedagogical Note
 
-The method followed will be based on
-[PRIMM](https://blogs.kcl.ac.uk/cser/2017/09/01/primm-a-structured-approach-to-teaching-programming/):
+The method followed will be based on [PRIMM](https://blogs.kcl.ac.uk/cser/2017/09/01/primm-a-structured-approach-to-teaching-programming/):
 
--   **PREDICT** Inspect the code and guess at what the code might do,
-    **write predictions**
+-   **PREDICT** Inspect the code and guess at what the code might do, **write predictions**
 -   **RUN** the code provided and check what happens
 -   **INFER** what the `parameters` of the code do and **write comments to explain**. What bells and whistles can you see?
--   **MODIFY** the `parameters` code provided to understand the
-    `options` available. **Write comments** to show what you have aimed for and achieved.
--   **MAKE** : take an idea/concept of your own, and graph it.
-# Inspiration + data
+-   **MODIFY** the `parameters` code provided to understand the `options` available. **Write comments** to show what you have aimed for and achieved.
+-   **MAKE** : take an idea/concept of your own, and graph it. \# Inspiration + data
 
 We'll use data from the Star Wars series of movies. May the Force be with you!!
 
@@ -55,23 +51,37 @@ set.seed(1014)
 
 When working with data you must:
 
-* Figure out what you want to do.
+-   Figure out what you want to do.
 
-* Describe those tasks in the form of a computer program.
+-   Describe those tasks in the form of a computer program.
 
-* Execute the program.
+-   Execute the program.
 
 The `dplyr` package makes these steps fast and easy:
 
-* By constraining your options, it helps you think about your data manipulation challenges.
+-   By constraining your options, it helps you think about your data manipulation challenges.
 
-* It provides simple **"verbs"**, functions that correspond to the most common data manipulation tasks, to help you translate your thoughts into code.
+-   It provides simple **"verbs"**, functions that correspond to the most common data manipulation tasks, to help you translate your thoughts into code.
 
 This document introduces you to dplyr's basic set of tools, and shows you how to apply them to data frames. `dplyr` also supports databases via the `dbplyr` package, once you've installed, read `vignette("dbplyr")` to learn more.
 
+## Tidy Data
+
+"Tidy Data" is an important way of thinking about what data typically look like in R. Let's fetch a figure from the web to show the (preferred) structure of data in R. (The syntax to bring in a web-figure is `![caption](url)`)
+
+![Tidy Data](https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/tidydata_1.jpg)
+
+The three features described in the figure above define the nature of tidy data:
+
+-   *Variables in Columns*\
+-   *Observations in Rows* and\
+-   *Measurements in Cells*.
+
+Data are imagined to be resulting from an **experiment**. Each *variable* represents a parameter/aspect in the experiment. Each *row* represents an additional datum of measurement. A *cell* is a single measurement on a single parameter(column) in a single observation(row).
+
 ## Data: starwars
 
-To explore the basic data manipulation verbs of `dplyr`, we'll use the dataset `starwars`. This dataset contains `r nrow(starwars)` characters and comes from the [Star Wars API](https://swapi.dev), and is documented in `?starwars` 
+To explore the basic data manipulation verbs of `dplyr`, we'll use the dataset `starwars`. This dataset contains `r nrow(starwars)` characters and comes from the [Star Wars API](https://swapi.dev), and is documented in `?starwars`
 
 This means: type `?starwars` in the Console. Try.
 
@@ -88,25 +98,23 @@ Check your Environment Tab to inspect `starwars` in a separate tab.
 
 `dplyr` aims to provide a function for each basic verb of data manipulation. These verbs can be organised into three categories based on the component of the dataset that they work with:
 
-* Rows:
-  * `filter()` chooses rows based on column values.
-  * `slice()` chooses rows based on location.
-  * `arrange()` changes the order of the rows.
-  
-* Columns:
-  * `select()` changes whether or not a column is included.
-  * `rename()` changes the name of columns.
-  * `mutate()` changes the values of columns and creates new columns.
-  * `relocate()` changes the order of the columns.
+-   Rows:
+    -   `filter()` chooses rows based on column values.
+    -   `slice()` chooses rows based on location.
+    -   `arrange()` changes the order of the rows.
+-   Columns:
+    -   `select()` changes whether or not a column is included.
+    -   `rename()` changes the name of columns.
+    -   `mutate()` changes the values of columns and creates new columns.
+    -   `relocate()` changes the order of the columns.
+-   Groups of rows:
+    -   `summarise()` collapses a group into a single row.
 
-* Groups of rows:
-  * `summarise()` collapses a group into a single row.
-
-Think of the parallels from Microsoft Excel. 
+Think of the parallels from Microsoft Excel.
 
 ### The pipe
 
-All of the `dplyr` functions take a data frame (or `tibble`) as the first argument. Rather than forcing the user to either save intermediate objects or nest functions, dplyr provides the `%>%` operator from `magrittr`. `x %>% f(y)` turns into `f(x, y)` so the result from one step is then "piped" into the next step. You can use the pipe to rewrite multiple operations that you can read left-to-right, top-to-bottom (**reading the pipe operator as "then"**). 
+All of the `dplyr` functions take a data frame (or `tibble`) as the first argument. Rather than forcing the user to either save intermediate objects or nest functions, dplyr provides the `%>%` operator from `magrittr`. `x %>% f(y)` turns into `f(x, y)` so the result from one step is then "piped" into the next step. You can use the pipe to rewrite multiple operations that you can read left-to-right, top-to-bottom (**reading the pipe operator as "then"**).
 
 ### Filter rows with `filter()`
 
@@ -114,12 +122,11 @@ All of the `dplyr` functions take a data frame (or `tibble`) as the first argume
 
 For example, we can select all character with light skin color and brown eyes with:
 
-Note the double equal to sign (==) below! Equivalent to MS Excel Data -> Filter
+Note the double equal to sign (==) below! Equivalent to MS Excel Data -\> Filter
 
 ```{r}
 starwars %>% filter(skin_color == "light", eye_color == "brown")
 ```
-
 
 ### Arrange rows with `arrange()`
 
@@ -135,26 +142,27 @@ Use `desc()` to order a column in descending order:
 starwars %>% arrange(desc(height))
 ```
 
-###  Choose rows using their position with `slice()`
+### Choose rows using their position with `slice()`
 
-`slice()` lets you index rows by their (integer) locations. It allows you to select, remove, and duplicate rows. 
+`slice()` lets you index rows by their (integer) locations. It allows you to select, remove, and duplicate rows.
 
-> This is an important step in Prediction, Modelling and Machine Learning. 
+> This is an important step in Prediction, Modelling and Machine Learning.
 
 We can get characters from row numbers 5 through 10.
+
 ```{r}
 starwars %>% slice(5:10)
 ```
 
 It is accompanied by a number of helpers for common use cases:
 
-* `slice_head()` and `slice_tail()` select the first or last rows.
+-   `slice_head()` and `slice_tail()` select the first or last rows.
 
 ```{r}
 starwars %>% slice_head(n = 3)
 ```
 
-* `slice_sample()` randomly selects rows. Use the option prop to choose a certain proportion of the cases.
+-   `slice_sample()` randomly selects rows. Use the option prop to choose a certain proportion of the cases.
 
 ```{r}
 starwars %>% slice_sample(n = 5)
@@ -165,7 +173,7 @@ Use `replace = TRUE` to perform a bootstrap sample. If needed, you can weight th
 
         Note : ` Bootstrap samples` are a special statistical sampling method. Counterintuitive perhaps, since you sample **with replacement**. Should remind you of your high school Permutation and Combination class, with all those urn models and so on. If you remember. 
 
-* `slice_min()` and `slice_max()` select rows with highest or lowest values of a variable. Note that we first must choose  only the values which are not NA.
+-   `slice_min()` and `slice_max()` select rows with highest or lowest values of a variable. Note that we first must choose only the values which are not NA.
 
 ```{r}
 starwars %>%
@@ -247,7 +255,6 @@ Use a similar syntax as `select()` to move blocks of columns at once
 starwars %>% relocate(sex:homeworld, .before = height)
 ```
 
-
 ### Summarise values with `summarise()`
 
 The last verb is `summarise()`. It collapses a data frame to a single row.
@@ -258,23 +265,21 @@ starwars %>% summarise(mean_height = mean(height, na.rm = TRUE))
 
 It's not that useful until we learn the `group_by()` verb below.
 
-
 ### Commonalities
 
 You may have noticed that the syntax and function of all these verbs are very similar:
 
-* The first argument is a data frame.
+-   The first argument is a data frame.
 
-* The subsequent arguments describe what to do with the data frame. You can
-  refer to columns in the data frame directly without using `$`.
+-   The subsequent arguments describe what to do with the data frame. You can refer to columns in the data frame directly without using `$`.
 
-* The result is a new data frame
+-   The result is a new data frame
 
-Together these properties make it easy to chain together multiple simple steps to achieve a complex result. 
+Together these properties make it easy to chain together multiple simple steps to achieve a complex result.
 
-These five functions provide the basis of a language of data manipulation. At the most basic level, you can only alter a tidy data frame in five useful ways: you can reorder the rows (`arrange()`), pick observations and variables of interest (`filter()` and `select()`), add new variables that are functions of existing variables (`mutate()`), or collapse many values to a summary (`summarise()`). 
+These five functions provide the basis of a language of data manipulation. At the most basic level, you can only alter a tidy data frame in five useful ways: you can reorder the rows (`arrange()`), pick observations and variables of interest (`filter()` and `select()`), add new variables that are functions of existing variables (`mutate()`), or collapse many values to a summary (`summarise()`).
 
-## Combining functions with `%>%` 
+## Combining functions with `%>%`
 
 The dplyr API is functional in the sense that function calls don't have side-effects. dplyr provides the `%>%` operator from magrittr. `x %>% f(y)` turns into `f(x, y)` so you can use it to rewrite multiple operations that you can read left-to-right, top-to-bottom (reading the pipe operator as "then"):
 
@@ -287,3 +292,4 @@ starwars %>%
   )
 ```
 
+------------------------------------------------------------------------

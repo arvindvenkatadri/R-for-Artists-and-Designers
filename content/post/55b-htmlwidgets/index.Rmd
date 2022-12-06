@@ -7,6 +7,7 @@ summary: "Using Javascript libraries in R"
 featured: no
 draft: no
 weight: 58
+view: 2
 output:
   html_document:
     toc_float: true

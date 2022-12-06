@@ -5,6 +5,7 @@ subtitle: "The Grammar of Networks"
 summary: "The Grammar of Networks"
 author: Arvind Venkatadri
 weight: 70
+view: 2
 featured: no
 image:
   placement: 2

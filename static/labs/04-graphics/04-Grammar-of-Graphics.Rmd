@@ -53,6 +53,7 @@ To reiterate: Packages and datasets are **not** the same thing !! Packages are (
 
 
 ```{r setup, include = FALSE}
+
 knitr::opts_chunk$set(cache = TRUE)
 options(digits = 3)
 
@@ -74,28 +75,76 @@ library(HistData)
 
 # For pedagogical reasons
 library(flair)
+
 ```
 
 
 
 # A Teaser from John Snow
 
-```{r teaser}
-SnowMap(polygons = TRUE)
+```{r teaser,echo=FALSE}
+
+# SnowMap(polygons = TRUE)
 # Write some comments on this code and what it seems to be creating
 # Are there "layers" in this visualization?
+library(sf)
+library(sfheaders)
+library(ggformula)
+
+data(Snow.deaths)
+data(Snow.pumps)
+data(Snow.streets)
+data(Snow.polygons)
+data(Snow.dates)
+
+## Convert to spatial format using sfheaders
+snow_streets_sf <- Snow.streets %>% 
+  sfheaders::sf_linestring(., linestring_id = "street",x = "x", y = "y")
+
+#####
+snow_polygons_sf <- Snow.polygons %>% 
+  map_df(.f = ~ sfheaders::sf_linestring(.x), c(x = .x$"x", y = .x$"y", keep = TRUE))
+
+#####
+snow_pumps_sf <- Snow.pumps %>% sfheaders::sf_point(x = "x", y = "y", keep = TRUE)
+
+####
+snow_deaths_sf <- Snow.deaths2 %>% sfheaders::sf_point(x = "x", y = "y", keep = TRUE)
+
+### Now to plot it
+
+ggplot() + 
+  
+    
+  geom_density_2d_filled(data = Snow.deaths2, aes(x = x, y = y), 
+                         colour = "black", show.legend = FALSE, bins = 9, alpha = 0.5) + 
+  
+  geom_sf(data = snow_polygons_sf, color = "brown",fill = "white",
+          linewidth = 1) +
+  
+  geom_sf(data = snow_streets_sf, color = "grey") +
+  
+  geom_sf(data = snow_pumps_sf, fill = "blue", color = "blue",
+          shape = 17, size = 6) +
+  
+  geom_sf(data = snow_deaths_sf, shape = 22, fill = "red", 
+            colour = "red", size = 1) + 
+  
+  geom_sf_text(data = snow_pumps_sf,aes(label = label),
+               nudge_x = 0.5, nudge_y = -0.75) + 
+  
+
+  
+  # stat_density_2d_filled(data = Snow.deaths2, aes(x = x, y = y), bins = 8, contour_var = "ndensity") +
+  
+  scale_fill_brewer(palette = "Greens", direction = 1,type = "qual") + 
+  theme_void()
 
 
-
-
-
-
-
-#
 ```
 
 
-# Tidy Data
+# Review of Tidy Data
 
 "Tidy Data" is an important way of thinking about what data typically look like in R. Let's fetch a figure from the web to show the (preferred) structure of data in R. (The syntax to bring in a web-figure is `![caption](url)`)
 

@@ -5,6 +5,7 @@ summary: "Making a website to show it all"
 author: "Arvind Venkatadri"
 date: "`r Sys.Date()`"
 weight: 100
+view: 2
 featured: false
 draft: false
 output:

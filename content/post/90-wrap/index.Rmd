@@ -5,6 +5,7 @@ summary: "Wrapping it all Up"
 author: "Arvind Venkatadri"
 date: "`r Sys.Date()`"
 weight: 90
+view: 2
 featured: false
 draft: false
 output:
