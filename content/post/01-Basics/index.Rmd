@@ -12,6 +12,13 @@ output:
     theme: united
     toc: true
     code_folding: true
+pager: true
+profile: true
+show_breadcrumb: true
+reading_time: true
+features:
+  math:
+    enable: true
 tags:
 - Scientific Inquiry
 - Experiments
@@ -48,10 +55,7 @@ library(ggtext)
 
 ## Where does Data come from?
 
-```{r, echo=FALSE}
-knitr::include_url("slides/10-Nature-of-Data/10-Nature-of-Data.html")
-
-```
+Let us look at the slides. Click on the slides icon above. 
 
 
 ## Why Visualize?
