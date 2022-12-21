@@ -1,0 +1,45 @@
+---
+title: 'Lab-13: Old Tortoise Taught Us'
+subtitle: "Wrapping it all Up"
+summary: "Wrapping it all Up"
+author: "Arvind Venkatadri"
+date: "`r Sys.Date()`"
+weight: 130
+view: 2
+featured: false
+draft: true
+output:
+  html_document:
+    toc_float: true
+    theme: united
+    toc: true
+    code_folding: true
+image:
+  placement: 2
+  caption: 'Image credit: [**Alice In Wonderland dot Net**](https://www.alice-in-wonderland.net/)'
+  focal_point: ""
+  preview_only: true
+projects: []
+links:
+- icon: flask
+  icon_pack: fas
+  name: lab
+  url: /labs/08-diagrams/08-Grammar-of-Diagrams.html
+# - icon: magic
+#   icon_pack: fas
+#   name: slides
+#   url: /slides/08-diagrams/08-Grammar-of-Diagrams.html
+---
+
+![](featured.jpg)
+
+## Introduction
+
+We will spend a little time wrapping up everything that we have learnt so far, in R.
+
+We will take one large dataset that has numerical, spatial and network type data, and see how we can make multiple visual depictions of it. We will use most of the packages that we have encountered so far and try to make a polished info visualization with all the graphs, text, and descriptions put together!
+
+## References
+
+1. Alex Cookson, *Great Data Sets github repo*,  <https://github.com/tacookson/data>
+1. 

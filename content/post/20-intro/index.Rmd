@@ -1,0 +1,70 @@
+---
+title: 'Lab-2: Down the R-abbit Hole...'
+subtitle: 'Welcome ! Introduce Yourself to R, RStudio, and to all of Us!'
+summary: Welcome ! Introduce Yourself to R, RStudio!
+date: "`r Sys.Date()`"
+featured: false
+draft: false
+weight: 20
+view: 2
+output:
+  html_document:
+    toc_float: true
+    theme: united
+    toc: true
+    code_folding: true
+
+# Featured image
+# To use, add an image named `featured.jpg/png` to your page's folder.
+# Placement options: 1 = Full column width, 2 = Out-set, 3 = Screen-width
+# Focal point options: Smart, Center, TopLeft, Top, TopRight, Left, Right, BottomLeft, Bottom, BottomRight
+image:
+  placement: 2
+  caption: 'Image credit: [**Alice In Wonderland dot Net**](https://www.alice-in-wonderland.net/)'
+  focal_point: ""
+  preview_only: true
+
+# Projects (optional).
+#   Associate this post with one or more of your projects.
+#   Simply enter your project's folder or file name without extension.
+#   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
+#   Otherwise, set `projects = []`.
+projects: []
+
+links:
+- icon: flask
+  icon_pack: fas
+  name: lab
+  url: /labs/00-installation/00-install_name_plot.html
+  
+- icon: magic
+  icon_pack: fas
+  name: Installation Slides
+  url: /slides/00-installation/00-Installation.html
+---
+
+![](featured.jpg)
+
+```{r setup, include=FALSE}
+library(blogdown)
+```
+
+## Introduction
+
+Welcome! 
+
+Let's start our journey to the Garden of Data Visualization, with this terrific presentation by the great ( and sadly late..) **Hans Rosling**.
+
+The best stats you've ever seen by Hans Rosling: 
+
+`r blogdown::shortcode("youtube", "hVimVzgtD6w")`
+
+
+<br>
+
+We will run some boiler-plate R code today! Nothing ( almost! ) to code! We will get used to the tools and words of the trade: R, RStudio, installation, packages, libraries....
+
+
+
+
+

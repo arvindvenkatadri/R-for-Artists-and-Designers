@@ -1,0 +1,46 @@
+---
+title: "Lab-11: The Queen of Hearts, She Made some Tarts"
+subtitle: "The Grammar of Diagrams"
+summary: "The Grammar of Diagrams"
+author: "Arvind Venkatadri"
+date: "`r Sys.Date()`"
+weight: 110
+view: 2
+featured: no
+image:
+  placement: 2
+  caption: 'Image credit: [**Alice In Wonderland dot Net**](https://www.alice-in-wonderland.net/)'
+  focal_point: ""
+  preview_only: true
+projects: []
+output: 
+  html_document:
+    code_download: TRUE
+    toc_float: true
+    theme: united
+    toc: true
+    code_folding: true
+links:
+- icon: flask
+  icon_pack: fas
+  name: lab
+  url: /labs/08-diagrams/08-Grammar-of-Diagrams.html
+- icon: magic
+  icon_pack: fas
+  name: slides
+  url: /slides/08-diagrams/08-Grammar-of-Diagrams.html
+---
+
+![](featured.jpg)
+
+
+## Introduction
+
+We can use R to create complicated *diagrams* too ! Flow charts, Gantt charts, Org charts...all with R. We will use packages such as `nomnoml` and `DiagrammeR` to achieve these ends.
+
+
+# References
+
+1. [The nomnoml package in R](https://nomnoml.com)
+
+2. [ Rich Iannone's DiagrammeR package](https://rich-iannone.github.io/DiagrammeR/graphviz_and_mermaid.html)

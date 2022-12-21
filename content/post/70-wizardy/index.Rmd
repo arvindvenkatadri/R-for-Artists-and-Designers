@@ -1,0 +1,78 @@
+---
+title: 'Lab-7: The Lobster Quadrille'
+subtitle: 'Fonts and other Wizardy in ggplot'
+summary: 'Fonts and other Wizardy in ggplot'
+date: "`r Sys.Date()`"
+featured: false
+draft: false
+weight: 70
+view: 2
+output:
+  html_document:
+    toc_float: true
+    theme: united
+    toc: true
+    code_folding: true
+
+# Featured image
+# To use, add an image named `featured.jpg/png` to your page's folder.
+# Placement options: 1 = Full column width, 2 = Out-set, 3 = Screen-width
+# Focal point options: Smart, Center, TopLeft, Top, TopRight, Left, Right, BottomLeft, Bottom, BottomRight
+image:
+  placement: 2
+  caption: 'Image credit: [Alice in Wonderland dot net](https:alice-in-wonderland.net)'
+  focal_point: ""
+  preview_only: true
+
+# Projects (optional).
+#   Associate this post with one or more of your projects.
+#   Simply enter your project's folder or file name without extension.
+#   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
+#   Otherwise, set `projects = []`.
+projects: []
+
+links:
+- icon: flask
+  icon_pack: fas
+  name: lab
+  url: /labs/05-wizardy/05-wizardy.html
+# - icon: magic
+#   icon_pack: fas
+#   name: slides
+#   url: /slides/03-slides.html
+---
+
+![](featured.jpg)
+
+## Introduction
+
+We will hear at icing and froth to our vanilla ggplots:<p style="font-family: times, serif; font-size:11pt; font-style:italic">
+    fonts, annotations, highlights and even pictures!!
+</p>
+
+
+
+
+## References
+
+1. Thomas Lin Pedersen, <https://www.data-imaginist.com/>. The creator of `ggforce`, and `patchwork` packages.  
+
+1. Claus Wilke, *cowplot – Streamlined plot theme and plot annotations for ggplot2*, <https://wilkelab.org/cowplot/index.html>  
+
+1. Claus Wilke, *Spruce up your ggplot2 visualizations with formatted text*, <https://clauswilke.com/talk/rstudio_conf_2020/>. Slides, Code, and Video !  
+
+1. Robert Kabacoff, *ggplot theme cheatsheet*, <https://rkabacoff.github.io/datavis/modifyingthemes.pdf>
+
+
+
+
+
+## Fun Stuff
+
+1. Zuguang Gu, *Circular Visualization in R*, 
+```{r, echo = FALSE, out.height="140px", out.width="80px", fig.align='left'}
+knitr::include_graphics("https://pbs.twimg.com/media/FJdWa9QXEAEABYT?format=jpg&name=900x900")
+
+```
+
+<https://jokergoo.github.io/circlize_book/book/>
