@@ -96,119 +96,26 @@ In more detail:
 
 By asking questions!
 
-+----------+--------------------+----------+-------------+----------+
-| Pronoun  | Answer             | Variable | Example     | What     |
-|          |                    | / Scale  |             | Ope      |
-|          |                    |          |             | rations? |
-+==========+====================+==========+:============+==========+
-| What,    | Name, Place,       | Qua      | Name        | -        |
-| Who,     | Animal, Thing      | litative |             |    Count |
-| Where,   |                    | /        |             |     no.  |
-| Whom,    |                    | **N      |             |     of   |
-| Which    |                    | ominal** |             |          |
-|          |                    |          |             |    cases |
-|          |                    |          |             | -   Mode |
-+----------+--------------------+----------+-------------+----------+
-| How,     | A Manner / Method, | Qua      | -   Socio   | -        |
-| What     | Type or Attribute  | litative |             |   Median |
-| Kind,    | from a list, with  | /        |   -economic | -   Per  |
-| What     | list items in some | **O      |     status  | centiles |
-| Sort     | " order\*\*" (     | rdinal** |     ("low   |          |
-|          | e.g. good, better, |          |     income, |          |
-|          | improved, best..)  |          |     middle  |          |
-|          |                    |          |     income, |          |
-|          |                    |          |     high    |          |
-|          |                    |          |     income) |          |
-|          |                    |          |             |          |
-|          |                    |          | -           |          |
-|          |                    |          |   education |          |
-|          |                    |          |     level   |          |
-|          |                    |          |             |          |
-|          |                    |          |     ("high  |          |
-|          |                    |          |             |          |
-|          |                    |          |    school", |          |
-|          |                    |          |     "B S"," |          |
-|          |                    |          |     M       |          |
-|          |                    |          |             |          |
-|          |                    |          |   S","PhD") |          |
-|          |                    |          |             |          |
-|          |                    |          | -   income  |          |
-|          |                    |          |     level   |          |
-|          |                    |          |             |          |
-|          |                    |          |     ("less  |          |
-|          |                    |          |     than    |          |
-|          |                    |          |     50K",   |          |
-|          |                    |          |             |          |
-|          |                    |          | "50K-100K", |          |
-|          |                    |          |     "over   |          |
-|          |                    |          |     100K")  |          |
-|          |                    |          |             |          |
-|          |                    |          | -   S       |          |
-|          |                    |          | atisfaction |          |
-|          |                    |          |     rating  |          |
-|          |                    |          |     (       |          |
-|          |                    |          |             |          |
-|          |                    |          |  "extremely |          |
-|          |                    |          |             |          |
-|          |                    |          |   dislike", |          |
-|          |                    |          |             |          |
-|          |                    |          |  "dislike", |          |
-|          |                    |          |             |          |
-|          |                    |          |  "neutral", |          |
-|          |                    |          |     "like", |          |
-|          |                    |          |             |          |
-|          |                    |          |  "extremely |          |
-|          |                    |          |     like"). |          |
-+----------+--------------------+----------+-------------+----------+
-| How Many | Quantities with    | Quan     | -   pH      | -   Mean |
-| / Much / | Scale.             | titative | -   SAT     |          |
-| Heavy?   |                    | /        |     score   | -        |
-| Few?     | **Differences**    | **In     |             | Standard |
-| Seldom?  | are meaningful,    | terval** |  (200-800), |     D    |
-| Often?   | but not products   |          | -   Credit  | eviation |
-| When?    | or ratios          |          |     score   |          |
-|          |                    |          |             |          |
-|          |                    |          |  (300-850). |          |
-|          |                    |          | -   Year of |          |
-|          |                    |          |             |          |
-|          |                    |          |    Starting |          |
-|          |                    |          |     in      |          |
-|          |                    |          |     College |          |
-+----------+--------------------+----------+-------------+----------+
-| How Many | Quantities, with   | Quan     | -           | -   Cor  |
-| / Much / | Scale and a Zero   | titative |   Weight,le | relation |
-| Heavy?   | Value.             | /        | ngth,Height | -        |
-| Few?     |                    | R        |             |    Coeff |
-| Seldom?  | Differences and    | atio\*\* | -           |     of   |
-| Often?   | Ratios /Products   |          | Temperature |     V    |
-| When?    | are meaningful.    |          |     in      | ariation |
-|          | (e.g Weight )      |          |     Kelvin  |          |
-|          |                    |          |             |          |
-|          |                    |          | -   Enzyme  |          |
-|          |                    |          |             |          |
-|          |                    |          |   activity, |          |
-|          |                    |          |     dose    |          |
-|          |                    |          |     amount, |          |
-|          |                    |          |             |          |
-|          |                    |          |    reaction |          |
-|          |                    |          |     rate,   |          |
-|          |                    |          |     flow    |          |
-|          |                    |          |     rate,co |          |
-|          |                    |          | ncentration |          |
-|          |                    |          |             |          |
-|          |                    |          | -   Pulse   |          |
-|          |                    |          |             |          |
-|          |                    |          | -           |          |
-|          |                    |          |    Survival |          |
-|          |                    |          |     time    |          |
-+----------+--------------------+----------+-------------+----------+
+
+```{r echo=FALSE,message=FALSE,warning=FALSE}
+library(kableExtra)
+pronouns <- read_csv("pronouns.csv") %>% select(-No)
+pronouns %>%
+  kbl() %>% 
+  kable_classic(full_width = TRUE) %>% 
+    kable_styling(bootstrap_options = c("striped", "hover","condensed"))
+
+
+```
+
+
 
 As you go from `Qualitative` to `Quantitative` data types in the table,
 I hope you can detect a movement from fuzzy groups/categories to more
 and more crystallized numbers. Each variable/scale can be subjected to
-the operations of the previous group. In the words of [S.S.
-Stevens](https://stats.idre.ucla.edu/other/mult-pkg/whatstat/what-is-the-difference-between-categorical-ordinal-and-interval-variables/)
-,
+the operations of the previous group. 
+
+In the words of [S.S.Stevens](https://stats.idre.ucla.edu/other/mult-pkg/whatstat/what-is-the-difference-between-categorical-ordinal-and-interval-variables/):
 
 > the basic operations needed to create each type of scale is
 > cumulative: to an operation listed opposite a particular scale must be

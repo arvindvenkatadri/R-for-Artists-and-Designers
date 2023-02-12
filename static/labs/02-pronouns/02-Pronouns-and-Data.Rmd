@@ -152,13 +152,15 @@ pronouns %>%
 As you go from Qualitative to Quantitative data types in the table, I
 hope you can detect a movement from fuzzy groups/categories to more and
 more crystallized numbers. Each variable/scale can be subjected to the
-operations of the previous group, in the words of [S.S.Stevens.](https://stats.idre.ucla.edu/other/mult-pkg/whatstat/what-is-the-difference-between-categorical-ordinal-and-interval-variables/) See his classic paper here. [PDF](https://psychology.okstate.edu/faculty/jgrice/psyc3214/Stevens_FourScales_1946.pdf)
+operations of the previous group. 
+
+In the words of [S.S.Stevens.](https://stats.idre.ucla.edu/other/mult-pkg/whatstat/what-is-the-difference-between-categorical-ordinal-and-interval-variables/):
 
 > the basic operations needed to create each type of scale is
 > cumulative: to an operation listed opposite a particular scale must be
 > added all those operations preceding it.
 
-Do think about this as you work with data.
+See his classic paper here [PDF](https://psychology.okstate.edu/faculty/jgrice/psyc3214/Stevens_FourScales_1946.pdf). Do think about this as you work with data.
 
 ![Types of Data Variables](../images/RatioIntervalOrdinalNominal.PNG)
 
