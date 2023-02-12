@@ -9,10 +9,10 @@ output:
     toc_float: TRUE
     toc_depth: 2
     number_sections: TRUE
-    code_folding: hide
+    code_folding: show
     code_download: TRUE
-    df_print: paged
-abstract: Part of the `R for Artists and Designers` workshop course at the School of Foundation Studies, Srishti Manipal Institute of Art, Design, and Technology, Bangalore.
+    df_print: kable
+abstract: Part of my `R for Artists and Designers` workshop course.
 editor_options: 
   markdown: 
     wrap: 72
@@ -20,16 +20,8 @@ editor_options:
 
 # Introduction
 
-This RMarkdown document is part of the Generic Skills Component (GSK) of
-the Course of the Foundation Studies Programme at Srishti Manipal
-Institute of Art, Design, and Technology, Bangalore India. The material
-is based on *A Layered Grammar of Graphics* by Hadley Wickham. The
-course is meant for First Year students pursuing a Degree in Art and
-Design.
-
-The intent of this GSK part is to build Skill in coding in R, and also
-appreciate R as a way to metaphorically visualize information of various
-kinds, using predominantly geometric figures and structures.
+This RMarkdown document is part of a Workshop on Data Visualization with R. The material
+is based on *A Layered Grammar of Graphics* by Hadley Wickham. The intent is to build Skill in coding in R, and also appreciate R as a way to metaphorically visualize information of various kinds, using predominantly geometric figures and structures.
 
 All RMarkdown files combine code, text, web-images, and figures
 developed using code. Everything is text; code chunks are enclosed in
@@ -59,7 +51,13 @@ The method followed will be based on
     for and achieved.
 -   **MAKE** : take an idea/concept of your own, and graph it.
 
-## Set Up
+In the following:
+
+> When it is YOUR TURN: wherever you see YOUR TURN, please respond with
+> explanations, more questions and if you are already confident, code
+> chunks to create new calculations and graphs.
+
+# Set Up
 
 The `setup` code **chunk** below brings into our coding session **R
 packages** that provide specific computational abilities and also
@@ -69,9 +67,9 @@ To reiterate: Packages and datasets are **not** the same thing !!
 Packages are (small) collections of programs. Datasets are
 just....information.
 
-# Packages needed
+## Packages needed
 
-```{r setup, include=TRUE}
+```{r setup, include=TRUE,message=FALSE}
 
 knitr::opts_chunk$set(echo = TRUE,warning = TRUE)
 library(tidyverse)
@@ -79,7 +77,7 @@ library(palmerpenguins)
 
 ```
 
-# Introduction
+# What Does Data Look Like?
 
 In this RMarkdown document, we try to connect story-making **questions**
 with two ideas:
@@ -99,14 +97,8 @@ prove/disprove a particular hypothesis and need to get into further
 research / experimental design. It is possible to design the research
 experiments also in R, but we may cover that much later.
 
-In the following:
 
-> When it is YOUR TURN: wherever you see YOUR TURN, please respond with
-> explanations, more questions and if you are already confident, code
-> chunks to create new calculations and graphs. This will be one of your
-> submissions for this module, on Teams!
-
-# Interrogative Pronouns for Data Variables
+## Interrogative Pronouns for Data Variables
 
 So how do we ask questions? These are usually with *interrogative
 pronouns* in English: What? Who? Where? Which? What Kind? How? and so
@@ -134,144 +126,33 @@ any(is.na(penguins) == TRUE)
     Interrogative Pronouns, e.g. How...MANY?)
 4.  Where might the answers take your story?
 
-### YOUR TURN-1
+## YOUR TURN-1
 
 State a few questions after discussion with your friend and state
 possible variables, or what you could DO with the variables, as an
 answer.\
 E.g. Q. How many penguins? A. We need to count...rows?
 
-## Pronouns and Variables
+
 
 In the Table below, we have a rough mapping of interrogative pronouns to
 the kinds of variables in the data:
 
-+-----------+--------------+-----------+-----------+-----------+
-| Pronoun   | Answer       | Variable  | Example   | What Ope  |
-|           |              | / Scale   |           | rations?  |
-+===========+==============+===========+===========+===========+
-| What,     | Name, Place, | Qu        | Name      | -   Count |
-| Who,      | Animal,      | alitative |           |     no.   |
-| Where,    | Thing        | /         |           |     of    |
-| Whom,     |              | **        |           |     cases |
-| Which     |              | Nominal** |           |           |
-|           |              |           |           | -   Mode  |
-+-----------+--------------+-----------+-----------+-----------+
-| How, What | A Manner /   | Qu        | -   Socio | -         |
-| Kind,     | Method, Type | alitative | -economic |    Median |
-| What Sort | or Attribute | /         |           | -   Pe    |
-|           | from a list, | **        |    status | rcentiles |
-|           | with list    | Ordinal** |     ("low |           |
-|           | items in     |           |           |           |
-|           | some "       |           |   income, |           |
-|           | **order**" ( |           |           |           |
-|           | e.g. good,   |           |    middle |           |
-|           | better,      |           |           |           |
-|           | improved,    |           |   income, |           |
-|           | best..)      |           |     high  |           |
-|           |              |           |           |           |
-|           |              |           |   income) |           |
-|           |              |           |           |           |
-|           |              |           | -         |           |
-|           |              |           | education |           |
-|           |              |           |     level |           |
-|           |              |           |           |           |
-|           |              |           |     ("hig |           |
-|           |              |           | hschool", |           |
-|           |              |           |           |           |
-|           |              |           |    "BS"," |           |
-|           |              |           |     M     |           |
-|           |              |           | S","PhD") |           |
-|           |              |           |           |           |
-|           |              |           | -         |           |
-|           |              |           |    income |           |
-|           |              |           |     le    |           |
-|           |              |           | vel("less |           |
-|           |              |           |     than  |           |
-|           |              |           |     50K", |           |
-|           |              |           |           |           |
-|           |              |           |   "50K-10 |           |
-|           |              |           | 0K","over |           |
-|           |              |           |           |           |
-|           |              |           |    100K") |           |
-|           |              |           |           |           |
-|           |              |           | -   Sat   |           |
-|           |              |           | isfaction |           |
-|           |              |           |           |           |
-|           |              |           |    rating |           |
-|           |              |           |     ("    |           |
-|           |              |           | extremely |           |
-|           |              |           |           |           |
-|           |              |           | dislike", |           |
-|           |              |           |     "     |           |
-|           |              |           | dislike", |           |
-|           |              |           |     "     |           |
-|           |              |           | neutral", |           |
-|           |              |           |           |           |
-|           |              |           |   "like", |           |
-|           |              |           |     "     |           |
-|           |              |           | extremely |           |
-|           |              |           |           |           |
-|           |              |           |   like"). |           |
-+-----------+--------------+-----------+-----------+-----------+
-| How Many  | Quantities   | Qua       | -   pH    | -   Mean  |
-| / Much /  | with Scale.  | ntitative | -   SAT   |           |
-| Heavy?    |              | /         |     score | -         |
-| Few?      | **D          | **I       |           |  Standard |
-| Seldom?   | ifferences** | nterval** | (200-800) |           |
-| Often?    | are          |           | -         | Deviation |
-| When?     | meaningful,  |           |    Credit |           |
-|           | but not      |           |     score |           |
-|           | products or  |           | (300-850) |           |
-|           | ratios       |           | -   Year  |           |
-|           |              |           |     of    |           |
-|           |              |           |           |           |
-|           |              |           |  Starting |           |
-|           |              |           |     in    |           |
-|           |              |           |           |           |
-|           |              |           |   College |           |
-+-----------+--------------+-----------+-----------+-----------+
-| How Many  | Quantities,  | Qua       | -         | -   Co    |
-| / Much /  | with Scale   | ntitative |   Weight, | rrelation |
-| Heavy?    | and a Zero   | /         |           | -   Coeff |
-| Few?      | Value.       | **Ratio** |   Length, |     of    |
-| Seldom?   |              |           |           |           |
-| Often?    | Differences  |           |    Height | Variation |
-| When?     | and Ratios   |           |           |           |
-|           | /Products    |           | -   Te    |           |
-|           | are          |           | mperature |           |
-|           | meaningful.  |           |     in    |           |
-|           | (e.g Weight  |           |           |           |
-|           | )            |           |    Kelvin |           |
-|           |              |           |           |           |
-|           |              |           | -         |           |
-|           |              |           |    Enzyme |           |
-|           |              |           |           |           |
-|           |              |           | activity, |           |
-|           |              |           |     dose  |           |
-|           |              |           |           |           |
-|           |              |           |   amount, |           |
-|           |              |           |           |           |
-|           |              |           |  reaction |           |
-|           |              |           |     rate, |           |
-|           |              |           |     flow  |           |
-|           |              |           |           |           |
-|           |              |           | rate,conc |           |
-|           |              |           | entration |           |
-|           |              |           |           |           |
-|           |              |           | -   Pulse |           |
-|           |              |           |           |           |
-|           |              |           | -         |           |
-|           |              |           |  Survival |           |
-|           |              |           |     time  |           |
-+-----------+--------------+-----------+-----------+-----------+
+```{r echo=FALSE,message=FALSE,warning=FALSE}
+library(kableExtra)
+pronouns <- read_csv("pronouns.csv") %>% select(-No)
+pronouns %>%
+  kbl() %>% 
+  kable_classic(full_width = TRUE) %>% 
+    kable_styling(bootstrap_options = c("striped", "hover","condensed"))
+
+
+```
 
 As you go from Qualitative to Quantitative data types in the table, I
 hope you can detect a movement from fuzzy groups/categories to more and
 more crystallized numbers. Each variable/scale can be subjected to the
-operations of the previous group. In the words of [S.S.
-Stevens](https://stats.idre.ucla.edu/other/mult-pkg/whatstat/what-is-the-difference-between-categorical-ordinal-and-interval-variables/)
-(<https://psychology.okstate.edu/faculty/jgrice/psyc3214/Stevens_FourScales_1946.pdf>)
+operations of the previous group, in the words of [S.S.Stevens.](https://stats.idre.ucla.edu/other/mult-pkg/whatstat/what-is-the-difference-between-categorical-ordinal-and-interval-variables/) See his classic paper here. [PDF](https://psychology.okstate.edu/faculty/jgrice/psyc3214/Stevens_FourScales_1946.pdf)
 
 > the basic operations needed to create each type of scale is
 > cumulative: to an operation listed opposite a particular scale must be
@@ -279,7 +160,7 @@ Stevens](https://stats.idre.ucla.edu/other/mult-pkg/whatstat/what-is-the-differe
 
 Do think about this as you work with data.
 
-[![Types of Variables](images/Ratio%20Interval%20Ordinal%20Nominal.PNG)]
+![Types of Data Variables](../images/RatioIntervalOrdinalNominal.PNG)
 
 Do take a look at these references:
 
@@ -299,7 +180,7 @@ any(is.na(mpg) == TRUE)
 
 ```
 
-### YOUR TURN-2
+## YOUR TURN-2
 
 Look carefully at the variables here. How would you interpret say the
 `cyl` variable? Is it a number and therefore Quantitative, or could it
@@ -361,7 +242,7 @@ ggplot(penguins) + geom_bar(aes(x = sex))
 
 ```
 
-### YOUR TURN-3
+## YOUR TURN-3
 
 ## Single Quantitative Variable
 
@@ -392,7 +273,7 @@ ggplot(penguins) + geom_histogram(aes(x = bill_length_mm))
 
 ```
 
-### YOUR TURN-4
+## YOUR TURN-4
 
 Are all the above Quantitative variables *ratio* variables? Justify.
 
@@ -429,7 +310,7 @@ ggplot(penguins) +
 
 ```
 
-### YOUR TURN-5
+## YOUR TURN-5
 
 ## Two Variables: Categorical vs Categorical
 
@@ -464,7 +345,7 @@ ggplot(penguins) + geom_bar(aes(x = island,
 
 Storyline: तीन पेनगीन। और तुम भी तीन(Oh never mind!)
 
-### YOUR TURN-6
+## YOUR TURN-6
 
 ## Two Variables: Quantitative vs Qualitative
 
@@ -506,9 +387,9 @@ ggplot(penguins) +
 
 ```
 
-### YOUR TURN-7
+## YOUR TURN-7
 
-### Time to Play
+# Time to Play
 
 1.  Create a fresh RMarkdown and similarly analyse two datasets of the
     following data sets
@@ -533,18 +414,15 @@ ggplot(penguins) +
 
 1.  Data Visualization with R, [Robert
     Kabacoff](https://rkabacoff.github.io/datavis/)
-
--   Good crisp descriptions of many kinds of graphs, no nonsense book.
-    Available free on the web.
+    - Good crisp descriptions of many kinds of graphs, no nonsense book. Available free on the web.
 
 2.  Wickham and Grolemund, [R for Data Science](https://r4ds.had.co.nz/)
-
--   R Bible. Available free on the web.
+    - R Bible. Available free on the web.
 
 3.  [The best stats you've ever seen \| Hans
     Rosling](https://www.youtube.com/watch?v=hVimVzgtD6w)
-
--   India Data Portal <https://data.gov.in/>
+    - India Data Portal <https://data.gov.in/>
 
 Ask me for help any time!
+
 

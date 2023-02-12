@@ -55,14 +55,21 @@ library(ggtext)
 
 ## Where does Data come from?
 
-Let us look at the slides. Click on the slides icon above. 
-
+Let us look at the slides. Click on the slides icon above.
 
 ## Why Visualize?
 
 -   We can digest information more easily when it is pictorial
--   Our [Working Memories](https://www.understood.org/en/articles/working-memory-what-it-is-and-how-it-works) are both *short-term* and *limited* in capacity. So a picture abstracts the details and presents us with an overall summary, an insight, or a story that is both easy to recall and easy on retention.\
--   Data Viz includes *shapes* that carry strong cultural memories and impressions for us. These cultural memories help us to use data viz in a *universal way* to appeal to a wide variety of audiences. (Do humans have a gene for geometry?)
+-   Our [Working
+    Memories](https://www.understood.org/en/articles/working-memory-what-it-is-and-how-it-works)
+    are both *short-term* and *limited* in capacity. So a picture
+    abstracts the details and presents us with an overall summary, an
+    insight, or a story that is both easy to recall and easy on
+    retention.\
+-   Data Viz includes *shapes* that carry strong cultural memories and
+    impressions for us. These cultural memories help us to use data viz
+    in a *universal way* to appeal to a wide variety of audiences. (Do
+    humans have a gene for geometry?)
 -   It helps sift facts and mere statements: for example:
 
 ```{r echo=FALSE, fig.alt= "Source https://www.deccanherald.com/national/india-is-known-as-the-rape-capital-of-the-world-rahul-783495.html", fig.cap="Source https://www.deccanherald.com/national/india-is-known-as-the-rape-capital-of-the-world-rahul-783495.html"}
@@ -89,43 +96,123 @@ In more detail:
 
 By asking questions!
 
-+----------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------+-----------------------------+-------------------------------------------------------------------------------------------------+------------------------+
-| Pronoun                                            | Answer                                                                                                                        | Variable / Scale            | Example                                                                                         | What Operations?       |
-+====================================================+===============================================================================================================================+=============================+:================================================================================================+========================+
-| What, Who, Where, Whom, Which                      | Name, Place, Animal, Thing                                                                                                    | Qualitative / **Nominal**   | Name                                                                                            | -   Count no. of cases |
-|                                                    |                                                                                                                               |                             |                                                                                                 | -   Mode               |
-+----------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------+-----------------------------+-------------------------------------------------------------------------------------------------+------------------------+
-| How, What Kind, What Sort                          | A Manner / Method, Type or Attribute from a list, with list items in some " order\*\*" ( e.g. good, better, improved, best..) | Qualitative / **Ordinal**   | -   Socio -economic status ("low income, middle income, high income)                            | -   Median             |
-|                                                    |                                                                                                                               |                             |                                                                                                 | -   Percentiles        |
-|                                                    |                                                                                                                               |                             | -   education level                                                                             |                        |
-|                                                    |                                                                                                                               |                             |                                                                                                 |                        |
-|                                                    |                                                                                                                               |                             |     ("high school", "B S"," M S","PhD")                                                         |                        |
-|                                                    |                                                                                                                               |                             |                                                                                                 |                        |
-|                                                    |                                                                                                                               |                             | -   income level                                                                                |                        |
-|                                                    |                                                                                                                               |                             |                                                                                                 |                        |
-|                                                    |                                                                                                                               |                             |     ("less than 50K", "50K-100K", "over 100K")                                                  |                        |
-|                                                    |                                                                                                                               |                             |                                                                                                 |                        |
-|                                                    |                                                                                                                               |                             | -   Satisfaction rating ( "extremely dislike", "dislike", "neutral", "like", "extremely like"). |                        |
-+----------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------+-----------------------------+-------------------------------------------------------------------------------------------------+------------------------+
-| How Many / Much / Heavy? Few? Seldom? Often? When? | Quantities with Scale.                                                                                                        | Quantitative / **Interval** | -   pH                                                                                          | -   Mean               |
-|                                                    |                                                                                                                               |                             | -   SAT score (200-800),                                                                        |                        |
-|                                                    | **Differences** are meaningful, but not products or ratios                                                                    |                             | -   Credit score (300-850).                                                                     | -   Standard Deviation |
-|                                                    |                                                                                                                               |                             | -   Year of Starting in College                                                                 |                        |
-+----------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------+-----------------------------+-------------------------------------------------------------------------------------------------+------------------------+
-| How Many / Much / Heavy? Few? Seldom? Often? When? | Quantities, with Scale and a Zero Value.                                                                                      | Quantitative / Ratio\*\*    | -   Weight,length,Height                                                                        | -   Correlation        |
-|                                                    |                                                                                                                               |                             |                                                                                                 | -   Coeff of Variation |
-|                                                    | Differences and Ratios /Products are meaningful. (e.g Weight )                                                                |                             | -   Temperature in Kelvin                                                                       |                        |
-|                                                    |                                                                                                                               |                             |                                                                                                 |                        |
-|                                                    |                                                                                                                               |                             | -   Enzyme activity, dose amount, reaction rate, flow rate,concentration                        |                        |
-|                                                    |                                                                                                                               |                             |                                                                                                 |                        |
-|                                                    |                                                                                                                               |                             | -   Pulse                                                                                       |                        |
-|                                                    |                                                                                                                               |                             |                                                                                                 |                        |
-|                                                    |                                                                                                                               |                             | -   Survival time                                                                               |                        |
-+----------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------+-----------------------------+-------------------------------------------------------------------------------------------------+------------------------+
++----------+--------------------+----------+-------------+----------+
+| Pronoun  | Answer             | Variable | Example     | What     |
+|          |                    | / Scale  |             | Ope      |
+|          |                    |          |             | rations? |
++==========+====================+==========+:============+==========+
+| What,    | Name, Place,       | Qua      | Name        | -        |
+| Who,     | Animal, Thing      | litative |             |    Count |
+| Where,   |                    | /        |             |     no.  |
+| Whom,    |                    | **N      |             |     of   |
+| Which    |                    | ominal** |             |          |
+|          |                    |          |             |    cases |
+|          |                    |          |             | -   Mode |
++----------+--------------------+----------+-------------+----------+
+| How,     | A Manner / Method, | Qua      | -   Socio   | -        |
+| What     | Type or Attribute  | litative |             |   Median |
+| Kind,    | from a list, with  | /        |   -economic | -   Per  |
+| What     | list items in some | **O      |     status  | centiles |
+| Sort     | " order\*\*" (     | rdinal** |     ("low   |          |
+|          | e.g. good, better, |          |     income, |          |
+|          | improved, best..)  |          |     middle  |          |
+|          |                    |          |     income, |          |
+|          |                    |          |     high    |          |
+|          |                    |          |     income) |          |
+|          |                    |          |             |          |
+|          |                    |          | -           |          |
+|          |                    |          |   education |          |
+|          |                    |          |     level   |          |
+|          |                    |          |             |          |
+|          |                    |          |     ("high  |          |
+|          |                    |          |             |          |
+|          |                    |          |    school", |          |
+|          |                    |          |     "B S"," |          |
+|          |                    |          |     M       |          |
+|          |                    |          |             |          |
+|          |                    |          |   S","PhD") |          |
+|          |                    |          |             |          |
+|          |                    |          | -   income  |          |
+|          |                    |          |     level   |          |
+|          |                    |          |             |          |
+|          |                    |          |     ("less  |          |
+|          |                    |          |     than    |          |
+|          |                    |          |     50K",   |          |
+|          |                    |          |             |          |
+|          |                    |          | "50K-100K", |          |
+|          |                    |          |     "over   |          |
+|          |                    |          |     100K")  |          |
+|          |                    |          |             |          |
+|          |                    |          | -   S       |          |
+|          |                    |          | atisfaction |          |
+|          |                    |          |     rating  |          |
+|          |                    |          |     (       |          |
+|          |                    |          |             |          |
+|          |                    |          |  "extremely |          |
+|          |                    |          |             |          |
+|          |                    |          |   dislike", |          |
+|          |                    |          |             |          |
+|          |                    |          |  "dislike", |          |
+|          |                    |          |             |          |
+|          |                    |          |  "neutral", |          |
+|          |                    |          |     "like", |          |
+|          |                    |          |             |          |
+|          |                    |          |  "extremely |          |
+|          |                    |          |     like"). |          |
++----------+--------------------+----------+-------------+----------+
+| How Many | Quantities with    | Quan     | -   pH      | -   Mean |
+| / Much / | Scale.             | titative | -   SAT     |          |
+| Heavy?   |                    | /        |     score   | -        |
+| Few?     | **Differences**    | **In     |             | Standard |
+| Seldom?  | are meaningful,    | terval** |  (200-800), |     D    |
+| Often?   | but not products   |          | -   Credit  | eviation |
+| When?    | or ratios          |          |     score   |          |
+|          |                    |          |             |          |
+|          |                    |          |  (300-850). |          |
+|          |                    |          | -   Year of |          |
+|          |                    |          |             |          |
+|          |                    |          |    Starting |          |
+|          |                    |          |     in      |          |
+|          |                    |          |     College |          |
++----------+--------------------+----------+-------------+----------+
+| How Many | Quantities, with   | Quan     | -           | -   Cor  |
+| / Much / | Scale and a Zero   | titative |   Weight,le | relation |
+| Heavy?   | Value.             | /        | ngth,Height | -        |
+| Few?     |                    | R        |             |    Coeff |
+| Seldom?  | Differences and    | atio\*\* | -           |     of   |
+| Often?   | Ratios /Products   |          | Temperature |     V    |
+| When?    | are meaningful.    |          |     in      | ariation |
+|          | (e.g Weight )      |          |     Kelvin  |          |
+|          |                    |          |             |          |
+|          |                    |          | -   Enzyme  |          |
+|          |                    |          |             |          |
+|          |                    |          |   activity, |          |
+|          |                    |          |     dose    |          |
+|          |                    |          |     amount, |          |
+|          |                    |          |             |          |
+|          |                    |          |    reaction |          |
+|          |                    |          |     rate,   |          |
+|          |                    |          |     flow    |          |
+|          |                    |          |     rate,co |          |
+|          |                    |          | ncentration |          |
+|          |                    |          |             |          |
+|          |                    |          | -   Pulse   |          |
+|          |                    |          |             |          |
+|          |                    |          | -           |          |
+|          |                    |          |    Survival |          |
+|          |                    |          |     time    |          |
++----------+--------------------+----------+-------------+----------+
 
-As you go from `Qualitative` to `Quantitative` data types in the table, I hope you can detect a movement from fuzzy groups/categories to more and more crystallized numbers. Each variable/scale can be subjected to the operations of the previous group. In the words of [S.S. Stevens](https://stats.idre.ucla.edu/other/mult-pkg/whatstat/what-is-the-difference-between-categorical-ordinal-and-interval-variables/) ,
+As you go from `Qualitative` to `Quantitative` data types in the table,
+I hope you can detect a movement from fuzzy groups/categories to more
+and more crystallized numbers. Each variable/scale can be subjected to
+the operations of the previous group. In the words of [S.S.
+Stevens](https://stats.idre.ucla.edu/other/mult-pkg/whatstat/what-is-the-difference-between-categorical-ordinal-and-interval-variables/)
+,
 
-> the basic operations needed to create each type of scale is cumulative: to an operation listed opposite a particular scale must be added all those operations preceding it.
+> the basic operations needed to create each type of scale is
+> cumulative: to an operation listed opposite a particular scale must be
+> added all those operations preceding it.
 
 ## What Are the Parts of a Data Viz?
 
@@ -170,29 +257,54 @@ g + geom_text(data=annotation, aes( x=x, y=y, label=label, angle = angle),      
 
 ## How to pick a Data Viz?
 
-Most Data Visualizations use one or more of the following geometric attributes or aesthetics. These geometric aesthetics are used to *represent* qualitative or quantitative variables from your data.
+Most Data Visualizations use one or more of the following geometric
+attributes or aesthetics. These geometric aesthetics are used to
+*represent* qualitative or quantitative variables from your data.
 
 ```{r echo=FALSE, fig.cap="From Claus Wilke, Fundamentals of Data Visualization"}
 knitr::include_graphics("common-aesthetics-1.png")
 ```
 
-What does that mean? We can think of simple visualizations as **combinations** of these aesthetics. Some examples:
+What does that mean? We can think of simple visualizations as
+**combinations** of these aesthetics. Some examples:
 
-+-----------------------------------+------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
-| Aesthetic #1                      | Aesthetic #2                             | Shape                                                                                                                           | Chart Picture                                                                                                                                      |
-+===================================+==========================================+:===============================================================================================================================:+====================================================================================================================================================+
-| Position X = Quant Variable       | Position Y = Quant Variable              | Points/Circles with Fixed Size                                                                                                  | <img src="https://img.icons8.com/ios-filled/100/000000/scatter-plot.png"/>                                                                         |
-+-----------------------------------+------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
-| Position X = Qual Variable        | Position Y = Count of Qual var)          | Columns                                                                                                                         | <img src="https://img.icons8.com/material/100/000000/futures--v1.png"/>                                                                            |
-+-----------------------------------+------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
-| Position X = Qual Variable        | Position Y = Qual Variable               | Rectangles, with *area* proportional to joint(X,Y) *count*                                                                      | <img src="https://img.icons8.com/windows/100/000000/modern-art.png"/>                                                                              |
-+-----------------------------------+------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
-| Position X = Qualitative Variable | Position Y = Rank Ordered Quant Variable | Box + Whisker, Box length proportional to *Inter-Quartile Range*, whisker-length proportional to upper and lower quartile resp. | <img src="https://img.icons8.com/external-icongeek26-glyph-icongeek26/100/000000/external-plot-data-analytics-icongeek26-glyph-icongeek26-1.png"/> |
-+-----------------------------------+------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
-| Position X = Quant Variable       | Postion Y = Quant Variable + Qual Var    |                                                                                                                                 | <img src="https://img.icons8.com/ios-filled/100/000000/area-chart.png"/>                                                                           |
-+-----------------------------------+------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
-| Quant Variable                    | Shape = Line with Quant Variable         |                                                                                                                                 | ![](https://img.icons8.com/material/24/000000/combo-chart--v1.png){width="100"}                                                                    |
-+-----------------------------------+------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
-
-
-
++-----------+-----------+--------------------+-----------------------+
+| Aesthetic | Aesthetic | Shape              | Chart Picture         |
+| #1        | #2        |                    |                       |
++===========+===========+:==================:+=======================+
+| Position  | Position  | Points/Circles     | <img src="h           |
+| X = Quant | Y = Quant | with Fixed Size    | ttps://img.icons8.com |
+| Variable  | Variable  |                    | /ios-filled/100/00000 |
+|           |           |                    | 0/scatter-plot.png"/> |
++-----------+-----------+--------------------+-----------------------+
+| Position  | Position  | Columns            | <img src              |
+| X = Qual  | Y = Count |                    | ="https://img.icons8. |
+| Variable  | of Qual   |                    | com/material/100/0000 |
+|           | var)      |                    | 00/futures--v1.png"/> |
++-----------+-----------+--------------------+-----------------------+
+| Position  | Position  | Rectangles, with   | <img s                |
+| X = Qual  | Y = Qual  | *area*             | rc="https://img.icons |
+| Variable  | Variable  | proportional to    | 8.com/windows/100/000 |
+|           |           | joint(X,Y) *count* | 000/modern-art.png"/> |
++-----------+-----------+--------------------+-----------------------+
+| Position  | Position  | Box + Whisker, Box | <img src="https://im  |
+| X =       | Y = Rank  | length             | g.icons8.com/external |
+| Qu        | Ordered   | proportional to    | -icongeek26-glyph-ico |
+| alitative | Quant     | *Inter-Quartile    | ngeek26/100/000000/ex |
+| Variable  | Variable  | Range*,            | ternal-plot-data-anal |
+|           |           | whisker-length     | ytics-icongeek26-glyp |
+|           |           | proportional to    | h-icongeek26-1.png"/> |
+|           |           | upper and lower    |                       |
+|           |           | quartile resp.     |                       |
++-----------+-----------+--------------------+-----------------------+
+| Position  | Postion Y |                    | <img src=             |
+| X = Quant | = Quant   |                    | "https://img.icons8.c |
+| Variable  | V         |                    | om/ios-filled/100/000 |
+|           | ariable + |                    | 000/area-chart.png"/> |
+|           | Qual Var  |                    |                       |
++-----------+-----------+--------------------+-----------------------+
+| Quant     | Shape =   |                    | ![](https://img.      |
+| Variable  | Line with |                    | icons8.com/material/2 |
+|           | Quant     |                    | 4/000000/combo-chart- |
+|           | Variable  |                    | -v1.png){width="100"} |
++-----------+-----------+--------------------+-----------------------+

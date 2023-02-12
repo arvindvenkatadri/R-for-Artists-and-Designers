@@ -50,3 +50,13 @@ using ggraph and graphlayouts](http://mr.schochastics.net/netVizR.html)
 
 3. Konrad M. Lawson, [Toilers and Gangsters:Simple Network Visualization with R for Historians](https://kmlawson.github.io/dh-tutorials/network.html)
 
+4. Mark Hoffman, *Methods for Network Analysis.* <https://bookdown.org/markhoff/social_network_analysis/>
+
+5. Omar Lizardo and Isaac Jilbert, *Social Networks: An Introduction.* <https://bookdown.org/omarlizardo/_main/>
+
+
+
+2020-01-06
+
+
+Fall 2021
