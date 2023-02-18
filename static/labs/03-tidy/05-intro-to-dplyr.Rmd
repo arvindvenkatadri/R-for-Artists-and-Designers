@@ -14,9 +14,14 @@ output:
     code_download: TRUE
 
 ---
-## Instructions:
 
-Start here if this is your first time using dplyr. You'll learn the basic philosophy, the most important data manipulation **verbs**, and the pipe, `%>%`, which allows you to combine multiple verbs together to solve real problems.
+# Introduction
+
+One of the dominant paradigms of working with data in R is to render it into "tidy" form. A huge benefit of the tidy way of working is that it influences your thinking with data and helps plan out your operations, in going from purpose to actual code in a swift and intuitive manner.  This tidy form allows for a huge variety of data manipulation, summarizing, and plotting tasks, that can be performed using the packages of the tidyverse, and other packages that leverage the power of the tidyverse.
+
+## Instructions: Working with `dplyr`
+
+Start here if this is your first time using `dplyr`. You'll learn the basic philosophy, the most important data manipulation **verbs**, and the pipe, `%>%`, which allows you to combine multiple verbs together to solve real problems.
 
 Read the text and execute each chunk as you go along. If you make any discoveries or have questions, put them into the text immediately after the chunk/text where your doubt is created. I have put in small instructions here and there for you to prompt your thinking and connection-making.
 
@@ -32,9 +37,9 @@ set.seed(1014)
 
 When working with data you must:
 
-* Figure out what you want to do.
+* Figure out what you want to do. (Purpose)
 
-* Describe those tasks in the form of a computer program.
+* Describe those tasks in the form of a computer program. (Plain English to R Code)
 
 * Execute the program.
 
@@ -60,9 +65,10 @@ To explore the basic data manipulation verbs of `dplyr`, we'll use the dataset `
 ```{r}
 dim(starwars)
 starwars
+
 ```
 
-Note that `starwars` is a `tibble`, a modern reimagining of the data frame. It's particularly useful for large datasets because it only prints the first few rows. You can learn more about tibbles at <https://tibble.tidyverse.org>; in particular you can convert data frames to tibbles with `as_tibble()`.
+Note that `starwars` is a `tibble`, a modern re-imagining of the data frame. It's particularly useful for large datasets because it only prints the first few rows. You can learn more about tibbles at <https://tibble.tidyverse.org>; in particular you can convert data frames to tibbles with `as_tibble()`.
 
 > Check your Environment Tab to inspect `starwars` in a separate tab.
 

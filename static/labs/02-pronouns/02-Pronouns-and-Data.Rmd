@@ -74,6 +74,7 @@ just....information.
 knitr::opts_chunk$set(echo = TRUE,warning = TRUE)
 library(tidyverse)
 library(palmerpenguins)
+library(janitor)
 
 ```
 
@@ -188,9 +189,76 @@ Look carefully at the variables here. How would you interpret say the
 `cyl` variable? Is it a number and therefore Quantitative, or could it
 be something else?
 
+## Reading External Data
+
+A first task is often the reading in of external data. Data is best stored and shared in a `CSV file format`.Download this CSV file into your project folder:
+<br>
+
+```{r echo=FALSE,message=FALSE}
+mpg_new <- read_csv("mpg_uppercase.csv")
+library(downloadthis)
+mpg_new %>% download_this(
+    output_name = "mpg_new",
+    output_extension = ".csv",
+    button_label = "Download CSV",
+    button_type = "info",
+    has_icon = TRUE,
+    icon = "fa fa-save"
+  )
+```
+
+To read this CSV data into our R Session, we use a command called `read_csv` from the `readr` package:
+
+
+```{r}
+#| label: reading-files
+mpg_new <- readr::read_csv("mpg_uppercase.csv")
+
+```
+
+As can be seen , `read_csv` tells us by default what the column names are and the types they are: `chr` and `dbl` in this case. 
+
+In the event that the column names are not very good or evocative, we can set `name_repair` = `make_clean_names` inside `read_csv`; this additional function is available via the `janitor` package.
+
+```{r}
+read_csv("mpg_uppercase.csv",
+         show_col_types = TRUE,
+         name_repair = make_clean_names) %>% # needs `janitor`
+  glimpse()
+
+```
+
+Note that the default naming is based in `snake_case`. There are other ways and if we desire to use them, we need to make `make_clean_names` as what is called a **lambda function** with extra parameters:
+
+```{r}
+
+read_csv("mpg_uppercase.csv",
+         show_col_types = TRUE,
+         name_repair = 
+           
+      # Here is the lambda function
+      # To be used only when you want to go beyond the defaults
+      # using additional parameters. e.g `case`
+           ~ make_clean_names(., 
+                              case = "big_camel")) %>% 
+  
+  # needs `janitor`
+  # `.` denotes the VECTOR of column names
+  
+  glimpse()
+
+```
+
+Note the usage of `~` to make a function: this is needed only if we want
+to pass (additional) arguments to `make_clean_names`. (We will find this
+also when we encounter the `purrr` package where we run functions
+iteratively over each individual entry in a vector/column or
+list-column.)
+
+
 # Interrogations and Graphs
 
-We can also respond to ( more complex ) Questions, with not just a
+Now that we know how to access "R internal" datasets and to read in external datasets, we can also respond to ( more complex ) Questions, with not just a
 *variable* but one of two things:
 
 -   A calculation, shown in a *table*
@@ -245,6 +313,9 @@ ggplot(penguins) + geom_bar(aes(x = sex))
 ```
 
 ## YOUR TURN-3
+Use the `mpg_new` dataset to create a few Single Categorical Graphs.
+
+
 
 ## Single Quantitative Variable
 
@@ -278,6 +349,8 @@ ggplot(penguins) + geom_histogram(aes(x = bill_length_mm))
 ## YOUR TURN-4
 
 Are all the above Quantitative variables *ratio* variables? Justify.
+Use the `mpg_new` dataset to create a few Single Quant Graphs.
+
 
 ## Two Variables: Quantitative vs Quantitative
 
@@ -313,6 +386,8 @@ ggplot(penguins) +
 ```
 
 ## YOUR TURN-5
+Use the `mpg_new` dataset to create a few Quant vs Quant Graphs.
+
 
 ## Two Variables: Categorical vs Categorical
 
@@ -348,6 +423,8 @@ ggplot(penguins) + geom_bar(aes(x = island,
 Storyline: तीन पेनगीन। और तुम भी तीन(Oh never mind!)
 
 ## YOUR TURN-6
+Use the `mpg_new` dataset to create a few Quant vs Categorical Graphs.
+
 
 ## Two Variables: Quantitative vs Qualitative
 
@@ -390,13 +467,14 @@ ggplot(penguins) +
 ```
 
 ## YOUR TURN-7
+Use the `mpg_new` dataset to create a few Single Categorical Graphs.
+
 
 # Time to Play
 
-1.  Create a fresh RMarkdown and similarly analyse two datasets of the
-    following data sets
+1.  Create a fresh RMarkdown/Quarto document and similarly analyse two datasets of the following data sets
 
--   Any dataset in your R installation. Type `data()` in your console to
+-   Any data set in your R installation. Type `data()` in your console to
     see what is available.
 
 -   `diamonds` . This dataset is part of the tidyverse package so just
@@ -405,7 +483,7 @@ ggplot(penguins) +
 -   `gapminder` !! Yes!!You will need to install the `gapminder` package
     to access this dataset
 
--   `mosaicData` package datasets. Install `mosaicData`
+-   `mosaicData` package datasets. Install `mosaicData` first !!
 
 -   `data.world`: Find Datasets of your choice:
     <https://docs.data.world/en/64499-64516-Quickstarts-and-tutorials.html>
