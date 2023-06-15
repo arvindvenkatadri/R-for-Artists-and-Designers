@@ -82,23 +82,23 @@ privacy_pack = false
 ############################
 
 # Enter contact details (optional). To hide a field, clear it to "".
-email = "arvind.venkatadri@manipal.edu"
+email = "arvind.venkatadri@gmail.com"
 phone = ""
 
 # Address
 # For country_code, use the 2-letter ISO code (see https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2 )
-address = {street = "40/D Marilingiah Building 2nd Cross, Yelahanka New Town", city = "Bangalore", region = "KA", postcode = "560064", country = "India", country_code = "IN"}
+#address = {street = "40/D Marilingiah Building 2nd Cross, Yelahanka New Town", city = "Bangalore", region = "KA", postcode = "560064", country = "India", country_code = "IN"}
 
 # Geographic coordinates
 # To get your coordinates, right-click on Google Maps and choose "What's here?". The coords will show up at the bottom.
-coordinates = {latitude = "13.1076", longitude = "77.5760"}
+#coordinates = {latitude = "13.1076", longitude = "77.5760"}
 
 # Directions for visitors to locate you.
-directions = "Enter N3 Building and take the stairs to Staff Room ( Yellow Door ) on Floor 2"
+#directions = "Enter N3 Building and take the stairs to Staff Room ( Yellow Door ) on Floor 2"
 
 # Office hours
 # A list of your office hours. To remove, set to an empty list `[]`.
-office_hours = ["Monday 10:00 to 13:00", "Wednesday 09:00 to 10:00"]
+#office_hours = ["Monday 10:00 to 13:00", "Wednesday 09:00 to 10:00"]
 
 # Enter an optional link for booking appointments (e.g. calendly.com).
 appointment_url = ""
@@ -118,7 +118,7 @@ contact_links = [
 ############################
 
 # Default image for social sharing and search engines. Place image in `static/img/` folder and specify image name here.
-sharing_image = "blue-balloon.jpg"
+sharing_image = "3.jpg"
 
 # Twitter username (without @). Used when a visitor shares your site on Twitter.
 twitter = "arvind_v"
@@ -147,14 +147,14 @@ main_menu = {align = "l", show_logo = true}
 reading_time = false
 
 # Display next/previous section pager? (true/false)
-section_pager = false
+section_pager = true
 docs_section_pager = true  # Display pager in Docs layout (e.g. tutorials)?
 
 # Enable in-built social sharing buttons? (true/false)
-sharing = false
+sharing = true
 
 # Link authors to their profile page? (true/false)
-link_authors = false
+link_authors = true
 
 # Abstract length (characters) in the Compact and Portfolio Card list views. Also, see `summaryLength` in `config.toml`.
 abstract_length = 135

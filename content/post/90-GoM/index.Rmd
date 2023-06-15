@@ -4,7 +4,7 @@ subtitle: "The Grammar of Maps"
 summary: "The Grammar of Maps"
 author: "Arvind Venkatadri"
 date: "`r Sys.Date()`"
-weight : 90
+weight: 90
 view: 2
 output:
   html_document:

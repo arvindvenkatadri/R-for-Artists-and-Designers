@@ -1,0 +1,404 @@
+---
+title: "Iteration: Learning to purrr"
+author: "Arvind Venkatadri"
+subtitle: "Performing Iterations in R"
+summary: "Performing Iterations in R"
+date: "`r Sys.Date()`"
+weight: 125
+view: 2
+output:
+  html_document:
+    toc_float: true
+    theme: united
+    toc: true
+    code_folding: true
+featured: no
+image:
+  placement: 2
+  caption: 'Image credit: [**Alice In Wonderland dot Net**](https://www.alice-in-wonderland.net/)'
+  focal_point: ""
+  preview_only: true
+projects: []
+# links:
+# - icon: flask
+#   icon_pack: fas
+#   name: lab
+#   url: /labs/06-spatial/06-Grammar-of-Maps.html
+#   
+# - icon: magic
+#   icon_pack: fas
+#   name: Introduction Slides
+#   url: /slides/06-spatial/06-Spatial-Data-in-R.html
+#   
+# - icon: flask
+#   icon_pack: fas
+#   name: Interactive Maps with leaflet and mapview
+#   url: /labs/06-spatial/PlayingwithLeaflet.html
+---
+
+
+## Setting up the R packages
+
+```{r}
+#| label: setup
+knitr::opts_chunk$set(message = FALSE)
+library(tidyverse)
+library(janitor)
+library(fs)
+library(tidystringdist)
+
+library(gapminder)
+library(ggformula)
+
+```
+
+![](featured.jpg){fig-align="center" width="248"}
+
+## Introduction
+
+Often we want to perform the same operation on several different sets of
+data. Rather than repeat the operation for each instance of data, it is
+faster, more intuitive, and less error-prone if we create a data
+structure that holds all the data, and use the `map-*` series functions
+from the `purrr` package to perform all the repeated operations in one
+shot.
+
+This requires getting used to. We need to understand: - the data
+structure - the iteration mechanism using `map` functions - the form of
+the results
+
+## Case Study #1: Multiple Models for Life Expectancy with `gapminder`
+
+We will start with a complete case study and then work backwards to
+understand the various pieces of code that make it up.
+
+Let us look at the `gapminder` dataset:
+
+```{r}
+skimr::skim(gapminder)
+```
+
+We have `lifeExp`, `gdpPerCap`, and `pop` as Quant variables over time
+(`year`) for each country in the world. Suppose now that we wish to
+create Linear Regression Models predicting `lifeExp` using `year`,
+`gdpPercap` and `pop` for each country. The straightforward by
+labourious and naive way would be to use the `lm` command after
+filtering the dataset for each country, creating 140+ Linear Models
+manually! This would be horribly tedious!
+
+There is a better way with `purrr`, and also more recently, with `dplyr`
+itself. Let us see both methods, the established `purrr` method first,
+and the new `dplyr` based method thereafter.
+
+## EDA Plots
+
+We can first plot `lifeExp` over `year`, grouped by `country`:
+
+```{r}
+#| layout-ncol: 2
+ggplot(gapminder,aes(x = year, y = lifeExp, colour = country)) + 
+  geom_line(show.legend = FALSE) + 
+  theme_classic()
+
+ggplot(gapminder,aes(x = year, y = lifeExp, colour = country)) + 
+  geom_line(show.legend = FALSE) + 
+  facet_wrap(~ continent) + 
+  theme_classic()
+
+```
+
+Constructing a Linear Model:
+
+```{r}
+model <- lm(lifeExp ~ year, data = gapminder)
+summary(model)
+```
+
+```{r}
+#| layout-ncol: 2
+model %>% broom::tidy() # Parameters of the Model
+model %>% broom::glance() # Statistics of the Model
+
+```
+
+Since the slope `r model$coefficients[2]` is positive, life expectancy
+has been increasing over the years. How do we do this for each country?
+We need to use the `split-apply-combine` method to achieve this.
+
+The combination of `group_by` and `summarise` is a example of the
+`split > apply > combine` method. For example, we could (split) the data
+by country, calculate the linear model each group (apply), and (combine)
+the results in a data frame.
+
+However, this first-attempt code for a per-country linear model does not
+work:
+
+```{r}
+#| eval: false
+#| echo: fenced
+gapminder %>% 
+  group_by(country) %>% 
+  summarise(linmod = lm(lifeExp ~ year, data = .))
+
+```
+
+This is because the `linmod` variable is a **list** variable and *cannot
+be accommodated in a simple column*, which is what `summarize` will try
+to create.
+
+Counter-intuitively, we **do** need to be able to create "list" columns
+in a data frame! The `purrr` package contains a new class of functions,
+that can take vectors/tibbles/lists as input, and perform an identical
+function over each component of these, and generate a
+vectors/tibbles/lists as output. These are the `map_*` functions that
+are part of the `purrr` package. The `*` in the `map_*` function defines
+what kind of **output** (vector/tibble/list) the function generates. Let
+us look at a few short examples.
+
+## Using `map_*` functions from `purrr`
+
+The basic structure of the `map_*` functions is:
+
+```{r}
+#| echo: fenced
+#| eval: false
+map_typeOfResult(.x = what_to_iterate_with, 
+                  .f = function_to_apply)
+
+map_typeOfResult(.x = what_to_iterate_with, 
+                  .f = \(x) function_to_apply(x, additional_parameters))
+
+```
+
+Two examples:
+
+```{r}
+#| layout-ncol: 2
+# Example 1
+diamonds %>% 
+  select(where(is.numeric)) %>% 
+  # We need dbl-type numbers in output **vector**
+map_dbl(.x = ., 
+        .f = mean)
+
+diamonds %>% 
+  select(where(is.numeric)) %>% 
+  # We need dbl-type numbers in output **vector**
+map_df(.x = ., 
+        .f = mean)
+
+```
+
+Sometimes the function `.f` may need some additional parameters to be
+specified, and these may not come from the `.x`:
+
+```{r}
+#| layout-ncol: 2
+# Example 3, with additional parameters to .f
+palmerpenguins::penguins %>% 
+  select(where(is.numeric)) %>% 
+  map_dbl(.x = ., 
+          .f = \(x) mean(x, 
+                         
+  # penguins has two rows of NA entries which need to be dropped
+  # Hence this additional parameter for the `mean` function
+                         na.rm = TRUE))
+# Example 4: if we want a tibble output
+palmerpenguins::penguins %>% 
+  select(where(is.numeric)) %>% 
+  map_df(.x = ., 
+          .f = \(x) mean(x, 
+                         
+  # penguins has two rows of NA entries which need to be dropped
+  # Hence this additional parameter for the `mean` function
+                         na.rm = TRUE))
+
+```
+
+The `.f` function can be anything, even a `ggformula` plot command; in
+this case the output will not be a vector or a tibble, but a list:
+
+```{r}
+#| layout-ncol: 3
+#library(ggformula)
+palmerpenguins::penguins %>% 
+  select(where(is.numeric)) %>% select(-year) %>% drop_na() %>% 
+  
+  # `map` gives a list output
+  map(.x = .,
+      .f = \(x) gf_histogram(~x, bins = 30) %>%
+        gf_refine(theme_classic())
+      )
+
+```
+
+Note: we need to do just a bit of extra pre-work to get the variable
+names on the x-axis of the histograms.
+
+So in summary, we need to create a tibble with column(s) that are the
+inputs to the `map` function. We then provide `map` with a function that
+it will apply to each of these columns. The function can take additional
+parameters too. Finally, depending upon the kind of output the function
+generates, we need to choose the `map` function.
+
+## Using `purrr` to create multiple models
+
+Now that we have some handle on purrr's `map` functions, we can see how
+to develop a linear regression model for **every** country in the
+`gapminder` dataset.
+
+Here is the process:
+
+-   Group the data by `country`\
+-   Create a `nested` column of data for each country (i.e `nest` the
+    columns other than `country` into a **list column**). This `list`
+    column is the first argument `.x` for`map_*`.\
+-   Use `map` to create an `lm` object for each country (in another list
+    column)
+-   Use `map` again with `broom::tidy` as the function to give us clean
+    columns for the model per country.
+-   Use that multi-model tibble to plot graphs for each country
+-   Etc.
+
+Let us do this now!
+
+```{r}
+#| layout-nrow: 2
+  gapminder_models <- gapminder %>% 
+  group_by(country) %>% 
+  nest(.key = "list") %>% # Name the column as "list"
+  
+  # We use mutate + map to add a list column containing linear models
+  mutate(model = map(.x = list, 
+                     
+          # One column to iterate over
+          # The list column contains data frames
+          # So we access individual columns 
+          # within these individual data frames
+                     .f = \(.x) lm(lifeExp ~ year, data = .x)
+          )) %>% 
+  # Use mutate + map again to expose the columns of the models
+  
+  mutate(model_params = map(.x = model, 
+                      .f = \(.x) broom::tidy(.x, 
+                                             conf.int = TRUE, 
+                                             conf.lvel = 0.95)),
+         model_metrics = map(.x = model,
+                      .f = \(x) broom::glance(x))) 
+gapminder_models
+
+params <- gapminder_models %>% 
+  select(country,model_params, model_metrics) %>% 
+  ungroup() %>% 
+  # Now unpack the linear model parameters into columns
+  unnest(cols = model_params)
+
+metrics <- gapminder_models %>% 
+  select(country,model_metrics) %>% 
+  ungroup() %>% 
+  # Now unpack the linear model parameters into columns
+  unnest(cols = model_metrics)
+params
+metrics
+
+```
+
+We can now plot these models and their uncertainty (i.e Confidence
+Intervals). We can select a few of the countries and plot:
+
+```{r}
+params %>% 
+  filter(country %in% c("India", "United States", "Brazil", "China"), term == "year") %>% 
+  gf_errorbar(conf.high + conf.low ~ country, 
+              color = ~ -log10(p.value),
+              linewidth = ~ -log10(p.value), width = 0.3,
+              ylab = "Effect Size", title = "Effect of years on Life Expectancy") %>% 
+  gf_theme(theme_classic()) %>% 
+  gf_refine(scale_color_viridis_c("significance"), scale_linewidth_continuous("significance", range = c(0.2,3)))
+
+```
+
+We can look at the model metrics and see for which countries the model
+fares the worst. We will reverse sort on `r.squared` and choose the 5
+worst models:
+
+```{r}
+metrics %>% slice_min(order_by = r.squared, n = 5)
+
+```
+
+We see that for a few African countries, the linear model for Life
+Expectancy fails. There are of course political reasons for
+this: genocide in Rwanda, and hyper-inflation in Zimbabwe.
+
+## Recent developments in `dplyr`
+
+In recent times, the familiar `dplyr` package also has **experimental**
+functions that are syntactically easier and offer pretty much
+`purrr`-like capability, and without introducing the complexity of the
+list columns or list output.
+
+Look the code below and decipher how it works:
+
+```{r}
+
+# Using group_modify
+gapminder_model_dplyr <- gapminder %>%
+  group_by(continent, country) %>%
+  
+  dplyr::group_modify(
+             .data = .,
+             .f = ~ lm(lifeExp ~ year, data = .) %>% 
+      
+      # glance/tidy is part of the group_map's .f variable.
+      # Applies to each model
+      # .f MUST generate a tibble here and *not* a list
+      # Hence broom::tidy is essential!
+      
+      broom::glance(conf.int = TRUE,  # try `tidy()` and `augment()`
+                    conf.lvel = 0.95)) %>% 
+  
+  # We already have a grouped tibble from `group_modify()`
+  # Just ungroup()
+  ungroup()
+
+gapminder_model_dplyr
+
+```
+
+There is no nesting and unnesting; the data is the familiar tibble
+throughout! This seems like a simple and elegant method.
+
+::: callout-tip
+### Using `dplyr::group_modify`
+
+Note: `group_modify` is new experimental functions in `dplyr`, as is
+`list_rbind`. The second-named requires that the operation in `.f`
+generates a tibble, **not a list**, and we can retain the grouping
+variable easily too. We can remove the groups with `ungroup`.
+
+`group_modify()` looks very clear and crisp, in my opinion. And very
+learner-friendly!
+:::
+
+## Conclusion
+
+We have seen how purrr simplifies the application of functions
+iteratively to large groups of data, in a faster, replicable, and less
+error-prone manner.
+
+## References
+
+1.  {{< video https://youtu.be/rz3_FDVt9eg >}}
+
+2.  Rebecca Barter, \* Learn to purrr\*.
+    <https://www.rebeccabarter.com/blog/2019-08-19_purrr>
+
+3.  Emorie Beck, *Introduction to purrr*.
+    <https://emoriebeck.github.io/R-tutorials/purrr/#>
+
+4.  Sander Wuyts, *purrr Tutorial*.
+    <https://sanderwuyts.com/en/blog/purrr-tutorial/>
+
+5.  Jared Wilber, \* Using the tidyverse for Machine Learning\*.
+    <https://www.jwilber.me/nest/>

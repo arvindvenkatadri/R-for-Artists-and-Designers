@@ -471,10 +471,16 @@ theme_update(
 
 ```{r}
 ## plot that we will annotate with ggforce afterwards
-gf <- ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm)) + 
-  scico::scale_color_scico(palette = "bamako", direction = -1) +
+gf <- ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm, 
+                           colour = body_mass_g)) + 
+  geom_point(size = 3.5) + 
   coord_cartesian(xlim = c(25, 65), ylim = c(10, 25)) +
+  
+  # Add colours
+  scico::scale_color_scico(palette = "bamako", direction = -1) +
   rcartocolor::scale_fill_carto_d(palette = "Bold") +
+  
+  # Add labels
   labs(
     title = "Bill Dimensions of Brush-Tailed Penguins (*Pygoscelis*)",
     subtitle = 'A scatter plot of bill depth versus bill length.',
@@ -484,20 +490,24 @@ gf <- ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm)) +
     color = "Body mass (g)",
     fill = "Species"
   )
-
+gf
 ```
 
 
 ```{r}
  
 ## ellipsoids for all groups
-(gf +
+gf +
   ggforce::geom_mark_ellipse(
-    aes(fill = species, label = species), 
-    alpha = .15, show.legend = FALSE
+    aes(fill = species, 
+        label = species), 
+    alpha = .15, 
+    show.legend = FALSE
   ) +
-  geom_point(aes(color = body_mass_g), alpha = .6, size = 3.5)
-)
+  geom_point(aes(color = body_mass_g), 
+             alpha = .6, 
+             size = 3.5)
+
 
 
 ```
@@ -507,14 +517,19 @@ gf <- ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm)) +
 
  
 ## ellipsoids for specific subset
-(gf +
+gf +
   ggforce::geom_mark_ellipse(
-    aes(fill = species, label = species, filter = species == 'Gentoo'), 
-    alpha = 0, show.legend = FALSE
+    aes(fill = species, 
+        label = species, 
+        filter = species == 'Gentoo'), # Curious syntax here!!
+    alpha = 0.25, 
+    show.legend = FALSE
   ) +
- geom_point(aes(color = body_mass_g), alpha = .6, size = 3.5)
-#   coord_cartesian(xlim = c(25, 65), ylim = c(10, 25))
-)
+ geom_point(aes(color = body_mass_g), 
+            alpha = .6, 
+            size = 3.5) + 
+   coord_cartesian(xlim = c(25, 65), ylim = c(10, 25))
+
 
 
 ```
@@ -524,14 +539,16 @@ gf <- ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm)) +
 ```{r}
 
 ## circles
-(gf +
+gf +
   ggforce::geom_mark_circle(
-    aes(fill = species, label = species, filter = species == 'Gentoo'), 
-    alpha = 0, show.legend = FALSE
+    aes(fill = species, label = species, 
+        filter = species == 'Gentoo'), 
+    alpha = 0.25, 
+    show.legend = FALSE
   ) +
-  geom_point(aes(color = body_mass_g), alpha = .6, size = 3.5)
-)
- 
+  geom_point(aes(color = body_mass_g), 
+             alpha = .6, 
+             size = 3.5)
 
 ```
 
@@ -540,15 +557,17 @@ gf <- ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm)) +
 ```{r}
 
 ## rectangles
-(gf +
+gf +
   ggforce::geom_mark_rect(
-    aes(fill = species, label = species, filter = species == 'Gentoo'), 
-    alpha = 0, show.legend = FALSE
+    aes(fill = species, 
+        label = species, 
+        filter = species == 'Gentoo'), 
+    alpha = 0.25, 
+    show.legend = FALSE
   ) +
-  geom_point(aes(color = body_mass_g), alpha = .6, size = 3.5) 
-)
- 
-
+  geom_point(aes(color = body_mass_g), 
+             alpha = .6, 
+             size = 3.5) 
 
 ```
 
@@ -557,14 +576,17 @@ gf <- ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm)) +
 ```{r}
 library(concaveman)
 ## hull
-(gf +
+gf +
   ggforce::geom_mark_hull(
-    aes(fill = species, label = species, filter = species == 'Gentoo'), 
-    alpha = 0, show.legend = FALSE
+    aes(fill = species, 
+        label = species, 
+        filter = species == 'Gentoo'), 
+    alpha = 0.25, 
+    show.legend = FALSE
   ) +
-  geom_point(aes(color = body_mass_g), alpha = .6, size = 3.5)
-)
- 
+  geom_point(aes(color = body_mass_g), 
+             alpha = .6, 
+             size = 3.5)
 
 ```
 
@@ -572,7 +594,7 @@ library(concaveman)
 ## ggplot tricks
 
 ```{r}
-(gg0 <- 
+gg0 <- 
   ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm)) +
     ggforce::geom_mark_ellipse(
       aes(fill = species, label = species), 
@@ -590,7 +612,7 @@ library(concaveman)
       y = "Bill Depth (mm)",
       color = "Body mass (g)"
     )
-)
+gg0
 
 ```
 
@@ -610,12 +632,15 @@ library(concaveman)
 
 ```
 
+
+
+
 ### Legend Design
 
 ```{r}
 (gg2 <- gg1b + theme(legend.position = "top"))
 
-ggsave("06a_legend_position.pdf", width = 9, height = 8, device = cairo_pdf)
+#ggsave("06a_legend_position.pdf", width = 9, height = 8, device = cairo_pdf)
 
 (gg2b <- gg2 + 
   guides(color = guide_colorbar(title.position = "top", 
@@ -627,17 +652,19 @@ ggsave("06a_legend_position.pdf", width = 9, height = 8, device = cairo_pdf)
 ```
 
 
+
 ### Add Images
 
 ```{r}
 ## read PNG file from web
 png <- magick::image_read("https://raw.githubusercontent.com/allisonhorst/palmerpenguins/master/man/figures/culmen_depth.png")
+
 ## turn image into `rasterGrob`
 img <- grid::rasterGrob(png, interpolate = TRUE)
 
-gg5 <- gg4 +
-  annotation_custom(img, ymin = 18.5, ymax = 30.5, xmin = 55, xmax = 65.5) +
-    labs(caption = "Data: Gorman, Williams & Fraser (2014) *PLoS ONE* &bull; Illustration: Allison Horst")
+gg5 <- gg2b +
+  annotation_custom(img, ymin = 22, ymax = 25, xmin = 55, xmax = 65) +
+  labs(caption = "Data: Gorman, Williams & Fraser (2014) *PLoS ONE* &bull; Illustration: Allison Horst")
 gg5
 
 
@@ -678,6 +705,7 @@ gg6 <- ggplot(penguins_stats, aes(y = bill_ratio, x = species, fill = species, c
     plot.subtitle = element_text(margin = margin(t = 5, b = 10)),
     plot.margin = margin(10, 25, 10, 25)
   )
+gg6
 
 ```
 

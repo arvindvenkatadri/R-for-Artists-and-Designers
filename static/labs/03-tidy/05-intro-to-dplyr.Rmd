@@ -394,26 +394,27 @@ The operations/verbs used to manipulate two-table verbs are:
   - `inner_join()`
   
 ```{r,echo=FALSE}
-knitr::include_graphics("images/inner-join.gif")
+knitr::include_graphics("../images/inner-join.gif")
+
 ```
 
   - `left_join()`
   
 ```{r,echo=FALSE}
-knitr::include_graphics("images/left-join.gif")
+knitr::include_graphics("../images/left-join.gif")
 ```
 
   - `right_join()`
   
 ```{r,echo=FALSE}
-knitr::include_graphics("images/right-join.gif")
+knitr::include_graphics("../images/right-join.gif")
 ```
 
 
   - `full_join()`
     
 ```{r,echo=FALSE}
-knitr::include_graphics("images/full-join.gif")
+knitr::include_graphics("../images/full-join.gif")
 ```
 
   
@@ -421,14 +422,14 @@ knitr::include_graphics("images/full-join.gif")
   - `semi_join(x, y)` keeps all observations in x that have a match in y.
   
 ```{r,echo=FALSE}
-knitr::include_graphics("images/semi-join.gif")
+knitr::include_graphics("../images/semi-join.gif")
 ```
 
 
   - `anti_join(x, y)` drops all observations in x that have a match in y.
   
 ```{r,echo=FALSE}
-knitr::include_graphics("images/anti-join.gif")
+knitr::include_graphics("../images/anti-join.gif")
 ```
 
 
@@ -439,32 +440,32 @@ knitr::include_graphics("images/anti-join.gif")
   - union()
   
 ```{r,echo=FALSE}
-knitr::include_graphics("images/union.gif.")
+knitr::include_graphics("../images/union.gif.")
 ```
 
   - union_all(), 
   
 ```{r,echo=FALSE}
-knitr::include_graphics("images/union-all.gif.")
+knitr::include_graphics("../images/union-all.gif.")
 ```
 
   - intersect(), 
   
 ```{r,echo=FALSE}
-knitr::include_graphics("images/intersect.gif")
+knitr::include_graphics("../images/intersect.gif")
 ```
   
   - setdiff()
   
 ```{r,echo=FALSE}
-knitr::include_graphics("images/setdiff-rev.gif")
+knitr::include_graphics("../images/setdiff-rev.gif")
 ```
 
 * Tidyr Operations: 
-- pivot_longer()
-- pivot_wider()
+  - pivot_longer()
+  - pivot_wider()
   
 ```{r,echo=FALSE}
-knitr::include_graphics("images/tidyr-pivoting.gif")
+knitr::include_graphics("../images/tidyr-pivoting.gif")
 ```
 

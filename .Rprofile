@@ -38,7 +38,7 @@ options(
   )
 
 # fix Hugo version
-options(blogdown.hugo.version = "0.92.2")
+options(blogdown.hugo.version = "0.89.0")
 
 # Add new line at the end
 
