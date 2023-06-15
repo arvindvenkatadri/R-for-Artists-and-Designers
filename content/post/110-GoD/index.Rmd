@@ -4,7 +4,7 @@ subtitle: "The Grammar of Diagrams"
 summary: "The Grammar of Diagrams"
 author: "Arvind Venkatadri"
 date: "`r Sys.Date()`"
-weight: 110
+weight: 115
 view: 2
 featured: no
 image:

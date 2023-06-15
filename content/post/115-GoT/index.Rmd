@@ -4,7 +4,7 @@ date: "`r Sys.Date()`"
 subtitle: "The Grammar of Tables"
 summary: "The Grammar of Tables"
 author: Arvind Venkatadri
-weight: 115
+weight: 110
 view: 2
 featured: no
 image:
