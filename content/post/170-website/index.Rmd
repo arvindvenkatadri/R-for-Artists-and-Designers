@@ -4,7 +4,7 @@ subtitle: "Making a website to show it all"
 summary: "Making a website to show it all"
 author: "Arvind Venkatadri"
 date: "`r Sys.Date()`"
-weight: 140
+weight: 170
 view: 2
 featured: false
 draft: true

@@ -334,7 +334,7 @@ knitr::include_graphics("images/Ratio Interval Ordinal Nominal.PNG")
 ---
 ## Nightingale's Rose
 .pull-left[
-.small[Nightingale created a remarkable and original graphical display to show us just what hadd really gone on in the War. It was a .orange[Polar-Area Diagram] that showed how people had died during the period from July, 1854, through the end of the following year. 
+.small[Nightingale created a remarkable and original graphical display to show us just what had really gone on in the War. It was a .orange[Polar-Area Diagram] that showed how people had died during the period from July, 1854, through the end of the following year. 
 
 Nightingale's graph is like a pie chart, cut into twelve equal angles. These slices advance in a clockwise direction, one each month. The radius shows how many deaths occurred in that month. We see little short slices in April, May and June of 1854. After the troops land in the Crimea, the slices begin reaching far outward in the radial direction.
 

@@ -1,8 +1,8 @@
 ---
-title: "Lab-14: Iteration: Learning to purrr"
+title: "Lab-14: `Oh, you’re sure to do that`, said the Cat, `if you only walk long enough.`"
 author: "Arvind Venkatadri"
-subtitle: "Performing Iterations in R"
-summary: "Performing Iterations in R"
+subtitle: "Using purrr to Perform Iterations in R"
+summary: "Using purrr to Perform Iterations in R"
 date: "`r Sys.Date()`"
 weight: 125
 view: 2
