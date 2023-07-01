@@ -60,7 +60,7 @@ library(RSelenium)
 > daisies, who were just beginning again, she whispered, 'If you don't
 > hold your tongues, I'll pick you!'
 >
->  - Through the Looking Glass. Chapter 2. Lewis Carroll
+> -   Through the Looking Glass. Chapter 2. Lewis Carroll
 
 Often the data we want is not available readily in a form we can import
 into R. It may be available as part of a table on a webpage, or even on
