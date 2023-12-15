@@ -1,0 +1,82 @@
+---
+title: "Lab-15: O Tiger-lily, I wish you could talk!"
+author: "Arvind Venkatadri"
+summary: "Scraping messy websites for data"
+subtitle: "Using `rvest` and `rselenium` to scrape the messy websites for data"
+date: "`r Sys.Date()`"
+weight: 150
+view: 2
+output:
+  html_document:
+    toc_float: true
+    theme: united
+    toc: true
+    code_folding: true
+featured: no
+image:
+  placement: 2
+  caption: 'Image credit: [**Alice In Wonderland dot Net**](https://www.alice-in-wonderland.net/)'
+  focal_point: ""
+  preview_only: true
+projects: []
+# links:
+# - icon: flask
+#   icon_pack: fas
+#   name: lab
+#   url: /labs/06-spatial/06-Grammar-of-Maps.html
+#   
+# - icon: magic
+#   icon_pack: fas
+#   name: Introduction Slides
+#   url: /slides/06-spatial/06-Spatial-Data-in-R.html
+#   
+# - icon: flask
+#   icon_pack: fas
+#   name: Interactive Maps with leaflet and mapview
+#   url: /labs/06-spatial/PlayingwithLeaflet.html
+---
+
+![](featured.jpg){fig-align="center" width="248"}
+
+## Introduction
+
+> 'Silence, every one of you!' cried the Tiger-lily, waving itself
+> passionately from side to side, and trembling with excitement. 'They
+> know I can't get at them!' it panted, bending its quivering head
+> towards Alice, 'or they wouldn't dare to do it!'
+>
+> 'Never mind!' Alice said in a soothing tone, and stooping down to the
+> daisies, who were just beginning again, she whispered, 'If you don't
+> hold your tongues, I'll pick you!'
+>
+> -   Through the Looking Glass. Chapter 2. Lewis Carroll
+
+Often the data we want is not available readily in a form we can import
+into R. It may be available as part of a table on a webpage, or even on
+several webpages that require human interaction to navigate, view, and
+copy. These operations can be automated to a great extent ( based on the
+complexity of the website) and the resulting data neatly made available
+as a tibble in a R session.
+
+We will learn about the `rvest` package to scrape data from static
+pages, and then the `RSelenium` package to obtain data from interactive
+websites.
+
+
+## Setting up the R packages
+
+```{r}
+#| label: setup
+knitr::opts_chunk$set(message = FALSE)
+library(tidyverse)
+library(rvest)
+library(RSelenium)
+
+```
+
+
+## Conclusion
+
+## References
+
+1.  <https://rsconnect.biostat.jhsph.edu/ocs-bp-youth-mental-health-interactive/#Basic_steps_of_web_scraping>

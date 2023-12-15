@@ -1,10 +1,10 @@
 ---
-title: "Lab-12: The Queen of Hearts, She Made some Tarts"
+title: "Lab-11: The Queen of Hearts, She Made some Tarts"
 subtitle: "The Grammar of Diagrams"
 summary: "The Grammar of Diagrams"
 author: "Arvind Venkatadri"
 date: "`r Sys.Date()`"
-weight: 115
+weight: 110
 view: 2
 featured: no
 image:
@@ -23,12 +23,22 @@ output:
 links:
 - icon: flask
   icon_pack: fas
-  name: lab
-  url: /labs/08-diagrams/08-Grammar-of-Diagrams.html
+  name: Using DiagrammeR
+  url: /labs/08-diagrams/DiagrammeR/DiagrammeR.html
+  links:
+- icon: flask
+  icon_pack: fas
+  name: Using nomnoml
+  url: /labs/08-diagrams/nomnoml/nomnoml.html
+  links:
+- icon: flask
+  icon_pack: fas
+  name: Using D2
+  url: /labs/08-diagrams/D2/d2.html
 - icon: magic
   icon_pack: fas
-  name: slides
-  url: /slides/08-diagrams/08-Grammar-of-Diagrams.html
+  name: Using bpmnR
+  url: /labs/08-diagrams/bpmnR/bpmnR.html
 ---
 
 ![](featured.jpg)
@@ -36,11 +46,28 @@ links:
 
 ## Introduction
 
-We can use R to create complicated *diagrams* too ! Flow charts, Gantt charts, Org charts...all with R. We will use packages such as `nomnoml` and `DiagrammeR` to achieve these ends.
+We can use R to create complicated *diagrams* too ! Flow charts, Gantt charts, Org charts...all with R. We will use packages such as `nomnoml` and `DiagrammeR`, also try the language D2 <https://d2lang.com> to achieve these ends. There is also an R package called `bpmnR` that allows to create Business Process Model Diagrams <https://www.bpmn.org>
+
+```{r setup, include = TRUE}
+
+library(tidyverse)
+library(DiagrammeR)
+library(nomnoml)
+library(bpmnR)
+
+```
 
 
-# References
+## References
 
 1. [The nomnoml package in R](https://nomnoml.com)
 
 2. [ Rich Iannone's DiagrammeR package](https://rich-iannone.github.io/DiagrammeR/graphviz_and_mermaid.html)
+
+3. https://www.bpmn.org
+
+4. https://d2lang.com
+
+5. A list of Text-to-Diagram tools! <https://xosh.org/text-to-diagram/>
+
+

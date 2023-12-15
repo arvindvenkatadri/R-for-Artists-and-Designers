@@ -1,10 +1,10 @@
 ---
-title: "Lab-12: The Queen of Hearts, She Made some Tarts"
+title: "Lab-11: The Queen of Hearts, She Made some Tarts"
 subtitle: "The Grammar of Diagrams"
 summary: "The Grammar of Diagrams"
 author: "Arvind Venkatadri"
-date: "2023-06-15"
-weight: 115
+date: "2023-12-15"
+weight: 110
 view: 2
 featured: no
 image:
@@ -23,12 +23,22 @@ output:
 links:
 - icon: flask
   icon_pack: fas
-  name: lab
-  url: /labs/08-diagrams/08-Grammar-of-Diagrams.html
+  name: Using DiagrammeR
+  url: /labs/08-diagrams/DiagrammeR/DiagrammeR.html
+  links:
+- icon: flask
+  icon_pack: fas
+  name: Using nomnoml
+  url: /labs/08-diagrams/nomnoml/nomnoml.html
+  links:
+- icon: flask
+  icon_pack: fas
+  name: Using D2
+  url: /labs/08-diagrams/D2/d2.html
 - icon: magic
   icon_pack: fas
-  name: slides
-  url: /slides/08-diagrams/08-Grammar-of-Diagrams.html
+  name: Using bpmnR
+  url: /labs/08-diagrams/bpmnR/bpmnR.html
 ---
 
 
@@ -36,12 +46,29 @@ links:
 <p><img src="featured.jpg" /></p>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>We can use R to create complicated <em>diagrams</em> too ! Flow charts, Gantt charts, Org charts…all with R. We will use packages such as <code>nomnoml</code> and <code>DiagrammeR</code> to achieve these ends.</p>
+<p>We can use R to create complicated <em>diagrams</em> too ! Flow charts, Gantt charts, Org charts…all with R. We will use packages such as <code>nomnoml</code> and <code>DiagrammeR</code>, also try the language D2 <a href="https://d2lang.com" class="uri">https://d2lang.com</a> to achieve these ends. There is also an R package called <code>bpmnR</code> that allows to create Business Process Model Diagrams <a href="https://www.bpmn.org" class="uri">https://www.bpmn.org</a></p>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.1.4     ✔ readr     2.1.4
+## ✔ forcats   1.0.0     ✔ stringr   1.5.1
+## ✔ ggplot2   3.4.4     ✔ tibble    3.2.1
+## ✔ lubridate 1.9.3     ✔ tidyr     1.3.0
+## ✔ purrr     1.0.2     
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<pre class="r"><code>library(DiagrammeR)
+library(nomnoml)
+library(bpmnR)</code></pre>
 </div>
-<div id="references" class="section level1">
-<h1>References</h1>
+<div id="references" class="section level2">
+<h2>References</h2>
 <ol style="list-style-type: decimal">
 <li><p><a href="https://nomnoml.com">The nomnoml package in R</a></p></li>
 <li><p><a href="https://rich-iannone.github.io/DiagrammeR/graphviz_and_mermaid.html">Rich Iannone’s DiagrammeR package</a></p></li>
+<li><p><a href="https://www.bpmn.org" class="uri">https://www.bpmn.org</a></p></li>
+<li><p><a href="https://d2lang.com" class="uri">https://d2lang.com</a></p></li>
+<li><p>A list of Text-to-Diagram tools! <a href="https://xosh.org/text-to-diagram/" class="uri">https://xosh.org/text-to-diagram/</a></p></li>
 </ol>
 </div>

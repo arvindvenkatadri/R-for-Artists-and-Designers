@@ -1,7 +1,7 @@
 ---
 title: 'Lab-3: Drink Me!'
-subtitle: 'Working with R Markdown'
-summary: Working with R Markdown
+subtitle: 'Working with R Markdown and Quarto'
+summary: Working with R Markdown and Quarto
 date: "`r Sys.Date()`"
 featured: false
 draft: false

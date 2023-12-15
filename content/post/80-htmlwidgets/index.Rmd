@@ -1,5 +1,5 @@
 ---
-title: "Lab-8: Did you ever see such a thing as a drawing of a muchness?"
+title: "Lab-8: A Much of a Muchness?"
 subtitle: "Working with htmlwidgets !!"
 author: "Arvind Venkatadri"
 date: "`r Sys.Date()`"

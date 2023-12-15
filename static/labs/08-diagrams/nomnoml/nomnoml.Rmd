@@ -1,0 +1,576 @@
+---
+title: "The Grammar of Diagrams"
+subtitle: " Converting Text to Diagrams in R"
+author: Arvind Venkatadri
+affiliation: Srishti Manipal Institute of Art, Design, and Technology, Bangalore
+output:
+  html_document:
+    theme: flatly
+    toc: TRUE
+    toc_float: TRUE
+    toc_depth: 2
+    number_sections: TRUE
+    code_folding: hide
+    code_download: TRUE
+abstract: Part of the `R for Artists and Designers` workshop course at the School of Foundation Studies, Srishti Manipal Institute of Art, Design, and Technology, Bangalore.
+---
+
+# Introduction
+
+There are many presentation and drawing tools out there. And these allow the user full control over the diagram so generally result in prettier diagrams that can convey more information to the audience at that point in time.
+
+But that point in time passes, and **pretty pictures can quickly become out-of-date** and, ironically, misinforming if they don't match the reality of the system they are describing. This is especially so if one team is drawing the pretty pictures, and another team is writing the software/implementing the system.
+
+Having **diagrams as code that can live beside the system design/code**, that the stakeholders are equally comfortable editing and viewing,reduces the gap i.e. "Where system diagrams meet system reality".
+
+We will "explore" two packages to do this: `DiagrammeR`
+and `nomnoml`. Each of these follows a specific grammar so that sets of "sentences" will morph into very different kinds of diagrams.
+
+
+# Goals
+
+At the end of this Lab session, we will be able to:
+
+- Make conceptual Block Diagrams of different types, using `text`
+- Be able to create Flow Charts, Sequence Diagrams, Gantt Charts etc. to represent diverse realities in diagram form
+- Be able to use `mermaid` and `nomoml` syntax in R
+
+# Packages
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE)
+library(tidyverse)
+library(DiagrammeR)
+library(nomnoml)
+```
+
+We will work with `Diagrammer` first and then with `nomnoml`. 
+
+
+# Using DiagrammeR
+
+`DiagrammeR` is a unique package since it allows you create Diagrams **and** the Network Diagrams that you have created using `tidygraph` and `ggraph`. And it uses the tidyverse pipe `%>%` syntax too! So it is worth exploring in its entirety. But that is for another time, or perhaps you can explore this yourself!!
+
+
+**Mermaid** language (**What !! Another language?!!!**) is an approach to creating diagrams using text.  It is an integral part of the `DiagrammeR` R package. And hence the code you write is actually R code, to create Diagrams.
+
+## Sequence Diagram
+
+Look at the code below: What do you think it represents?
+
+```{r Sequence_1}
+DiagrammeR("
+sequenceDiagram
+Arvind ->> Anamika: Why are you late today?
+Anamika ->> Anamika: Ulp...
+Anamika ->> Arvind: I am sorry... <br> may I come in please?
+
+Arvind ->> Komal: And you? What kept you?
+Komal ->> Anamika: (Quietly) He's having a bad day, dude...
+Anamika ->> Komal: (Whisper) Boomer...
+")
+
+```
+This is a simple Sequence Diagram! Shows a **strictly** imaginary exchange between a pair of students and an unknown Faculty Member.
+
+Let us now see how we can embellish this kind of diagram. Can we have a Garden of Forking Paths?
+
+```{r}
+DiagrammeR("
+    mermaid.sequenceConfig = {
+    diagramMarginX: 50,
+    diagramMarginY: 10,
+    boxTextMargin: 5,
+    noteMargin: 10,
+    messageMargin: 35,
+    mirrorActors: true
+};
+")
+```
+
+
+```{r Sequence_2}
+
+DiagrammeR("
+        sequenceDiagram
+        
+        alt Anamika is always punctual
+        Arvind ->> Anamika: Why haven't you put up your Daily Reflection?
+        Anamika ->> Anamika: Ulp...
+        Note right of Anamika : I have had it today..
+        Anamika ->> Arvind: I am sorry... 
+        Arvind ->> Anamika: Ok write it today
+        
+        else Anamika is usually tardy
+        Arvind ->> Anamika: Why haven't you put up your Daily Reflection?
+        Anamika ->> Anamika: Ulp...
+        Anamika ->> Arvind: I am sorry... 
+        Arvind ->> Anamika: This is not acceptable and will reflect in your grade
+        end
+        
+        Arvind ->> Komal: And you? What kept you?
+        Komal ->> Anamika: (Quietly) He's having a bad day, dude...
+        Anamika ->> Komal: (Whisper) Boomer...
+        Note over Anamika,Komal: Giggle...
+")
+
+```
+
+From here: <https://cyberhelp.sesync.org/blog/visualization-with-diagrammeR.html>
+
+
+```{r}
+grViz("digraph{
+
+      graph[rankdir = LR]
+  
+      node[shape = rectangle, style = filled]
+  
+      node[fillcolor = Coral, margin = 0.2]
+      A[label = 'Figure 1: Map']
+      B[label = 'Figure 2: Metrics']
+  
+      node[fillcolor = Cyan, margin = 0.2]
+      C[label = 'Figures.Rmd']
+  
+      node[fillcolor = Violet, margin = 0.2]
+      D[label = 'Analysis_1.R']
+      E[label = 'Analysis_2.R']
+  
+      subgraph cluster_0 {
+        graph[shape = rectangle]
+        style = rounded
+        bgcolor = Gold
+    
+        label = 'Data Source 1'
+        node[shape = rectangle, fillcolor = LemonChiffon, margin = 0.25]
+        F[label = 'my_dataframe_1.csv']
+        G[label = 'my_dataframe_2.csv']
+      }
+  
+      subgraph cluster_1 {
+         graph[shape = rectangle]
+         style = rounded
+         bgcolor = Gold
+    
+         label = 'Data Source 2'
+         node[shape = rectangle, fillcolor = LemonChiffon, margin = 0.25]
+         H[label = 'my_dataframe_3.csv']
+         I[label = 'my_dataframe_4.csv']
+      }
+  
+      edge[color = black, arrowhead = vee, arrowsize = 1.25]
+      C -> {A B}
+      D -> C
+      E -> C
+      F -> D
+      G -> D
+      H -> E
+      I -> E
+      
+      }")
+
+```
+
+
+```{r}
+mermaid("
+        graph BT
+        A((Salinity))
+        A-->B(Barnacles)
+        B-.->|-0.10|B1{Mussels}
+        A-- 0.30 -->B1
+
+        C[Air Temp]
+        C-->B
+        C-.->E(Macroalgae)
+        E-->B1
+        C== 0.89 ==>B1
+
+        style A fill:#FFF, stroke:#333, stroke-width:4px
+        style B fill:#9AA, stroke:#9AA, stroke-width:2px
+        style B1 fill:#879, stroke:#333, stroke-width:1px
+        style C fill:#ADF, stroke:#333, stroke-width:2px
+        style E fill:#9C2, stroke:#9C2, stroke-width:2px
+
+        ")
+```
+
+```{r}
+DiagrammeR("
+sequenceDiagram
+  Arvind ->>ticket seller: ask ticket
+  ticket seller->>database: seats
+  alt tickets available
+    database->>ticket seller: ok
+    ticket seller->>customer: confirm
+    Arvind ->>ticket seller: ok
+    ticket seller->>database: book a seat
+    ticket seller->>printer: print ticket
+  else sold out
+    database->>ticket seller: none left
+    ticket seller->>customer: sorry
+  end
+")
+```
+```{r}
+DiagrammeR("
+  graph LR
+    A-->B
+    A-->C
+    C-->E
+    B-->D
+    C-->D
+    D-->F
+    E-->F
+")
+
+```
+
+```{r }
+DiagrammeR(
+"graph TB;
+A(Rounded)-->B[Squared];
+B-->C{A Decision};
+C-->D[Square One];
+C-->E[Square Two];
+
+%% Now styling these blocks
+style A fill:#E5E25F;  
+style B fill:#87AB51; 
+style C fill:#3C8937;
+style D fill:#23772C;  
+style E fill:#B6E6E6;
+"
+)
+```
+
+
+```{r DiagrammeR, fig.width=7, fig.height= 8, fig.align='center'}
+
+  grViz("
+digraph boxes_and_circles {
+
+  # a 'graph' statement
+  graph [overlap = true, fontsize = 10,forcelabels = true]
+
+  # several 'node' statements
+  node [shape = box,fontname = Helvetica, color = red, style = filled]
+  A[label = 'This is \\n an internal \\n label', xlabel = 'This is \\nan external \\nlabel']; B; C; D; E; F
+
+  node [shape = circle, fixedsize = true, color = palegreen, width = 0.9] // sets as circles
+  1; 2; 3; 4; 5; 6; 7; 8
+
+  # several 'edge' statements
+  A->{1,2,3,4} B->2 B->3 B->4 C->A
+  1->D E->A 2->4 1->5 1->F
+  E->6 4->6 5->7 6->7 3->8 3->1
+}
+")
+
+```
+
+
+
+
+## Sequence Diagram-2
+
+## Sequence Diagram 3
+
+## Mindmap
+
+
+
+## Gantt Chart
+
+
+
+## Flow chart
+
+
+
+
+
+
+# Using `nomnoml`
+
+`nomnoml` is touted as a "sassy" UML diagram creator, in R. It allows us
+to rapidly create many of diagrams that we can use in System Descriptions.
+
+The syntax options for nomnoml and what can be created is described here
+<https://nomnoml.com/>
+
+The R pdf Manual for nomnoml at
+[CRAN](https://cran.r-project.org/web/packages/nomnoml/nomnoml.pdf) (
+read just the first half-page and you are ready!!)
+
+So what can it do?
+
+```{nomnoml}
+#import: filename
+#arrowSize: 1
+#bendSize: 0.3
+#direction: down | right
+#gutter: 5
+#edgeMargin: 0
+#gravity: 1
+#edges: hard | rounded
+#background: lightgrey
+
+//nested list of colours
+//#fill: #fcfcfc; #eee8d5; #fdf6e3
+#fill: lightgreen; pink;
+#fillArrows: false
+#font: Calibri
+#fontSize: 12
+#leading: 1.25
+#lineWidth: 3
+#padding: 8
+#spacing: 40
+#stroke: #33322E
+#title: filename
+#zoom: 1
+#acyclicer: greedy
+#ranker: network-simplex | tight-tree | longest-path
+
+[Pirate|eyeCount: Int|raid()|pillage()|
+  [beard]--[parrot]
+  [beard]-:>[foul mouth]
+  ]
+
+[<table>mischief | bawl | sing || yell | drink]
+
+[<abstract>Marauder]<:--[Pirate]
+[Pirate]- 0..7[mischief]
+[jollyness]_>[Pirate]
+[jollyness]->[rum]
+[jollyness]->[singing]
+[Pirate]-> *[rum|tastiness: Int|swig()]
+[Pirate]->[singing]
+[singing]<->[rum]
+
+[<start>st]->[<state>plunder]
+[plunder]->[<choice>more loot]
+[more loot]->[st]
+[more loot] no ->[<end>e]
+
+[<actor>Sailor] - [<usecase>shiver me;timbers]
+```
+
+## Some definitions on the "grammar of shapes" in `nomnoml`
+
+1.  Association Types: Connectors between blocks( i.e. Classifiers)
+
+2.  Classifier Types: Kinds of **blocks**.
+
+3.  Directive Types: Directives change the nature of the diagram
+    rendered, by affective parameters like colour, direction and
+    margins. ( Ha! VC people!!)
+
+CSS colours <https://www.w3schools.com/cssref/css_colors.asp> Only these
+colours are permitted, so use either the names or these specific colour
+hash codes. Any general hash code will *not* render.
+
+```{nomnoml association-1}
+//association-1
+[a] - [b] 
+
+//association-2
+[b] -> [c] 
+
+//association_3
+[c] <-> [a]
+
+//dependency-1
+[a] <-->[d]
+
+//dependency-2
+#.ell: visual=ellipse fill=#fbfb09 bold
+#.arvind: visual=rhomb fill=#ff2234 bold
+[<ell>e]-->[a]
+//generalization-1
+[c]-:>[<arvind>k]
+
+//implementation --:>
+[k]--:>[d]
+```
+
+```{nomnoml association-2,svg=TRUE}
+//composition +-
+[a]+-[b]
+//composition +->
+[b]-+[c]
+//aggregation o-
+[c]o->[d]
+//aggregation o->
+[d]o->[a]
+//note --
+[d]--[everything happens;here]
+//hidden -/-
+[d]-/-[f]
+////////////////////////
+//weightless edge _>
+//[k]_>[d] //not working
+//weightless dashed__
+//[d]__[j] //not working
+```
+
+### Classifier Types
+
+These are different kinds of **blocks**.
+
+```{nomnoml, svg=TRUE}
+[class]->[<abstract> abstract]
+[<abstract> abstract]-:>[<instance> instance]
+[<instance> instance]-:>[<note> note]
+[<note> note]-->[<reference> reference]
+```
+
+```{nomnoml}
+[<package> package|components]-->[<frame> frame|]
+[<database> database]-->[<start> start]
+[<end> end]-o>[<state> state]
+```
+
+```{nomnoml}
+[<choice> choice]--->[<sync> sync]
+[<input> input]->[<sender> sender]
+[<receiver> receiver]o-[<transceiver> transceiver]
+```
+
+```{nomnoml, svg=TRUE}
+#direction:down
+#background:lightgrey
+#fill: fuchsia; green; purple
+#fillArrows: false
+#font: Courier
+[class]->[<abstract> abstract]
+[<abstract> abstract]-:>[<instance> instance]
+[<instance> instance]-:>[<note> note]
+[<note> note]-->[<reference> reference]
+```
+
+```{nomnoml}
+#font: CenturySchoolbook
+#fill: lightyellow
+#stroke: green
+
+[<actor> actor]---[<usecase> usecase]
+[<usecase> usecase]<-->[<label> label]
+[<usecase> usecase]-/-[<hidden> hidden]
+```
+
+```{nomnoml}
+[<table> table| a | 5 || b | 7]
+```
+
+```{nomnoml}
+[<table> table| c | 9 ]
+```
+
+## Directives
+
+Directives change the nature of the diagram rendered, by affective
+parameters like colour, direction and margins.
+
+## Custom classifier styles
+
+A directive that starts with "." define a **classifier's style**. The
+style is written as a space separated list of *modifiers* and *key/value
+pairs*.
+
+```{nomnoml}
+#.box: fill=#8f8 dashed
+#.blob: visual=ellipse title=bold
+#.arvind: visual=rhomb title=bold dashed fill=CornFlowerBlue
+[<box> GreenBox]
+[<blob> Blobby]
+[<arvind> Someone]
+```
+
+## `nomnoml` Key/value pairs
+
+-   fill=(any css color)
+-   stroke=(any css color)
+-   align=center align=left
+-   direction=right direction=down
+-   visual=actor
+-   visual=class
+-   visual=database
+-   visual=ellipse
+-   visual=end
+-   visual=frame
+-   visual=hidden
+-   visual=input
+-   visual=none
+-   visual=note
+-   visual=package
+-   visual=receiver
+-   visual=rhomb
+-   visual=roundrect
+-   visual=sender
+-   visual=start
+-   visual=sync
+-   visual=table
+-   visual=transceiver
+
+## Text modifiers
+
+bold center italic left underline
+
+```{nomnoml}
+# .box: fill=#8f8 dashed
+# .blob: visual=rhomb title=bold fill=#8f8 dashed
+
+[A]-[B]
+[B]--[<usecase>C]
+[C]-[<box> D]
+[B]--[<blob> Jabba;TheHut]
+```
+
+```{nomnoml}
+[a] ->[b]
+[b] -:> [c]
+[c]o->[d]
+[d]-/-[e]
+```
+
+```{nomnoml}
+#fill: lightgreen; lightblue; lightyellow; grey; white
+
+[<table> table | c | 9 ]
+
+[R | [<table> Packages |
+         Base R |
+         [ <table> tidyverse| ggplot | tidyr | readr |
+             [<table> dplyr|
+                 magrittr | Others]]]]
+```
+
+```{nomnoml}
+#fill: lightgreen; lightblue; lightyellow; pink; white
+
+[RStudio | [R | [<table> Packages |
+                   Base R | [ tidyverse |
+                               ggplot | tidyr | readr |
+                               [dplyr]--[magrittr]
+                               [dplyr]--[Others]
+                             | tibble
+                             ]
+                 | lubridate | DiagrammeR | Lattice]]]
+```
+
+```{nomnoml mindmap}
+[Linux]+-[Ubuntu]
+[Linux]+-[Mint]
+[Ubuntu]--[Mint]
+[Linux]+-[Rosa Linux]
+[Linux]+-[Mx Linux]
+[Debian]-+[Linux]
+
+
+[Fedora]-+[Linux]
+[Puppy Linux]-+[Linux]
+[Personal Pups]-+[Puppy Linux]
+
+```

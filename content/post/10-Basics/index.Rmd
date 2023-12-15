@@ -1,6 +1,6 @@
 ---
-title: "Lab-1: Science, Human Experience, Experiments, and Data"
-subtitle: ""
+title: "Lab-1: What is the use of a book with no pictures?"
+subtitle: "Science, Human Experience, Experiments, and Data"
 author: "Arvind Venkatadri"
 date: "`r Sys.Date()`"
 weight: 10
@@ -27,8 +27,8 @@ tags:
 - Experience
 - Measurement
 image:
-  caption: Photo by rawpixel on Unsplash
-  focal_point: Smart
+  placement: 2
+  caption: 'Image credit: [**Pinterest**](https://www.pinterest.com/pin/130604457932666664/)'
 external_link: ""
 links:
 - icon: book

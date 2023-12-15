@@ -1,0 +1,639 @@
+---
+title: "Lab-14: `Oh, you’re sure to do that`, said the Cat, `if you only walk long enough.`"
+author: "Arvind Venkatadri"
+subtitle: "Using purrr to Perform Iterations in R"
+summary: "Using purrr to Perform Iterations in R"
+date: "2023-12-15"
+weight: 140
+view: 2
+output:
+  html_document:
+    toc_float: true
+    theme: united
+    toc: true
+    code_folding: true
+featured: no
+image:
+  placement: 2
+  caption: 'Image credit: [**Alice In Wonderland dot Net**](https://www.alice-in-wonderland.net/)'
+  focal_point: ""
+  preview_only: true
+projects: []
+# links:
+# - icon: flask
+#   icon_pack: fas
+#   name: lab
+#   url: /labs/06-spatial/06-Grammar-of-Maps.html
+#   
+# - icon: magic
+#   icon_pack: fas
+#   name: Introduction Slides
+#   url: /slides/06-spatial/06-Spatial-Data-in-R.html
+#   
+# - icon: flask
+#   icon_pack: fas
+#   name: Interactive Maps with leaflet and mapview
+#   url: /labs/06-spatial/PlayingwithLeaflet.html
+---
+
+
+
+<div id="setting-up-the-r-packages" class="section level2">
+<h2>Setting up the R packages</h2>
+<pre class="r"><code>knitr::opts_chunk$set(message = FALSE)
+library(tidyverse)</code></pre>
+<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.1.4     ✔ readr     2.1.4
+## ✔ forcats   1.0.0     ✔ stringr   1.5.1
+## ✔ ggplot2   3.4.4     ✔ tibble    3.2.1
+## ✔ lubridate 1.9.3     ✔ tidyr     1.3.0
+## ✔ purrr     1.0.2     
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<pre class="r"><code>library(janitor)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;janitor&#39;
+## 
+## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     chisq.test, fisher.test</code></pre>
+<pre class="r"><code>library(fs)
+library(tidystringdist)
+
+library(gapminder)
+library(ggformula)</code></pre>
+<pre><code>## Loading required package: scales
+## 
+## Attaching package: &#39;scales&#39;
+## 
+## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     discard
+## 
+## The following object is masked from &#39;package:readr&#39;:
+## 
+##     col_factor
+## 
+## Loading required package: ggridges
+## 
+## New to ggformula?  Try the tutorials: 
+## 	learnr::run_tutorial(&quot;introduction&quot;, package = &quot;ggformula&quot;)
+## 	learnr::run_tutorial(&quot;refining&quot;, package = &quot;ggformula&quot;)</code></pre>
+<p><img src="featured.jpg" fig-align="center" width="248" /></p>
+</div>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>Often we want to perform the same operation on several different sets of
+data. Rather than repeat the operation for each instance of data, it is
+faster, more intuitive, and less error-prone if we create a data
+structure that holds all the data, and use the <code>map-*</code> series functions
+from the <code>purrr</code> package to perform all the repeated operations in one
+shot.</p>
+<p>This requires getting used to. We need to understand: - the data
+structure - the iteration mechanism using <code>map</code> functions - the form of
+the results</p>
+</div>
+<div id="case-study-1-multiple-models-for-life-expectancy-with-gapminder" class="section level2">
+<h2>Case Study #1: Multiple Models for Life Expectancy with <code>gapminder</code></h2>
+<p>We will start with a complete case study and then work backwards to
+understand the various pieces of code that make it up.</p>
+<p>Let us look at the <code>gapminder</code> dataset:</p>
+<pre class="r"><code>skimr::skim(gapminder)</code></pre>
+<table>
+<caption><span id="tab:unnamed-chunk-2">Table 1: </span>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">gapminder</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">1704</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">6</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">factor</td>
+<td align="left">2</td>
+</tr>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">4</td>
+</tr>
+<tr class="even">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: factor</strong></p>
+<table>
+<colgroup>
+<col width="14%" />
+<col width="10%" />
+<col width="14%" />
+<col width="8%" />
+<col width="9%" />
+<col width="41%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">ordered</th>
+<th align="right">n_unique</th>
+<th align="left">top_counts</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">country</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">142</td>
+<td align="left">Afg: 12, Alb: 12, Alg: 12, Ang: 12</td>
+</tr>
+<tr class="even">
+<td align="left">continent</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">5</td>
+<td align="left">Afr: 624, Asi: 396, Eur: 360, Ame: 300</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table style="width:100%;">
+<colgroup>
+<col width="11%" />
+<col width="8%" />
+<col width="11%" />
+<col width="9%" />
+<col width="10%" />
+<col width="7%" />
+<col width="8%" />
+<col width="8%" />
+<col width="9%" />
+<col width="10%" />
+<col width="4%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">p0</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p100</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">year</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1979.50</td>
+<td align="right">17.27</td>
+<td align="right">1952.00</td>
+<td align="right">1965.75</td>
+<td align="right">1979.50</td>
+<td align="right">1993.25</td>
+<td align="right">2007.0</td>
+<td align="left">▇▅▅▅▇</td>
+</tr>
+<tr class="even">
+<td align="left">lifeExp</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">59.47</td>
+<td align="right">12.92</td>
+<td align="right">23.60</td>
+<td align="right">48.20</td>
+<td align="right">60.71</td>
+<td align="right">70.85</td>
+<td align="right">82.6</td>
+<td align="left">▁▆▇▇▇</td>
+</tr>
+<tr class="odd">
+<td align="left">pop</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">29601212.32</td>
+<td align="right">106157896.74</td>
+<td align="right">60011.00</td>
+<td align="right">2793664.00</td>
+<td align="right">7023595.50</td>
+<td align="right">19585221.75</td>
+<td align="right">1318683096.0</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">gdpPercap</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">7215.33</td>
+<td align="right">9857.45</td>
+<td align="right">241.17</td>
+<td align="right">1202.06</td>
+<td align="right">3531.85</td>
+<td align="right">9325.46</td>
+<td align="right">113523.1</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+</tbody>
+</table>
+<p>We have <code>lifeExp</code>, <code>gdpPerCap</code>, and <code>pop</code> as Quant variables over time
+(<code>year</code>) for each country in the world. Suppose now that we wish to
+create Linear Regression Models predicting <code>lifeExp</code> using <code>year</code>,
+<code>gdpPercap</code> and <code>pop</code> for each country. The straightforward by
+labourious and naive way would be to use the <code>lm</code> command after
+filtering the dataset for each country, creating 140+ Linear Models
+manually! This would be horribly tedious!</p>
+<p>There is a better way with <code>purrr</code>, and also more recently, with <code>dplyr</code>
+itself. Let us see both methods, the established <code>purrr</code> method first,
+and the new <code>dplyr</code> based method thereafter.</p>
+</div>
+<div id="eda-plots" class="section level2">
+<h2>EDA Plots</h2>
+<p>We can first plot <code>lifeExp</code> over <code>year</code>, grouped by <code>country</code>:</p>
+<pre class="r"><code>ggplot(gapminder,aes(x = year, y = lifeExp, colour = country)) + 
+  geom_line(show.legend = FALSE) + 
+  theme_classic()</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(gapminder,aes(x = year, y = lifeExp, colour = country)) + 
+  geom_line(show.legend = FALSE) + 
+  facet_wrap(~ continent) + 
+  theme_classic()</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-3-2.png" width="672" /></p>
+<p>Constructing a Linear Model:</p>
+<pre class="r"><code>model &lt;- lm(lifeExp ~ year, data = gapminder)
+summary(model)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = lifeExp ~ year, data = gapminder)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -39.949  -9.651   1.697  10.335  22.158 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -585.65219   32.31396  -18.12   &lt;2e-16 ***
+## year           0.32590    0.01632   19.96   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 11.63 on 1702 degrees of freedom
+## Multiple R-squared:  0.1898,	Adjusted R-squared:  0.1893 
+## F-statistic: 398.6 on 1 and 1702 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>model %&gt;% broom::tidy() # Parameters of the Model</code></pre>
+<pre><code>## # A tibble: 2 × 5
+##   term        estimate std.error statistic  p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept) -586.      32.3        -18.1 2.90e-67
+## 2 year           0.326    0.0163      20.0 7.55e-80</code></pre>
+<pre class="r"><code>model %&gt;% broom::glance() # Statistics of the Model</code></pre>
+<pre><code>## # A tibble: 1 × 12
+##   r.squared adj.r.squared sigma statistic  p.value    df logLik    AIC    BIC
+##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1     0.190         0.189  11.6      399. 7.55e-80     1 -6598. 13202. 13218.
+## # ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
+<p>Since the slope 0.3259038 is positive, life expectancy
+has been increasing over the years. How do we do this for each country?
+We need to use the <code>split-apply-combine</code> method to achieve this.</p>
+<p>The combination of <code>group_by</code> and <code>summarise</code> is a example of the
+<code>split &gt; apply &gt; combine</code> method. For example, we could (split) the data
+by country, calculate the linear model each group (apply), and (combine)
+the results in a data frame.</p>
+<p>However, this first-attempt code for a per-country linear model does not
+work:</p>
+<pre class="r"><code>gapminder %&gt;% 
+  group_by(country) %&gt;% 
+  summarise(linmod = lm(lifeExp ~ year, data = .))</code></pre>
+<p>This is because the <code>linmod</code> variable is a <strong>list</strong> variable and <em>cannot
+be accommodated in a simple column</em>, which is what <code>summarize</code> will try
+to create.</p>
+<p>Counter-intuitively, we <strong>do</strong> need to be able to create “list” columns
+in a data frame! The <code>purrr</code> package contains a new class of functions,
+that can take vectors/tibbles/lists as input, and perform an identical
+function over each component of these, and generate a
+vectors/tibbles/lists as output. These are the <code>map_*</code> functions that
+are part of the <code>purrr</code> package. The <code>*</code> in the <code>map_*</code> function defines
+what kind of <strong>output</strong> (vector/tibble/list) the function generates. Let
+us look at a few short examples.</p>
+</div>
+<div id="using-map_-functions-from-purrr" class="section level2">
+<h2>Using <code>map_*</code> functions from <code>purrr</code></h2>
+<p>The basic structure of the <code>map_*</code> functions is:</p>
+<pre class="r"><code>map_typeOfResult(.x = what_to_iterate_with, 
+                  .f = function_to_apply)
+
+map_typeOfResult(.x = what_to_iterate_with, 
+                  .f = \(x) function_to_apply(x, additional_parameters))</code></pre>
+<p>Two examples:</p>
+<pre class="r"><code># Example 1
+diamonds %&gt;% 
+  select(where(is.numeric)) %&gt;% 
+  # We need dbl-type numbers in output **vector**
+map_dbl(.x = ., 
+        .f = mean)</code></pre>
+<pre><code>##        carat        depth        table        price            x            y 
+##    0.7979397   61.7494049   57.4571839 3932.7997219    5.7311572    5.7345260 
+##            z 
+##    3.5387338</code></pre>
+<pre class="r"><code>diamonds %&gt;% 
+  select(where(is.numeric)) %&gt;% 
+  # We need dbl-type numbers in output **vector**
+map_df(.x = ., 
+        .f = mean)</code></pre>
+<pre><code>## # A tibble: 1 × 7
+##   carat depth table price     x     y     z
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 0.798  61.7  57.5 3933.  5.73  5.73  3.54</code></pre>
+<p>Sometimes the function <code>.f</code> may need some additional parameters to be
+specified, and these may not come from the <code>.x</code>:</p>
+<pre class="r"><code># Example 3, with additional parameters to .f
+palmerpenguins::penguins %&gt;% 
+  select(where(is.numeric)) %&gt;% 
+  map_dbl(.x = ., 
+          .f = \(x) mean(x, 
+                         
+  # penguins has two rows of NA entries which need to be dropped
+  # Hence this additional parameter for the `mean` function
+                         na.rm = TRUE))</code></pre>
+<pre><code>##    bill_length_mm     bill_depth_mm flipper_length_mm       body_mass_g 
+##          43.92193          17.15117         200.91520        4201.75439 
+##              year 
+##        2008.02907</code></pre>
+<pre class="r"><code># Example 4: if we want a tibble output
+palmerpenguins::penguins %&gt;% 
+  select(where(is.numeric)) %&gt;% 
+  map_df(.x = ., 
+          .f = \(x) mean(x, 
+                         
+  # penguins has two rows of NA entries which need to be dropped
+  # Hence this additional parameter for the `mean` function
+                         na.rm = TRUE))</code></pre>
+<pre><code>## # A tibble: 1 × 5
+##   bill_length_mm bill_depth_mm flipper_length_mm body_mass_g  year
+##            &lt;dbl&gt;         &lt;dbl&gt;             &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;
+## 1           43.9          17.2              201.       4202. 2008.</code></pre>
+<p>The <code>.f</code> function can be anything, even a <code>ggformula</code> plot command; in
+this case the output will not be a vector or a tibble, but a list:</p>
+<pre class="r"><code>#library(ggformula)
+palmerpenguins::penguins %&gt;% 
+  select(where(is.numeric)) %&gt;% select(-year) %&gt;% drop_na() %&gt;% 
+  
+  # `map` gives a list output
+  map(.x = .,
+      .f = \(x) gf_histogram(~x, bins = 30) %&gt;%
+        gf_refine(theme_classic())
+      )</code></pre>
+<pre><code>## $bill_length_mm</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<pre><code>## 
+## $bill_depth_mm</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-10-2.png" width="672" /></p>
+<pre><code>## 
+## $flipper_length_mm</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-10-3.png" width="672" /></p>
+<pre><code>## 
+## $body_mass_g</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-10-4.png" width="672" /></p>
+<p>Note: we need to do just a bit of extra pre-work to get the variable
+names on the x-axis of the histograms.</p>
+<p>So in summary, we need to create a tibble with column(s) that are the
+inputs to the <code>map</code> function. We then provide <code>map</code> with a function that
+it will apply to each of these columns. The function can take additional
+parameters too. Finally, depending upon the kind of output the function
+generates, we need to choose the <code>map</code> function.</p>
+</div>
+<div id="using-purrr-to-create-multiple-models" class="section level2">
+<h2>Using <code>purrr</code> to create multiple models</h2>
+<p>Now that we have some handle on purrr’s <code>map</code> functions, we can see how
+to develop a linear regression model for <strong>every</strong> country in the
+<code>gapminder</code> dataset.</p>
+<p>Here is the process:</p>
+<ul>
+<li>Group the data by <code>country</code><br />
+</li>
+<li>Create a <code>nested</code> column of data for each country (i.e <code>nest</code> the
+columns other than <code>country</code> into a <strong>list column</strong>). This <code>list</code>
+column is the first argument <code>.x</code> for<code>map_*</code>.<br />
+</li>
+<li>Use <code>map</code> to create an <code>lm</code> object for each country (in another list
+column)</li>
+<li>Use <code>map</code> again with <code>broom::tidy</code> as the function to give us clean
+columns for the model per country.</li>
+<li>Use that multi-model tibble to plot graphs for each country</li>
+<li>Etc.</li>
+</ul>
+<p>Let us do this now!</p>
+<pre class="r"><code>  gapminder_models &lt;- gapminder %&gt;% 
+  group_by(country) %&gt;% 
+  nest(.key = &quot;list&quot;) %&gt;% # Name the column as &quot;list&quot;
+  
+  # We use mutate + map to add a list column containing linear models
+  mutate(model = map(.x = list, 
+                     
+          # One column to iterate over
+          # The list column contains data frames
+          # So we access individual columns 
+          # within these individual data frames
+                     .f = \(.x) lm(lifeExp ~ year, data = .x)
+          )) %&gt;% 
+  # Use mutate + map again to expose the columns of the models
+  
+  mutate(model_params = map(.x = model, 
+                      .f = \(.x) broom::tidy(.x, 
+                                             conf.int = TRUE, 
+                                             conf.lvel = 0.95)),
+         model_metrics = map(.x = model,
+                      .f = \(x) broom::glance(x))) 
+gapminder_models</code></pre>
+<pre><code>## # A tibble: 142 × 5
+## # Groups:   country [142]
+##    country     list              model  model_params     model_metrics    
+##    &lt;fct&gt;       &lt;list&gt;            &lt;list&gt; &lt;list&gt;           &lt;list&gt;           
+##  1 Afghanistan &lt;tibble [12 × 5]&gt; &lt;lm&gt;   &lt;tibble [2 × 7]&gt; &lt;tibble [1 × 12]&gt;
+##  2 Albania     &lt;tibble [12 × 5]&gt; &lt;lm&gt;   &lt;tibble [2 × 7]&gt; &lt;tibble [1 × 12]&gt;
+##  3 Algeria     &lt;tibble [12 × 5]&gt; &lt;lm&gt;   &lt;tibble [2 × 7]&gt; &lt;tibble [1 × 12]&gt;
+##  4 Angola      &lt;tibble [12 × 5]&gt; &lt;lm&gt;   &lt;tibble [2 × 7]&gt; &lt;tibble [1 × 12]&gt;
+##  5 Argentina   &lt;tibble [12 × 5]&gt; &lt;lm&gt;   &lt;tibble [2 × 7]&gt; &lt;tibble [1 × 12]&gt;
+##  6 Australia   &lt;tibble [12 × 5]&gt; &lt;lm&gt;   &lt;tibble [2 × 7]&gt; &lt;tibble [1 × 12]&gt;
+##  7 Austria     &lt;tibble [12 × 5]&gt; &lt;lm&gt;   &lt;tibble [2 × 7]&gt; &lt;tibble [1 × 12]&gt;
+##  8 Bahrain     &lt;tibble [12 × 5]&gt; &lt;lm&gt;   &lt;tibble [2 × 7]&gt; &lt;tibble [1 × 12]&gt;
+##  9 Bangladesh  &lt;tibble [12 × 5]&gt; &lt;lm&gt;   &lt;tibble [2 × 7]&gt; &lt;tibble [1 × 12]&gt;
+## 10 Belgium     &lt;tibble [12 × 5]&gt; &lt;lm&gt;   &lt;tibble [2 × 7]&gt; &lt;tibble [1 × 12]&gt;
+## # ℹ 132 more rows</code></pre>
+<pre class="r"><code>params &lt;- gapminder_models %&gt;% 
+  select(country,model_params, model_metrics) %&gt;% 
+  ungroup() %&gt;% 
+  # Now unpack the linear model parameters into columns
+  unnest(cols = model_params)
+
+metrics &lt;- gapminder_models %&gt;% 
+  select(country,model_metrics) %&gt;% 
+  ungroup() %&gt;% 
+  # Now unpack the linear model parameters into columns
+  unnest(cols = model_metrics)
+params</code></pre>
+<pre><code>## # A tibble: 284 × 9
+##    country     term     estimate std.error statistic  p.value conf.low conf.high
+##    &lt;fct&gt;       &lt;chr&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+##  1 Afghanistan (Interc… -5.08e+2  40.5        -12.5  1.93e- 7 -5.98e+2  -417.   
+##  2 Afghanistan year      2.75e-1   0.0205      13.5  9.84e- 8  2.30e-1     0.321
+##  3 Albania     (Interc… -5.94e+2  65.7         -9.05 3.94e- 6 -7.40e+2  -448.   
+##  4 Albania     year      3.35e-1   0.0332      10.1  1.46e- 6  2.61e-1     0.409
+##  5 Algeria     (Interc… -1.07e+3  43.8        -24.4  3.07e-10 -1.17e+3  -970.   
+##  6 Algeria     year      5.69e-1   0.0221      25.7  1.81e-10  5.20e-1     0.619
+##  7 Angola      (Interc… -3.77e+2  46.6         -8.08 1.08e- 5 -4.80e+2  -273.   
+##  8 Angola      year      2.09e-1   0.0235       8.90 4.59e- 6  1.57e-1     0.262
+##  9 Argentina   (Interc… -3.90e+2   9.68       -40.3  2.14e-12 -4.11e+2  -368.   
+## 10 Argentina   year      2.32e-1   0.00489     47.4  4.22e-13  2.21e-1     0.243
+## # ℹ 274 more rows
+## # ℹ 1 more variable: model_metrics &lt;list&gt;</code></pre>
+<pre class="r"><code>metrics</code></pre>
+<pre><code>## # A tibble: 142 × 13
+##    country   r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC
+##    &lt;fct&gt;         &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+##  1 Afghanis…     0.948         0.942 1.22      181.  9.84e- 8     1 -18.3  42.7 
+##  2 Albania       0.911         0.902 1.98      102.  1.46e- 6     1 -24.1  54.3 
+##  3 Algeria       0.985         0.984 1.32      662.  1.81e-10     1 -19.3  44.6 
+##  4 Angola        0.888         0.877 1.41       79.1 4.59e- 6     1 -20.0  46.1 
+##  5 Argentina     0.996         0.995 0.292    2246.  4.22e-13     1  -1.17  8.35
+##  6 Australia     0.980         0.978 0.621     481.  8.67e-10     1 -10.2  26.4 
+##  7 Austria       0.992         0.991 0.407    1261.  7.44e-12     1  -5.16 16.3 
+##  8 Bahrain       0.967         0.963 1.64      291.  1.02e- 8     1 -21.9  49.7 
+##  9 Banglade…     0.989         0.988 0.977     930.  3.37e-11     1 -15.7  37.3 
+## 10 Belgium       0.995         0.994 0.293    1822.  1.20e-12     1  -1.20  8.40
+## # ℹ 132 more rows
+## # ℹ 4 more variables: BIC &lt;dbl&gt;, deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
+<p>We can now plot these models and their uncertainty (i.e Confidence
+Intervals). We can select a few of the countries and plot:</p>
+<pre class="r"><code>params %&gt;% 
+  filter(country %in% c(&quot;India&quot;, &quot;United States&quot;, &quot;Brazil&quot;, &quot;China&quot;), term == &quot;year&quot;) %&gt;% 
+  gf_errorbar(conf.high + conf.low ~ country, 
+              color = ~ -log10(p.value),
+              linewidth = ~ -log10(p.value), width = 0.3,
+              ylab = &quot;Effect Size&quot;, title = &quot;Effect of years on Life Expectancy&quot;) %&gt;% 
+  gf_theme(theme_classic()) %&gt;% 
+  gf_refine(scale_color_viridis_c(&quot;significance&quot;), scale_linewidth_continuous(&quot;significance&quot;, range = c(0.2,3)))</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p>We can look at the model metrics and see for which countries the model
+fares the worst. We will reverse sort on <code>r.squared</code> and choose the 5
+worst models:</p>
+<pre class="r"><code>metrics %&gt;% slice_min(order_by = r.squared, n = 5)</code></pre>
+<pre><code>## # A tibble: 5 × 13
+##   country   r.squared adj.r.squared sigma statistic p.value    df logLik   AIC
+##   &lt;fct&gt;         &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+## 1 Rwanda       0.0172       -0.0811  6.56     0.175   0.685     1  -38.5  83.0
+## 2 Botswana     0.0340       -0.0626  6.11     0.352   0.566     1  -37.7  81.3
+## 3 Zimbabwe     0.0562       -0.0381  7.21     0.596   0.458     1  -39.6  85.3
+## 4 Zambia       0.0598       -0.0342  4.53     0.636   0.444     1  -34.1  74.1
+## 5 Swaziland    0.0682       -0.0250  6.64     0.732   0.412     1  -38.7  83.3
+## # ℹ 4 more variables: BIC &lt;dbl&gt;, deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
+<p>We see that for a few African countries, the linear model for Life
+Expectancy fails. There are of course political reasons for
+this: genocide in Rwanda, and hyper-inflation in Zimbabwe.</p>
+</div>
+<div id="recent-developments-in-dplyr" class="section level2">
+<h2>Recent developments in <code>dplyr</code></h2>
+<p>In recent times, the familiar <code>dplyr</code> package also has <strong>experimental</strong>
+functions that are syntactically easier and offer pretty much
+<code>purrr</code>-like capability, and without introducing the complexity of the
+list columns or list output.</p>
+<p>Look the code below and decipher how it works:</p>
+<pre class="r"><code># Using group_modify
+gapminder_model_dplyr &lt;- gapminder %&gt;%
+  group_by(continent, country) %&gt;%
+  
+  dplyr::group_modify(
+             .data = .,
+             .f = ~ lm(lifeExp ~ year, data = .) %&gt;% 
+      
+      # glance/tidy is part of the group_map&#39;s .f variable.
+      # Applies to each model
+      # .f MUST generate a tibble here and *not* a list
+      # Hence broom::tidy is essential!
+      
+      broom::glance(conf.int = TRUE,  # try `tidy()` and `augment()`
+                    conf.lvel = 0.95)) %&gt;% 
+  
+  # We already have a grouped tibble from `group_modify()`
+  # Just ungroup()
+  ungroup()
+
+gapminder_model_dplyr</code></pre>
+<pre><code>## # A tibble: 142 × 14
+##    continent country      r.squared adj.r.squared sigma statistic  p.value    df
+##    &lt;fct&gt;     &lt;fct&gt;            &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;
+##  1 Africa    Algeria         0.985         0.984  1.32    662.    1.81e-10     1
+##  2 Africa    Angola          0.888         0.877  1.41     79.1   4.59e- 6     1
+##  3 Africa    Benin           0.967         0.963  1.17    289.    1.04e- 8     1
+##  4 Africa    Botswana        0.0340       -0.0626 6.11      0.352 5.66e- 1     1
+##  5 Africa    Burkina Faso    0.919         0.911  2.05    113.    9.05e- 7     1
+##  6 Africa    Burundi         0.766         0.743  1.61     32.7   1.93e- 4     1
+##  7 Africa    Cameroon        0.680         0.648  3.24     21.3   9.63e- 4     1
+##  8 Africa    Central Afr…    0.493         0.443  3.52      9.73  1.09e- 2     1
+##  9 Africa    Chad            0.872         0.860  1.83     68.4   8.82e- 6     1
+## 10 Africa    Comoros         0.997         0.997  0.479  3165.    7.63e-14     1
+## # ℹ 132 more rows
+## # ℹ 6 more variables: logLik &lt;dbl&gt;, AIC &lt;dbl&gt;, BIC &lt;dbl&gt;, deviance &lt;dbl&gt;,
+## #   df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
+<p>There is no nesting and unnesting; the data is the familiar tibble
+throughout! This seems like a simple and elegant method.</p>
+<div id="using-dplyrgroup_modify" class="section level3 callout-tip">
+<h3>Using <code>dplyr::group_modify</code></h3>
+<p>Note: <code>group_modify</code> is new experimental functions in <code>dplyr</code>, as is
+<code>list_rbind</code>. The second-named requires that the operation in <code>.f</code>
+generates a tibble, <strong>not a list</strong>, and we can retain the grouping
+variable easily too. We can remove the groups with <code>ungroup</code>.</p>
+<p><code>group_modify()</code> looks very clear and crisp, in my opinion. And very
+learner-friendly!</p>
+</div>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>We have seen how purrr simplifies the application of functions
+iteratively to large groups of data, in a faster, replicable, and less
+error-prone manner.</p>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<ol style="list-style-type: decimal">
+<li><p>{{&lt; video <a href="https://youtu.be/rz3_FDVt9eg" class="uri">https://youtu.be/rz3_FDVt9eg</a> &gt;}}</p></li>
+<li><p>Rebecca Barter, * Learn to purrr*.
+<a href="https://www.rebeccabarter.com/blog/2019-08-19_purrr" class="uri">https://www.rebeccabarter.com/blog/2019-08-19_purrr</a></p></li>
+<li><p>Emorie Beck, <em>Introduction to purrr</em>.
+<a href="https://emoriebeck.github.io/R-tutorials/purrr/#" class="uri">https://emoriebeck.github.io/R-tutorials/purrr/#</a></p></li>
+<li><p>Sander Wuyts, <em>purrr Tutorial</em>.
+<a href="https://sanderwuyts.com/en/blog/purrr-tutorial/" class="uri">https://sanderwuyts.com/en/blog/purrr-tutorial/</a></p></li>
+<li><p>Jared Wilber, * Using the tidyverse for Machine Learning*.
+<a href="https://www.jwilber.me/nest/" class="uri">https://www.jwilber.me/nest/</a></p></li>
+</ol>
+</div>
