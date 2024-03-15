@@ -11,10 +11,16 @@ view: 2
 output:
   html_document:
     toc_float: true
-    theme: united
     toc: true
     code_folding: true
     self_contained: false
+pager: true
+profile: true
+show_breadcrumb: true
+reading_time: true
+features:
+  math:
+    enable: true
 image:
   placement: 2
   caption: "Image credit: [**Alice In Wonderland dot Net**](https://www.alice-in-wonderland.net/)"

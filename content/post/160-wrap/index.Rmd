@@ -20,6 +20,13 @@ image:
   focal_point: ""
   preview_only: true
 projects: []
+pager: true
+profile: true
+show_breadcrumb: true
+reading_time: true
+features:
+  math:
+    enable: true
 links:
 - icon: flask
   icon_pack: fas

@@ -40,3 +40,13 @@
 #    name = "CV"
 #    url = "files/cv.pdf"
 #    weight = 70
+
+
+#breadcrumb:
+#  page_types:
+#    book: true
+#    page: true
+#    post: true
+#    project: true
+#    publication: true
+    

@@ -3,11 +3,12 @@ authors:
 - admin
 bio: This course will give Art and Design students a foundation in the principles and practice of data visualization using R.
 email: ""
-name: Arvind Venkatadri
+name: Arvind V.
 organizations:
 - name: Srishti Manipal Institute of Art, Design, and Technology, Manipal Academy of Higher Education
   url: https://srishtimanipalinstitute.in/people/arvind-venkatadri
 role: Faculty Member, SMI, MAHE
+
 social:
 # - icon: discord
 #  icon_pack: fab
@@ -18,7 +19,7 @@ social:
 
 - icon: envelope
   icon_pack: fas
-  link: mailto:arvind.venkatadri@manipal.edu
+  link: mailto:arvind.venkatadri@gmail.com
   
 - icon: github
   icon_pack: fab

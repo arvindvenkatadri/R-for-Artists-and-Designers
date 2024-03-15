@@ -18,7 +18,7 @@ social:
 
 - icon: envelope
   icon_pack: fas
-  link: mailto:arvind.venkatadri@manipal.edu
+  link: mailto:arvind.venkatadri@gmail.com
   
 - icon: github
   icon_pack: fab
@@ -52,3 +52,5 @@ Arvind joined <u>[**Wipro Technologies**](https://www.wipro.com/)</u>, Bangalore
 After more than 20 years in technology, Arvind joined the organized philanthropy sector and worked for <u>[**Akshara Foundation, Bangalore**](https://akshara.org.in/)</u> in 2007, where he managed the School Libraries Project, which was funded ( among others ) by the Michael and Susan Dell Foundation (MSDF). He worked at <u>[**ChipperSage Education**](https://www.thechippersage.com/)</u>, an education domain startup incubated at the [*NSRCEL, Indian Institute of Management, Bangalore*](https://www.nsrcel.org/).  
 
 He joined <u>[**Srishti Institute of Art, Design, and Technology**](http://srishtimanipalinstitute.in/)</u> in 2014, where he is a part of the Foundation Studies Programme.
+
+He is currently also employed as Adjunct Professor, School of Commerce and Management Studies, Dayanand Sagar University, Bangalore.

@@ -20,6 +20,13 @@ output:
     theme: united
     toc: true
     code_folding: true
+pager: true
+profile: true
+show_breadcrumb: true
+reading_time: true
+features:
+  math:
+    enable: true
 links:
 - icon: flask
   icon_pack: fas
