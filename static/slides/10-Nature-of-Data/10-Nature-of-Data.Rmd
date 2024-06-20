@@ -12,10 +12,8 @@ output:
     lib_dir: libs
     seal: false
     nature:
-      slideNumberFormat: "%current%"
       highlightStyle: github
       highlightLines: true
-      countIncrementalSlides: false
       ratio: "16:9"
 ---
 
@@ -44,12 +42,13 @@ today <- format(Sys.Date(),
                 format="%B %d %Y")
 library(xaringanthemer)
 library(xaringanExtra)
-library(xaringanBuilder)
+#library(xaringanBuilder)
 library(renderthis)
 library(tidyverse)
 library(patchwork)
 library(emoji)
 library(emojifont)
+#devtools::install_github('emitanaka/anicon')
 library(anicon)
 library(sf)
 library(showtext)
@@ -118,9 +117,10 @@ Written: `r dateWritten`
 Updated: `r today`
 
 .footer-large[.right[.fira[
-<br><br><br><br><br>[The Foundation Series](https://the-foundation-series.netlify.app/courses/7-data-visualization-with-no-code/)
+<br><br><br><br><br>[The Foundation Series](https://av-quarto.netlify.app/content/courses/nocode/listing)
 ]]]
 
+.footer-large[.left[.fira[   Use Arrow Keys to Navigate]]]
 ---
 
 ## What makes Human Experience?
