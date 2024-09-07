@@ -42,9 +42,9 @@
 #    weight = 70
 
 
-#breadcrumb:
-#  page_types:
-#    book: true
+#breadcrumb: true
+# page_types:
+#   book: true
 #    page: true
 #    post: true
 #    project: true

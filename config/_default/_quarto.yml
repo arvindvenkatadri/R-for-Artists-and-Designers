@@ -1,0 +1,11 @@
+project:
+  type: hugo
+      
+format: 
+  hugo-md:
+    code-fold: false
+  
+execute: 
+  warning: false
+
+bibliography: references.bib

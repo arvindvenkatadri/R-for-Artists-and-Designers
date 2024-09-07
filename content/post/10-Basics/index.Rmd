@@ -4,14 +4,10 @@ subtitle: "Science, Human Experience, Experiments, and Data"
 author: "Arvind Venkatadri"
 date: "`r Sys.Date()`"
 weight: 10
+type: book
 view: 2
 summary: "What is Data? Why do we visualize it?"
-output:
-  html_document:
-    toc_float: true
-    theme: united
-    toc: true
-    code_folding: true
+output: md_document
 pager: true
 profile: true
 show_breadcrumb: true
