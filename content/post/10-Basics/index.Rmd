@@ -1,13 +1,18 @@
 ---
 title: "Lab-1: What is the use of a book with no pictures?"
 subtitle: "Science, Human Experience, Experiments, and Data"
-author: "Arvind Venkatadri"
+summary: "Science, Human Experience, Experiments, and Data"
 date: "`r Sys.Date()`"
+featured: false
+draft: false
 weight: 10
-type: book
 view: 2
-summary: "What is Data? Why do we visualize it?"
-output: md_document
+output:
+  html_document:
+    toc_float: true
+    theme: united
+    toc: true
+    code_folding: true
 pager: true
 profile: true
 show_breadcrumb: true
