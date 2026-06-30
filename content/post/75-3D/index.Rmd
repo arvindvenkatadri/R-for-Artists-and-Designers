@@ -1,0 +1,60 @@
+---
+title: "Lab-7a: Sure, it's an Arm, your Honour!"
+subtitle: '3D Charts in R'
+summary: '3D Charts in R'
+date: "`r Sys.Date()`"
+featured: false
+draft: false
+weight: 75
+view: 2
+output:
+  html_document:
+    toc_float: true
+    theme: united
+    toc: true
+    code_folding: true
+pager: true
+profile: true
+show_breadcrumb: true
+reading_time: true
+features:
+  math:
+    enable: true
+# Featured image
+# To use, add an image named `featured.jpg/png` to your page's folder.
+# Placement options: 1 = Full column width, 2 = Out-set, 3 = Screen-width
+# Focal point options: Smart, Center, TopLeft, Top, TopRight, Left, Right, BottomLeft, Bottom, BottomRight
+image:
+  placement: 2
+  caption: 'Image credit: [Alice in Wonderland dot net](https:alice-in-wonderland.net)'
+  focal_point: ""
+  preview_only: true
+
+# Projects (optional).
+#   Associate this post with one or more of your projects.
+#   Simply enter your project's folder or file name without extension.
+#   E.g. `projects = ["internal-project"]` references `content/project/deep-learning/index.md`.
+#   Otherwise, set `projects = []`.
+projects: []
+
+# links:
+# - icon: flask
+#   icon_pack: fas
+#   name: lab
+#   url: /labs/05-wizardy/05-wizardy.html
+# - icon: magic
+#   icon_pack: fas
+#   name: slides
+#   url: /slides/03-slides.html
+---
+
+![](featured.jpg)
+
+## Introduction
+
+Sometimes, just some times, we need to go 3D with our charts. Especially when we may have more than one variable, or if we wish to show the behaviour of a function of multiple variables, or show vector fields and so on. At such times making the graph 3D **and** interactive may add real value and aid in comprehension
+
+## References
+
+1. RGL - 3D visualization device system for R using OpenGL. <https://dmurdoch.github.io/rgl/dev/index.html>
+

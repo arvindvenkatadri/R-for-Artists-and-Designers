@@ -35,7 +35,7 @@ links:
 - icon: book
   icon_pack: fa
   name: notes
-  url: "https://schoolofdata.org/handbook/courses/what-is-data/"
+  url: "https://archive.schoolofdata.org/handbook/courses/what-is-data/"
 - icon: file-powerpoint
   icon_pack: fa
   name: slides
